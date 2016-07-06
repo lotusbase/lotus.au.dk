@@ -1,0 +1,28 @@
+---
+layout: plain
+---
+<ul class="post-list masonry">  
+	<li class="masonry-gutter"></li>
+	<li class="masonry-sizer"></li>
+	{% assign postCount = '0' %}
+	{% for post in site.posts limit:8 %}
+	{% capture postCount %}{{ postCount | plus: '1' }}{% endcapture %}
+	<li class="post-card masonry-item item-{{ postCount }} {% if post.coverImage and postCount == '1' %}hero{% endif %}">
+		<a href="{{ post.url | prepend: "/blog" }}">
+			{% if post.coverImage %}
+				<div class="post-cover-image" style="background-image: url('{{ post.coverImage }}');"><img src="{{ post.coverImage }}" alt="{{ post.title }}" title="{{ post.title }}" /></div>
+			{% endif %}
+			<header>
+				<span class="post-date">{{ post.date | date_to_string }}</span>
+				<h3 class="post-title">{{ post.title }}</h3>
+				<span class="post-author"><img class="avatar" src="<?php echo WEB_ROOT; ?>/dist/images/team/{{ post.author | replace:' ','_' | downcase }}.jpg" alt="{{ post.author }}" title="{{ post.author }}" />{{ post.author }}</span>
+			</header>
+			<p class="post-excerpt">{% if post.summary %}{% if post.coverImage and postCount == '1' %}{{ post.summary | strip_html | truncatewords: 50 }}{% else %}{{ post.summary | strip_html | truncatewords: 30 }}{% endif %}{% else %}{% if post.coverImage and postCount == '1' %}{{ post.content | strip_html | truncatewords: 50 }}{% else %}{{ post.content | strip_html | truncatewords: 30 }}{% endif %}{% endif %}</p>
+		</a>
+	</li>
+	{% endfor %}  
+</ul>
+<div class="read-more align-center">
+	<a href="/blog" class="button">Read more on our blog</a>
+	<p>Don't want to be left behind? <a href="{{ "/feed.xml" | prepend: "/blog" }}">Subscribe to our RSS feed</a> to stay updated.</p>
+</div>

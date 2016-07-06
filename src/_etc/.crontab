@@ -1,0 +1,5 @@
+SHELL=/bin/bash
+
+* * * * * /var/www/html/lib/python/corr/cron_correlationNetworkServer.sh
+@reboot /var/www/html/lib/python/corr/cron_correlationNetworkServer.sh
+00 00 * * * /var/www/html/lib/python/corr/cron_correlationJobDelete.sh

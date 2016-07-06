@@ -1,0 +1,240 @@
+{
+   "tracks" : [
+      {
+         "showTranslation" : false,
+         "key" : "<em>L. japonicus</em> v3.0 DNA sequence",
+         "storeClass" : "JBrowse/Store/Sequence/StaticChunked",
+         "chunkSize" : 20000,
+         "urlTemplate" : "seq/{refseq_dirpath}/{refseq}-",
+         "label" : "DNA",
+         "type" : "JBrowse/View/Track/Sequence",
+         "category" : "Lotus japonicus reference sequence"
+      },
+      {
+         "style" : {
+            "className" : "feature_lore1",
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "LORE1 insertions",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "JBrowse/View/Track/HTMLFeatures",
+         "urlTemplate" : "tracks/20150909_LORE1/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "JBrowse/View/Track/HTMLFeatures",
+         "label" : "20150909_LORE1"
+      },
+      {
+         "style" : {
+            "className" : "feature_repeat-masker",
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "RepeatMasker",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : null,
+         "urlTemplate" : "tracks/RepeatMasker/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "FeatureTrack",
+         "label" : "20121123_RepeatMasker"
+      },
+      {
+         "style" : {
+            "className" : "generic_parent",
+            "subfeatureClasses" : {
+               "exon" : "feature_exon",
+               "CDS" : "feature_cds"
+            },
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "GeneMark",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : null,
+         "urlTemplate" : "tracks/GeneMark/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "FeatureTrack",
+         "label" : "20121122_GeneMark"
+      },
+      {
+         "style" : {
+            "className" : "generic_parent",
+            "subfeatureClasses" : {
+               "exon" : "feature_exon",
+               "CDS" : "feature_cds"
+            },
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "Cufflinks",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : null,
+         "urlTemplate" : "tracks/Cufflinks/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "FeatureTrack",
+         "label" : "20121122_Cufflinks"
+      },
+      {
+         "style" : {
+            "className" : "generic_parent",
+            "subfeatureClasses" : {
+               "exon" : "feature_exon",
+               "CDS" : "feature_cds"
+            },
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "Augustus",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : null,
+         "urlTemplate" : "tracks/Augustus/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "FeatureTrack",
+         "label" : "20121122_Augustus"
+      },
+      {
+         "style" : {
+            "className" : "generic_parent",
+            "subfeatureClasses" : {
+               "exon" : "feature_exon",
+               "CDS" : "feature_cds"
+            },
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "Glimmer",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : null,
+         "urlTemplate" : "tracks/Glimmer/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "FeatureTrack",
+         "label" : "20121122_Glimmer"
+      },
+      {
+         "style" : {
+            "className" : "generic_parent",
+            "subfeatureClasses" : {
+               "exon" : "feature_exon",
+               "CDS" : "feature_cds"
+            },
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "<em>L. japonicus</em> gene indices",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : null,
+         "urlTemplate" : "tracks/20100518_LotusGI/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "FeatureTrack",
+         "label" : "20100518_LotusGI"
+      },
+      {
+         "style" : {
+            "className" : "generic_parent",
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "MG20 mRNA denovo",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : null,
+         "urlTemplate" : "tracks/MG20_denovo/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "FeatureTrack",
+         "label" : "20121122_MG20_denovo"
+      },
+      {
+         "style" : {
+            "clip_marker_color" : "#f6ae2d",
+            "variance_band_color" : "rgba(55,55,55,0.15)",
+            "neg_color" : "#b13131",
+            "pos_color" : "#33658a",
+            "height" : 100
+         },
+         "variance_band" : true,
+         "key" : "<em>L.japonicus</em> Gifu RNA-seq coverage",
+         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
+         "urlTemplate" : "../rawdata/Gifu_accepted_hits.refined.bw",
+         "scale" : "log",
+         "label" : "20140822_Gifu_mRNAseq",
+         "type" : "JBrowse/View/Track/Wiggle/XYPlot"
+      },
+      {
+         "style" : {
+            "clip_marker_color" : "#f6ae2d",
+            "variance_band_color" : "rgba(55,55,55,0.15)",
+            "neg_color" : "#b13131",
+            "pos_color" : "#33658a",
+            "height" : 100
+         },
+         "variance_band" : true,
+         "key" : "<em>L.japonicus</em> MG20 RNA-seq coverage",
+         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
+         "urlTemplate" : "../rawdata/MG20_accepted_hits.refined.bw",
+         "scale" : "log",
+         "label" : "20140822_MG20_mRNAseq",
+         "type" : "JBrowse/View/Track/Wiggle/XYPlot"
+      },
+      {
+         "style" : {
+            "className" : "generic_parent",
+            "subfeatureClasses" : {
+               "exon" : "feature_exon",
+               "CDS" : "feature_cds"
+            },
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "Lotus japonicus predicted proteins",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "JBrowse/View/Track/HTMLFeatures",
+         "urlTemplate" : "tracks/20140314_Lj30/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "JBrowse/View/Track/HTMLFeatures",
+         "label" : "20140314_Lj30"
+      },
+      {
+         "style" : {
+            "className" : "feature_n-repeat",
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "<em>L. japonicus</em> genome gaps",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "JBrowse/View/Track/HTMLFeatures",
+         "urlTemplate" : "tracks/20151108_ljv3genome_n_gaps/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "JBrowse/View/Track/HTMLFeatures",
+         "label" : "20151108_ljv3genome_n_gaps"
+      }
+   ],
+   "names" : {
+      "url" : "names/",
+      "type" : "Hash"
+   },
+   "formatVersion" : 1,
+   "defaultLocation" : "chr1:1..62285374",
+   "defaultTracks" : "DNA,20140314_Lj30,20150909_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
+   "alwaysOnTracks" : "DNA,20140314_Lj30,20150909_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
+   "highResolutionMode" : "auto",
+   "trackSelector" : {
+      "selectableFacets" : [
+         "key",
+         "category",
+         "organism"
+      ],
+      "type" : "Faceted",
+      "displayColumns" : [
+         "key",
+         "description",
+         "category",
+         "organism",
+         "date_created",
+         "date_added",
+         "principal_investigator",
+         "file_creator",
+         "file_curator"
+      ]
+   },
+   "trackMetadata" : {
+      "sources" : [
+         {
+            "url" : "data/trackMetadata.csv",
+            "type" : "csv"
+         }
+      ]
+   },
+   "aboutThisBrowser" : {
+      "title" : "Lotus japonicus Genome Browser",
+      "description" : "Genome browser for the model legume <em>Lotus japonicus</em>, with data such as protein predictions, RNA-seq data, LORE1 insertions and more, developed by the Centre for Carbohygrade Recognition and Signalling, Aarhus University, Denmark."
+   }
+}

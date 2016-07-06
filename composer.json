@@ -1,0 +1,20 @@
+{
+    "config": {
+        "vendor-dir": "build/vendor"
+    },
+    "require": {
+        "phpmailer/phpmailer": "~5.2",
+        "league/oauth2-client": "~1.1",
+        "league/oauth2-google": "~1.0",
+        "sameer-shelavale/php-countries-array": "~1.0",
+        "easybook/geshi": "v1.0.8.15",
+        "google/recaptcha": "~1.1",
+        "google/apiclient": "^2.0.0@RC",
+        "drewm/mailchimp-api": "^2.1",
+        "slim/slim": "^3.0",
+        "tuupola/slim-jwt-auth": "^2.2",
+        "firebase/php-jwt": "^3.0",
+        "akrabat/rka-scheme-and-host-detection-middleware": "^0.2.0",
+        "palanik/corsslim": "dev-slim3"
+    }
+}

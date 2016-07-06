@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /test/
+Disallow: /lib/
+Disallow: /data/mail/
+Disallow: /admin/
+Disallow: /genome/data/
+Disallow: /genome/rawdata/

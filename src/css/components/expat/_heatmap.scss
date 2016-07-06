@@ -1,0 +1,17 @@
+@import '../../mixins';
+
+#expat-heatmap {
+
+	rect {
+		@include transition;
+		&:hover {
+			fill: #000;
+		}
+	}
+
+	#expat-heatmap__wrapper .y.axis text {
+		cursor: pointer;
+		transition: fill .125s ease-in-out;
+		&:hover { fill: $lotusPrimary4; }
+	}
+}

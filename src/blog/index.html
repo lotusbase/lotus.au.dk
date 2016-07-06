@@ -1,0 +1,39 @@
+---
+layout: default
+---
+<?php
+	$header = new \LotusBase\PageHeader();
+	$header->add_header_class('alt');
+	$header->set_header_content('<div class="align-center"><h1>'.file_get_contents(DOC_ROOT."/dist/images/branding/logo.svg").'<em>Lotus</em> Base Blog</h1><span class="byline">Annoucements, blog posts, user guides, and more.</span></div>');
+	echo $header->get_header();
+?>
+
+<section class="wrapper">
+	<h2>Posts</h2>
+	<p class="rss-subscribe align-center"><a class="button" href="{{ "/feed.xml" | prepend: site.baseurl }}">Subscribe to our RSS feed</a></p>
+	<ul class="post-list masonry timeline">  
+
+		<li class="masonry-gutter"></li>
+		<li class="masonry-sizer"></li>
+
+		<li class="timeline__track">
+			
+		</li>
+
+		{% for post in site.posts %}
+		<li class="post-card masonry-item {% if post.coverImage %}has-cover-image{% endif %}">
+			<a href="{{ post.url | prepend: "/blog" }}">
+				{% if post.coverImage %}
+					<div class="post-cover-image" style="background-image: url('{{ post.coverImage }}');"><img src="{{ post.coverImage }}" alt="{{ post.title }}" title="{{ post.title }}" /></div>
+				{% endif %}
+				<header>
+					<span class="post-date">{{ post.date | date_to_string }}</span>
+					<h3 class="post-title">{{ post.title }}</h3>
+					<span class="post-author"><img class="avatar" src="/dist/images/team/{{ post.author | replace:' ','_' | downcase }}.jpg" alt="{{ post.author }}" title="{{ post.author }}" />{{ post.author }}</span>
+				</header>
+				<p class="post-excerpt">{% if post.summary %}{{ post.summary | strip_html | truncatewords: 30 }}{% else %}{{ post.content | strip_html | truncatewords: 30 }}{% endif %}</p>
+			</a>
+		</li>
+		{% endfor %}  
+	</ul>
+</section>

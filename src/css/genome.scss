@@ -1,0 +1,483 @@
+// Mixins
+@import 'variables';
+@import 'mixins';
+@import 'type';
+
+/* Global font-size override */
+html {
+	font-size: 16px;
+}
+body {
+	font-family: $fontface-sansSerif !important;
+	font-size: 1rem;
+}
+
+/* Custom styles for Lotus genome browser */
+#lotusbase__genome {
+	font-size: 12px;
+	width: 100%;
+	height: 100vh;
+	height: calc(100vh - 3rem);
+	margin: 0 !important;
+
+	// Turn off universal border-box sizing
+	& * {
+		box-sizing: content-box;
+	}
+
+	// Embedded
+	.embed & {
+		height: 100vh;
+	}
+}
+#lotusbase__wrap { z-index: 9; }
+#navbox { text-align: center !important; }
+
+
+/* Dojo.css override */
+h1 {
+	margin-top: 0;
+}
+
+/* Reset general table styles */
+table {
+	border-collapse: collapse;
+	line-height: 1;
+	margin: 0;
+	width: auto;
+
+	tr {
+		transition: all .25s ease-in-out;
+	}
+
+	td, th {
+		border: none;
+		padding: 0;
+	}
+
+	thead {
+		font-size: 1em;
+		font-weight: normal;
+		letter-spacing: 0;
+		line-height: 1;
+		text-transform: none;
+		th, td {
+			border: 0;
+			padding: 0;
+		}
+	}
+
+	tbody {
+		tr {
+			background: none;
+		}
+	}
+}
+
+/* Navigation */
+div.overview-pos {
+	line-height: 1em;
+}
+
+/* Non-loading message */
+#GenomeBrowser {
+	#container {
+		background-color: #eee;
+	}
+	#jBrowse__default-message {
+		font-size: 1rem;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		max-width: 75vw;
+	}
+}
+
+/* Menubar styles */
+/* Overriding menubar.css */
+.tundra {
+	.menuBar {
+		background: none;
+		background-image:
+			linear-gradient(0deg, rgba(#eee,.25) 0%, rgba(#eee,.25) 100%),
+			linear-gradient(90deg, $lotusPrimary4 0%, adjust-hue($lotusPrimary4,-30deg) 100%);
+
+		a {
+			color: #eee;
+		}
+
+		& > .menu {
+			color: #eee;
+		}
+
+		.dijitButton {
+			font-size: 120%;
+			margin: 0;
+			.dijitButtonNode {
+				border: none;
+				padding: 0 1em 0 0.7em;
+				line-height: 25px;
+			}
+			.icon { display: none; }
+		}
+
+		.dijitButtonNode {
+			* { color: #eee; }
+		}
+	}
+
+	div.locationTrap {
+		border-bottom-color: $lotusPrimary3;
+	}
+
+	// Embedded
+	&.embed {
+		.menuBar {
+			background-color: #ccc;
+			background-image: none;
+			a,
+			& > .menu,
+			.dijitButtonNode * {
+				color: #333;
+			}
+		}
+	}
+}
+
+/* Dialogue styles */
+/* Overriding main.css */
+.tundra {
+	.dijitDialog {
+		border: none;
+	}
+	.dijitDialogUnderlayWrapper {
+		position: fixed;
+		top: 0 !important;
+		left: 0 !important;
+		bottom: 0 !important;
+		right: 0 !important;
+		.dijitDialogUnderlay {
+			background-color: #eee;
+			opacity: 0.5;
+			width: 100vw !important;
+			height: 100vh !important;
+		}
+	}
+
+	.dijitDialogTitleBar {
+		background-color: #ccc;
+		background-image: none;
+		padding: .6rem 0 .4rem;
+		text-align: center;
+		.dijitDialogTitle {
+			line-height: 2.5rem;
+			font-family: 'Open Sans', $fontface-sansSerif;
+			font-weight: 300;
+			font-size: 2rem;
+		}
+		.dijitDialogCloseIcon {
+			background: none;
+			font-family: 'Fontello';
+			width: 3.5rem;
+			height: 3.5rem;
+			&::before {
+				content: '\2715';
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				line-height: 3.5rem;
+				font-size: 1.5em;
+			}
+		}
+	}
+	.dijitDialogPaneActionBar {
+		.dijitButtonNode {
+			background-color: $lotusPrimary4;
+			background-image: none;
+			border-radius: 4px;
+			border: 1px solid rgba(0,0,0,.1);
+			border-bottom: 2px solid rgba(0,0,0,.2);
+			color: #eee;
+			font-family: 'Open Sans', $fontface-sansSerif;
+			font-weight: 400;
+			letter-spacing: 1px;
+			line-height: 1.5rem;
+			padding: .75rem 3rem;
+			@include transition;
+			width: auto;
+
+			.dijitButtonActive &,
+			&:hover {
+				background-color: darken($lotusPrimary4, 5%);
+				background-image: none;
+				border: 1px solid rgba(0,0,0,.1);
+				border-bottom: 2px solid rgba(0,0,0,.2);
+			}
+		}
+	}
+	.feature-detail {
+		width: auto;
+		h2 {
+			font-size: 1.5rem;
+			font-weight: normal;
+			margin-top: 1rem;
+		}
+		.field_container {
+			display: -webkit-flex;
+			display: flex;
+			margin-bottom: .25rem;
+
+			h2.field {
+				background-color: rgba(#eee,.5);
+				border-bottom: none;
+				font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+				font-size: 1rem;
+				font-weight: bold;
+				margin: 0;
+				min-width: 10rem;
+			}
+			.field, .value_container {
+				padding: .25rem .5rem;
+			}
+			.value {
+				flex-grow: 1;
+				font-size: 1rem;
+				line-height: 1.5em;
+			}
+			.fastaView {
+				border: none;
+				textarea {
+					background-color: rgba($lotusPrimary3,.25);
+					display: block;
+					font-family: Consolas, monospace;
+					line-height: 1.25em;
+					outline: none;
+					padding: 1rem;
+					resize: vertical;
+					width: 100% !important;
+					max-height: 30rem;
+				}
+			}
+			.subfeatures {
+				margin-left: 1rem;
+			}
+			.subfeature-detail {
+				background: transparent;
+				border: none;
+				border-bottom: 2px dashed rgba(#000,.15);
+				margin-bottom: 1.5rem;
+				padding-bottom: 1.5rem;
+				&:last-child {
+					border: none;
+					margin-bottom: 0;
+					padding-bottom: 0;
+				}
+			}
+		}
+	}
+}
+@supports (backdrop-filter: none) {
+	.tundra {
+		.dijitDialogUnderlayWrapper {
+			.dijitDialogUnderlay {
+				background-color: rgba(#eee,.5);
+				backdrop-filter: blur(10px);
+				opacity: 1;
+			}
+		}
+	}
+}
+
+/* Overriding faceted_track_selector.css */
+.tundra {
+	#faceted_tracksel_top {
+		background-color: $lotusPrimary5;
+		.title {
+			font-family: 'Open Sans', $fontface-sansSerif;
+			font-weight: 300;
+			padding: 1rem;
+			width: auto;
+		}
+		.topLink {
+			top: 50%;
+			transform: translateY(-50%);
+			a {
+				color: #eee;
+			}
+		}
+	}
+	#faceted_tracksel {
+		div.mainContainer { border: none; }
+
+		/* Top controls */
+		.gridPane {
+			.gridControls {
+				border: none;
+				button {
+					background-color: #ccc;
+					color: #333;
+					padding: 0 1rem;
+					text-transform: uppercase;
+					img { display: none; }
+					&::before {
+						font-family: 'Fontello';
+						margin-right: 4px;
+					}
+					&.faceted_tracksel_on_off::before {
+						content: '\e83b';
+					}
+					&.clear_filters::before {
+						content: '\2715';
+						color: #b13131;
+					}
+				}
+			}
+		}
+		& > div.faceted_tracksel_on_off.tab {
+			background: none;
+			background-color: #eee;
+			border: 1px solid rgba(#000,.75);
+			border-left: none;
+			line-height: 1.25em;
+			opacity: .75;
+			top: 25%;
+			transform: translateY(-50%);
+			@include transition;
+
+			img { display: none; }
+			padding: .5rem 1rem;
+			&::before {
+				content: '\e83b';
+				font-family: 'Fontello';
+				margin-right: .25rem;
+			}
+			&:hover { opacity: 1; }
+		}
+		label.textFilterControl.selected input {
+			background-color: $lotusPrimary2;
+			border-top-color: transparent !important;
+		}
+
+		/* Sidebar */
+		.dijitContentPane {
+			color: #333;
+		}
+		.dijitTitlePaneTitle {
+			background: none;
+			background-color: #ddd;
+			&.dijitTitlePaneTitleHover {
+				background-color: $lotusPrimary3;
+				color: #eee;
+			}
+		}
+		.activeFacet {
+			border-top-color: $lotusPrimary4;
+			background-color: $lotusPrimary3;
+			color: #eee;
+		}
+		.facetTitle {
+			color: #333;
+		}
+		table.facetSelect {
+			tr.facetValue {
+				&:hover {
+					background-color: rgba($lotusPrimary3,.5);
+				}
+				&.selected, &.selected:hover {
+					background-color: rgba($lotusPrimary3,.5);
+				}
+			}
+			td {
+				padding: .25rem 0;
+				&.count { font-weight: bold; padding: .25rem; }
+			}
+		}
+	}
+	.dojoxGrid {
+		font-family: $fontface-sansSerif;
+		.dojoxGridHeader .dojoxGridCell {
+			color: #333 !important;
+		}
+	}
+}
+
+/* Track styles */
+/* Overriding track_styles.css */
+div.feature-hist,
+div.generic_parent-hist {
+	background-color: #f6ae2d;
+	border-color: transparent;
+}
+.feature_lore1,
+.plus-feature_lore1,
+.minus-feature_lore1	{ background-color: #02818a; }
+
+.plus-feature_exon,
+.minus-feature_exon		{ background-color: #bf812d; }
+
+.plus-feature_cds,
+.minus-feature_cds {
+	background-color: #35978f;
+	background-size: 100% 50%;
+	background-repeat: no-repeat;
+	background-position: top center, bottom center;
+}
+	.plus-feature_cds	{ @include chevron(right, 45deg, #35978f, #80cdc1); }
+	.minus-feature_cds	{ @include chevron(left, 45deg, #35978f, #80cdc1); }
+
+.feature_repeat-masker,
+.plus-feature_repeat-masker,
+.minus-feature_repeat-masker {
+	background-color: #88419d;
+	background-size: 100% 50%;
+	background-repeat: no-repeat;
+	background-position: top center, bottom center;
+}
+	.plus-feature_repeat-masker		{ @include chevron(right, 45deg, #88419d, #8c96c6); }
+	.minus-feature_repeat-masker	{ @include chevron(left, 45deg, #88419d, #8c96c6); }
+
+.feature_n-repeat,
+.plus-feature_n-repeat,
+.minus-feature_n-repeat {
+	background-color: #666;
+	background-size: 100% 50%;
+	background-repeat: no-repeat;
+	background-position: top center, bottom center;
+}
+	.plus-feature_n-repeat	{ @include chevron(right, 45deg, #666, #999); }
+	.minus-feature_n-repeat { @include chevron(left, 45deg, #666, #999); }
+
+.ruler {
+	&, & div {
+		font-family: $fontface-sansSerif !important;
+	}
+}
+
+/* User messages */
+div.error {
+	@include gentle-gradient($ui_warning);
+	color: #eee;
+	font-size: 1rem;
+	padding: 1rem 1.25rem;
+	h2 {
+		font-size: 2rem;
+		font-weight: normal;
+	}
+	code {
+		background-color: rgba(#000,.3);
+		border-bottom: 1px solid rgba(#000,.3);
+		color: #eee;
+		font-size: 1rem;
+		margin: 0;
+		padding: .5rem 1rem;
+		position: relative;
+	}
+}
+
+/* Popup dialog */
+.popup-dialog {
+	min-width: 40rem;
+}

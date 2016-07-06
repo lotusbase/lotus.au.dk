@@ -1,0 +1,28 @@
+<?php
+	require_once($_SERVER['DOCUMENT_ROOT'].'/config.php');
+?>
+<!DOCTYPE html>
+<html>
+
+	{% include head.html %}
+
+	<body class="blog {% body_class %}">
+
+		<?php
+			// Generate header
+			$header = new \LotusBase\PageHeader();
+			$header->add_header_class('blog post');
+			$header->set_header_content();
+			echo $header->get_header();
+		?>
+
+		<div id="lotusbase__wrap"><div id="lotusbase__container">
+
+		{{ content }}
+
+		<?php include(DOC_ROOT.'/footer.php'); ?>
+    	<script src="/dist/js/blog.min.js"></script>
+
+	</body>
+
+</html>

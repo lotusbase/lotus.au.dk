@@ -1,0 +1,303 @@
+// Mixins
+@import 'variables';
+@import 'mixins';
+@import 'type';
+
+/*----------------------------------------- 
+------------------ EXPAT ------------------
+------------------------------------------*/
+/* Hide message*/
+#expat-message {
+	display: none;
+	margin-bottom: 1.5rem;
+}
+
+/* Subset table */
+#expat-dataset-subset {
+	display: none;
+	width: 100%;
+	input[type="text"] {
+		margin-bottom: .5rem;
+	}
+	.table-overflow {
+		overflow: auto;
+		max-height: 500px;
+		max-height: 50vh;
+		max-width: calc((90vw - 1.5em) * 0.75 - 3em);
+		table {
+			td, th {
+				border-right-color: #ddd;
+			}
+			thead th[data-sort] { cursor: pointer;}
+			tbody {
+				td.PlantSpecies { font-style: italic; }
+				td.Comments {
+					min-width: 20rem;
+					white-space: normal;
+				}
+			}
+			&.disabled {
+				thead th[data-sort] {
+					cursor: no-drop;
+					cursor: not-allowed;
+				}
+				tbody tr {
+					opacity: 0.25;
+				}
+			}
+		}
+	}
+}
+
+/* Sort list */
+#expat-user-custom .sort-list {
+	margin-top: 1rem;
+	padding-top: 1rem;
+	&::before {
+		font-size: .75rem;
+		padding: .125rem .5rem;
+	}
+}
+#expat-sort-conditions span.icon-cancel {
+	padding: 0 .25em;
+}
+
+/* User customization */
+#user-custom {
+	background-color: #ddd;
+	margin-bottom: 1.5em;
+	padding-bottom: 0;
+	overflow: hidden;
+	h3 {
+		font-size: 1.125rem;
+		color: #555;
+		display: block;
+	}
+}
+#expat-user-custom {
+	margin: 0;
+	padding-bottom: 0;
+	position: relative;
+	left: -3rem;
+	width: calc(100% + 6rem);
+	& > ul.ui-tabs-nav {
+		border: none;
+		display: flex;
+		align-items: flex-end;
+		list-style: none;
+		padding: 0 3rem;
+		margin: 0;
+		& > li {
+			background-color: rgba(255,255,255,.5);
+	 		flex: 1 0 auto;
+	 		margin-right: .5em;
+	 		position: relative;
+	 		text-align: center;
+	 		transition: all .125s ease-in-out;
+	 		width: auto;
+	 		& > a {
+	 			color: rgba(51,51,51,.33333);
+	 			display: block;
+	 			outline: none;
+	 			padding: .5em;
+	 			position: relative;
+	 			text-decoration: none;
+	 			transition: all .125s ease-in-out;
+	 			z-index: 2;
+	 		}
+	 		&::before {
+	 			background-image: linear-gradient(0deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,0) 100%);
+	 			background-size: 100%;
+	 			background-repeat: no-repeat;
+	 			content: '';
+	 			position: absolute;
+	 			bottom: 0;
+	 			left: 0;
+	 			right: 0;
+	 			height: .75em;
+	 			z-index: 1;
+	 			transition: all .125s ease-in-out;
+	 		}
+	 		&:last-child { margin: 0; }
+	 		&:hover {
+	 			background-color: $lotusPrimary3;
+	 			& > a { color: #eee; }
+	 		}
+	 		&.ui-tabs-active {
+	 			border-bottom: none;
+	 			&::before { opacity: 0; }
+	 			& > a {
+	 				background-color: #ccc;
+	 				color: #333;
+	 			}
+	 		}
+	 		
+		}
+	}
+	& > div.ui-tabs-panel {
+		background-color: #ccc;
+ 		overflow: hidden;
+ 		padding: 1.5em;
+	}
+	.user-message {
+		padding: .5rem 1rem;
+		margin-bottom: .75rem;
+	}
+	h4 {
+		font-size: 1.25rem;
+		margin: 0 0 .375rem 0;
+	}
+	input[disabled] + span { color: rgba(#333,.3); }
+	input[type="checkbox"] { display: inline-block; }
+	fieldset label {
+		line-height: 1.5rem;
+		margin-bottom: .75rem;
+	}
+}
+
+
+/* Custom layout */
+#user-custom-tab-1 {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	p { width: 100%; }
+}
+	#expat-user-custom-cluster-toggle {
+		margin-right: 2rem;
+		flex-grow: 1;
+		width: 33%;
+	}
+	#expat-user-custom-cluster-configs {
+		width: calc(67% - 2rem);
+		.user-message .loader {
+			float:left;
+			margin: 0 .5em 0 0;
+			width: 1.5em;
+			height: 1.5em;
+			text-align: center;
+			& > svg {
+				width: 100%;
+				height: 100%;
+				& > circle.path {
+					stroke: #eee;
+					stroke-width: 8px;
+				}
+			}
+		}
+		.col-one, .col-two { width: 50%; }
+	}
+#user-sort-custom-field {
+	cursor: pointer;
+}
+#expat-colorbrewer-list { 
+	padding: 0;
+	li {
+		list-style: none;
+	}
+	& > li {
+		float: left;
+		& > ul {
+			background-color: #fff;
+			box-sizing: content-box;
+			cursor: pointer;
+			border: 1px solid rgba(0,0,0,.25);
+			display: flex;
+			opacity: .5;
+			flex-direction: column;
+			padding: .25rem;
+			margin: 0 .25rem .5rem;
+			width: 1.2rem;
+			height: 8rem;
+			& > li {
+				width: 100%;
+				height: 100%;
+			}
+		}
+		&.selected, &:hover {
+			ul { opacity: 1; }
+		}
+	}
+}
+
+/* Table data */
+.table-overflow {
+	overflow-x: auto;
+	#rows {
+		margin-bottom: 3rem;
+		thead {
+			td {
+				height: 22em;
+				white-space: nowrap;
+				vertical-align: bottom;
+				position: relative;
+				&:hover, &.hover { background: none; }
+				div {
+					position: absolute;
+					top: 100%;
+					left: 100%;
+					transform: translate(-1.5rem, -2.5rem) rotate(-45deg);
+					width: 3rem;
+					span {
+						border-bottom: 1px solid #ccc;
+						padding: 1rem 2rem 1rem .25rem;
+					}
+				}
+				&[data-condition] {
+					text-transform: none;
+					letter-spacing: 0;
+				}
+			}
+		}
+		tbody {
+			th {
+				white-space: nowrap;
+				.dropdown.button { display: inline-block; }
+			}
+		}
+
+		tfoot {
+			tr {
+				background-color: #eee;
+				button {
+					white-space: nowrap;
+				}
+			}
+		}
+	}
+}
+
+
+/* SVG Charts */
+.d3-chart {
+	&:last-child { margin-bottom: 1.5rem; }
+	svg {
+		font-family: $fontface-sansSerif;
+		width: 100%;
+		path, line, rect {
+			shape-rendering: auto;
+		}
+	}
+}
+
+// D3 tooltip
+@import 'components/d3/_tip.scss';
+
+// ExpAt linegraph
+@import 'components/expat/_linegraph.scss';
+
+// ExpAt heatmap
+@import 'components/expat/_heatmap.scss';
+
+// ExpAt dendrogram
+@import 'components/expat/_dendrogram.scss';
+
+	
+.expat-probes #probes-result form {
+	background: none;
+	margin-top: 1.5em;
+	padding: 0;
+}
+	.expat-probes #rows tbody td {
+		font-size: 1em;
+	}

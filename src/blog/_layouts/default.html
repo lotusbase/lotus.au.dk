@@ -1,0 +1,20 @@
+<?php
+	require_once($_SERVER['DOCUMENT_ROOT'].'/config.php');
+?>
+<!DOCTYPE html>
+<html>
+
+	{% include head.html %}
+
+	<body class="blog {% body_class %}">
+
+		<div id="lotusbase__wrap"><div id="lotusbase__container">
+
+		{{ content }}
+
+		<?php include(DOC_ROOT.'/footer.php'); ?>
+    	<script src="/dist/js/blog.min.js"></script>
+
+	</body>
+
+</html>

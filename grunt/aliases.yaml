@@ -1,0 +1,62 @@
+default:
+  description: 'Default (production) build'
+  tasks:
+    - prod
+dev:
+  description: 'Development build'
+  tasks:
+    - 'newer:concurrent:devFirst'
+    - 'newer:concurrent:devSecond'
+    - 'newer:concurrent:devThird'
+img:
+  description: 'Image tasks, total rebuild'
+  tasks:
+    - 'concurrent:imgFirst'
+imgNewer:
+  description: 'Image tasks, for newer files only'
+  tasks:
+    - 'newer:concurrent:imgFirst'
+jsmin:
+  description: 'JS tasks, total rebuild'
+  tasks:
+    - 'jshint'
+    - 'uglify'
+jsminNewer:
+  description: 'JS tasks, total rebuild'
+  tasks:
+    - 'newer:jshint'
+    - 'newer:uglify'
+fileCopy:
+  description: 'Copying over minified files, total rebuild'
+  tasks:
+    - 'concurrent:fileCopy'
+fileCopyNewer:
+  description: 'Copying over minified files, for newer files only'
+  tasks:
+    - 'newer:concurrent:fileCopy'
+devimg:
+  description: 'Development build and image tasks'
+  tasks:
+    - dev
+    - img
+prod:
+  description: 'Production build, total rebuild'
+  tasks:
+    - clean
+    - 'concurrent:prodFirst'
+    - 'concurrent:prodSecond'
+    - 'concurrent:prodThird'
+    - 'cacheBust:prod'
+prodNewer:
+  description: 'Production build, for newer files only'
+  tasks:
+    - 'newer:concurrent:prodFirst'
+    - 'newer:concurrent:prodSecond'
+    - 'newer:concurrent:prodThird'
+    - imgNewer
+    - 'newer:cacheBust:prod'
+prodCdc:
+  description: 'Production build, copy template files and run cacheBust'
+  tasks:
+    - fileCopy
+    - 'cacheBust:prod'

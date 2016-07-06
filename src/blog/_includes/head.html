@@ -1,0 +1,31 @@
+<head>
+
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<title>{% if page.title %}{{ site.title | strip_html }}: {{ page.title | strip_html }}{% else %}{{ site.title | strip_html }}{% endif %}</title>
+
+	<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="{{ "/dist/css/ggs.min.css" | prepend: site.webroot }}" type="text/css" media="screen" />
+	<link rel="stylesheet" href="{{ "/dist/css/styles.min.css" | prepend: site.webroot }}" type="text/css" media="screen" />
+	<link rel="stylesheet" href="{{ "/dist/css/blog.min.css" | prepend: site.webroot }}" type="text/css" media="screen" />
+	<link rel="stylesheet" href="{{ "/lib/header-icon-css" | prepend: site.webroot }}" type="text/css" media="screen" />
+	<link rel="stylesheet" href="{{ "/dist/css/print.min.css" | prepend: site.webroot }}" type="text/css" media="print" />
+	<link rel="shortcut icon" type="image/png" href="{{ "/dist/images/logos/lotusbase-favicon.png" | prepend: site.webroot }}" />
+
+	<!-- Google Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,300,400,600|Open+Sans+Condensed:300' rel='stylesheet prefetch' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Crimson+Text:400,400italic' rel='stylesheet' type='text/css'>
+
+	<script src="/dist/js/plugins/modernizr.min.js"></script>
+
+	<!-- Metadata -->
+	<meta name="author" content="Terry Mun">
+
+	<link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+	<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
+
+</head>

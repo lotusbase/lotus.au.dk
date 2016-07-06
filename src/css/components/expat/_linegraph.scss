@@ -1,0 +1,66 @@
+@import '../../mixins';
+
+#expat-linegraph {
+	.tick {
+		line {
+			stroke: #ccc;
+		}
+	}
+
+	.x.axis {
+		.tick {
+			line {
+				stroke: transparent;
+				&.hover {
+					stroke: #777;
+				}
+			}
+		}
+	}
+
+	g.row {
+		opacity: 0.25;
+
+		path {
+			stroke: #555;
+			stroke-width: 3px;
+			@include transition;
+		}
+
+		&.active,
+		&:hover {
+			opacity: 1;
+		}
+
+	}
+
+	circle.point {
+		opacity: 0;
+		fill: #eee;
+		stroke: #555;
+		stroke-width: 1.5px;
+		@include transition;
+
+		&.active {
+			opacity: 1;
+			stroke: #333;
+			fill: #eee;
+		}
+	}
+}
+
+
+	#expat-linegraph.active g.row circle.point {
+		stroke: #999;
+	}
+	#expat-linegraph.active g.row.active circle.point,
+	#expat-linegraph g.row:hover circle.point {
+		stroke: rgba(74,114,152,1);
+		fill: rgba(97,149,198,1);
+	}
+	#expat-linegraph.active g.row.active circle.point.hover,
+	#expat-linegraph:hover g.row circle.point:hover {
+		opacity: 1;
+		stroke: #333;
+		fill: #eee;
+	}

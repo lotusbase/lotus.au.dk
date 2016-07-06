@@ -1,0 +1,232 @@
+@import 'stepform';
+
+@keyframes pulsate {
+	0% {box-shadow: 0 0 0 0px rgba(#fff,0);}
+	50% {box-shadow: 0 0 0 20px rgba(#fff, .5);}
+	100% {box-shadow: 0 0 0 40px rgba(#fff,0);}
+}
+
+#order-status {
+	padding: 0 3rem;
+}
+
+#order-overview {
+	background-color: rgba(#000,.1);
+	border-radius: 4px;
+	margin-bottom: 1rem;
+	overflow: hidden;
+	h4 {
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+}
+	#order-overview__meta {
+		flex: 1 1 auto;
+		width: 50%;
+		& > div {
+			padding: 1.5rem 3rem;
+		}
+	}
+
+.progress {
+	position: relative;
+	width: 100%;
+	height: 4rem;
+	margin-bottom: 1.5rem;
+	.progress__steps {
+		list-style: none;
+		position: absolute;
+		padding: 0;
+		margin: 0;
+		top: 1rem;
+		left: .5rem;
+		right: .5rem;
+		li.progress__step {
+			position: relative;
+			& > span.step__title {
+				color: #999;
+				font-weight: bold;
+				position: absolute;
+				top: 100%;
+				left: 50%;
+				transform: translateX(-50%);
+			}
+			& > span.step__count {
+				background-color: #999;
+				border-radius: 50%;
+				box-sizing: border-box;
+				color: #fff;
+				display: block;
+				font-weight: bold;
+				line-height: calc(2rem - 6px);
+				text-align: center;
+				border: 3px solid #fff;
+				width: 2rem;
+				height: 2rem;
+			}
+
+			// Status
+			&.step--completed {
+				& > span.step__title { color: $lotusPrimary3; }
+				& > span.step__count { background-color: $lotusPrimary3; }
+			}
+		}
+		
+	}
+	.progress__track {
+		background-color: #fff;
+		position: absolute;
+		height: .5rem;
+		top: 1.75rem;
+		left: 1rem;
+		right: 1rem;
+		.progress__value {
+			background-color: $lotusPrimary3;
+			display: block;
+			position: absolute;
+			left: 0;
+			top: 2px;
+			bottom: 2px;
+		}
+	}
+}
+@media (max-width: 767px) {
+	.progress {
+		height: auto;
+		.progress__steps {
+			position: static;
+			li.progress__step {
+				margin-bottom: .5rem;
+				overflow: hidden;
+				& > span {
+					float: left;
+					&.step__title {
+						line-height: 2rem;
+						margin-left: .5rem;
+						position: static;
+						transform: none;
+					}
+				}
+			}
+		}
+		.progress__track {
+			border-radius: 2rem;
+			border-left: 2px solid #fff;
+			border-right: 2px solid #fff;
+			margin-bottom: .75rem;;
+			position: relative;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 1rem;
+			.progress__value {
+				border-top-left-radius: 2rem;
+				border-bottom-left-radius: 2rem;
+			}
+		}
+	}
+}
+
+#order-overview__shipping {
+	&::after {
+		border-bottom: 2px solid #eee;
+		content: '';
+		display: block;
+		width: 50%;
+		margin: 0 auto;
+		position: relative;
+		bottom: calc(1px - 1.5rem);
+	}
+	.vcard {
+		background-color: transparent;
+		border-radius: 0;
+		p {
+			margin-bottom: .5rem;
+			.organization { font-weight: bold; }
+		}
+		.fn {
+			font-size: 1.5rem;
+		}
+	}
+}
+
+#order-overview__lore1-lines {
+	p { margin-bottom: .5rem; }
+	ul { margin: 0 0 1.5rem 0; }
+
+	table {
+		tr {
+			&.total {
+				border-top: 3px double #555;
+				border-bottom: 2px solid #555;
+				font-weight: bold;
+			}
+		}
+		td[data-type='num'] {
+			text-align: right;
+		}
+		small { color: #777; }
+	}
+}
+
+#order-overview__map {
+	background-color: rgba(#000,.1);
+	background-position: center center;
+	flex: 1 1 auto;
+	min-width: 50%;
+	position: relative;
+	&::before {
+		animation: pulsate 1s linear infinite;
+		border-radius: 50%;
+		content: '';
+		display: block;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: $lotusPrimary5;
+		border: 2px solid #fff;
+		width: 10px;
+		height: 10px;
+	}
+
+	.tooltip {
+		background-color: rgba(#fff,.9);
+		border-radius: 4px;
+		box-shadow: 0 0 10px 0 rgba(#000,.25);
+		position: absolute;
+		left: 50%;
+		top: calc(50% - 2rem);
+		max-width: 50%;
+		transform: translate(-50%, -200%);
+		padding: 1rem 1.5rem;
+		opacity: 0;
+		transition: all $transitionDuration $transitionTimingFunction;
+		&.show { display: block; opacity: 1; transform: translate(-50%, -100%); }
+	}
+}
+
+#disclaimer {
+	article {
+		background-color: #ddd;
+		background-image: radial-gradient(ellipse at 50% 100%, rgba(#000,.1) 0%, rgba(#000,0) 100%);
+		background-size: 100% 25%;
+		background-repeat: no-repeat;
+		background-position: bottom center;
+		overflow-y: auto;
+		max-height: 50vh;
+		margin: 0;
+		padding: 1.5rem 3rem;
+	}
+}
+
+#payment-status {
+	display: none;
+}
+
+@media (max-width: 767px) {
+	#order-overview__map {
+		width: 100%;
+		height: 400px;
+	}
+}

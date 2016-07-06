@@ -1,0 +1,142 @@
+// Include
+@import 'variables';
+@import 'mixins';
+
+// Additional mixins
+@mixin form_nav($color: #eee, $bg_col_start: #ddd, $bg_col_end: darken($bg_col_start, 5%)) {
+	a {
+		background-color: $bg_col_start;
+		background-image: linear-gradient(90deg, rgba($bg_col_start,0) 50%, rgba($bg_col_end,1) 100%);
+		color: $color;
+		&::after {
+			background-image:
+				linear-gradient(to top right, rgba($bg_col_end,1) 50%, rgba($bg_col_end,0) 50%),
+				linear-gradient(to bottom right, rgba($bg_col_end,1) 50%, rgba($bg_col_end,0) 50%);
+		}
+	}
+}
+
+form.has-steps {
+	#form-step__header {
+		nav {
+			ul {
+				padding: 0;
+				li {
+					list-style: none;
+					flex-grow: 1;
+					a {
+						background-color: rgba(#000,.15);
+						display: block;
+						padding: .5rem 1rem;
+						position: relative;
+						text-align: center;
+						text-decoration: none;
+						&::after {
+							background-size: 100% 50%;
+							background-repeat: no-repeat;
+							background-position: top center, bottom center;
+							content: '';
+							display: block;
+							position: absolute;
+							top: 0;
+							bottom: 0;
+							right: -1rem;
+							width: 1rem;
+							z-index: 1;
+						}
+						span {
+							display: block;
+							&.step-label {
+								font-size: .875rem;
+								font-weight: bold;
+								line-height: 1.5rem;
+							}
+						}
+					}
+
+					&:first-child a { border-top-left-radius: 4px; border-bottom-left-radius: 4px; }
+					&:last-child a {
+						border-top-right-radius: 4px;
+						border-bottom-right-radius: 4px;
+						&::after { display: none; }
+					}
+
+					// States
+					&.form-step-nav--disabled {
+						@include form_nav(rgba(#000,.25), #ddd);
+						a { cursor: not-allowed; }
+					}
+					&.form-step-nav--enabled {
+						@include form_nav(#eee, $lotusPrimary3);
+						a { cursor: pointer; }
+					}
+					&.form-step-nav--active {
+						@include form_nav(darken($lotusPrimary2,35%), $lotusPrimary2);
+						a {
+							border-top-left-radius: 4px;
+							border-bottom-left-radius: 4px;
+							box-shadow: .5rem .5rem 1rem 0 rgba(0, 0, 0, .15);
+							cursor: pointer;
+							transform: scale(1.1);
+							z-index: 2;
+						}
+						&.form-step-nav--valid { @include form_nav(#eee, $ui_ok); }
+					}
+					&.form-step-nav--invalid {
+						@include form_nav(#eee, $ui_warning);
+					}
+				}
+			}
+		}
+	}
+	div.form-step {
+		display: none;
+		&.form-step--active {
+			display: block;
+		}
+
+		// Shipping
+		#shipping_billing {
+			display: inline-block;
+			margin-right: .5rem;
+		}
+		#alt-shipping {
+			display: none;
+		}
+
+		// Payment
+		.payment-price { font-weight: bold; }
+	}
+}
+
+@media (max-width: 767px) {
+	form.has-steps {
+		#form-step__header {
+			nav {
+				ul {
+					li {
+						margin-bottom: 1px;
+						a {
+							border-radius: 0 !important;
+							&::after { display: none; }
+						}
+
+						&.form-step-nav--active {
+							a {
+								box-shadow: none;
+								transform: none;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	#form-step__nav-bottom {
+		display: flex;
+		& > * {
+			width: auto;
+		}
+	}
+}

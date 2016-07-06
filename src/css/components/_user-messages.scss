@@ -1,0 +1,69 @@
+/* User messages */
+.user-message {
+	border-radius: 4px;
+	background-color: $lotusPrimary3;
+	color: #eee;
+	margin-bottom: 1.5rem;
+	padding: 1rem 1.25rem;
+	/* Modifiers */
+	&.warning		{ @include gentle-gradient($ui_warning); }
+	&.reminder		{ @include gentle-gradient($ui_reminder); }
+	&.note			{ @include gentle-gradient($ui_note); }
+	&.approved		{ @include gentle-gradient($ui_ok); }
+	&.unknown		{ @include gentle-gradient(#999); }
+
+	/* Components */
+	h3 {
+		color: #eee;
+		margin: 0;
+		text-align: center;
+		.pictogram {
+			display: block;
+			font-size: 3em;
+		}
+	}
+	p {
+		margin-bottom: .75rem;
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+	a {
+		color: #eee;
+		text-decoration: underline;
+		code { text-decoration: underline; }
+	}
+	ul {
+		margin: 0;
+	}
+	pre, code {
+		background-color: rgba(#000,.3);
+		color: #eee;
+		border-bottom: 1px solid rgba(#000,.3);
+		position: relative;
+		top: -1px;
+	}
+	button {
+		background-color: rgba(#000,.5);
+		border: 1px solid rgba(#000,.15);
+		&:hover { background-color: rgba(#000,.65); }
+	}
+
+	/* Modifiers */
+	&.plain {
+		background: none;
+		margin-bottom: 3rem;
+		padding: 0;
+	}
+	&.minimal {
+		background-image: none;
+		&.warning		{ background-color: $ui_warning; }
+		&.reminder		{ background-color: $ui_reminder; }
+		&.note			{ background-color: $ui_note; }
+		&.approved		{ background-color: $ui_ok; }
+		&.unknown		{ background-color: #999; }
+	}
+	&.user-mssage--dense, &.status {
+		padding: 0 .5rem;
+	}
+}

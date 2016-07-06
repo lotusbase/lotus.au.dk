@@ -1,0 +1,59 @@
+// Themes
+body.theme--white {
+	// Header
+	#header {
+		background-image:
+			radial-gradient(ellipse at 50% 100%, rgba(#eee,.25) 0%, rgba(#eee,0) 50%),
+			linear-gradient(90deg, rgba(#ddd,.85) 0%, rgba(#ccc,.85) 100%),
+			url('/lib/random-image?type=header');
+		.header-content {
+			color: #555;
+			h1 {
+				& + span { color: #555; }
+			}
+			a {
+				color: #333;
+			}
+			.user-message a {
+				color: #eee;
+			}
+		}
+		nav.main {
+			&::before {
+				background-image: linear-gradient(90deg, rgba(#ddd,.85) 0%, rgba(#ccc,.85) 100%);
+			}
+			a {
+				color: #555;
+			}
+
+			.search-form {
+				color: #555;
+				button.icon-search {
+					color: #555;
+				}
+				input, select {
+					color: rgba(#333,.5);
+					@include placeholder { color: rgba(#333,.25); }
+				}
+				select {
+					background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill="#333" d="M4.516,7.548c0.436-0.446,1.043-0.481,1.576,0L10,11.295l3.908-3.747c0.533-0.481,1.141-0.446,1.574,0 c0.436,0.445,0.408,1.197,0,1.615c-0.406,0.418-4.695,4.502-4.695,4.502C10.57,13.888,10.285,14,10,14s-0.57-0.112-0.789-0.335 c0,0-4.287-4.084-4.695-4.502C4.107,8.745,4.08,7.993,4.516,7.548z"/></svg>');
+				}
+				input {
+					&:focus {
+						box-shadow: inset 0 -2px 0 #333;
+						& + select {
+							box-shadow: inset 0 -2px 0 rgba(#333, .5);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Top notifications
+	#top-notifications {
+		& > div {
+			background-color: rgba(#000,.25);
+		}
+	}
+}

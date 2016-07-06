@@ -1,0 +1,24 @@
+.expat-dendrogram {
+	pointer-events: none;
+	&.active {
+		pointer-events: auto;
+	}
+
+	// Components
+	.node {
+		&.leaf {
+			circle {
+				cursor: pointer;
+				&:hover { fill: #555; }
+			}
+		}
+		&.parent {
+			circle { cursor: auto; }
+		}
+	}
+	path.link {
+		stroke: #ccc;
+		stroke-width: 1px;
+		fill: none;
+	}
+}

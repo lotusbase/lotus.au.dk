@@ -1,0 +1,172 @@
+<main>
+	<% report.queries.each_with_index do |query, q| %>
+		<article class="resultn" id="<%="Query_#{query.number}"%>" data-query-len="<%= query.length %>" data-graphit-target="hsps" data-graphit="overview" data-hit-count="<%= query.hits.count %>">
+			<header>
+				<h2>Query: <%= query.id %><span><%= query.title %></span></h2>
+				<span title="<%= "Query #{query.number}." %>"><%= "#{query.number}&nbsp;of&nbsp;#{report.queries.length}"%></span>
+			</header>
+
+			<section>
+				<% if query.hits.empty? %>
+					<p><strong>Query length:</strong> <%= query.length %></p>
+					<p class="user-message warning">No hits found for <%= query.id %>. You might want to revise your search query.</p>
+				<% else %>
+					<table class="blast-hits table--dense table--no-stripes">
+						<thead>
+							<th>&#8470;</th>
+							<th>Sequences producing significant alignments</th>
+							<th data-type="numeric">Total score</th>
+							<th data-type="numeric">E value </th>
+							<th data-type="numeric">Length </th>
+						</thead>
+						<tbody>
+						<% query.hits.each_with_index do |hit, h| %>
+							<tr>
+								<td><%= h + 1 %></td>
+								<td><a href="<%="#Query_#{query.number}_hit_#{hit.number}"%>"><%= "#{hit.id}" %></a></td>
+								<td data-type="numeric"><%= prettify hit.score	%></td>
+								<td data-type="numeric"><%= prettify hit.evalue	%></td>
+								<td data-type="numeric"><%= prettify hit.length	%></td>
+							</tr>
+						<% end %>
+						</tbody>
+					</table>
+					<ul class="hit-list">
+					<% query.hits.each do |hit| %>
+						<li class="hitn" id="<%="Query_#{query.number}_hit_#{hit.number}"%>" data-hit-def="<%= hit.id %>" data-hit-evalue="<%= hit.evalue %>" data-hit-len="<%= hit.length %>">
+							<div class="toggle">
+								<h3>
+									<a class="open" data-toggled="on" data-target="#<%= "Query_#{query.number}_hit_#{hit.number}_alignment" %>" title="View raw query metadata">
+										<div>
+											<span class="hit-id"><%= hit.id %></span>
+											<span class="hit-title"><%= hit.title %></span>
+										</div>
+										<div class="hit-number" title="<%= "Query #{query.number}. Hit #{hit.number}&nbsp;of&nbsp;#{query.hits.length}." %>"><%= "#{hit.number}&nbsp;of&nbsp;#{query.hits.length}"%></div>
+									</a>
+								</h3>
+								<div>
+									<div class="cols">
+										<div class="hit-length"><% if false %>Database: <%
+											hitDBs = []
+											hit.whichdb.each do |hitDB|
+												hitDBs.push(hitDB.title)
+											%>
+										<strong><%= hitDB.title %></strong>
+										<% end %>| <% end %>Hit length: <strong><%= hit.length %></strong></div>
+										<div class="hit-links">
+											<label><input type="checkbox" value="<%= hit.accession %>" data-target="<%= "#Query_#{query.number}_hit_#{hit.number}" %>">Select</label><% hit.links.each do |link| %> | <%= a link %><% end %><%
+												# If mactches Lotus protein ID pattern
+												if(hit.id =~ /^Lj([0-6]|mito|chloro)g\d+v.*$/i)
+												%> | <div class="dropdown"><span class="dropdown--title">More info</span><ul class="dropdown--list">
+													<li><a href="../genome/?loc=<%= hit.id %>" title="View in jBrowse"><span class="pictogram icon-map">jBrowse</span></a></li>
+													<li><a href="../expat/?ids=<%= hit.id %>&amp;t=6" title="Access expression data from the Expression Atlas"><span class="pictogram icon-map">Expression Atlas</span></a></li>
+													<li><a href="../lore1/search-exec?gene=<%= hit.id %>&amp;v=30" title="Search for LORE1 insertions in this gene"><span class="pictogram icon-search">LORE1 lines</span></a></li>
+												</ul></div><% elsif(hit.id =~ /^NODE_/) %>
+													| <div class="dropdown"><span class="dropdown--title">More info</span><ul class="dropdown--list">
+														<li><a href="../genome/?loc=<%= hit.id %>" title="View in jBrowse"><span class="pictogram icon-map">jBrowse</span></a></li>
+													</ul></div>
+												<% end %>
+										</div>
+									</div>
+									<ul class="hsps">
+										<% hit.hsps.each do |hsp| %>
+											<li>
+												<div class="hsp-number"><%= hsp.number %></div>
+												<div class="hsp" id="<%="Query_#{query.number}_hit_#{hit.number}_#{hsp.number}"%>" data-hsp-evalue="<%= hsp.evalue %>" data-hsp-start="<%= hsp.qstart %>" data-hsp-end="<%= hsp.qend %>" data-hsp-frame="<%= hsp.sframe %>">
+													<table class="hsp-stats">
+														<thead>
+															<% hsp.stats.keys.each do |key| %>
+																<th>
+																	<%= key %>
+																</th>
+															<% end %>
+														</thead>
+														<tbody>
+															<tr>
+																<% hsp.stats.values.each do |value| %>
+																	<td>
+																		<%= prettify value %>
+																	</td>
+																<% end %>
+															</tr>
+														</tbody>
+													</table>
+													<pre class="alignment"><%= hsp.pp %></pre>
+												</div>
+											</li>
+										<% end %>
+									</ul>
+								</div>
+							</div>
+						</li>
+					<% end %>
+					</ul>
+				<% end %>
+			</section>
+		</article>
+	<% end %>
+
+	<article id="blast-metadata">
+		<h3>View raw query metadata</h3>
+		<pre><code>Program used: <%= report.program_version %>
+Databases queried:
+<% report.querydb.each do |db| %>
+<%= "#{db.title}\n\t#{db.nsequences} sequences, #{db.ncharacters} letters\n\tcreated/updated on - #{db.updated_on}" %>
+<% end %>
+Total sequences in queried databases: <%= report.stats[:nsequences] %>
+Total letters in queried databases: <%= report.stats[:ncharacters] %>
+</code></pre>
+	</article>
+</main>
+
+<% unless report.queries.length == 1 && report.queries.first.hits.empty? %>
+<aside class="sticky">
+	<div>
+		<h2><%= report.program.upcase %></h2>
+		<p><a href="#blast" title="Return to top">Return to top</a> to refine search.</p>
+
+		<h3>Using <%= report.queries.length %> <%= report.queries.length > 1 ? 'queries' : 'query' %></h3>
+		<ul>
+			<% report.queries.each do |query| %>
+				<li><a href="<%="#Query_#{query.number}"%>" title="<%= "Query: #{query.id}" %>"><%= "#{query.id}" %></a></li>
+			<% end %>
+		</ul>
+
+		<h3>Against <%= report.querydb.length %> <%= report.querydb.length > 1 ? 'databases' : 'database' %></h3>
+		<ul>
+			<% report.querydb.each do |db| %>
+				<li><span title="<%= "Database: #{db.title}" %>"><%= "#{db.title}" %></span></li>
+			<% end %>
+		</ul>
+
+		<h3>Download FASTA, XML, TSV</h3>
+		<ul>
+			<li>
+				<a class="download download-fasta-of-all disabled" data-databases="<%= report.querydb.map(&:id).join(' ') %>">FASTA of all hits
+				</a>
+			</li>
+			<li>
+				<a class="download download-fasta-of-selected disabled" data-databases="<%= report.querydb.map(&:id).join(' ') %>">FASTA of <span class="text-bold"></span> selected hit(s)
+				</a>
+			</li>
+			<li>
+				<a class="download" title="12 columns: query and subject ID; alignment length, mismatches, gaps, identity, start and end coordinates, e value and bitscore." href="download/<%= report.search_id %>.std_tsv">Standard tabular report
+				</a>
+			</li>
+			<li>
+				<a class="download" title="44 columns: query and subject ID, GI, accessions, and length; alignment details; taxonomy details of subject sequence(s) and query coverage per subject and per HSP." href="download/<%= report.search_id %>.full_tsv">Full tabular report
+				</a>
+			</li>
+			<li>
+				<a class="download" title="Results in XML format." href="download/<%= report.search_id %>.xml">Full XML report
+				</a>
+			</li>
+		</ul>
+
+		<h3>Metadata</h3>
+		<ul>
+			<li><a href="#blast-metadata" title="View metadata of this BLAST query">View metadata</a></li>
+		</ul>
+	</div>
+</aside>
+<% end %>

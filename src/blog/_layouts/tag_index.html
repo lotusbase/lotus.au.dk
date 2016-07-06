@@ -1,0 +1,59 @@
+---
+layout: default
+---
+<?php
+
+	// Generate header
+	$header = new \LotusBase\PageHeader();
+	$header->add_header_class('blog tag');
+	$header->set_header_content('<h1>{{ page.title }}</h1>');
+	echo $header->get_header();
+?>
+
+<section class="wrapper" id="breadcrumb">
+	<nav>
+		<ul>
+			<li><a href="<?php echo WEB_ROOT; ?>/" title="Home"><em>Lotus</em> Base</a></li>
+			<li><a href="<?php echo WEB_ROOT; ?>/blog/" title="Home">Blog</a></li>
+			<li><a href="{{ page.url | prepend: "/blog" }}" title="{{ page.title }}">{{ page.title }}</a></li>
+		</ul>
+	</nav>
+</section>
+
+<section class="wrapper">
+	<ul class="post-list related-posts masonry">  
+		<li class="masonry-gutter"></li>
+		<li class="masonry-sizer"></li>
+		{% for post in site.posts %}
+		{% for tag in post.tags %}
+		{% if tag == page.tag %}
+		<li class="post-card masonry-item">
+			<a href="{{ post.url | prepend: "/blog" }}">
+				{% if post.coverImage %}
+					<div class="post-cover-image" style="background-image: url('{{ post.coverImage }}');"><img src="{{ post.coverImage }}" alt="{{ post.title }}" title="{{ post.title }}" /></div>
+				{% endif %}
+				<header>
+					<span class="post-date">{{ post.date | date_to_string }}</span>
+					<h3 class="post-title">{{ post.title }}</h3>
+					<span class="post-author"><img class="avatar" src="<?php echo WEB_ROOT; ?>/dist/images/team/{{ post.author | replace:' ','_' | downcase }}.jpg" alt="{{ post.author }}" title="{{ post.author }}" />{{ post.author }}</span>
+					<ul class="tag-list cols flex-wrap__nowrap justify-content__center">
+						{% for tag in post.tags %}
+						<li><span>{{ tag }}</span></li>
+						{% endfor %}
+					</ul>
+				</header>
+				<p class="post-excerpt">{% if post.summary %}{% if post.coverImage and postCount == '1' %}{{ post.summary | strip_html | truncatewords: 50 }}{% else %}{{ post.summary | strip_html | truncatewords: 30 }}{% endif %}{% else %}{% if post.coverImage and postCount == '1' %}{{ post.content | strip_html | truncatewords: 50 }}{% else %}{{ post.content | strip_html | truncatewords: 30 }}{% endif %}{% endif %}</p>
+			</a>
+			<!--<time style="color:#666;font-size:11px;" datetime='{.{post.date | date: "%Y-%m-%d"}}'>{{post.date | date: "%m/%d/%y"}}</time> <a class="archive_list_article_link" href='{.{post.url}}'>{{post.title}}</a>
+			<p class="summary">{{post.summary}}</p>
+			<ul class="tag_list">
+				{% for tag in post.tags %}
+				<li class="inline archive_list"><a class="tag_list_link" href="/tag/{.{ tag }}">{{ tag }}</a></li>
+				{% endfor %}
+			</ul>-->
+		</li>
+		{% endif %}
+		{% endfor %}
+		{% endfor %}
+	</ul>
+</section>

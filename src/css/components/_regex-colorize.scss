@@ -1,0 +1,16 @@
+.regex-colorize b     {background: #aad1f7;} /* metasequence */
+.regex-colorize i     {background: #f9ca69;} /* char class */
+.regex-colorize i b   {background: #f7a700;} /* char class: metasequence */
+.regex-colorize i u   {background: #efba4a;} /* char class: range-hyphen */
+.regex-colorize b.g1  {background: #d2f854;} /* group: depth 1 */
+.regex-colorize b.g2  {background: #9ec70c;} /* group: depth 2 */
+.regex-colorize b.g3  {background: #ecc9f7;} /* group: depth 3 */
+.regex-colorize b.g4  {background: #54b70b;} /* group: depth 4 */
+.regex-colorize b.g5  {background: #b688cf;} /* group: depth 5 */
+.regex-colorize b.err {background: #ff4300;} /* error */
+.regex-colorize b, .regex-colorize i, .regex-colorize u {font-weight: normal; font-style: normal; text-decoration: none;}
+
+.regex-colorize:hover {
+	background-color: rgba(#000,.25);
+	color: #333;
+}

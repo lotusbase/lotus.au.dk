@@ -1,0 +1,32 @@
+/* Fonts */
+// Global site variables for styling
+$fontface-monospace:			'Consolas', 'Lucida Console', 'Lucida Sans Typewriter', 'Courier New', 'Courier', monospace !default;
+$fontface-serif:				'Lora', 'Georgia', 'Times', 'Times New Roman', serif !default;
+$fontface-sansSerif:			'Helvetica Neue', 'Helvetica', 'Arial', sans-serif !default;
+$fontface-sansSerifCondensed:	'Helvetica Condensed', 'Arial Narrow', sans-serif !default;
+
+/* Colors */
+// Primary colour scheme from https://coolors.co/app/e63946-f1faee-a8dadc-457b9d-1d3557
+// Primary colour scheme from https://coolors.co/app/e56d39-f6f9ed-a6dbc1-459e93-1c5056
+/* Coolors Exported Palette - coolors.co/f26419-f6ae2d-5ca4a9-33658a-2f4858 */
+
+$color1: #f26419 !default; //rgba(242, 100, 25, 100)
+$color2: #f6ae2d !default; //rgba(246, 174, 45, 100)
+$color3: #5ca4a9 !default; //rgba(92, 164, 169, 100)
+$color4: #33658a !default; //rgba(51, 101, 138, 100)
+$color5: #2f4858 !default; //rgba(47, 72, 88, 100)
+$lotusPrimary1: $color1 !default;
+$lotusPrimary2: $color2 !default;
+$lotusPrimary3: $color3 !default;
+$lotusPrimary4: $color4 !default;
+$lotusPrimary5: $color5 !default;
+
+// Action colours
+$ui_ok:			#1F8E61 !default;
+$ui_note:		$color4 !default;
+$ui_reminder:	#DB9E36 !default;
+$ui_warning:	#BD4932 !default;
+
+// Global config
+$transitionDuration: .25s !default;
+$transitionTimingFunction: ease-in-out !default;

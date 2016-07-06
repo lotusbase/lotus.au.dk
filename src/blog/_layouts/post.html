@@ -1,0 +1,87 @@
+---
+layout: default
+---
+<?php
+
+	// Load teams
+	require_once(DOC_ROOT.'/lib/team.php');
+
+	echo '<div itemscope itemtype="http://schema.org/BlogPosting">';
+
+	// Generate header
+	$header = new \LotusBase\PageHeader();
+	$header->add_header_class('blog post');
+	{% if page.coverImage %}
+	$header->set_header_background_image('{{ page.coverImage }}');
+	{% endif %}
+	$header->set_header_content('<h1 class="post-title" itemprop="name headline">{{ page.title }}</h1>
+	<p class="post-meta">{% if page.author %}<img src="'.WEB_ROOT.'/dist/images/team/{{ page.author | replace:' ','_' | downcase }}.jpg" class="avatar" alt="{{ page.author }}" title="{{ page.author }}" /><span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span><span itemprop="description" class="author-role">'.$team['{{ page.author }}']['role'].'</span></span>{% endif %}<span><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time> &middot; {% include reading_time.html %}</span></p>');
+	echo $header->get_header();
+?>
+
+<section class="wrapper" id="breadcrumb">
+	<nav>
+		<ul itemscope itemtype="http://schema.org/BreadcrumbList">
+			<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="<?php echo WEB_ROOT; ?>/" title="Home"><span itemprop="name"><em>Lotus</em> Base</span><meta itemprop="position" content="1" /></a></li>
+			<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="<?php echo WEB_ROOT; ?>/blog/" title="Home"><span itemprop="name">Blog</span><meta itemprop="position" content="2" /></a></li>
+			<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{ page.url | prepend: "/blog" }}" title="{{ page.title }}"><span itemprop="name">{{ page.title }}</span><meta itemprop="position" content="3" /></a></li>
+		</ul>
+	</nav>
+</section>
+
+<article class="post">
+
+	<div class="post-content" itemprop="articleBody">
+		{{ content }}
+	</div>
+
+	<div class="post-meta">
+		<ul class="post-tags">
+			{% for tag in page.tags %}
+			<li><a href="<?php echo WEB_ROOT; ?>/blog/tag/{{ tag }}">{{ tag }}</a></li>
+			{% endfor %}
+		</ul>
+
+		<h3>Related posts</h3>
+		<ul class="post-list related-posts masonry">  
+			<li class="masonry-gutter"></li>
+			<li class="masonry-sizer"></li>
+			{% for post in site.related_posts limit:3 %}
+			<li class="post-card masonry-item">
+			   	<a href="{{ post.url | prepend: "/blog" }}" class="{% if post.coverImage %}has-cover-image{% endif %}" style="{% if post.coverImage %}background-image: url({{ post.coverImage }});{% endif %}">
+			   		<span class="post-date">{{ post.date | date_to_string }}</span>
+			   		<h3 class="post-title">{{ post.title }}</h3>
+			   		<span class="post-author"><img class="avatar" src="<?php echo WEB_ROOT; ?>/dist/images/team/{{ post.author | replace:' ','_' | downcase }}.jpg" alt="{{ post.author }}" title="{{ post.author }}" />{{ post.author }}</span>
+			   	</a>
+			</li>
+			{% endfor %}  
+		</ul>
+
+		<h3>Discussion</h3>
+		<div id="disqus_thread"></div>
+		<script>
+		/**
+		* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+		* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+		*/
+
+		var disqus_config = function () {
+		this.page.url = "{{ post.url }}"; // Replace PAGE_URL with your page's canonical URL variable
+		this.page.identifier = "{{ post.id }}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+		};
+
+		(function() { // DON'T EDIT BELOW THIS LINE
+		var d = document, s = d.createElement('script');
+
+		s.src = '//lotusbase.disqus.com/embed.js';
+
+		s.setAttribute('data-timestamp', +new Date());
+		(d.head || d.body).appendChild(s);
+		})();
+		</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+	</div>
+
+</article>
+
+<?php echo '</div>'; ?>

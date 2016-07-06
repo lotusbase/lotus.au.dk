@@ -1,0 +1,63 @@
+/* Tooltips */
+.tooltip {
+	background: rgba(#fff,.95);
+	border-radius: 4px;
+	box-shadow: 0 0 1em 0 rgba(#000,.25);
+	color: #333;
+	display: none;
+	font-size: .85rem;
+	opacity: 0;
+	padding: 1rem;
+	position: absolute;
+	pointer-events: none;
+	@include transition(opacity $transitionDuration $transitionTimingFunction);
+	z-index: 30;
+	&.active {
+		display: block;
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	// Tip
+	&::before {
+		border: 10px solid rgba(#000,0);
+		content: '';
+		display: block;
+		position: absolute;
+		left: 50%;
+		margin-left: -10px;
+		width: 0;
+		height: 0;
+		pointer-events: none;
+	}
+
+	// Positions
+	&.position--top {
+		transform: translateY(-100%) translateY(-1.5rem) translateX(-50%);
+		&::before {
+			border-top-color: rgba(#fff,.95);
+			bottom: -20px;
+		}
+	}
+	&.position--bottom {
+		transform: translateY(0%) translateY(1.5rem) translateX(-50%);
+		&::before {
+			border-bottom-color: rgba(#fff,.95);
+			top: -20px;
+		}
+	}
+	&.position--left {
+		transform: translateY(-50%) translateX(-100%) translateX(-1.5rem);
+		&::before {
+			border-left-color: rgba(#fff,.95);
+			right: -20px;
+		}
+	}
+	&.position--right {
+		transform: translateY(-50%) translateX(0%) translateX(1.5rem);
+		&::before {
+			border-right-color: rgba(#fff,.95);
+			left: -20px;
+		}
+	}
+}
