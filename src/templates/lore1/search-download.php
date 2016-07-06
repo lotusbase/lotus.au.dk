@@ -59,6 +59,11 @@ if($download === "checked" || !$ak) {
 	$downloadkeys = unserialize($ak);
 }
 
+// Convert download keys to binaries
+foreach ($downloadkeys as $i => $key) {
+	$downloadkeys[$i] = hex2bin($key);
+}
+
 // Perform query
 $downloadkeys_placeholder = str_repeat('?,', count($downloadkeys)-1).'?';
 try {

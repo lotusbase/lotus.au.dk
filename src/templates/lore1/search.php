@@ -245,7 +245,7 @@
 			}
 
 			// Perform pre-query
-			$q1 = $db->prepare("SELECT lore.IDKey AS IDKey, lore.Salt AS Salt ".$dbq." GROUP BY lore.IDKey");
+			$q1 = $db->prepare("SELECT lore.IDKey AS IDKey, HEX(lore.Salt) AS Salt ".$dbq." GROUP BY lore.IDKey");
 			$q1->execute($placeholder_array);
 
 			// Fetch keys
@@ -284,7 +284,7 @@
 				lore.PCRInsPos AS PCRInsPos,
 				lore.PCRWT AS PCRWT,
 				lore.IDKey AS IDKey,
-				lore.Salt AS Salt,
+				HEX(lore.Salt) AS Salt,
 
 				GROUP_CONCAT(DISTINCT gene.Gene ORDER BY gene.Gene) AS Gene,
 				GROUP_CONCAT(DISTINCT exon.Gene ORDER BY exon.Gene) AS Exon,
