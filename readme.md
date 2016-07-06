@@ -1,5 +1,5 @@
 # *Lotus* Base
-![Latest release](https://img.shields.io/github/release/lotusbase/lotus.au.dk.svg) ![Latest tag](https://img.shields.io/github/release/lotusbase/lotus.au.dk.svg)
+![Latest release](https://img.shields.io/github/release/lotusbase/lotus.au.dk.svg) ![Latest tag](https://img.shields.io/github/tag/lotusbase/lotus.au.dk.svg)
 
 *Lotus* Base is a central, integrated information portal for the model legume *Lotus japonicus*.
 
