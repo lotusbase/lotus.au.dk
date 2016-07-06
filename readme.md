@@ -3,7 +3,7 @@
 
 ![Lotus Base logo](https://raw.githubusercontent.com/lotusbase/lotus.au.dk/master/src/images/branding/logo-128x128.png "Lotus Base logo")
 
-*Lotus* Base is a central, integrated information portal for the model legume *Lotus japonicus*.
+*Lotus* Base is a central, integrated information portal for the model legume *Lotus japonicus*. You can access *Lotus* Base at **https://lotus.au.dk**.
 
 ## User guide
 Refer to the [Frequently Asked Questions](https://lotus.au.dk/meta/faq) on our site for general use instructions, and frequently asked questions. If you encounter technical issues with *Lotus* Base, feel free to open an issue.
