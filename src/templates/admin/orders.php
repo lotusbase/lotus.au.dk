@@ -357,7 +357,9 @@
 					<input type="hidden" name="origin" id="origin" value="<?php echo $origin = urlencode($_SERVER["REQUEST_URI"]); ?>" />
 				</div>
 
-				<?php if($_SESSION['user']['admin_privileges']['DeleteFile']) { ?>
+				<?php
+					if(!empty($user['Privileges']) && !empty($user['Privileges']['DeleteFile']) && $user['Privileges']['DeleteFile'] == 1) {
+				?>
 				<label class="col-one">Admin Actions</label>
 				<div class="col-two">
 					<button type="button" class="admin-action" data-admin-action="4">Manually Verify<span> (<span class="count">0</span>)</span></button>

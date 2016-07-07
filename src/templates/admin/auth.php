@@ -20,6 +20,15 @@
 			if($user['Authority'] > 3) {
 				$_SESSION['user_privilege_error'] = 'You do not have sufficient privilege to access the administrative interface.';
 				header('Location: ../users/profile');
+			} else {
+				// Get user privileges
+				$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306", DB_USER, DB_PASS);
+				$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+				$q = $db->prepare('SELECT * FROM adminprivileges WHERE Authority = ?');
+				$q->execute(array($user['Authority']));
+
+				$user['Privileges'] = $q->fetch(PDO::FETCH_ASSOC);
 			}
 		}
 	} catch(Firebase\JWT\SignatureInvalidException $e) {
