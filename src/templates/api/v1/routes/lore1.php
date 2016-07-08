@@ -29,7 +29,7 @@ $api->get('/lore1', function($request, $response, $args) {
 				'status' => 500,
 				'data' => $e->getMessage(),
 				'code' => $e->getCode(),
-				'more_info' => DOMAIN_NAME . '/' . WEB_ROOT . '/docs/errors/pdo-exception'
+				'more_info' => DOMAIN_NAME . '/' . WEB_ROOT . '/docs/api/v1#pdo-exception'
 				),JSON_UNESCAPED_SLASHES));
 	}
 });
@@ -81,7 +81,7 @@ $api->get('/lore1/{pids}/verify', function ($request, $response, $args) {
 					'data' => array(
 						'pid_invalid' => $pid_invalid
 						),
-					'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/errors/not-found'
+					'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/api/v1#not-found'
 					)
 				,JSON_UNESCAPED_SLASHES));
 		}
@@ -135,7 +135,7 @@ $api->get('/lore1/{pids}/verify', function ($request, $response, $args) {
 						'status' => 207,
 						'message' => 'One or more plant ID you have provided are not available for ordering.',
 						'data' => $data,
-						'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/errors/partial-success'
+						'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/api/v1#207-partial-success'
 						)
 					,JSON_UNESCAPED_SLASHES));
 			}
@@ -152,7 +152,7 @@ $api->get('/lore1/{pids}/verify', function ($request, $response, $args) {
 					'status' => 404,
 					'message' => 'No valid plant ID has been found.',
 					'data' => $data,
-					'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/errors/not-found'
+					'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/api/v1#404-not-found'
 					)
 				,JSON_UNESCAPED_SLASHES));
 		}
@@ -178,7 +178,7 @@ $api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($requ
 				->write(json_encode(array(
 					'status' => 400,
 					'message' => 'Invalid <em>Lotus japonicus</em> genome version selected.',
-					'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/errors/invalid-lotus-genome-version'
+					'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/api/v1#invalid-lotus-genome-version'
 				),JSON_UNESCAPED_SLASHES));
 		}
 
@@ -225,7 +225,7 @@ $api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($requ
 				->withHeader('Content-Type', 'application/json')
 				->write(json_encode(array(
 					'message' => 'No flanking sequence found for the LORE1 mutant line and <em>Lotus japonicus</em> genome combination.',
-					'more_info' => DOMAIN_NAME . '/' . WEB_ROOT . '/docs/errors/not-found'
+					'more_info' => DOMAIN_NAME . '/' . WEB_ROOT . '/docs/api/v1#404-not-found'
 				),JSON_UNESCAPED_SLASHES));
 		}
 
@@ -272,7 +272,7 @@ $api->get('/lore1/orders/by-country', function ($request, $response) {
 				->withHeader('Content-Type', 'application/json')
 				->write(json_encode(array(
 					'message' => 'No country data available for pre-existing LORE1 orders',
-					'more_info' => DOMAIN_NAME . '/' . WEB_ROOT . '/docs/errors/not-found'
+					'more_info' => DOMAIN_NAME . '/' . WEB_ROOT . '/docs/api/v1#404-not-found'
 				),JSON_UNESCAPED_SLASHES));
 		}
 
