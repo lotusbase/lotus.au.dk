@@ -83,7 +83,7 @@ $api->add(new \Slim\Middleware\JwtAuthentication([
 	'regexp' => '/(.*)/',
 	'secure' => true,
 	'relaxed' => ['localhost'],
-	'passthrough' => ['/cornea/job/data'],
+	'passthrough' => ['/', '/cornea/job/data'],
 	'path' => ['/'],
 	'attribute' => 'access_token',
 	'error' => function($request, $response, $arguments) {
@@ -142,11 +142,7 @@ $api->add(new RKA\Middleware\SchemeAndHost(['10.29.0.253']));
 $api->get('/', function ($request, $response) {
 	return $response
 		->withStatus(200)
-		->withHeader('Content-Type', 'application/json')
-		->write(json_encode(array(
-			'status' => 200,
-			'message' => 'Welcome to Lotus Base API v1'
-			)));
+		->withHeader('Location', DOMAIN_NAME . WEB_ROOT . '/docs/api/');
 });
 
 // Routes for admin

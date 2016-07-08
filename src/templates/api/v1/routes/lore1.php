@@ -29,7 +29,7 @@ $api->get('/lore1', function($request, $response, $args) {
 				'status' => 500,
 				'data' => $e->getMessage(),
 				'code' => $e->getCode(),
-				'more_info' => DOMAIN_NAME . '/' . WEB_ROOT . '/docs/api/v1#pdo-exception'
+				'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/api/v1#pdo-exception'
 				),JSON_UNESCAPED_SLASHES));
 	}
 });
@@ -225,7 +225,7 @@ $api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($requ
 				->withHeader('Content-Type', 'application/json')
 				->write(json_encode(array(
 					'message' => 'No flanking sequence found for the LORE1 mutant line and <em>Lotus japonicus</em> genome combination.',
-					'more_info' => DOMAIN_NAME . '/' . WEB_ROOT . '/docs/api/v1#404-not-found'
+					'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/api/v1#404-not-found'
 				),JSON_UNESCAPED_SLASHES));
 		}
 
@@ -272,7 +272,7 @@ $api->get('/lore1/orders/by-country', function ($request, $response) {
 				->withHeader('Content-Type', 'application/json')
 				->write(json_encode(array(
 					'message' => 'No country data available for pre-existing LORE1 orders',
-					'more_info' => DOMAIN_NAME . '/' . WEB_ROOT . '/docs/api/v1#404-not-found'
+					'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/api/v1#404-not-found'
 				),JSON_UNESCAPED_SLASHES));
 		}
 
