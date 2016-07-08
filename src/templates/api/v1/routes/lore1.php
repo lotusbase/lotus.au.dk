@@ -183,7 +183,7 @@ $api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($requ
 		}
 
 		// Prepare query
-		$q = $db->prepare("SELECT Chromosome, Position, Orientation, InsFlank
+		$q = $db->prepare("SELECT PlantID, Chromosome, Position, Orientation, InsFlank
 			FROM lore1ins
 			WHERE
 				Salt = :salt AND
@@ -198,6 +198,7 @@ $api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($requ
 		// Get results
 		if($q->rowCount()) {
 			while($row = $q->fetch(PDO::FETCH_ASSOC)) {
+				$pid = $row['PlantID'];
 				$chr = $row['Chromosome'];
 				$pos = $row['Position'];
 				$orn = $row['Orientation'];
@@ -210,6 +211,7 @@ $api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($requ
 				->write(json_encode(array(
 					'status' => 200,
 					'data' => array(
+						'plantID' => $pid,
 						'chromosome' => $chr,
 						'position' => $pos,
 						'orientation' => $orn,
