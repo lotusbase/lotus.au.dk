@@ -191,7 +191,7 @@ $api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($requ
 				");
 
 		// Bind params and execute
-		$q->bindParam(":salt", $args['id']);
+		$q->bindParam(":salt", hex2bin($args['id']));
 		$q->bindParam(":version", $ver->check());
 		$q->execute();
 
@@ -224,7 +224,7 @@ $api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($requ
 				->withStatus(404)
 				->withHeader('Content-Type', 'application/json')
 				->write(json_encode(array(
-					'message' => 'No flanking sequence found for the LORE1 mutant line and <em>Lotus japonicus</em> genome combination.',
+					'message' => 'No flanking sequence found for the <em>LORE1</em> mutant line and <em>Lotus japonicus</em> genome combination.',
 					'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/api/v1#404-not-found'
 				),JSON_UNESCAPED_SLASHES));
 		}
