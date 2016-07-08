@@ -140,15 +140,18 @@ $api->get('/lore1/{pids}/verify', function ($request, $response, $args) {
 					,JSON_UNESCAPED_SLASHES));
 			}
 		} else {
+			$data = array('pid_notFound' => $pid_valid);
+			if($pid_invalid) {
+				$data['pid_invalid'] = $pid_invalid;
+			}
+
 			return $response
 				->withStatus(404)
 				->withHeader('Content-Type', 'application/json')
 				->write(json_encode(array(
 					'status' => 404,
 					'message' => 'No valid plant ID has been found.',
-					'data' => array(
-						'pid_notFound' => $pid_valid
-						),
+					'data' => $data,
 					'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/errors/not-found'
 					)
 				,JSON_UNESCAPED_SLASHES));
