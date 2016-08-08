@@ -14,7 +14,7 @@ import Datasets
 
 # Parse config
 config = configparser.ConfigParser()
-config.read('../../config.ini')
+config.read(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, 'config.ini'))
 
 #db = pny.Database("sqlite", "correlation_network_jobs.db", create_db=True)
 db = pny.Database('mysql', host=config['general']['host'].strip("'"), user=config['general']['user'].strip("'"), passwd=config['general']['pass'].strip("'"), db=config['general']['db'].strip("'"))
