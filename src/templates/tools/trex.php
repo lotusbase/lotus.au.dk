@@ -21,17 +21,12 @@
 	}
 
 	// If it is a search query
-	if($_GET && isset($_GET['ids']) && !empty($_GET['ids'])) {
+	if($_GET) {
 		// Perform search when $_GET variable is found
-		// Construct query
-		$trx = $_GET['ids'];
-		if(is_array($trx)) {
-			$vars = array_filter($trx);
-		} else {
-			$trx_rep = preg_match_all('/(\w+|[\"\'][\w\s]*[\"\'])+/' , $trx , $trx_matched);
-			$vars = $trx_matched[0];
-		}
+
+		// Declare variables to be executed
 		$exec_vars = array();
+		$searched = false;
 
 		// What version are we filtering for?
 		if(!isset($_GET['v']) || empty($_GET['v'])) {
@@ -44,36 +39,117 @@
 		}
 		$exec_vars = array_merge($exec_vars, $version_str);
 
-		// Construct query, loop through all transcript IDs
-		$dbq = "
-			FROM annotations AS anno
-			LEFT JOIN transcriptcoord AS tc ON (
-				anno.Gene = tc.Transcript AND
-				anno.Version = tc.Version
-			)
-			LEFT JOIN exonins AS exon ON (
-				tc.Transcript = exon.Gene AND
-				tc.Version = exon.Version
-			)
-			LEFT JOIN lore1ins AS lore ON (
-				exon.Chromosome = lore.Chromosome AND
-				exon.Position = lore.Position AND
-				exon.Orientation = lore.Orientation AND
-				exon.Version = lore.Version
-			)
-			WHERE anno.Version IN (".str_repeat("?,", count($version_str)-1)."?".") AND (";
-		foreach ($vars as $trx_item) {
-			if(preg_match('/^chr\d+/', $trx_item)) {
-				$dbq .= "anno.Gene LIKE ? OR ";
-				$exec_vars = array_merge($exec_vars, array($trx_item.'%'));
+		// If an ID is used in a search
+		if(isset($_GET['ids']) && !empty($_GET['ids'])) {
+			// Construct query
+			$trx = $_GET['ids'];
+			if(is_array($trx)) {
+				$vars = array_filter($trx);
 			} else {
-				$dbq .= "MATCH(anno.Gene) AGAINST (? IN BOOLEAN MODE) OR MATCH(anno.Annotation) AGAINST (? IN BOOLEAN MODE) OR MATCH(anno.LjAnnotation) AGAINST (? IN BOOLEAN MODE) OR ";
-				$exec_vars = array_merge($exec_vars, array($trx_item, $trx_item, (preg_match('/^Lj/i', $trx_item) ? $trx_item : 'Lj'.$trx_item)));
+				$trx_rep = preg_match_all('/(\w+|[\"\'][\w\s]*[\"\'])+/' , $trx , $trx_matched);
+				$vars = $trx_matched[0];
 			}
-			
+
+			// Construct query, loop through all transcript IDs
+			$dbq = "
+				FROM annotations AS anno
+				LEFT JOIN transcriptcoord AS tc ON (
+					anno.Gene = tc.Transcript AND
+					anno.Version = tc.Version
+				)
+				LEFT JOIN exonins AS exon ON (
+					tc.Transcript = exon.Gene AND
+					tc.Version = exon.Version
+				)
+				LEFT JOIN lore1ins AS lore ON (
+					exon.Chromosome = lore.Chromosome AND
+					exon.Position = lore.Position AND
+					exon.Orientation = lore.Orientation AND
+					exon.Version = lore.Version
+				)
+				WHERE anno.Version IN (".str_repeat("?,", count($version_str)-1)."?".") AND (";
+			foreach ($vars as $trx_item) {
+				if(preg_match('/^chr\d+/', $trx_item)) {
+					$dbq .= "anno.Gene LIKE ? OR ";
+					$exec_vars = array_merge($exec_vars, array($trx_item.'%'));
+				} else {
+					$dbq .= "MATCH(anno.Gene) AGAINST (? IN BOOLEAN MODE) OR MATCH(anno.Annotation) AGAINST (? IN BOOLEAN MODE) OR MATCH(anno.LjAnnotation) AGAINST (? IN BOOLEAN MODE) OR ";
+					$exec_vars = array_merge($exec_vars, array($trx_item, $trx_item, (preg_match('/^Lj/i', $trx_item) ? $trx_item : 'Lj'.$trx_item)));
+				}
+				
+			}
+			$dbq = substr($dbq, 0 ,-4);
+			$dbq .= ") GROUP BY tc.Transcript";
+			$searched = true;
+
 		}
-		$dbq = substr($dbq, 0 ,-4);
-		$dbq .= ") GROUP BY tc.Transcript";
+
+		// If chromosome and at least one position is provided
+		else if(!empty($_GET['chr']) && !empty($_GET['pos1'])) {
+
+			// Construct database query
+			$dbq = "
+				FROM
+					transcriptcoord AS tc
+				LEFT JOIN annotations AS anno ON (
+					tc.Transcript = anno.Gene AND
+					tc.Version = anno.Version
+				)
+				LEFT JOIN exonins AS exon ON (
+					tc.Transcript = exon.Gene AND
+					tc.Version = exon.Version
+				)
+				LEFT JOIN lore1ins AS lore ON (
+					exon.Chromosome = lore.Chromosome AND
+					exon.Position = lore.Position AND
+					exon.Orientation = lore.Orientation AND
+					exon.Version = lore.Version
+				)
+				WHERE anno.Version IN (".str_repeat("?,", count($version_str)-1)."?".")
+			";
+
+			// Assign variables
+			$pos1 = $_GET['pos1'];
+			$pos2 = $_GET['pos2'];
+
+			// Process positions
+			if($pos1 > $pos2) {
+				if($pos2 == '') {
+					$dbq .= "AND (tc.StartPos = ? OR tc.EndPos = ?)";
+					$exec_vars[] = $pos1;
+				} else {
+					$lower = $pos2;
+					$upper = $pos1;
+					$dbq .= " AND (tc.StartPos BETWEEN ? AND ?)";
+					$exec_vars[] = $pos2;
+					$exec_vars[] = $pos1;
+				}
+			} elseif($pos1 < $pos2) {
+				if($pos1 == '') {
+					$dbq .= "AND (tc.StartPos = ?)";
+					$exec_vars[] = $pos1;
+				} else {
+					$lower = $pos1;
+					$upper = $pos2;
+					$dbq .= " AND (tc.StartPos BETWEEN ? AND ?)";
+					$exec_vars[] = $pos1;
+					$exec_vars[] = $pos2;
+				}
+			}
+
+			// Add chromosome
+			$dbq .= " AND tc.Chromosome = ?";
+			$exec_vars[] = $_GET['chr'];
+
+			$dbq .= " GROUP BY tc.Transcript";
+			$searched = true;
+		}
+		else {
+			$error = array(
+				'error' => true,
+				'message' => 'Invalid TREX query used.'
+			);
+		}
 
 		try {
 			// Prequery
@@ -222,7 +298,7 @@
 	<?php include(DOC_ROOT.'/head.php'); ?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/tools.min.css" type="text/css" media="screen" />
 </head>
-<body class="tools trex <?php echo (!empty($_GET['ids'])) ? 'results' : ''; ?>">
+<body class="tools trex <?php echo ($searched) ? 'results' : ''; ?>">
 	<?php
 		$header = new \LotusBase\PageHeader();
 		echo $header->get_header();
@@ -233,7 +309,7 @@
 	<section class="wrapper">
 		<h2>TREX</h2>
 		<span class="byline"><strong>Transcript Explorer</strong><br />for <em>L.</em> japonicus reference genomes</span>
-		<p>The <strong>Transcript Explorer</strong> tool allows you to look up the genomic coordinates of known <em>Lotus</em> transcripts by providing an uplink to the JBrowse tool. The coordinates displayed are only usable in the version 3.0 genome assembly.</p>
+		<p>The <strong>Transcript Explorer</strong> tool can be used to search for candidate <em>Lotus</em> genes using user-defined keywords, or to comb a specific genomic interval&mdash;a combination of chromosome and position range&mdash;for genes of interest.</p>
 
 		<?php 
 			// Display error if any
@@ -246,13 +322,13 @@
 			}
 
 			// Allow collapsible form when search is initiated
-			if(!empty($_GET['ids'])) {
+			if($searched) {
 				echo '<div class="toggle'.(empty($error) ? ' hide-first' : '').'"><h3><a href="#" title="Repeat Search">Repeat Search</a></h3>';
 			}
 
 		?>
-			<form action="./trex" method="get" id="trex-form">
-				<div class="cols">
+			<form action="./trex" method="get" id="trex-form" class="has-group">
+				<div class="cols" role="group">
 					<label for="ids-input" class="col-one">Query <a href="<?php echo WEB_ROOT; ?>/lib/docs/trex-query" class="info" title="How should I look for my gene of interest?" data-modal="wide">?</a></label>
 					<div class="col-two">
 						<div class="multiple-text-input input-mimic">
@@ -276,6 +352,32 @@
 						<small><strong>Separate each keyword, or gene/transcript ID, with a comma or tab. Spaces are not accepted as delimiters due to their potential use in <a href="<?php echo WEB_ROOT; ?>/lib/docs/trex-query" title="How should I look for my gene of interest?" data-modal="wide">boolean searches</a>.</strong></small>
 					</div>
 
+					<div class="separator full-width"><span>or</span></div>
+
+					<label for="chromosome" class="col-one">Chromosome</label>
+					<div class="col-two field__chromosome">
+						<select name="chr" id="chromosome" class="search-param">
+							<option value="" selected="selected">Select chromosome</option>
+							<option value="chr0" <?php echo (isset($_GET['chr']) && $_GET['chr'] === 'chr0') ? 'selected' : ''; ?>>Chromosome 0</option>
+							<option value="chr1" <?php echo (isset($_GET['chr']) && $_GET['chr'] === 'chr1') ? 'selected' : ''; ?>>Chromosome 1</option>
+							<option value="chr2" <?php echo (isset($_GET['chr']) && $_GET['chr'] === 'chr2') ? 'selected' : ''; ?>>Chromosome 2</option>
+							<option value="chr3" <?php echo (isset($_GET['chr']) && $_GET['chr'] === 'chr3') ? 'selected' : ''; ?>>Chromosome 3</option>
+							<option value="chr4" <?php echo (isset($_GET['chr']) && $_GET['chr'] === 'chr4') ? 'selected' : ''; ?>>Chromosome 4</option>
+							<option value="chr5" <?php echo (isset($_GET['chr']) && $_GET['chr'] === 'chr5') ? 'selected' : ''; ?>>Chromosome 5</option>
+							<option value="chr6" <?php echo (isset($_GET['chr']) && $_GET['chr'] === 'chr6') ? 'selected' : ''; ?>>Chromosome 6</option>
+							<option value="mito" <?php echo (isset($_GET['chr']) && $_GET['chr'] === 'mito') ? 'selected' : ''; ?>>Mitochondrion</option>
+							<option value="chloro" <?php echo (isset($_GET['chr']) && $_GET['chr'] === 'chloro') ? 'selected' : ''; ?>>Chlorophyll</option>
+							<option value="chr8" <?php echo (isset($_GET['chr']) && $_GET['chr'] === 'chr8') ? 'selected' : ''; ?>>Plastid</option>
+						</select>
+					</div>
+
+					<label class="col-one">Position <a class="info" data-modal="search-help" data-modal-content="Genes can be searched between two positions (inclusive). However: &lt;ul&gt;&lt;li&gt;if only one position is filled in, the search will only look for an exact position, or&hellip;&lt;/li&gt;&lt;li&gt;if nothing is filled in, search will not look for genes based on positions.&lt;/li&gt;&lt;/ul&gt;" title="How to search for the position of gene insert?">?</a></label>
+					<div class="col-two cols flex-wrap__nowrap field__positions">
+						<label for="pos1">Between</label> <input type="number" name="pos1" id="pos1" class="search-param" placeholder="Start " value="<?php echo (!empty($_GET['pos1'])) ? $_GET['pos1'] : ''; ?>" min="0" /> <label for="pos2">and</label> <input type="number" name="pos2" id="pos2" class="search-param" placeholder="End" value="<?php echo (!empty($_GET['pos2'])) ? $_GET['pos2'] : ''; ?>" min="0" />
+					</div>
+				</div>
+
+				<div class="cols" role="group">
 					<div class="col-one"><label>Genome version(s) <a href="<?php echo WEB_ROOT; ?>/lib/docs/version-filtering" class="info" title="Filtering for versions" data-modal>?</a></label></div>
 					<div class="col-two cols justify-content__flex-start versions">
 						<?php
@@ -292,7 +394,7 @@
 				<button type="submit"><span class="pictogram icon-search">Search for gene of interest</span></button>
 			</form>
 		<?php
-			echo (empty($error) && (!empty($_GET['ids']))) ? '</div>
+			echo (empty($error) && $searched) ? '</div>
 			<div class="toggle">
 				<h3><a href="#" data-toggled="on" class="open">Export options</a></h3>
 				<p>Download the entire search result as a CSV file.</p>
@@ -316,7 +418,7 @@
 			</div>' : '';
 
 			// Display search results
-			if(empty($error) && (!empty($_GET['ids'])) && $q2->rowCount() > 0) {
+			if(empty($error) && $searched && $q2->rowCount() > 0) {
 
 		?>
 			<p>We have found <?php echo "<strong>".$rows."</strong> ".pl($rows,'result','results'); ?>. Now displaying <?php echo $page." of ".$last." with ".$num." ".pl($num,'row','rows');?> per page. This search has taken <strong><?php echo number_format((microtime(true) - $start_time), 3); ?>s</strong> to perform.</p>
