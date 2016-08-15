@@ -57,7 +57,7 @@ $(function() {
 						dataType: 'json'
 					}),
 					data = $.ajax({
-						url: '/api/v1/lore1/orders/by-country',
+						url: '/api/v1/lore1/orders/all/by-country',
 						dataType: 'json'
 					});
 
