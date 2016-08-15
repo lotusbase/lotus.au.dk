@@ -237,7 +237,7 @@ $api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($requ
 });
 
 // LORE1 orders by country
-$api->get('/lore1/orders/by-country', function ($request, $response) {
+$api->get('/lore1/orders/all/by-country', function ($request, $response) {
 
 	try {
 		$db = $this->get('db');
