@@ -19,6 +19,7 @@ __author__ = 'Asger Bachmann (agb@birc.au.dk)'
 # Parse config
 config = configparser.ConfigParser()
 config.read('../../config.ini')
+#config.read(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, 'config.ini'))
 
 # Job statuses
 class JobStatus:

@@ -3,10 +3,11 @@ import json
 import rpyc
 import Datasets
 import configparser
+import os
 
 # Parse config
 config = configparser.ConfigParser()
-config.read('../../config.ini')
+config.read(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, 'config.ini'))
 
 conn = rpyc.connect(config['rpyc']['host'].strip("'"), int(config['rpyc']['port'].strip("'")), config={"allow_public_attrs": True,
                                                "allow_pickle": True})
