@@ -166,6 +166,7 @@ form {
 				cursor: pointer;
 				outline: none;
 				height: 1.5rem;
+				margin-top: .375rem;
 				position: relative;
 				transition: border .25s .15s, box-shadow .25s .3s, padding .25s, opacity .25s;
 				width: 3rem;
@@ -201,7 +202,7 @@ form {
 				}
 				& + label {
 					color: #666;
-					line-height: 1.5rem;
+					line-height: 2.25rem;
 					margin-left: .5rem;
 				}
 			}
