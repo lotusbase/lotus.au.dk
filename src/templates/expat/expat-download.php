@@ -21,6 +21,7 @@ $expat_query->set_column_type(array('Mean','Std','SampleValues'));
 $expat_query->set_clustering(false);
 $expat_query->set_melting(false);
 $expat_query->set_purpose('download');
+$expat_query->set_data_transform(false);
 
 // Retrieve data
 $expat = $expat_query->execute();
