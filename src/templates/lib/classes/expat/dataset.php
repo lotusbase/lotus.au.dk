@@ -9,7 +9,8 @@ class Dataset {
 	// Default settings for select element
 	private $_vars = array(
 		'id' => 'expat-dataset',
-		'name' => 'dataset'
+		'name' => 'dataset',
+		'blacklist' => array()
 		);
 
 	// Initialize optgroups
@@ -98,6 +99,11 @@ class Dataset {
 		$this->_vars['name'] = $name;
 	}
 
+	// Set blacklist
+	public function set_blacklist($ids) {
+		$this->_vars['blacklist'] = $ids;
+	}
+
 	// Render
 	public function render() {
 		// Get optgroups
@@ -124,8 +130,11 @@ class Dataset {
 								in_array($d['idType'], $this->_vars['idType'])
 							) ||
 							empty($this->_vars['idType'])
+						) &&
+						(
+							!in_array($dataset, $this->_vars['blacklist'])
 						)
-						) {
+					) {
 						$opts[] = '<option
 							data-idtype="'.$d['idType'].'"
 							data-column-share="'.(!empty($d['column_share']) ? $d['column_share'] : '').'"
