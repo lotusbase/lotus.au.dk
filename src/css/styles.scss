@@ -219,10 +219,10 @@ ul {
 
 /* Search form */
 .search-form {
-	display: flex;
+	@extend .cols;
 	& > * {
 		margin-left: 2px;
-		&:first-child { margin: 0; }
+		&:first-child:not(p) { margin: 0; }
 	}
 	input {
 		background-color: #eee;
@@ -246,6 +246,14 @@ ul {
 		font-size: 1.25rem;
 		flex-shrink: 0;
 		padding: 0 1.5rem;
+	}
+}
+#searchform-tabs__nav {
+	margin-bottom: 0;
+	li.ui-state-active {
+		a {
+			background-color: #ddd;
+		}
 	}
 }
 
