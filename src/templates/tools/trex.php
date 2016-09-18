@@ -549,7 +549,7 @@
 							<?php
 							$anno = preg_replace('/\[([\w\s]+)\]?/', '[<em>$1</em>]', $row['Annotation']);
 							if (isset($row['LjAnnotation']) && !empty($row['LjAnnotation'])) { ?>
-								<span class="anno__manual"><?php echo $row['LjAnnotation']; ?>
+								<span class="anno__manual"><em><?php echo $row['LjAnnotation']; ?></em>
 								<?php if(version_compare($v, '3.0', '<') && is_logged_in()) { ?>
 									<a href="<?php echo WEB_ROOT; ?>/lib/docs/gene-annotation" class="button manual-gene-anno" title="Manual gene name suggestion for <?php echo $row['Transcript']; ?>" data-gene="<?php echo $row['Transcript']; ?>"><span class="pictogram icon-bookmark">Suggest alternatives</span></a><?php } ?></span>
 									<?php if(!empty($anno)) { ?><span class="anno__generated"><?php echo $anno; ?></span>
