@@ -4,7 +4,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-	<title>{% if page.title %}{{ site.title | strip_html }}: {{ page.title | strip_html }}{% else %}{{ site.title | strip_html }}{% endif %}</title>
+	<title>{% if page.title %}Lotus Base Blog: {{ page.title | strip_html }}{% else %}The Lotus Base Blog{% endif %}</title>
 
 	<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 
@@ -34,9 +34,80 @@
 	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
 	<!-- Metadata -->
-	<meta name="author" content="Terry Mun">
-
+	{% if page.date %}
+		<meta name="author" content="{{ page.author }}">
+	{% else %}
+		<meta name="author" content="Terry Mun">
+	{% endif %}
 	<link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
-	<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
+	<link rel="alternate" type="application/rss+xml" title="The Lotus Base Blog" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
+
+	<!-- OpenGraph support -->
+	<meta content="The Lotus Base Blog" property="og:site_name" />
+	{% if page.title %}
+		<meta content="{{ page.title }}" property="og:title" />
+	{% else %}
+		<meta content="The Lotus Base Blog" property="og:title" />
+	{% endif %}
+	{% if page.title %}
+		<meta content="article" property="og:type" />
+	{% else %}
+		<meta content="website" property="og:type" />
+	{% endif %}
+	{% if page.description %}
+		<meta content="{{ page.description }}" property="og:description" />
+	{% else %}
+		<meta content="{{ site.description }}" property="og:description" />
+	{% endif %}
+	{% if page.url %}
+		<meta content="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" property="og:url" />
+	{% endif %}
+	{% if page.date %}
+		<meta content="{{ page.date | date_to_xmlschema }}" property="article:published_time" />
+		<meta content="{{ site.url }}/meta/team#{{ page.author | replace:' ','_' | downcase }}" property="article:author">
+	{% endif %}
+	{% if page.socialMediaCoverImage %}
+		<meta content="https://lotus.au.dk{{ page.socialMediaCoverImage }}" property="og:image" />
+	{% elsif page.coverImage %}
+		<meta content="https://lotus.au.dk{{ page.coverImage }}" property="og:image" />
+	{% else %}
+		<meta content="{{ site.url }}/dist/images/lotusbase-soft-launch.jpg" property="og:image" />
+	{% endif %}
+	{% if page.categories %}
+		{% for category in page.categories limit:1 %}
+		<meta content="{{ category }}" property="article:section" />
+		{% endfor %}
+	{% endif %}
+	{% if page.tags %}
+		{% for tag in page.tags %}
+		<meta content="{{ tag }}" property="article:tag" />
+		{% endfor %}
+	{% endif %}
+
+	<!-- Twitter Card support -->
+	<meta name="twitter:site" content="@LotusBase" />
+	{% if page.title %}
+		<meta name="twitter:title" content="{{ page.title }}" />
+	{% else %}
+		<meta name="twitter:title" content="The Lotus Base Blog" />
+	{% endif %}
+	{% if page.url %}
+		<meta name="twitter:url" content="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" />
+	{% endif %}
+	{% if page.description %}
+		<meta name="twitter:description" content="{{ page.content | strip_html | xml_escape | truncate: 200 }}" />
+	{% else %}
+		<meta name="twitter:description" content="{{ site.description }}" />
+	{% endif %}
+	{% if page.socialMediaCoverImage %}
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image" content="https://lotus.au.dk{{ page.socialMediaCoverImage }}" />
+	{% elsif page.coverImage %}
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image" content="https://lotus.au.dk{{ page.coverImage }}" />
+	{% else %}
+		<meta name="twitter:card" content="summary" />
+	{% endif %}
+
 
 </head>
