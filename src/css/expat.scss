@@ -277,6 +277,23 @@
 		path, line, rect {
 			shape-rendering: auto;
 		}
+
+		// Font sizes
+		text.x.axis {
+			&.break { font-size: 8px; }
+			&.label { font-size: 10px; }
+		}
+		text.y.axis {
+			&.break { font-size: 8px; }
+			&.id.break { font-size: 10px; }
+			&.label { font-size: 10px; }
+		}
+		text.tick-label {
+			font-size: 10px;
+		}
+		text.scale.label {
+			font-size: 10px;
+		}
 	}
 }
 

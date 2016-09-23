@@ -544,12 +544,14 @@ $(function() {
 					.attr('class', 'y axis')
 					.call(linegraphYAxis)
 					.selectAll('text')
+						.attr('class', 'y axis break')
 						.style({
 							'text-anchor': 'end',
 							'font-size': 8
 						});
 
 					var linegraphYAxisLabel = expatLinegraph.append('text')
+						.attr('class', 'y axis label')
 						.attr({
 							'dx': 0,
 							'dy': 0.5*expat.linegraph.targetHeight - 6
@@ -922,7 +924,7 @@ $(function() {
 
 				expatHeatmap.append("text")
 				.attr({
-					'class': 'label',
+					'class': 'scale label',
 					'x': 0,
 					'y': expat.heatmap.targetHeight + expat.chart.margin.bottom - 45
 				})
@@ -957,10 +959,11 @@ $(function() {
 					.call(heatmapXAxis)
 					.selectAll('text')
 						.style({
-							'font-size': 8.5,
+							'font-size': 8,
 							'text-anchor': 'start'
 						})
 						.attr({
+							'class': 'x axis break',
 							'dx': '8',
 							'dy': '-2',
 							'transform': 'rotate(90)'
@@ -975,6 +978,7 @@ $(function() {
 							'text-anchor': 'end'
 						})
 						.attr({
+							'class': 'y axis break id',
 							'data-row': function(d) { return d; }
 						});
 
@@ -1523,6 +1527,9 @@ $(function() {
 							})
 							.call(dist_axis)
 							.selectAll('text')
+								.attr({
+									'class': (orientation === 'vertical' ? 'y axis break' : 'x axis break'),
+								})
 								.style({
 									'font-size': 8,
 									'text-anchor': (orientation === 'vertical' ? 'end' : 'middle')
@@ -1532,6 +1539,7 @@ $(function() {
 							var axis_label = svg.append('text');
 							if (orientation === 'vertical') {
 								axis_label.attr({
+									'class': 'y axis label',
 									'dx': 0,
 									'dy': 0.5*expat.dendrogram.condition.targetHeight - 6
 								})
@@ -1554,6 +1562,7 @@ $(function() {
 							} else {
 								axis_label
 								.attr({
+									'class': 'x axis label',
 									'dx': 0,
 									'dy': expat.dendrogram.row.targetHeight + 30,
 								})
@@ -1833,6 +1842,9 @@ $(function() {
 					tweenLinegraph.selectAll('.y')
 					.call(linegraphYAxis)
 					.selectAll('text')
+						.attr({
+							'class': 'y axis break'
+						})
 						.style({
 							'font-size': 10,
 							'text-anchor': 'end'
@@ -2189,6 +2201,9 @@ $(function() {
 						tweenLinegraph.selectAll('.y')
 						.call(linegraphYAxis)
 						.selectAll('text')
+							.attr({
+								'class': 'y axis break'
+							})
 							.style({
 								'font-size': 8,
 								'text-anchor': 'end'
