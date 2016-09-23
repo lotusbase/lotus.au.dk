@@ -18,7 +18,7 @@ function nf($str) {
 // Format nucleic acid
 function naseq($str) {
 	if(!empty($str)) {
-		return chunk_split($str, 10, ' ');
+		return chunk_split($str, 80, ' ');
 	} else {
 		return $str;
 	}

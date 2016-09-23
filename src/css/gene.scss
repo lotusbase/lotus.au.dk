@@ -51,8 +51,7 @@ body.gene {
 		border: 1px solid #aaa;
 		color: #555;
 		font-family: Consolas, monospace;
-		height: auto;
-		max-height: 50vh;
+		height: 15rem;
 		padding: .75rem 1rem;
 		resize: none;
 		overflow-y: auto;
@@ -74,6 +73,7 @@ body.gene {
 	#gene__expression {
 		.loader__wrapper {
 			background-color: #ddd;
+			margin-bottom: 1.5rem;
 			padding: 1rem 0 2rem;
 			div.loader {
 				margin-top: 0;
