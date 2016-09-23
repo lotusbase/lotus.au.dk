@@ -29,6 +29,39 @@
 		echo $header->get_header();
 	?>
 
+	<section id="lotus-base-status" class="wrapper cols">
+		<div class="col">
+			<h2>Search</h2>
+			<div id="searchform-tabs">
+				<div id="searchform-tabs__nav" class="cols align-items__flex-end ui-tabs-nav__wrapper">
+					<ul class="tabbed">
+						<li><a href="#searchform__gene" data-custom-smooth-scroll>Gene/Transcript</a></li>
+						<li><a href="#searchform__lore1" data-custom-smooth-scroll><em>LORE1</em></a></li>
+					</ul>
+				</div>
+
+				<div id="searchform__gene">
+					<form action="<?php echo WEB_ROOT; ?>/tools/trex" class="search-form flex-wrap__wrap" method="get">
+					<p class="full-width">Search for a candidate gene or transcript using an internal identifier. Alternatively, use keywords for a full-text search.</p>
+						<input type="search" name="ids" placeholder="Gene ID / name (e.g. Lj4g3v0281040.1 / LjFls2)" />
+						<button type="submit"><span class="icon-search"></span></button>
+					</form>
+				</div>
+
+				<div id="searchform__lore1">
+					<form action="<?php echo WEB_ROOT; ?>/lore1/search" class="search-form flex-wrap__wrap" method="get">
+					<p class="full-width">Search for <em>LORE1</em> lines of interest using an internal ID.</p>
+						<input type="search" name="pid" placeholder="Line ID (e.g. 30010101)" />
+						<button type="submit"><span class="icon-search"></span></button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col align-center">
+			<a class="twitter-timeline" data-lang="en" data-theme="light" data-link-color="#5ca4a9" href="https://twitter.com/lotusbase" data-dnt="true" data-height="300"><span class="icon-twitter">Find us on Twitter at @LotusBase</span></a>
+		</div>
+	</section>
+
 	<section id="using-lore1-lines" class="wrapper">
 		<h2>Using <em>LORE1</em> lines</h2>
 		<p>The <em>LORE1</em> lines are currently shipped free of charge and MTAs are not required. If you find the lines useful in your research and have obtained them through <em>Lotus</em> Base, we ask that you cite the following <em>LORE1</em> papers:</p>
@@ -114,5 +147,21 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/worldmap.min.js"></script>
+	<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+	<script>
+	$(function() {
+		var searchTabs = $('#searchform-tabs').tabs();
+
+		// General function to check popstate events
+		$w.on('popstate', function(e) {
+			if (e.originalEvent.state && e.originalEvent.state.lotusbase) {
+				var $tab = $('.ui-tabs ul.ui-tabs-nav li a[href="'+window.location.hash+'"]'),
+					index = $tab.parent().index(),
+					$parentTab = $tab.closest('.ui-tabs');
+				$parentTab.tabs("option", "active", index);
+			}
+		});
+	});
+	</script>
 </body>
 </html>

@@ -40,7 +40,10 @@
 		<tr>
 			<td><em>Lotus japonicus</em> early root responses to fungal exudates</td>
 			<td>Probe ID</td>
-			<td>RNAseq data from <em>Lotus japonicus</em> roots after exposure to <em>C. trifolii</em> germinating spore exudates.</td>
+			<td>
+				<p>RNAseq data from <em>Lotus japonicus</em> roots after exposure to <em>C. trifolii</em> germinating spore exudates.</p>
+				<p class="user-message warning">Due to insufficient number of conditions, this dataset is not available for the CORX toolkit.</p>
+			</td>
 			<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/26175746" title="Early Lotus japonicus root transcriptomic responses to symbiotic and pathogenic fungal exudates.">Giovanetti <em>et al.</em>, 2015</a></td>
 		</tr>
 	</tbody>

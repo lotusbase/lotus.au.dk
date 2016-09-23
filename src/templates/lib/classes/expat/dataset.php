@@ -9,7 +9,8 @@ class Dataset {
 	// Default settings for select element
 	private $_vars = array(
 		'id' => 'expat-dataset',
-		'name' => 'dataset'
+		'name' => 'dataset',
+		'blacklist' => array()
 		);
 
 	// Initialize optgroups
@@ -54,7 +55,6 @@ class Dataset {
 			'experiment' => 'rnaseq-marcogiovanetti-2015',
 			'value' => 'rnaseq-marcogiovanetti-2015-am',
 			'text' => 'C. trifolii germinating spore exudates by probe ID',
-			'intranet_only' => true,
 			'label' => 'Marco Giovanetti, RNAseq data (2015)'
 			)
 		);
@@ -99,6 +99,11 @@ class Dataset {
 		$this->_vars['name'] = $name;
 	}
 
+	// Set blacklist
+	public function set_blacklist($ids) {
+		$this->_vars['blacklist'] = $ids;
+	}
+
 	// Render
 	public function render() {
 		// Get optgroups
@@ -112,18 +117,24 @@ class Dataset {
 			foreach ($this->_opts as $dataset => $d) {
 				if($d['label'] === $og) {
 					if(
-						(empty($d['intranet_only']) ||
-	 						(
-	 							!empty($d['intranet_only']) && $d['intranet_only'] === !!is_intranet_client()
-	 							)
-	 						) &&
+						(
+							!isset($d['intranet_only']) ||
+							(
+								isset($d['intranet_only']) &&
+								$d['intranet_only'] === !!is_intranet_client()
+							)
+						) &&
 						(
 							(
 								!empty($this->_vars['idType']) &&
-								in_array($d['idType'], $this->_vars['idType']))
+								in_array($d['idType'], $this->_vars['idType'])
 							) ||
 							empty($this->_vars['idType'])
-						) {
+						) &&
+						(
+							!in_array($dataset, $this->_vars['blacklist'])
+						)
+					) {
 						$opts[] = '<option
 							data-idtype="'.$d['idType'].'"
 							data-column-share="'.(!empty($d['column_share']) ? $d['column_share'] : '').'"

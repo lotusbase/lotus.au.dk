@@ -424,14 +424,14 @@ class Query {
 		if($this->_expat['purpose'] == 'download') {
 			// File location and name
 			$file_path = sys_get_temp_dir();
-			$zip = new ZipArchive;
+			$zip = new \ZipArchive;
 			$zipFile = "lotus_expresstionData_" . date("Y-m-d_H-i-s") . "_" . bin2hex(mcrypt_create_iv(5, MCRYPT_DEV_URANDOM)) . ".zip";
 
 			// Create file
 			touch($file_path . '/' . $zipFile);
 
 			// Open zip archive for writing
-			$zip->open($file_path . '/' . $zipFile, ZipArchive::CREATE);
+			$zip->open($file_path . '/' . $zipFile, \ZipArchive::CREATE);
 		}
 
 		// Iterate through all column types

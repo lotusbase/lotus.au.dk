@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-import time, json, pymysql, configparser
+import time, json, pymysql, configparser, os
 import numpy as np
 
 __author__ = 'Asger Bachmann (agb@birc.au.dk)'
 
 # Parse config
 config = configparser.ConfigParser()
-config.read('../../config.ini')
+#config.read('../../config.ini')
+config.read(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, 'config.ini'))
 
 # Retrieve data
 def get_data(print_debug, database, columns, gene_limit=None, genes=None, clean=True):
