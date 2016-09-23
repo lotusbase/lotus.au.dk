@@ -18,9 +18,10 @@
 		array('name' => 'InsFlank', 'desc' => '&pm;1000bp flanking sequences, relative to the insertion orientation', 'size' => 1377038184),
 		array('name' => 'ColCoord', 'desc' => 'Column coordinate for sequencing', 'size' => 3372140),
 		array('name' => 'RowCoord', 'desc' => 'Row coordinate for sequencing', 'size' => 3371403),
-		array('name' => 'ColCoordDetail', 'desc' => 'Counts of each column coordinate', 'size' => 7464084),
-		array('name' => 'RowCoordDetail', 'desc' => 'Counts of each row coordinate', 'size' => 5429930),
+		array('name' => 'CoordList', 'desc' => 'Coordinates for all instances of the same insertion', 'size' => 7464084),
+		array('name' => 'CoordCount', 'desc' => 'Absolute counts of each column and row coordinate', 'size' => 5429930),
 		array('name' => 'TotalCoverage', 'desc' => 'Total coverage of the sequencing reads', 'size' => 2769986),
+		array('name' => 'Version', 'desc' => 'Version of the genome assembly', 'size' => 4129050)
 	);
 	foreach($lore1_cols as $v) {
 		$lore1_colnames[] = $v['name'];
@@ -131,7 +132,7 @@
 	<?php
 		$header = new \LotusBase\PageHeader();
 		$header->set_header_content('<h1><em>LORE1</em> Raw Data</h1>
-		<p>The raw data for <em>LORE1</em> insertions can be downloaded here. Data is provieded on an as-is basis.</p>');
+		<p>The raw data for <em>LORE1</em> insertions mapped against v3.0 of the <em>L. japonicus</em> genome assembly can be downloaded here. Data is provieded on an as-is basis.</p>');
 		echo $header->get_header();
 	?>
 
