@@ -78,8 +78,8 @@ try {
 		lore.Orientation AS Orientation,
 		seeds.SeedStock AS SeedStock,
 		seeds.Ordering AS Ordering,
-		lore.ColCoordDetail AS ColCoordDetail,
-		lore.RowCoordDetail AS RowCoordDetail,
+		lore.CoordList AS CoordList,
+		lore.CoordCount AS CoordCount,
 		lore.TotalCoverage AS TotalCoverage,
 		lore.FwPrimer AS FwPrimer,
 		lore.RevPrimer AS RevPrimer,
@@ -135,7 +135,7 @@ try {
 		}
 
 		// Write header
-		$headerData = array("Plant ID","Batch","Chromosome","Position","Orientation","Gene","Exon","Exon Annotation","Total Coverage","Forward Primer","Reverse Primer","PCR Product Size with Insertion","PCR Product Size in Wild Type","+/-1000bp Insertion Flank","Seed Availability","OrderingAllowed","Column Coordinate","Row Coordinate","Column Coordinate Details","Row Coordinate Details");
+		$headerData = array("Plant ID","Batch","Chromosome","Position","Orientation","Gene","Exon","Exon Annotation","Total Coverage","Forward Primer","Reverse Primer","PCR Product Size with Insertion","PCR Product Size in Wild Type","+/-1000bp Insertion Flank","Seed Availability","OrderingAllowed","Column Coordinate","Row Coordinate","Coordinate List","Coordinate Counts");
 		$out = "\"".implode($sep, $headerData)."\""."\n";
 
 		while($row = $q->fetch(PDO::FETCH_ASSOC)) {
@@ -187,8 +187,8 @@ try {
 				$row['Ordering'],
 				$row['ColCoord'],
 				$row['RowCoord'],
-				$row['ColCoordDetail'],
-				$row['RowCoordDetail']
+				$row['CoordList'],
+				$row['CoordCount']
 				);
 
 			// Write data
