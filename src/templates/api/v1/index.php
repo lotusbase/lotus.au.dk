@@ -172,4 +172,7 @@ include_once('./routes/users.php');
 // Routes for registration
 include_once('./routes/registration.php');
 
+// Routes for PhyAlign
+include_once('./routes/phyalign.php');
+
 $api->run();

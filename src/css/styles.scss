@@ -90,10 +90,6 @@ pre, code {
 	color: #333;
 	font-family: $fontface-monospace;
 	@include transition;
-	&:hover {
-		background-color: $lotusPrimary3;
-		color: #eee;
-	}
 }
 pre {
 	display: block;
@@ -111,6 +107,10 @@ code {
 	line-height: 1.5em;
 	display: inline-block;
 	padding: 0 .5rem;
+	&:hover {
+		background-color: $lotusPrimary3;
+		color: #eee;
+	}
 	button & {
 		color: #eee;
 		&:hover {

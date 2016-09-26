@@ -36,7 +36,7 @@
 						foreach($db_metadata as $db_basename => $db) {
 							if(!in_array($db['category'], $db_group)) {
 								$db_group[] = $db['category'];
-								echo (count($db_group) > 1 ? '</optgroup>' : '').'<optgroup label="'.$db['category'].'">';
+								echo (count($db_group) > 1 ? '</optgroup>' : '').'<optgroup label="'.strip_tags($db['category']).'">';
 							}
 							echo '<option
 								data-gi-dropdown="'.(isset($db['gi_dropdown']) ? '1' : '0').'"
@@ -95,8 +95,8 @@
 
 			</div>
 
-			<div class="cols" role="group">
-				<p class="full-width user-message minimal">Additional options for sequence retrieval</p>
+			<div class="cols has-legend" role="group">
+				<p class="legend">Additional options</p>
 
 				<label for="seqret-from" class="col-one">Set subsequence</label>
 				<div class="col-two cols flex-wrap__nowrap field__positions">

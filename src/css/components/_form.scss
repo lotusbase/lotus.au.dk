@@ -134,6 +134,11 @@ form {
 				0 0 .5rem .25rem rgba($lotusPrimary2,.25);
 			color: darken($lotusPrimary2, 10%);
 		}
+
+		// Font faces
+		&.font-family_monospace {
+			font-family: $fontface-monospace;
+		}
 	}
 
 

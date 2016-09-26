@@ -3,6 +3,19 @@
 	require_once(DOC_ROOT.'/lib/classes.php');
 
 	$dbs = new \LotusBase\BLAST\DBMetadata();
+
+	// Get black and whitelists
+	if($_GET) {
+		if(!empty($_GET['blacklist']) && is_array($_GET['blacklist'])) {
+			$dbs->set_db_blacklist($_GET['blacklist']);
+			echo '<p class="user-message note">A filtering criteria based on a pre-defined, tool-specific blacklist is in effect.</p>';
+		}
+		if(!empty($_GET['whitelist']) && is_array($_GET['whitelist'])) {
+			$dbs->set_db_whitelist($_GET['whitelist']);
+			echo '<p class="user-message note">A filtering criteria based on a pre-defined, tool-specific whitelist is in effect.</p>';
+		}
+	}
+
 	$db_metadata = $dbs->get_metadata();
 
 	echo '<p>The databases that are available for searching are organized into several groups for ease of use:</p>

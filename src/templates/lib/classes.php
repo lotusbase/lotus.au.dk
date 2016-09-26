@@ -56,4 +56,12 @@ require_once('classes/users/auth-token.php');
 /* Integrates OAuth users into current database */
 require_once('classes/users/integrate.php');
 
+/* class: PhyAlign\Submit */
+/* Submits FASTA sequences with other Clustal Omega settings to the EMBL-EBI server */
+require_once('classes/phyalign/submit.php');
+
+/* class: PhyAlign\Data*/
+/* Get status and data (if any) of ClustalO job on EMBL-EBI server */
+require_once('classes/phyalign/data.php');
+
 ?>
