@@ -53,6 +53,9 @@ $api->get('/phyalign/data[/{jobID}]', function($request, $response, $args) {
 			throw new \Exception('No job ID has been provided.', 400);
 		}
 
+		// Force lowercase
+		$jobID = strtolower($jobID);
+
 		// Check job status with
 		$clustalo_status = new \LotusBase\PhyAlign\Data;
 		$clustalo_status->set_job_id($jobID);
@@ -61,6 +64,9 @@ $api->get('/phyalign/data[/{jobID}]', function($request, $response, $args) {
 		if(empty($clustalo_response)) {
 			throw new Exception('No response returned from EMBL-EBI server', 500);
 		}
+
+		// Inject job ID as part of the response
+		$clustalo_response['id'] = $jobID;
 
 		// Return response
 		return $response

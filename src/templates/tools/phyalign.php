@@ -33,6 +33,7 @@
 	<?php include(DOC_ROOT.'/head.php'); ?>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/tools.min.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/phyalign.min.css" type="text/css" media="screen" />
 </head>
 <body class="tools phyalign init-scroll--disabled">
 	<?php
@@ -227,17 +228,20 @@
 			</div>
 
 			<div id="make-tree">
-				<p>Submit a NEXUS-format tree file to draw phylogenetic tree.</p>
-				<form action="https://www.ebi.ac.uk/Tools/services/rest/clustalo/run/" method="post" id="phyalign-form__tree" class="has-group">
-					<div class="cols" role="group">
-						<label for="tree-input" class="col-one">Tree <span class="asterisk" title="Required Field">*</span></label>
+				<p>Submit a Newick-format tree file to draw phylogenetic tree.</p>
+				<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="phyalign-form__tree" class="has-group">
+					<div class="cols has-legend" role="group">
+						<p class="legend">Newick tree data</p>
+						<p class="full-width">Paste a Newick-format tree in the textarea below, or drag and drop a valid file in this box.</p>
+						<label for="tree-input" class="col-one">Direct input <span class="asterisk" title="Required Field">*</span></label>
 						<div class="col-two">
-							<textarea id="tree-input" name="tree" placeholder="Paste NEXUS-format tree file here" rows="10" class="resize__vertical"></textarea>
+							<textarea id="tree-input" name="tree" placeholder="Paste Newick-format tree file here" rows="10" class="resize__vertical"></textarea>
 						</div>
 					</div>
 
 					<button type="submit"><span class="pictogram icon-fork">Draw tree</span></button>
 				</form>
+				<div id="phyalign-tree"></div>
 			</div>
 		</div>
 
@@ -251,6 +255,10 @@
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/colorbrewer.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/d3-tip.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/newick.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/phyalign.min.js"></script>
 </body>
 </html>

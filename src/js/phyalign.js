@@ -225,7 +225,7 @@ $(function() {
 		submitHandler: function(form) {
 			// Make AJAX call
 			var clustalo_submit = $.ajax({
-				url: root + '/api/v1/phyalign',
+				url: root + '/api/v1/phyalign/submit',
 				dataType: 'json',
 				data: {
 					email: $('#email').val(),
@@ -281,10 +281,12 @@ $(function() {
 			// Hide form and show loader
 			globalFun.collapseForm.call(form);
 			$('#phyalign__job-status')
+			.removeClass('user-message warning')
 			.html('<div class="loader"><svg><circle class="path" cx="40" cy="40" r="30" /></svg></div><h2 id="phyalign-status--short">Please wait&hellip;</h2><span class="byline align-center">Contacting the EMBL-EBI Clustal Omega server</span>')
 			.slideDown(250);
 
 			// Start polling job
+			polled = false;
 			pollJobStatus();
 			pollTimer = window.setInterval(function() {
 				pollJobStatus();
@@ -306,23 +308,11 @@ $(function() {
 			type: 'GET'
 		});
 
-		// Change status update to timer, but only for the first instance
-		if(!polled) {
-			$('#phyalign-status__short').text('Job is still running&hellip;');
-			$('#phyalign-status span.byline').html('Last updated: '+moment(new Date()).format('MMM Do YYYY, HH:mm:ss').replace(/(st|nd|rd|th)/gi,'<sup>$1</sup>')+' &middot; updating in <span id="phyalign-status__countdown">' + (pollInterval) + 's</span>');
-		}
-
 		// Retrieve status
 		clustalo_status
 		.done(function(d) {
 			console.log('Receiving job status (and data, if any)…');
 			var job = d.data;
-
-			// Store job data
-			globalVar.phyalign.job = job;
-
-			// Update polled flag
-			polled = true;
 
 			// Countdown from pre-set interval
 			var	ticks = pollInterval - 1;
@@ -338,15 +328,26 @@ $(function() {
 
 			// Job has been completed
 			console.log(job);
-			if(job.status === 0) {
-				$('#phyalign__job-status').slideUp(250);
+			if(typeof job.status !== typeof undefined && job.status === 0) {
+
+				// Create data
+				globalVar.phyalign.data = job;
+
 				if (countdownTimer) window.clearInterval(countdownTimer);
 				if (pollTimer) window.clearInterval(pollTimer);
 				console.log('Job is completed, now parsing data…');
 
+				// Update status
+				$('#phyalign__job-status').find('div.loader').remove();
+				$('#phyalign-status--short')
+				.html('<span class="icon-ok-circled icon--big icon--no-spacing">Job completed</span>')
+				.next('span.byline')
+					.html('<span class="job-id__wrapper" data-job-id="'+job.id+'"><span class="job-id">'+job.id+'</span><span class="tooltip">Press <kbd>Ctrl &#8963;</kbd>/<kbd>Cmd &#8984;</kbd> + <kbd>C</kbd> to copy</span></span>');
+
 				// Parse incoming data
 				var $clustalo_tabs__nav = $('#phyalign__job-data__nav');
 				$.each(job.data, function(i, clustalo) {
+
 					// Append tab navigation
 					$clustalo_tabs__nav.append('<li><a href="#phyalign__job-data__'+clustalo.type.identifier+'" title="'+clustalo.type.description+'" data-custom-smooth-scroll>'+clustalo.type.label+'</a></li>');
 
@@ -364,10 +365,25 @@ $(function() {
 				$('#phyalign__job-data')
 				.show()
 				.tabs();
+			} else {
+				// Change status update to timer, but only for the first instance
+				if(!polled) {
+					$('#phyalign-status--short')
+					.html('Job is still running&hellip;')
+					.next('span.byline')
+						.html('Last updated: '+moment(new Date()).format('MMM Do YYYY, HH:mm:ss').replace(/(st|nd|rd|th)/gi,'<sup>$1</sup>')+' &middot; updating in <span id="phyalign-status__countdown">' + (pollInterval) + 's</span>');
+				}
+
+				// Update polled flag
+				polled = true;
 			}
 		})
 		.fail(function(jqXHR, textError, status) {
 			console.log(jqXHR, textError, status);
+			if (countdownTimer) window.clearInterval(countdownTimer);
+			if (pollTimer) window.clearInterval(pollTimer);
+
+			$('#phyalign__job-status').html('<p><span class="icon-attention"></span>We have encountered a '+jqXHR.status+' "'+status+'" error when attempting to retrieve your ClustalO job status and/or data.</p>').addClass('user-message warning');
 		});
 	};
 
@@ -380,6 +396,133 @@ $(function() {
 
 		// Handoff to third tab
 		$('#phyalign-tabs').tabs('option', 'active', 2);
+	});
+
+	// Expose global d3 variables
+	globalVar.phyalign.d3 = {
+		outerRadius: 960/2
+	};
+	globalVar.phyalign.d3.innerRadius = globalVar.phyalign.d3.outerRadius - 170;
+
+	// Expose global d3 functions
+	globalFun.phyalign = {
+		d3: {
+			setRadius: function(d, y0, k) {
+				d.radius = (y0 += d.length) * k;
+				if (d.children) d.children.forEach(function(d) { globalFun.phyalign.d3.setRadius(d, y0, k); });
+			},
+			maxLength: function(d) {
+				return d.length + (d.children ? d3.max(d.children, globalFun.phyalign.d3.maxLength) : 0);
+			},
+			step: function(startAngle, startRadius, endAngle, endRadius) {
+				var c0 = Math.cos(startAngle = (startAngle - 90) / 180 * Math.PI),
+					s0 = Math.sin(startAngle),
+					c1 = Math.cos(endAngle = (endAngle - 90) / 180 * Math.PI),
+					s1 = Math.sin(endAngle);
+
+				return "M" + startRadius * c0 + "," + startRadius * s0 + (endAngle === startAngle ? "" : "A" + startRadius + "," + startRadius + " 0 0 " + (endAngle > startAngle ? 1 : 0) + " " + startRadius * c1 + "," + startRadius * s1) + "L" + endRadius * c1 + "," + endRadius * s1;
+			},
+			mouseovered: function(active) {
+				console.log(active);
+			}
+		}
+	};
+
+	// Validation of submission form
+	$('#phyalign-form__tree').validate({
+		rules: {
+			tree: {
+				required: true
+			}
+		},
+		submitHandler: function(form) {
+
+			// Empty results
+			$('#phyalign-tree').empty();
+
+			// Cluster layout
+			var cluster = d3.layout.cluster()
+					.size([360, globalVar.phyalign.d3.innerRadius])
+					.children(function(d) { return d.branchset; })
+					.value(function(d) { return 1; })
+					.sort(function(a,b) { return (a.value - b.value) || d3.ascending(a.length, b.length); })
+					.separation(function(a,b) { return 1; }),
+
+				// SVG canvas
+				svg = d3.select('#phyalign-tree').append('svg')
+					.attr({
+						'viewBox': '0 0 ' + globalVar.phyalign.d3.outerRadius * 2 + ' ' + globalVar.phyalign.d3.outerRadius * 2,
+						'preserveAspectRatio': 'xMidYMid meet'
+					})
+					.style({
+						'font-family': 'Arial'
+					});
+
+				// Chart
+				chart = svg.append('g')
+					.attr('transform', 'translate('+globalVar.phyalign.d3.outerRadius+','+globalVar.phyalign.d3.outerRadius+')');
+
+			// Parse Newick
+			var newick = Newick.parse($('#tree-input').val()),
+				nodes = cluster.nodes(newick),
+				links = cluster.links(nodes);
+
+			// Set radius
+			globalFun.phyalign.d3.setRadius(
+				newick,
+				newick.length = 0,
+				globalVar.phyalign.d3.innerRadius / globalFun.phyalign.d3.maxLength(newick)
+				);
+
+			var linkExtension = chart.append('g')
+				.attr('class','link-extensions')
+				.selectAll('path')
+					.data(links.filter(function(d) { return !d.target.children; }))
+					.enter().append('path')
+						.each(function(d) {
+							d.target.linkExtensionNode = this;
+						})
+						.attr('d', function(d) {
+							return globalFun.phyalign.d3.step(d.source.x, d.source.y, d.target.x, globalVar.phyalign.d3.innerRadius);
+						})
+						.style('fill', 'none');
+
+			var link = chart.append('g')
+				.attr('class','links')
+				.selectAll('path')
+					.data(links)
+					.enter().append('path')
+						.each(function(d) {
+							d.target.linkNode = this;
+						})
+						.attr('d', function(d) {
+							return globalFun.phyalign.d3.step(d.source.x, d.source.y, d.target.x, d.target.y);
+						})
+						.style({
+							'stroke': function(d) { return '#000'; },
+							'fill': 'none'
+						});
+
+			chart.append('g')
+				.attr('class', 'labels')
+				.selectAll('text')
+				.data(nodes.filter(function(d) { return !d.children; }))
+				.enter().append('text')
+					.attr({
+						'dy': '.31em',
+						'transform': function(d) {
+							return 'rotate(' + (d.x - 90) + ')translate(' + (globalVar.phyalign.d3.innerRadius + 4) + ',0)' + (d.x < 180 ? '' : 'rotate(180)');
+						}
+					})
+					.style('text-anchor', function(d) {
+						return d.x < 180 ? 'start' : 'end';
+					})
+					.text(function(d) {
+						return d.name;
+					})
+					.on('mouseover', globalFun.phyalign.d3.mouseovered(true))
+					.on('mouseout', globalFun.phyalign.d3.mouseovered(false));
+		}
 	});
 
 });
