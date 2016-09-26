@@ -436,12 +436,6 @@ $(function() {
 			},
 			moveToFront: function() {
 				this.parentNode.appendChild(this);
-			},
-			toScale: function() {
-				d3.transition().duration(750).each(function() {
-					linkExtension.transition().attr("d", function(d) { return step(d.target.x, checked ? d.target.radius : d.target.y, d.target.x, innerRadius); });
-					link.transition().attr("d", function(d) { return step(d.source.x, checked ? d.source.radius : d.source.y, d.target.x, checked ? d.target.radius : d.target.y); });
-				});
 			}
 		}
 	};
@@ -484,13 +478,10 @@ $(function() {
 					.attr('transform', 'translate('+globalVar.phyalign.d3.outerRadius+','+globalVar.phyalign.d3.outerRadius+')');
 
 			// Parse Newick
-			var newick = Newick.parse('('+$('#tree-input').val().replace(/;$/i,'')+')'),
+			var newick = Newick.parse('('+$('#tree-input').val().replace(/;$/i,'')+':0.1)'),
 				nodes = cluster.nodes(newick),
 				links = cluster.links(nodes),
 				leaves = nodes.filter(function(d) { return !d.children; }).length;
-
-			console.log(newick);
-			console.log(leaves);
 
 			// Set radius
 			globalFun.phyalign.d3.setRadius(
@@ -508,9 +499,14 @@ $(function() {
 							d.target.linkExtensionNode = this;
 						})
 						.attr('d', function(d) {
-							return globalFun.phyalign.d3.step(d.source.x, d.source.y, d.target.x, globalVar.phyalign.d3.innerRadius);
+							return globalFun.phyalign.d3.step(d.target.x, d.target.y, d.target.x, globalVar.phyalign.d3.innerRadius);
 						})
-						.style('fill', 'none');
+						.style({
+							'fill': 'none',
+							'stroke': '#000000',
+							'stroke-opacity': 0.25,
+							'stroke-dasharray': '2, 2',
+						});
 
 			var link = chart.append('g')
 				.attr('class','links')
@@ -584,11 +580,18 @@ $(function() {
 					})
 					.call(tip);
 
-			// Expose internal variables
-			globalFun.phyalign.d3.cluster		= cluster;
-			globalFun.phyalign.d3.linkExtension	= linkExtension;
-			globalFun.phyalign.d3.link			= link;
-			globalFun.phyalign.d3.tip			= tip;
+			// Timeout
+			window.setTimeout(function() {
+				var checked = true;
+				d3.transition().duration(750).each(function() {
+					linkExtension.transition().attr("d", function(d) {
+						return globalFun.phyalign.d3.step(d.target.x, checked ? d.target.radius : d.target.y, d.target.x, globalVar.phyalign.d3.innerRadius);
+					});
+					link.transition().attr("d", function(d) {
+						return globalFun.phyalign.d3.step(d.source.x, checked ? d.source.radius : d.source.y, d.target.x, checked ? d.target.radius : d.target.y);
+					});
+				});
+			}, 2000);
 		}
 	});
 

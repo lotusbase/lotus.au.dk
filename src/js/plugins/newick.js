@@ -87,6 +87,10 @@
             tree.name = token;
           } else if (x == ':') {
             tree.length = parseFloat(token);
+            var bootstrap = token.match(/\[([^\]]+)\]/);
+            if(bootstrap) {
+              tree.bootstrap = parseFloat(bootstrap[1]);
+            }
           }
       }
     }

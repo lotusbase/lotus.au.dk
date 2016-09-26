@@ -18,6 +18,12 @@
 			}
 		}
 
+		.link-extensions {
+			fill: none;
+			stroke: #000;
+			stroke-opacity: .25;
+		}
+
 		.link--active {
 			stroke: #000 !important;
 			stroke-width: 2px;
