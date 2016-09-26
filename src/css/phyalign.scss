@@ -1,5 +1,37 @@
+// Mixins
+@import 'variables';
+@import 'mixins';
+@import 'type';
+
+/*-------------------------------------------- 
+------------------ PHYALIGN ------------------
+----------------------------------------------*/
 #phyalign-tree {
 	svg {
 		width: 100%;
+
+		g {
+			&.labels {
+				text {
+					cursor: pointer;
+				}
+			}
+		}
+
+		.link--active {
+			stroke: #000 !important;
+			stroke-width: 2px;
+		}
+
+		.link-extension--active {
+			stroke-opacity: .6;
+		}
+
+		.label--active {
+			font-weight: bold;
+		}
 	}
 }
+
+// D3 tooltip
+@import 'components/d3/_tip.scss';

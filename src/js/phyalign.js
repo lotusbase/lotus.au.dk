@@ -2,6 +2,11 @@ $(function() {
 
 	// jQuery UI tabs
 	var $phyalign_tabs = $('#phyalign-tabs').tabs();
+	$d.on('click', '.ui-tabs a.ui-tabs-anchor', function(e) {
+		e.preventDefault();
+		window.history.pushState({lotusbase: true}, '', $(this).attr('href'));
+		$(':input[name="hash"]').val($(this).attr('href').substring(1));
+	});
 
 	// Initialize db
 	$('#phyalign-db')
@@ -422,8 +427,21 @@ $(function() {
 
 				return "M" + startRadius * c0 + "," + startRadius * s0 + (endAngle === startAngle ? "" : "A" + startRadius + "," + startRadius + " 0 0 " + (endAngle > startAngle ? 1 : 0) + " " + startRadius * c1 + "," + startRadius * s1) + "L" + endRadius * c1 + "," + endRadius * s1;
 			},
-			mouseovered: function(active) {
-				console.log(active);
+			mouseover: function(d, active, that) {
+				d3.select(that).classed("label--active", active);
+				d3.select(d.linkExtensionNode).classed("link-extension--active", active).each(globalFun.phyalign.d3.moveToFront);
+				do {
+					d3.select(d.linkNode).classed("link--active", active).each(globalFun.phyalign.d3.moveToFront);
+				} while(!!(d = d.parent));
+			},
+			moveToFront: function() {
+				this.parentNode.appendChild(this);
+			},
+			toScale: function() {
+				d3.transition().duration(750).each(function() {
+					linkExtension.transition().attr("d", function(d) { return step(d.target.x, checked ? d.target.radius : d.target.y, d.target.x, innerRadius); });
+					link.transition().attr("d", function(d) { return step(d.source.x, checked ? d.source.radius : d.source.y, d.target.x, checked ? d.target.radius : d.target.y); });
+				});
 			}
 		}
 	};
@@ -439,6 +457,9 @@ $(function() {
 
 			// Empty results
 			$('#phyalign-tree').empty();
+
+			// Destroy tips
+			$('.d3-tip').remove();
 
 			// Cluster layout
 			var cluster = d3.layout.cluster()
@@ -463,9 +484,13 @@ $(function() {
 					.attr('transform', 'translate('+globalVar.phyalign.d3.outerRadius+','+globalVar.phyalign.d3.outerRadius+')');
 
 			// Parse Newick
-			var newick = Newick.parse($('#tree-input').val()),
+			var newick = Newick.parse('('+$('#tree-input').val().replace(/;$/i,'')+')'),
 				nodes = cluster.nodes(newick),
-				links = cluster.links(nodes);
+				links = cluster.links(nodes),
+				leaves = nodes.filter(function(d) { return !d.children; }).length;
+
+			console.log(newick);
+			console.log(leaves);
 
 			// Set radius
 			globalFun.phyalign.d3.setRadius(
@@ -503,6 +528,20 @@ $(function() {
 							'fill': 'none'
 						});
 
+			// Tooltip
+			var tip = d3.tip()
+				.attr('class', 'd3-tip tip--bottom')
+				.attr('id', 'phyalign-d3-tip')
+				.offset([-15,0])
+				.direction('n')
+				.html(function(d) {
+					return ['<ul>',
+						'<li class="node-label"><strong>Label</strong>: <span>'+d.name+'</span></li>',
+						'<li class="node-branch-length"><strong>Branch length</strong>: <span>'+d.length+'</span></li>',
+					'</ul>'].join('');
+				});
+
+			// Append labels to charts
 			chart.append('g')
 				.attr('class', 'labels')
 				.selectAll('text')
@@ -512,16 +551,54 @@ $(function() {
 						'dy': '.31em',
 						'transform': function(d) {
 							return 'rotate(' + (d.x - 90) + ')translate(' + (globalVar.phyalign.d3.innerRadius + 4) + ',0)' + (d.x < 180 ? '' : 'rotate(180)');
+						},
+						'data-name': function(d) {
+							return d.name.replace(/['"]/gi, '');
 						}
 					})
-					.style('text-anchor', function(d) {
-						return d.x < 180 ? 'start' : 'end';
+					.style({
+						'font-size': Math.max(5, Math.min(16, Math.round(2 * Math.PI * globalVar.phyalign.d3.outerRadius / leaves) - 5)),
+						'text-anchor': function(d) {
+							return d.x < 180 ? 'start' : 'end';
+						}
 					})
 					.text(function(d) {
-						return d.name;
+						var n = d.name.replace(/['"]/gi, ''),
+							l = Math.max(5, Math.min(16, Math.round(2 * Math.PI * globalVar.phyalign.d3.outerRadius / leaves) - 5)) * 3.5/1.55;
+
+						return (n.length > l) ? n.substr(0,l-1)+'…' : n;
 					})
-					.on('mouseover', globalFun.phyalign.d3.mouseovered(true))
-					.on('mouseout', globalFun.phyalign.d3.mouseovered(false));
+					.on('mousemove', function(e) {
+						tip.style({
+							'top': (d3.event.pageY - $('#phyalign-d3-tip').outerHeight() - 20) + 'px',
+							'left': (d3.event.pageX - 0.5 * $('#phyalign-d3-tip').outerWidth()) + 'px'
+						});
+					})
+					.on('mouseover', function(d) {
+						tip.show(d, this);
+						globalFun.phyalign.d3.mouseover(d, true, this);
+					})
+					.on('mouseout', function(d) {
+						tip.hide(d, this);
+						globalFun.phyalign.d3.mouseover(d, false, this);
+					})
+					.call(tip);
+
+			// Expose internal variables
+			globalFun.phyalign.d3.cluster		= cluster;
+			globalFun.phyalign.d3.linkExtension	= linkExtension;
+			globalFun.phyalign.d3.link			= link;
+			globalFun.phyalign.d3.tip			= tip;
+		}
+	});
+
+	// General function to check popstate events
+	$w.on('popstate', function(e) {
+		if (e.originalEvent.state && e.originalEvent.state.lotusbase) {
+			var $tab = $('.ui-tabs ul.ui-tabs-nav li a[href="'+window.location.hash+'"]'),
+				index = $tab.parent().index(),
+				$parentTab = $tab.closest('.ui-tabs');
+			$parentTab.tabs("option", "active", index);
 		}
 	});
 
