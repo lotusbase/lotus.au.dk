@@ -78,7 +78,7 @@
 							<select id="phyalign-db" name="db">
 							<?php
 								$dbs = new \LotusBase\BLAST\DBMetadata();
-								$dbs->set_db_whitelist($phyalign_db_whitelist);
+								//$dbs->set_db_whitelist($phyalign_db_whitelist);
 								$db_metadata = $dbs->get_metadata();
 								$db_count = 0;
 
@@ -229,11 +229,11 @@
 
 			<div id="make-tree">
 				<p>Submit a Newick-format tree file to draw phylogenetic tree.</p>
-				<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="phyalign-form__tree" class="has-group">
+				<form action="#" method="post" id="phyalign-form__tree" class="has-group">
 					<div class="cols has-legend" role="group">
 						<p class="legend">Newick tree data</p>
-						<p class="full-width">Paste a Newick-format tree in the textarea below, or drag and drop a valid file in this box.</p>
-						<label for="tree-input" class="col-one">Direct input <span class="asterisk" title="Required Field">*</span></label>
+						<p class="full-width">Paste a Newick-format tree in the textarea below, or drag and drop a valid file in this box. If you are curious how this tool works, you can try <a href="#" id="load-sample-tree__button">loading a sample tree</a>.</p>
+						<label for="tree-input" class="col-one">Newick tree <span class="asterisk" title="Required Field">*</span></label>
 						<div class="col-two">
 							<textarea id="tree-input" name="tree" placeholder="Paste Newick-format tree file here" rows="10" class="resize__vertical"></textarea>
 						</div>
@@ -241,7 +241,37 @@
 
 					<button type="submit"><span class="pictogram icon-fork">Draw tree</span></button>
 				</form>
-				<div id="phyalign-tree"></div>
+				<div id="phyalign-tree">
+					<div id="phyalign-tree__svg"></div>
+					<form id="phyalign-tree__controls" action="#" method="get" class="cols flex-wrap__nowrap has-group">
+						<div class="has-legend" role="group">
+							<p class="legend">Display options</p>
+							<label for="tc__scale"><input type="checkbox" name="tc__scale" id="tc__scale" class="prettify" /><span>Draw to scale</span></label>
+							<label for="tc__bootstrap-nodes"><input type="checkbox" name="tc__bootstrap-nodes" id="tc__bootstrap-nodes" class="prettify" /><span>Color nodes by bootstrap values</span></label>
+							<label for="tc__bootstrap-links"><input type="checkbox" name="tc__bootstrap-links" id="tc__bootstrap-links" class="prettify" /><span>Color links by bootstrap values</span></label>
+							<label for="tc__internodes"><input type="checkbox" name="tc__internodes" id="tc__internodes" class="prettify" /><span>Show internodes</span></label>
+							<label for="tc__leaves"><input type="checkbox" name="tc__leaves" id="tc__leaves" class="prettify" /><span>Show leaf nodes</span></label>
+							<label for="tc__root"><input type="checkbox" name="tc__root" id="tc__root" class="prettify" checked /><span>Show root</span></label>
+						</div>
+
+						<div class="has-legend" role="group">
+							<p class="legend">Layout options</p>
+							<label for="tc__layout">Tree type</label>
+							<select name="tc__layout" id="tc__layout">
+								<option value="radial">Radial</option>
+								<option value="dendrogram">Dendrogram</option>
+							</select>
+						</div>
+
+						<div class="has-legend" role="group">
+							<p class="legend">Radial tree options</p>
+							<label for="tc__radial__rotation" class="col-one">Rotation</label>
+							<div class="col-two">
+								<input type="range" name="tc__radial__rotation" id="tc__radial__rotation" min="0" max="360" value="0" /><output id="tc__radial__rotation--out"-></output>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 

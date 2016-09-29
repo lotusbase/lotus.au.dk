@@ -94,6 +94,14 @@ form {
 			transform: translateY(-50%);
 			width: auto;
 		}
+		&.has-legend {
+			margin-top: 3rem;
+			padding-top: 2rem;
+			position: relative;
+			&:first-child {
+				margin-top: 2rem;
+			}
+		}
 	}
 	.search-again & {
 		div[role='group'], fieldset {
@@ -596,14 +604,6 @@ form {
 		}
 		.input-mimic ~ label.error {
 			margin-bottom: 0;
-		}
-		&.has-legend {
-			margin-top: 3rem;
-			padding-top: 2rem;
-			position: relative;
-			&:first-child {
-				margin-top: 2rem;
-			}
 		}
 	}
 
