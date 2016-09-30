@@ -250,7 +250,7 @@
 				</form>
 				<div id="phyalign-tree">
 					<div id="phyalign-tree__svg"></div>
-					<form id="phyalign-tree__controls" action="#" method="get" class="cols flex-wrap__nowrap has-group">
+					<form id="phyalign-tree__controls" action="#" method="get" class="has-group">
 						<div class="has-legend" role="group">
 							<p class="legend">Display options</p>
 							<label for="tc__scale"><input type="checkbox" name="tc__scale" id="tc__scale" class="prettify" /><span>Draw to scale</span></label>

@@ -443,7 +443,8 @@ $(function() {
 				scaleX: 1,
 				scaleY: 1,
 				outerRadius: 400,
-				innerRadius: 400 - 150
+				innerRadius: 400 - 150,
+				rotate: 0
 			},
 			dendrogram: {
 				rowHeight: 14
@@ -502,10 +503,14 @@ $(function() {
 			label: {
 				radial: {
 					transform: function(d) {
-						return "rotate(" + (d.x - 90) + ")translate(" + (globalVar.phyalign.d3.tree.radial.innerRadius + 8) + ",0)" + (d.x < 180 ? "" : "rotate(180)");
+						var r = globalVar.phyalign.d3.tree.radial.rotate;
+						//return "rotate(" + (d.x - 90) + ")translate(" + (globalVar.phyalign.d3.tree.radial.innerRadius + 8) + ",0)" + (d.x < 180 ? "" : "rotate(180)");
+						return "rotate(" + (d.x - 90) + ")translate(" + (globalVar.phyalign.d3.tree.radial.innerRadius + 8) + ",0)" + ((d.x + r) % 360 < 180 ? "" : "rotate(180)");
 					},
 					textAnchor: function(d) {
-						return d.x < 180 ? 'start' : 'end';
+						var r = globalVar.phyalign.d3.tree.radial.rotate;
+						//return d.x < 180 ? 'start' : 'end';
+						return (d.x + r) % 360 < 180 ? 'start' : 'end';
 					}
 				},
 				dendrogram: {
@@ -679,8 +684,7 @@ $(function() {
 
 						// Position nicely
 						chart.attr({
-							'transform': 'translate(100,20)',
-							'data-transform': 'translate(100,20)'
+							'transform': 'translate(100,20)'
 						});
 
 						// Set scale
@@ -715,8 +719,7 @@ $(function() {
 
 						// Position nicely
 						chart.attr({
-							'transform': 'translate('+($('#phyalign-tree__svg svg').width()/2)+','+($('#phyalign-tree__svg svg').height()/2)+')',
-							'data-transform': 'translate('+($('#phyalign-tree__svg svg').width()/2)+','+($('#phyalign-tree__svg svg').height()/2)+')'
+							'transform': 'translate('+($('#phyalign-tree__svg svg').width()/2)+','+($('#phyalign-tree__svg svg').height()/2)+')  rotate('+globalVar.phyalign.d3.tree.radial.rotate+')'
 						});
 
 						// Set scale
@@ -1155,22 +1158,21 @@ $(function() {
 
 	// Radial tree
 	$('#tc__radial__rotation').on('input', $.throttle(50, function() {
-		var t = d3.transform(d3.select('#tree').attr('transform')),
-			r = +$(this).val();
+		var t = d3.transform(d3.select('#tree').attr('transform'));
 
+		// Update rotation value
+		globalVar.phyalign.d3.tree.radial.rotate = +$(this).val();
+
+		// Rotate tree and labels
 		d3.select('#tree').attr({
-			'transform': 'translate('+t.translate[0]+','+t.translate[1]+') rotate('+r+')'
+			'transform': 'translate('+t.translate[0]+','+t.translate[1]+') rotate('+globalVar.phyalign.d3.tree.radial.rotate+')'
 		});
 		d3.selectAll('text.label')
 			.style({
-				'text-anchor': function(d) {
-					return (d.x + r) % 360 < 180 ? 'start' : 'end';
-				}
+				'text-anchor': globalFun.phyalign.d3.label.radial.textAnchor
 			})
 			.attr({
-				'transform': function(d) {
-					return "rotate(" + (d.x - 90) + ")translate(" + (globalVar.phyalign.d3.tree.radial.innerRadius + 8) + ",0)" + ((d.x + r) % 360 < 180 ? "" : "rotate(180)");
-				}
+				'transform': globalFun.phyalign.d3.label.radial.transform
 			});
 	}));
 

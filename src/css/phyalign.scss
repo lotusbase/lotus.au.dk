@@ -73,9 +73,9 @@
 
 // Tree controls
 #phyalign-tree__controls {
-	flex-direction: column;
-	justify-content: center;
 	opacity: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
 	pointer-events: none;
 	position: absolute;
 	top: 0;
