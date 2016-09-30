@@ -53,9 +53,6 @@ $api->get('/phyalign/data[/{jobID}]', function($request, $response, $args) {
 			throw new \Exception('No job ID has been provided.', 400);
 		}
 
-		// Force lowercase
-		$jobID = strtolower($jobID);
-
 		// Check job status with
 		$clustalo_status = new \LotusBase\PhyAlign\Data;
 		$clustalo_status->set_job_id($jobID);

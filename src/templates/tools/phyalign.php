@@ -232,7 +232,14 @@
 				<form action="#" method="post" id="phyalign-form__tree" class="has-group">
 					<div class="cols has-legend" role="group">
 						<p class="legend">Newick tree data</p>
-						<p class="full-width">Paste a Newick-format tree in the textarea below, or drag and drop a valid file in this box. If you are curious how this tool works, you can try <a href="#" id="load-sample-tree__button">loading a sample tree</a>.</p>
+						<p class="full-width">New to the tool? Try loading a sample tree:</p>
+						<label for="tree-load" class="col-one">Select a demo</label>
+						<select name="tree-load" id="tree-load" class="col-two">
+							<option>Select one example tree to load</option>
+							<option value="<?php echo WEB_ROOT; ?>/data/sample/phyalign/tol.tree">Tree of Life</option>
+						</select>
+						<div class="separator full-width"><span>or</span></div>
+						<p class="full-width">&hellip;paste a Newick-format tree in the textarea below, or drag and drop a valid file in this box.</p>
 						<label for="tree-input" class="col-one">Newick tree <span class="asterisk" title="Required Field">*</span></label>
 						<div class="col-two">
 							<textarea id="tree-input" name="tree" placeholder="Paste Newick-format tree file here" rows="10" class="resize__vertical"></textarea>
@@ -254,20 +261,20 @@
 							<label for="tc__root"><input type="checkbox" name="tc__root" id="tc__root" class="prettify" checked /><span>Show root</span></label>
 						</div>
 
-						<div class="has-legend" role="group">
+						<div class="cols has-legend" role="group">
 							<p class="legend">Layout options</p>
-							<label for="tc__layout">Tree type</label>
-							<select name="tc__layout" id="tc__layout">
+							<label for="tc__layout" class="col_one">Tree type</label>
+							<select name="tc__layout" id="tc__layout" class="col-two">
 								<option value="radial">Radial</option>
 								<option value="dendrogram">Dendrogram</option>
 							</select>
 						</div>
 
-						<div class="has-legend" role="group">
+						<div class="cols has-legend tc__treeType" role="group" id="tc__radial">
 							<p class="legend">Radial tree options</p>
 							<label for="tc__radial__rotation" class="col-one">Rotation</label>
 							<div class="col-two">
-								<input type="range" name="tc__radial__rotation" id="tc__radial__rotation" min="0" max="360" value="0" /><output id="tc__radial__rotation--out"-></output>
+								<input type="range" name="tc__radial__rotation" id="tc__radial__rotation" min="0" max="360" value="0" disabled /><output id="tc__radial__rotation--out"-></output>
 							</div>
 						</div>
 					</form>

@@ -45,7 +45,7 @@ class Data {
 				curl_setopt($ch, CURLOPT_URL, 'http://www.ebi.ac.uk/Tools/services/rest/clustalo/resulttypes/'.$this->_jobID);
 				curl_setopt($ch, CURLOPT_HEADER, 0);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
+				
 				// Execute, receive, and parse server response
 				$clustalo_resultTypes = new \SimpleXMLElement(curl_exec($ch));
 				curl_close($ch);

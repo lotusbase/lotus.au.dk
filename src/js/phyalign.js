@@ -347,7 +347,13 @@ $(function() {
 				$('#phyalign-status--short')
 				.html('<span class="icon-ok-circled icon--big icon--no-spacing">Job completed</span>')
 				.next('span.byline')
-					.html('<span class="job-id__wrapper" data-job-id="'+job.id+'"><span class="job-id">'+job.id+'</span><span class="tooltip">Press <kbd>Ctrl &#8963;</kbd>/<kbd>Cmd &#8984;</kbd> + <kbd>C</kbd> to copy</span></span>');
+					.html('Job data retreived')
+					.after([
+						'<div class="simple-card align-center">',
+						'<p>We have retrieved run data from the Clustal Omega job from the EMBL-EBI server:</p>',
+						'<span class="job-id__wrapper" data-job-id="'+job.id+'"><span class="job-id">'+job.id+'</span><span class="tooltip">Press <kbd>Ctrl &#8963;</kbd>/<kbd>Cmd &#8984;</kbd> + <kbd>C</kbd> to copy</span></span>',
+						'</div>'
+						].join(''));
 
 				// Parse incoming data
 				var $clustalo_tabs__nav = $('#phyalign__job-data__nav');
@@ -396,30 +402,30 @@ $(function() {
 	$d.on('click', '#make-tree__button', function() {
 
 		// Setup form properly
-		$('#tree-input').val();
+		$('#tree-input').val(globalVar.phyalign.data.data.filter(function(o) {
+			return o.type.identifier === 'phylotree';
+		})[0].content);
 		$('#phyalign-form__tree').trigger('submit');
 
 		// Handoff to third tab
 		$('#phyalign-tabs').tabs('option', 'active', 2);
 	});
 
-	// Load premade tree
-	$d.on('click', '#load-sample-tree__button', function(e) {
+	// Load premade trees
+	$d.on('change', '#tree-load', function(e) {
 		var $inputs = $('#phyalign-form__tree :input[type="submit"], #tree-input');
-
-		// Prevent default action
-		e.preventDefault();
 
 		// Disable textarea and submit button until submission
 		$inputs.prop('disabled', true);
 
 		// Perform AJAX
 		$.ajax({
-			url: root + '/data/sample/tol.tree',
+			url: $(this).val(),
 			dataType: 'text'
 		})
 		.done(function(tree) {
 			$('#tree-input').val(tree);
+			$('#phyalign-form__tree').trigger('submit');
 		})
 		.always(function() {
 			$inputs.prop('disabled', false);
@@ -440,8 +446,7 @@ $(function() {
 				innerRadius: 400 - 150
 			},
 			dendrogram: {
-				scaleX: 3,
-				rowHeight: 16
+				rowHeight: 14
 			},
 			types: ['radial','dendrogram']
 		},
@@ -610,11 +615,16 @@ $(function() {
 					// Update tree type options
 					$('#tc__layout').val(treeType);
 
+					// Toggle tree controls
+					globalFun.phyalign.d3.tree.controls();
+
 					// Set y-axis scale for dendrogram
-					globalVar.phyalign.d3.tree.dendrogram.scaleY = leaves * globalVar.phyalign.d3.tree.dendrogram.rowHeight / globalVar.phyalign.d3.tree.radial.innerRadius;
+					var scaleY_calc = leaves * globalVar.phyalign.d3.tree.dendrogram.rowHeight / globalVar.phyalign.d3.tree.radial.innerRadius;
+					globalVar.phyalign.d3.tree.dendrogram.scaleX = $('#phyalign-tree__svg svg').width() / 360;
+					globalVar.phyalign.d3.tree.dendrogram.scaleY = scaleY_calc < 1.5 ? 1.5 : scaleY_calc;
 
 					// Chart
-					var chart = d3.select('#stage').append('g');
+					var chart = d3.select('#stage').append('g').attr('id', 'tree');
 
 					// Create groups
 					chart.append('g').attr('class', 'links');
@@ -668,7 +678,10 @@ $(function() {
 							tips		= d.tips;
 
 						// Position nicely
-						chart.transition().duration(750).attr('transform', 'translate(0,0)');
+						chart.attr({
+							'transform': 'translate(100,20)',
+							'data-transform': 'translate(100,20)'
+						});
 
 						// Set scale
 						globalFun.phyalign.d3.setScale[globalVar.phyalign.d3.tree.type](
@@ -701,7 +714,10 @@ $(function() {
 							tips	= d.tips;
 
 						// Position nicely
-						chart.transition().duration(750).attr('transform', 'translate('+($('#phyalign-tree__svg svg').width()/2)+','+($('#phyalign-tree__svg svg').height()/2)+')');
+						chart.attr({
+							'transform': 'translate('+($('#phyalign-tree__svg svg').width()/2)+','+($('#phyalign-tree__svg svg').height()/2)+')',
+							'data-transform': 'translate('+($('#phyalign-tree__svg svg').width()/2)+','+($('#phyalign-tree__svg svg').height()/2)+')'
+						});
 
 						// Set scale
 						globalFun.phyalign.d3.setScale[globalVar.phyalign.d3.tree.type](
@@ -736,7 +752,11 @@ $(function() {
 						chartLinks.selectAll('path.link')
 						.attr({
 							'd': function(d) {
-								return globalFun.phyalign.d3.step[treeType](d.source.x, d.source.y, d.target.x, d.target.y);
+								return globalFun.phyalign.d3.step[treeType](
+									d.source.x,
+									globalVar.phyalign.d3.opts.scale ? d.source.scale : d.source.y,
+									d.target.x,
+									globalVar.phyalign.d3.opts.scale ? d.target.scale : d.target.y);
 							}
 						});
 
@@ -755,7 +775,11 @@ $(function() {
 											return d.source.bootstrap ? d.source.bootstrap : '';
 										},
 										'd': function(d) {
-											return globalFun.phyalign.d3.step[treeType](d.source.x, d.source.y, d.target.x, d.target.y);
+											return globalFun.phyalign.d3.step[treeType](
+												d.source.x,
+												globalVar.phyalign.d3.opts.scale ? d.source.scale : d.source.y,
+												d.target.x,
+												globalVar.phyalign.d3.opts.scale ? d.target.scale : d.target.y);
 										}
 									})
 									.style({
@@ -775,7 +799,11 @@ $(function() {
 						chartLinkExtensions.selectAll('path.link-extension')
 						.attr({
 							'd': function(d) {
-								return globalFun.phyalign.d3.step[treeType](d.target.x, d.target.y, d.target.x, globalVar.phyalign.d3.tree.radial.innerRadius);
+								return globalFun.phyalign.d3.step[treeType](
+									d.target.x,
+									globalVar.phyalign.d3.opts.scale ? d.target.scale : d.target.y,
+									d.target.x,
+									globalVar.phyalign.d3.tree.radial.innerRadius);
 							}
 						});
 
@@ -789,7 +817,11 @@ $(function() {
 									})
 									.attr({
 										'd': function(d) {
-											return globalFun.phyalign.d3.step[treeType](d.target.x, d.target.y, d.target.x, globalVar.phyalign.d3.tree.radial.innerRadius);
+											return globalFun.phyalign.d3.step[treeType](
+												d.target.x,
+												globalVar.phyalign.d3.opts.scale ? d.target.scale : d.target.y,
+												d.target.x,
+												globalVar.phyalign.d3.tree.radial.innerRadius);
 										},
 										'class': 'link-extension'
 									})
@@ -902,8 +934,12 @@ $(function() {
 								})
 								.text(function(d) {
 									return d.name;
-								})
-								.on('mousemove', function(e) {
+								});
+
+
+						chartLabels
+							.selectAll('text.label')
+							.on('mousemove', function(e) {
 									tips.leaves.style({
 										'top': (d3.event.pageY - $('#phyalign-d3__leaves-tip').outerHeight() - 20) + 'px',
 										'left': (d3.event.pageX - 0.5 * $('#phyalign-d3__leaves-tip').outerWidth()) + 'px'
@@ -919,6 +955,11 @@ $(function() {
 								})
 								.call(tips.leaves);
 					}
+				},
+				controls: function() {
+					var treeType = globalVar.phyalign.d3.tree.type;
+					$('.tc__treeType').hide().find(':input').prop('disabled', true);
+					$('#tc__'+treeType).show().find(':input').prop('disabled', false);
 				}
 			},
 			drawTree: function() {
@@ -945,8 +986,7 @@ $(function() {
 			},
 			update: {
 				link: function(_opts) {
-					var link				= globalVar.phyalign.d3.tree.link,
-						stage				= globalVar.phyalign.d3.tree.stage,
+					var link				= d3.selectAll('path.link'),
 						bootstrapColor		= globalVar.phyalign.d3.tree.bootstrap.color,
 						bootstrapColorMap	= globalVar.phyalign.d3.tree.bootstrap.colorMap;
 					
@@ -973,7 +1013,7 @@ $(function() {
 					});
 				},
 				linkExtension: function(_opts) {
-					var linkExtension = globalVar.phyalign.d3.tree.linkExtension;
+					var linkExtension = d3.selectAll('path.link-extension');
 
 					// Update options
 					$.extend(true, globalVar.phyalign.d3.opts, _opts);
@@ -989,7 +1029,7 @@ $(function() {
 					});
 				},
 				branchNode: function(_opts) {
-					var branchNode			= globalVar.phyalign.d3.tree.branchNode,
+					var branchNode			= d3.selectAll('circle.node'),
 						bootstrapColor		= globalVar.phyalign.d3.tree.bootstrap.color,
 						bootstrapColorMap	= globalVar.phyalign.d3.tree.bootstrap.colorMap;
 
@@ -1102,14 +1142,37 @@ $(function() {
 	});
 	$('#tc__layout').on('change', function() {
 		if(globalVar.phyalign.d3.tree.types.indexOf($(this).val()) >= 0) {
-			//globalFun.phyalign.d3.tree.create($(this).val());
+			// Render tree again
 			globalVar.phyalign.d3.tree.type = $(this).val();
 			globalFun.phyalign.d3.tree.draw[globalVar.phyalign.d3.tree.type]();
-			//console.log(globalVar.phyalign.d3.tree.data);
+
+			// Toggle tree controls
+			globalFun.phyalign.d3.tree.controls();
 		} else {
 			console.log('Invalid tree type!');
 		}
 	});
+
+	// Radial tree
+	$('#tc__radial__rotation').on('input', $.throttle(50, function() {
+		var t = d3.transform(d3.select('#tree').attr('transform')),
+			r = +$(this).val();
+
+		d3.select('#tree').attr({
+			'transform': 'translate('+t.translate[0]+','+t.translate[1]+') rotate('+r+')'
+		});
+		d3.selectAll('text.label')
+			.style({
+				'text-anchor': function(d) {
+					return (d.x + r) % 360 < 180 ? 'start' : 'end';
+				}
+			})
+			.attr({
+				'transform': function(d) {
+					return "rotate(" + (d.x - 90) + ")translate(" + (globalVar.phyalign.d3.tree.radial.innerRadius + 8) + ",0)" + ((d.x + r) % 360 < 180 ? "" : "rotate(180)");
+				}
+			});
+	}));
 
 	// General function to check popstate events
 	$w.on('popstate', function(e) {
