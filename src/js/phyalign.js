@@ -753,6 +753,10 @@ $(function() {
 
 						// Update links
 						chartLinks.selectAll('path.link')
+						.each(function(d, i) {
+							d.target.linkNode = this;
+							if(i === 0) d.root = true;
+						})
 						.attr({
 							'd': function(d) {
 								return globalFun.phyalign.d3.step[treeType](
@@ -800,6 +804,9 @@ $(function() {
 
 						// Update link extensions
 						chartLinkExtensions.selectAll('path.link-extension')
+						.each(function(d) {
+							d.target.linkExtensionNode = this;
+						})
 						.attr({
 							'd': function(d) {
 								return globalFun.phyalign.d3.step[treeType](
@@ -845,6 +852,9 @@ $(function() {
 
 						// Update nodes
 						chartNodes.selectAll('circle.node')
+						.each(function(d, i) {
+							if(!d.children) d.bootstrap = d.parent.bootstrap;
+						})
 						.attr({
 							'transform': function(d) {
 								return globalFun.phyalign.d3.branchNode[treeType](d.x, d.y);
@@ -857,7 +867,7 @@ $(function() {
 								.data(nodes.filter(function(d,i){ return i > 0; }))
 								.enter().append('circle')
 									.each(function(d, i) {
-										if(!d.children) d.bootstrap = d.parent.bootstrap;	
+										if(!d.children) d.bootstrap = d.parent.bootstrap;
 									})
 									.attr({
 										'r': 3,
