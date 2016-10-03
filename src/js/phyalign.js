@@ -453,6 +453,9 @@ $(function() {
 		},
 		opts: 	{
 			scale: false,
+			scaleBar: {
+				show: false
+			},
 			nodes: {
 				bootstrap: false,
 				show: false
@@ -467,6 +470,9 @@ $(function() {
 			},
 			linkExtensions: {
 				bootstrap: false
+			},
+			grid: {
+				show: false
 			}
 		}
 	};
@@ -533,6 +539,15 @@ $(function() {
 					return 'translate(' + (y * globalVar.phyalign.d3.tree.dendrogram.scaleX) + ',' + (x * globalVar.phyalign.d3.tree.dendrogram.scaleY) + ')';
 				}
 			},
+			grid: {
+				radial: function(d, lengthScale) {
+					var r = lengthScale(d);
+					return 'M 0 0 m -'+r+', 0 a '+r+','+r+' 0 1,0 '+(r*2)+',0 a '+r+','+r+' 0 1,0 -'+(r*2)+',0';
+				},
+				dendrogram: function(d, lengthScale, height) {
+					return 'M '+lengthScale(d)+' 0 V ' + height;
+				}
+			},
 			mouseover: function(d, active, that) {
 				d3.select(that).classed("label--active", active);
 				d3.select(d.linkExtensionNode).classed("link-extension--active", active).each(globalFun.phyalign.d3.moveToFront);
@@ -549,6 +564,7 @@ $(function() {
 					var zoomListener = d3.behavior.zoom().scaleExtent([0.2,5]).on('zoom', function() {
 						d3.select('#stage').attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
 					});
+					globalVar.phyalign.d3.zoomListener = zoomListener;
 
 					var svg = d3.select('#phyalign-tree__svg').append('svg')
 							.attr({
@@ -558,7 +574,7 @@ $(function() {
 							.style({
 								'font-family': 'Arial'
 							})
-							.call(zoomListener),
+							.call(globalVar.phyalign.d3.zoomListener),
 
 						// Capture
 						capture = svg.append('rect')
@@ -582,9 +598,6 @@ $(function() {
 					window.setTimeout(function() {
 						$('#phyalign-tree').addClass('controls--visible');
 					}, 500);
-
-					// Expose
-					globalVar.phyalign.d3.tree.stage = stage;
 
 				},
 				create: function(forceTreeType) {
@@ -628,10 +641,19 @@ $(function() {
 					globalVar.phyalign.d3.tree.dendrogram.scaleX = $('#phyalign-tree__svg svg').width() / 360;
 					globalVar.phyalign.d3.tree.dendrogram.scaleY = scaleY_calc < 1.5 ? 1.5 : scaleY_calc;
 
+					// Stage
+					var stage = d3.select('#stage');
+
+					// Create scale bars
+					stage.append('g').attr('class', 'x axis top').style('opacity', globalVar.phyalign.d3.opts.scaleBar.show ? 1 : 0);
+					stage.append('g').attr('class', 'x axis bottom').style('opacity', globalVar.phyalign.d3.opts.scaleBar.show ? 1 : 0);
+					stage.append('g').attr('class', 'x gridExtensions').style('opacity', globalVar.phyalign.d3.opts.scaleBar.show ? 1 : 0);
+
 					// Chart
-					var chart = d3.select('#stage').append('g').attr('id', 'tree');
+					var chart = stage.append('g').attr('id', 'tree');
 
 					// Create groups
+					chart.append('g').attr('class', 'x grid').style('opacity', globalVar.phyalign.d3.opts.grid.show ? 1 : 0);
 					chart.append('g').attr('class', 'links');
 					chart.append('g').attr('class', 'link-extensions');
 					chart.append('g').attr('class', 'nodes');
@@ -640,14 +662,30 @@ $(function() {
 					// Tooltips
 					var tips = {
 						leaves: d3.tip()
-							.attr('class', 'd3-tip tip--bottom')
-							.attr('id', 'phyalign-d3__leaves-tip')
+							.attr({
+								'class': 'd3-tip tip--bottom',
+								'id': 'phyalign-d3__tip__leaves'
+							})
 							.offset([-15,0])
 							.direction('n')
 							.html(function(d) {
 								return ['<ul>',
-									'<li class="node-label"><strong>Label</strong>: <span>'+d.name+'</span></li>',
-									'<li class="node-branch-length"><strong>Branch length</strong>: <span>'+d.length+'</span></li>',
+									'<li class="leaf__label">'+(d.name ? '<strong>Label</strong>: <span>'+d.name+'</span>' : 'Unnamed leaf')+'</li>',
+									(globalVar.phyalign.d3.opts.scale ? '<li class="leaf__branch-length"><strong>Branch length</strong>: <span>'+d.length+'</span></li>' : ''),
+								'</ul>'].join('');
+							}),
+						nodes: d3.tip()
+							.attr({
+								'class': 'd3-tip tip--bottom',
+								'id': 'phyalign-d3__tip__'
+							})
+							.offset([-15,0])
+							.direction('n')
+							.html(function(d) {
+								return ['<ul>',
+									'<li class="node__label">'+(d.name ? '<strong>Label</strong>: <span>'+d.name+'</span>' : 'Unnamed node')+'</li>',
+									(globalVar.phyalign.d3.opts.scale ? '<li class="node__branch-length"><strong>Branch length</strong>: <span>'+d.length+'</span></li>' : ''),
+									(d.bootstrap && !isNaN(+d.bootstrap) && d.children ? '<li class="node__bootstrap"><strong>Bootstrap value</strong>: <span>'+d.bootstrap+'</span></li>' : ''),
 								'</ul>'].join('');
 							})
 					};
@@ -671,6 +709,25 @@ $(function() {
 						colorMap: bootstrapColorMap
 					};
 				},
+				zoomFit: function() {
+					var root = d3.select('#stage');
+					var bounds = root.node().getBBox();
+					var parent = root.node().parentElement;
+					var fullWidth = parent.clientWidth,
+						fullHeight = parent.clientHeight;
+					var width = bounds.width,
+						height = bounds.height;
+					var midX = bounds.x + width / 2,
+						midY = bounds.y + height / 2;
+					if (width === 0 || height === 0) return; // nothing to fit
+					var scale = 0.9 / Math.max(width / fullWidth, height / fullHeight);
+					var translate = [fullWidth / 2 - scale * midX, fullHeight / 2 - scale * midY];
+
+					root
+					.transition()
+					.duration(750)
+					.call(globalVar.phyalign.d3.zoomListener.translate(translate).scale(scale).event);
+				},
 				draw: {
 					dendrogram: function() {
 						// Variables
@@ -684,6 +741,12 @@ $(function() {
 
 						// Position nicely
 						chart.attr({
+							'transform': 'translate(100,20)'
+						});
+						d3.selectAll('g.x.gridExtensions').attr({
+							'transform': 'translate(100,20)'
+						});
+						d3.selectAll('g.x.axis').attr({
 							'transform': 'translate(100,20)'
 						});
 
@@ -701,6 +764,9 @@ $(function() {
 
 						// Update labels
 						globalFun.phyalign.d3.tree.update.label(d);
+
+						// Draw scale bar
+						globalFun.phyalign.d3.tree.update.scaleBar(d);
 
 						// Expose
 						globalVar.phyalign.d3.tree.linkExtension	= linkExtension;
@@ -721,6 +787,12 @@ $(function() {
 						chart.attr({
 							'transform': 'translate('+($('#phyalign-tree__svg svg').width()/2)+','+($('#phyalign-tree__svg svg').height()/2)+')  rotate('+globalVar.phyalign.d3.tree.radial.rotate+')'
 						});
+						d3.selectAll('g.x.gridExtensions').attr({
+							'transform': 'translate('+($('#phyalign-tree__svg svg').width()/2)+','+($('#phyalign-tree__svg svg').height()/2)+')  rotate('+globalVar.phyalign.d3.tree.radial.rotate+')'
+						});
+						d3.selectAll('g.x.axis').attr({
+							'transform': 'translate('+($('#phyalign-tree__svg svg').width()/2)+','+($('#phyalign-tree__svg svg').height()/2)+')  rotate('+globalVar.phyalign.d3.tree.radial.rotate+')'
+						});
 
 						// Set scale
 						globalFun.phyalign.d3.setScale[globalVar.phyalign.d3.tree.type](
@@ -736,6 +808,9 @@ $(function() {
 
 						// Update labels
 						globalFun.phyalign.d3.tree.update.label(d);
+
+						// Draw scale bar
+						globalFun.phyalign.d3.tree.update.scaleBar(d);
 
 						// Expose
 						globalVar.phyalign.d3.tree.linkExtension	= linkExtension;
@@ -792,6 +867,7 @@ $(function() {
 									.style({
 										'stroke': '#555',
 										'stroke-width': 1.5,
+										'stroke-linecap': 'square',
 										'fill': 'none'
 									});
 					},
@@ -847,6 +923,7 @@ $(function() {
 						// Variables
 						var chart 		= d.chart,
 							nodes 		= d.nodes,
+							tips		= d.tips,
 							treeType	= globalVar.phyalign.d3.tree.type,
 							chartNodes	= chart.select('g.nodes');
 
@@ -862,7 +939,7 @@ $(function() {
 						});
 
 						// Add new nodes
-						return chartNodes
+						var _chartNodes = chartNodes
 							.selectAll('circle.node')
 								.data(nodes.filter(function(d,i){ return i > 0; }))
 								.enter().append('circle')
@@ -880,8 +957,25 @@ $(function() {
 									})
 									.style({
 										'fill': '#555',
-										'fill-opacity': 0
+										'fill-opacity': 0,
+										'pointer-events': function(d) {
+											if(d.children) {
+												return globalVar.phyalign.d3.opts.nodes.show ? 'auto' : 'none';
+											} else {
+												return globalVar.phyalign.d3.opts.leaves.show ? 'auto' : 'none';
+											}
+										}
 									});
+
+						// Bind tips
+						chartNodes
+						.selectAll('circle.node')
+							.on('mouseover', tips.nodes.show)
+							.on('mouseout', tips.nodes.hide)
+							.call(tips.nodes);
+
+						// Return nodes
+						return _chartNodes;
 					},
 					label: function(d) {
 						// Variables
@@ -950,23 +1044,171 @@ $(function() {
 								});
 
 
+						// Bind tips
 						chartLabels
-							.selectAll('text.label')
+						.selectAll('text.label')
 							.on('mousemove', function(e) {
-									tips.leaves.style({
-										'top': (d3.event.pageY - $('#phyalign-d3__leaves-tip').outerHeight() - 20) + 'px',
-										'left': (d3.event.pageX - 0.5 * $('#phyalign-d3__leaves-tip').outerWidth()) + 'px'
-									});
+								tips.leaves.style({
+									'top': (d3.event.pageY - $('#phyalign-d3__tip__leaves').outerHeight() - 20) + 'px',
+									'left': (d3.event.pageX - 0.5 * $('#phyalign-d3__tip__leaves').outerWidth()) + 'px'
+								});
+							})
+							.on('mouseover', function(d) {
+								tips.leaves.show(d, this);
+								globalFun.phyalign.d3.mouseover(d, true, this);
+							})
+							.on('mouseout', function(d) {
+								tips.leaves.hide(d, this);
+								globalFun.phyalign.d3.mouseover(d, false, this);
+							})
+							.call(tips.leaves);
+					},
+					scaleBar: function(d) {
+						// Variables
+						var newick			= d.newick,
+							chart			= d.chart,
+							stage			= d3.select('#stage'),
+							nodes			= d.nodes,
+							leaves			= d.leaves,
+							treeType		= globalVar.phyalign.d3.tree.type;
+
+						// Establish scale
+						var lengthScale = d3.scale.linear()
+								.domain([
+									0,
+									globalFun.phyalign.d3.maxLength(newick)
+									])
+								.range([
+									0,
+									d3.max(nodes, function(d) { return +d.scale; })*globalVar.phyalign.d3.tree[treeType].scaleX
+									])
+								.nice(),
+							scaleAxis = d3.svg.axis()
+								.scale(lengthScale).tickFormat(function (d) {
+									return d;
+								}).ticks(5).outerTickSize(0).innerTickSize(3);
+
+						// Update/draw grids
+						var _grid = chart.select('g.x.grid').selectAll('path.grid')
+						.data(lengthScale.ticks(5))
+						.attr({
+							'd': function(d) {
+								return globalFun.phyalign.d3.grid[treeType](d, lengthScale, globalVar.phyalign.d3.tree.dendrogram.scaleY*360);
+							}
+						});
+
+						_grid
+							.enter().append('path')
+								.style({
+									'stroke': '#999',
+									'stroke-dasharray': '3,3',
+									'fill': 'none'
 								})
-								.on('mouseover', function(d) {
-									tips.leaves.show(d, this);
-									globalFun.phyalign.d3.mouseover(d, true, this);
+								.attr({
+									'class': 'grid',
+									'd': function(d) {
+
+										return globalFun.phyalign.d3.grid[treeType](d, lengthScale, globalVar.phyalign.d3.tree.dendrogram.scaleY*360);
+									}
+								});
+
+						_grid.exit().remove();
+
+						// Update/draw grid extensions
+						if(treeType === 'radial') {
+							stage.select('g.x.gridExtensions').selectAll('line.gridExtension')
+							.data(lengthScale.ticks(5))
+							.enter().append('line')
+								.style({
+									'stroke': '#ccc',
+									'stroke-dasharray': '2,2',
+									'fill': 'none'
 								})
-								.on('mouseout', function(d) {
-									tips.leaves.hide(d, this);
-									globalFun.phyalign.d3.mouseover(d, false, this);
+								.attr({
+									'class': 'gridExtension',
+									'x1': function(d) { return lengthScale(d); },
+									'y1': 0,
+									'x2': function(d) { return lengthScale(d); },
+									'y2': globalVar.phyalign.d3.tree.radial.outerRadius * 1.15
+								});
+						} else {
+							stage.selectAll('line.gridExtension').remove();
+						}
+
+						// Update/draw scale bar
+						var _scaleBarTop = stage.select('g.x.axis.top');
+						_scaleBarTop
+							.call(scaleAxis.orient('top'))
+							.attr({
+								'transform': function() {
+									var t = d3.transform(d3.select('#tree').attr('transform'));
+									if (globalVar.phyalign.d3.tree.type === 'radial') {
+										return 'translate('+(t.translate[0])+','+(t.translate[1]+globalVar.phyalign.d3.tree.radial.outerRadius*-1.15)+')';
+									} else {
+										return 'translate('+(t.translate[0])+','+(t.translate[1])+')';
+									}
+								}
+							})
+							.selectAll('text')
+								.attr({
+									'class': 'x axis break',
 								})
-								.call(tips.leaves);
+								.style({
+									'font-size': 10,
+									'text-anchor': 'middle'
+								});
+
+						// Style the scale bar
+						_scaleBarTop.selectAll('path.domain')
+						.style({
+							'stroke': '#333',
+							'stroke-linecap': 'square'
+						})
+						.attr({
+							'd': 'M0,0V0H'+lengthScale(scaleAxis.scale().ticks(scaleAxis.ticks()[0]).slice(-1)[0])+'V0'
+						});
+						_scaleBarTop.selectAll('g.tick')
+							.selectAll('line').style({
+								'stroke': '#333',
+								'stroke-linecap': 'square'
+							});
+
+						var _scaleBarBottom = stage.select('g.x.axis.bottom');
+						_scaleBarBottom
+							.call(scaleAxis.orient('bottom'))
+							.attr({
+								'transform': function() {
+									var t = d3.transform(d3.select('#tree').attr('transform'));
+									if (globalVar.phyalign.d3.tree.type === 'radial') {
+										return 'translate('+(t.translate[0])+','+(t.translate[1]+globalVar.phyalign.d3.tree.radial.outerRadius*1.15)+')';
+									} else {
+										return 'translate('+(t.translate[0])+','+(t.translate[1]+globalVar.phyalign.d3.tree.dendrogram.scaleY*360)+')';
+									}
+								}
+							})
+							.selectAll('text')
+								.attr({
+									'class': 'x axis break',
+								})
+								.style({
+									'font-size': 10,
+									'text-anchor': 'middle'
+								});
+
+						// Style the scale bar
+						_scaleBarBottom.selectAll('path.domain')
+						.style({
+							'stroke': '#333',
+							'stroke-linecap': 'square'
+						})
+						.attr({
+							'd': 'M0,0V0H'+lengthScale(scaleAxis.scale().ticks(scaleAxis.ticks()[0]).slice(-1)[0])+'V0'
+						});
+						_scaleBarBottom.selectAll('g.tick')
+							.selectAll('line').style({
+								'stroke': '#333',
+								'stroke-linecap': 'square'
+							});
 					}
 				},
 				controls: function() {
@@ -974,28 +1216,6 @@ $(function() {
 					$('.tc__treeType').hide().find(':input').prop('disabled', true);
 					$('#tc__'+treeType).show().find(':input').prop('disabled', false);
 				}
-			},
-			drawTree: function() {
-
-				// Draw scale bar
-//				var scaleAxis = d3.svg.axis().scale(d3.scale.linear().domain([0,d3.max(nodes, function(d) { return +d.bootstrap; })]).range([0, d3.max(nodes, function(d) { return +d.radius; })])).orient('horizontal').tickFormat(function (d) {
-//						return d;
-//					}).ticks(5).outerTickSize(0).innerTickSize(5);
-//
-//				svg.append('g')
-//				.attr({
-//					'class': 'x axis',
-//				})
-//				.call(scaleAxis)
-//				.selectAll('text')
-//					.attr({
-//						'class': 'x axis break',
-//					})
-//					.style({
-//						'font-size': 10,
-//						'text-anchor': 'middle'
-//					});
-
 			},
 			update: {
 				link: function(_opts) {
@@ -1061,11 +1281,48 @@ $(function() {
 							} else {
 								return globalVar.phyalign.d3.opts.leaves.show ? 1 : 0;
 							}
+						},
+						'pointer-events': function(d) {
+							if(d.children) {
+								return globalVar.phyalign.d3.opts.nodes.show ? 'auto' : 'none';
+							} else {
+								return globalVar.phyalign.d3.opts.leaves.show ? 'auto' : 'none';
+							}
 						}
 					})
 					.attr({
 						'transform': function(d) {
 							return globalFun.phyalign.d3.branchNode[globalVar.phyalign.d3.tree.type](d.x, globalVar.phyalign.d3.opts.scale ? d.scale : d.y);
+						}
+					});
+				},
+				grid: function(_opts) {
+					// Update options
+					$.extend(true, globalVar.phyalign.d3.opts, _opts);
+
+					// Do the work
+					d3.selectAll('g.x.grid').transition().duration(750)
+					.style({
+						'opacity': function(d) {
+							return globalVar.phyalign.d3.opts.grid.show ? 1 : 0;
+						}
+					});
+				},
+				scaleBar: function(_opts) {
+					// Update options
+					$.extend(true, globalVar.phyalign.d3.opts, _opts);
+
+					// Do the work
+					d3.selectAll('g.x.axis').transition().duration(750)
+					.style({
+						'opacity': function(d) {
+							return globalVar.phyalign.d3.opts.scaleBar.show ? 1 : 0;
+						}
+					});
+					d3.selectAll('g.x.gridExtensions').transition().duration(750)
+					.style({
+						'opacity': function(d) {
+							return globalVar.phyalign.d3.opts.scaleBar.show ? 1 : 0;
 						}
 					});
 				}
@@ -1095,7 +1352,9 @@ $(function() {
 
 	// Tree controls
 	$('#tc__scale').on('change', function() {
+
 		var checked = this.checked;
+
 		globalFun.phyalign.d3.update.linkExtension({
 			scale: checked
 		});
@@ -1105,8 +1364,78 @@ $(function() {
 		globalFun.phyalign.d3.update.branchNode({
 			scale: checked
 		});
+
+		$('#tc__grid').prop('checked', checked);
+		globalFun.phyalign.d3.update.grid({
+			grid: {
+				show: checked
+			}
+		});
+		$('#tc__scale-bar').prop('checked', checked);
+		globalFun.phyalign.d3.update.scaleBar({
+			scaleBar: {
+				show: checked
+			}
+		});
+
+	});
+	$('#tc__scale-bar').on('change', function() {
+
+		var checked = this.checked;
+
+		globalFun.phyalign.d3.update.grid({
+			scaleBar: {
+				show: checked
+			}
+		});
+		globalFun.phyalign.d3.update.scaleBar({
+			scaleBar: {
+				show: checked
+			}
+		});
+
+		if(checked) {
+			$('#tc__scale').prop('checked', true);
+
+			globalFun.phyalign.d3.update.linkExtension({
+				scale: checked
+			});
+			globalFun.phyalign.d3.update.link({
+				scale: checked
+			});
+			globalFun.phyalign.d3.update.branchNode({
+				scale: checked
+			});
+		}
+
+	});
+	$('#tc__grid').on('change', function() {
+
+		var checked = this.checked;
+
+		globalFun.phyalign.d3.update.grid({
+			grid: {
+				show: checked
+			}
+		});
+
+		if(checked) {
+			$('#tc__scale').prop('checked', true);
+
+			globalFun.phyalign.d3.update.linkExtension({
+				scale: checked
+			});
+			globalFun.phyalign.d3.update.link({
+				scale: checked
+			});
+			globalFun.phyalign.d3.update.branchNode({
+				scale: checked
+			});
+		}
+
 	});
 	$('#tc__bootstrap-nodes').on('change', function() {
+
 		var checked = this.checked,
 			opts = {
 				nodes: {
@@ -1120,6 +1449,7 @@ $(function() {
 		}
 
 		globalFun.phyalign.d3.update.branchNode(opts);
+
 	});
 	$('#tc__bootstrap-links').on('change', function() {
 		var checked = this.checked;
@@ -1158,12 +1488,16 @@ $(function() {
 			// Render tree again
 			globalVar.phyalign.d3.tree.type = $(this).val();
 			globalFun.phyalign.d3.tree.draw[globalVar.phyalign.d3.tree.type]();
+			globalFun.phyalign.d3.tree.zoomFit();
 
 			// Toggle tree controls
 			globalFun.phyalign.d3.tree.controls();
 		} else {
 			console.log('Invalid tree type!');
 		}
+	});
+	$('#tc__fit').on('click', function() {
+		globalFun.phyalign.d3.tree.zoomFit();
 	});
 
 	// Radial tree

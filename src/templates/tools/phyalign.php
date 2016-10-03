@@ -237,6 +237,7 @@
 						<select name="tree-load" id="tree-load" class="col-two">
 							<option>Select one example tree to load</option>
 							<option value="<?php echo WEB_ROOT; ?>/data/sample/phyalign/tol.tree">Tree of Life</option>
+							<option value="<?php echo WEB_ROOT; ?>/data/sample/phyalign/vertebrates.tree">Selected vertebrates</option>
 						</select>
 						<div class="separator full-width"><span>or</span></div>
 						<p class="full-width">&hellip;paste a Newick-format tree in the textarea below, or drag and drop a valid file in this box.</p>
@@ -253,12 +254,18 @@
 					<form id="phyalign-tree__controls" action="#" method="get" class="has-group">
 						<div class="has-legend" role="group">
 							<p class="legend">Display options</p>
-							<label for="tc__scale"><input type="checkbox" name="tc__scale" id="tc__scale" class="prettify" /><span>Draw to scale</span></label>
 							<label for="tc__bootstrap-nodes"><input type="checkbox" name="tc__bootstrap-nodes" id="tc__bootstrap-nodes" class="prettify" /><span>Color nodes by bootstrap values</span></label>
 							<label for="tc__bootstrap-links"><input type="checkbox" name="tc__bootstrap-links" id="tc__bootstrap-links" class="prettify" /><span>Color links by bootstrap values</span></label>
 							<label for="tc__internodes"><input type="checkbox" name="tc__internodes" id="tc__internodes" class="prettify" /><span>Show internodes</span></label>
 							<label for="tc__leaves"><input type="checkbox" name="tc__leaves" id="tc__leaves" class="prettify" /><span>Show leaf nodes</span></label>
 							<label for="tc__root"><input type="checkbox" name="tc__root" id="tc__root" class="prettify" checked /><span>Show root</span></label>
+						</div>
+
+						<div class="has-legend" role="group">
+							<p class="legend">Scale options</p>
+							<label for="tc__scale"><input type="checkbox" name="tc__scale" id="tc__scale" class="prettify" /><span>Draw to scale</span></label>
+							<label for="tc__scale-bar"><input type="checkbox" name="tc__scale" id="tc__scale-bar" class="prettify" /><span>Show scale bar</span></label>
+							<label for="tc__grid"><input type="checkbox" name="tc__grid" id="tc__grid" class="prettify" /><span>Show grid</span></label>
 						</div>
 
 						<div class="cols has-legend" role="group">
@@ -268,6 +275,8 @@
 								<option value="radial">Radial</option>
 								<option value="dendrogram">Dendrogram</option>
 							</select>
+
+							<button type="button" id="tc__fit">Zoom to fit</button>
 						</div>
 
 						<div class="cols has-legend tc__treeType" role="group" id="tc__radial">
