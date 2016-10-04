@@ -7,6 +7,12 @@ class DBMetadata {
 
 	private $blast_db_metadata = array();
 	private $blast_db_metadata_extra = array(
+		'20161004_lj_r40.fa' => array(
+			'gi_dropdown' => true,
+			'category' => 'Lotus japonicus genome',
+			'type' => 'genome',
+			'description' => '<p>Version 4.0 of the <em>Lotus</em> genome Gifu.</p><p class="user-message warning">This is a raw PacBio assembly that is not curated</p>'
+			),
 		'lj_r30.fa' => array(
 			'gi_dropdown' => true,
 			'category' => 'Lotus japonicus genome',
