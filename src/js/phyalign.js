@@ -1137,36 +1137,38 @@ $(function() {
 
 						// Update/draw scale bar
 						var _scaleBarTop = stage.select('g.x.axis.top');
-						_scaleBarTop
-							.call(scaleAxis.orient('top'))
-							.attr({
-								'transform': function() {
-									var t = d3.transform(d3.select('#tree').attr('transform'));
-									if (globalVar.phyalign.d3.tree.type === 'radial') {
-										return 'translate('+(t.translate[0])+','+(t.translate[1]+globalVar.phyalign.d3.tree.radial.outerRadius*-1.15)+')';
-									} else {
+						if(treeType === 'radial') {
+							_scaleBarTop.remove();
+						} else {
+							stage.append('g')
+								.call(scaleAxis.orient('top'))
+								.attr({
+									'class': 'x axis top',
+									'transform': function() {
+										var t = d3.transform(d3.select('#tree').attr('transform'));
 										return 'translate('+(t.translate[0])+','+(t.translate[1])+')';
 									}
-								}
-							})
-							.selectAll('text')
-								.attr({
-									'class': 'x axis break',
 								})
-								.style({
-									'font-size': 10,
-									'text-anchor': 'middle'
-								});
+								.selectAll('text')
+									.attr({
+										'class': 'x axis break',
+									})
+									.style({
+										'font-size': 10,
+										'text-anchor': 'middle'
+									});
 
-						// Style the scale bar
-						_scaleBarTop.selectAll('path.domain')
-						.style({
-							'stroke': '#333',
-							'stroke-linecap': 'square'
-						})
-						.attr({
-							'd': 'M0,0V0H'+lengthScale(scaleAxis.scale().ticks(scaleAxis.ticks()[0]).slice(-1)[0])+'V0'
-						});
+							// Style the scale bar
+							_scaleBarTop.selectAll('path.domain')
+							.style({
+								'stroke': '#333',
+								'stroke-linecap': 'square'
+							})
+							.attr({
+								'd': 'M0,0V0H'+lengthScale(scaleAxis.scale().ticks(scaleAxis.ticks()[0]).slice(-1)[0])+'V0'
+							});
+						}
+
 						_scaleBarTop.selectAll('g.tick')
 							.selectAll('line').style({
 								'stroke': '#333',
