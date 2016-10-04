@@ -32,7 +32,6 @@
 						$db_group = array();
 						$db_count = 0;
 
-						//print_r($db_metadata);
 						foreach($db_metadata as $db_basename => $db) {
 							if(!in_array($db['category'], $db_group)) {
 								$db_group[] = $db['category'];
