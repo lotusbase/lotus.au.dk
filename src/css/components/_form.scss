@@ -212,6 +212,9 @@ form {
 				}
 				&:disabled {
 					opacity: 0.5;
+					& + span {
+						opacity: 0.5;
+					}
 				}
 				& + label {
 					color: #666;

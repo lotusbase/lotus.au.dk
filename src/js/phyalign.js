@@ -482,15 +482,18 @@ $(function() {
 		d3: {
 			setScale: {
 				radial: function(d, y0, k) {
+					if(typeof d.length === typeof undefined) d.length = 1;
 					d.scale = (y0 += d.length) * k;
 					if (d.children) d.children.forEach(function(d) { globalFun.phyalign.d3.setScale.radial(d, y0, k); });
 				},
 				dendrogram: function(d, y0, k) {
+					if(typeof d.length === typeof undefined) d.length = 1;
 					d.scale = (y0 += d.length) * k;
 					if (d.children) d.children.forEach(function(d) { globalFun.phyalign.d3.setScale.dendrogram(d, y0, k); });
 				}
 			},
 			maxLength: function(d) {
+				if(typeof d.length === typeof undefined) d.length = 1;
 				return d.length + (d.children ? d3.max(d.children, globalFun.phyalign.d3.maxLength) : 0);
 			},
 			step: {
@@ -611,7 +614,7 @@ $(function() {
 							.separation(function(a,b) { return 1; });
 
 					// Parse Newick
-					var newick = Newick.parse('('+$('#tree-input').val().replace(/;$/i,'')+':0.01)'),
+					var newick = Newick.parse($('#tree-input').val().replace(/;$/i,'')),
 						nodes = cluster.nodes(newick),
 						links = cluster.links(nodes),
 						leaves = nodes.filter(function(d) { return !d.children; }).length;
@@ -620,6 +623,51 @@ $(function() {
 					var fills = ["#a6bddb","#74a9cf","#3690c0","#0570b0","#045a8d","#023858"],
 						bootstrapColor = d3.scale.linear().domain(d3.range(0, 1, 1.0 / (fills.length - 1))).range(fills),
 						bootstrapColorMap = d3.scale.linear().domain([0, d3.max(nodes, function(d) { return +d.bootstrap; })]).range([0, 1]).nice();
+
+					// Collect bootstrap values
+					var bootstraps = nodes.map(function(d) {
+						return !isNaN(+d.bootstrap);
+					});
+
+					// Disable bootstrap coloring if there are insufficient values
+					if(globalFun.arrayUnique(bootstraps).length < 2) {
+						$('#tc__bootstrap-nodes, #tc__bootstrap-links').prop({
+							'disabled': true,
+							'checked': false
+						})
+						.next('span').addClass('icon-attention')
+						.closest('label').on('click.phyalign', function() {
+							globalFun.modal.open({
+								'title': 'Bootstrap values not found',
+								'content': ['<p>',
+									'We have not managed to detect bootstrap values in the Newick tree provided. ',
+									'If you are confident that bootstrap values are indeed included in the tree, please ensure that bootstrap values are presented as the PHYLIP format, enclosed in square brackets after the branch length of each internode:',
+								'</p>',
+								'<p class="align-center"><code>(Leaf1:0.1,Leaf2:0.2):0.5[75]</code></p>',
+								'<p>Alternative bootstrap value encoding formats are not accepted, e.g.:</p>',
+								'<p class="align-center"><code>(Leaf1:0.1,Leaf2:0.2)75:0.5</code></p>'].join(''),
+								'class': 'warning'
+							});
+						}).css('cursor', 'help');
+
+						var _opts = {
+							nodes: {
+								bootstrap: false,
+							},
+							leaves: {
+								bootstrap: false,
+							},
+							links: {
+								bootstrap: false,
+							},
+							linkExtensions: {
+								bootstrap: false
+							}
+						};
+						$.extend(true, globalVar.phyalign.d3.opts, _opts);
+					} else {
+						$('#tc__bootstrap-nodes, #tc__bootstrap-links').prop('disabled', false).next('span').removeClass('icon-attention').closest('label').off('click.phyalign').css('cursor', 'pointer');
+					}
 
 					// Determine tree type before drawing
 					if(forceTreeType) {
@@ -1086,7 +1134,7 @@ $(function() {
 							scaleAxis = d3.svg.axis()
 								.scale(lengthScale).tickFormat(function (d) {
 									return d;
-								}).ticks(5).outerTickSize(0).innerTickSize(3);
+								}).ticks(5).outerTickSize(3).innerTickSize(3);
 
 						// Update/draw grids
 						var _grid = chart.select('g.x.grid').selectAll('path.grid')
@@ -1159,14 +1207,15 @@ $(function() {
 									});
 
 							// Style the scale bar
-							_scaleBarTop.selectAll('path.domain')
+							stage.select('g.x.axis.top').selectAll('path.domain')
 							.style({
 								'stroke': '#333',
-								'stroke-linecap': 'square'
-							})
-							.attr({
-								'd': 'M0,0V0H'+lengthScale(scaleAxis.scale().ticks(scaleAxis.ticks()[0]).slice(-1)[0])+'V0'
+								'stroke-linecap': 'square',
+								'fill': 'none'
 							});
+//							.attr({
+//								'd': 'M0,0V0H'+lengthScale(scaleAxis.scale().ticks(scaleAxis.ticks()[0]).slice(-1)[0])+'V0'
+//							});
 						}
 
 						_scaleBarTop.selectAll('g.tick')
@@ -1201,11 +1250,12 @@ $(function() {
 						_scaleBarBottom.selectAll('path.domain')
 						.style({
 							'stroke': '#333',
-							'stroke-linecap': 'square'
-						})
-						.attr({
-							'd': 'M0,0V0H'+lengthScale(scaleAxis.scale().ticks(scaleAxis.ticks()[0]).slice(-1)[0])+'V0'
+							'stroke-linecap': 'square',
+							'fill': 'none'
 						});
+//						.attr({
+//							'd': 'M0,0V0H'+lengthScale(scaleAxis.scale().ticks(scaleAxis.ticks()[0]).slice(-1)[0])+'V0'
+//						});
 						_scaleBarBottom.selectAll('g.tick')
 							.selectAll('line').style({
 								'stroke': '#333',

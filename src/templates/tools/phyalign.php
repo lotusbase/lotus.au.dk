@@ -237,7 +237,7 @@
 						<select name="tree-load" id="tree-load" class="col-two">
 							<option>Select one example tree to load</option>
 							<option value="<?php echo WEB_ROOT; ?>/data/sample/phyalign/tol.tree">Tree of Life</option>
-							<option value="<?php echo WEB_ROOT; ?>/data/sample/phyalign/vertebrates.tree">Selected vertebrates</option>
+							<option value="<?php echo WEB_ROOT; ?>/data/sample/phyalign/vertebrates.tree">UCSC Vertebrate Topology</option>
 						</select>
 						<div class="separator full-width"><span>or</span></div>
 						<p class="full-width">&hellip;paste a Newick-format tree in the textarea below, or drag and drop a valid file in this box.</p>
@@ -258,7 +258,6 @@
 							<label for="tc__bootstrap-links"><input type="checkbox" name="tc__bootstrap-links" id="tc__bootstrap-links" class="prettify" /><span>Color links by bootstrap values</span></label>
 							<label for="tc__internodes"><input type="checkbox" name="tc__internodes" id="tc__internodes" class="prettify" /><span>Show internodes</span></label>
 							<label for="tc__leaves"><input type="checkbox" name="tc__leaves" id="tc__leaves" class="prettify" /><span>Show leaf nodes</span></label>
-							<label for="tc__root"><input type="checkbox" name="tc__root" id="tc__root" class="prettify" checked /><span>Show root</span></label>
 						</div>
 
 						<div class="has-legend" role="group">
