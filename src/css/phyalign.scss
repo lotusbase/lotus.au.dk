@@ -1,0 +1,89 @@
+// Mixins
+@import 'variables';
+@import 'mixins';
+@import 'type';
+@import 'components/_simple-card';
+
+/*-------------------------------------------- 
+------------------ PHYALIGN ------------------
+----------------------------------------------*/
+// Tree and controls wrapper
+#phyalign-tree {
+	margin: 3rem 0 0 0;
+	overflow: visible;
+	position: relative;
+	left: 0;
+	transition: all .5s ease-in-out;
+
+	// State
+	&.controls--visible {
+		left: calc(-25% - .75rem);
+		#phyalign-tree__controls {
+			opacity: 1;
+			pointer-events: auto;
+			width: 50%;
+		}
+	}
+}
+
+// Tree SVG
+#phyalign-tree__svg {
+	svg {
+		cursor: grab;
+		display: block;
+		width: 100%;
+		height: 85vh;
+
+		g {
+			&.labels {
+				text {
+					cursor: pointer;
+				}
+			}
+		}
+
+		#capture {
+			fill: rgba(#fff,.25) !important;
+		}
+
+		.link-extensions {
+			fill: none;
+			stroke: #555;
+			stroke-opacity: .5;
+		}
+
+		.link--active {
+			stroke: #000 !important;
+			stroke-width: 2px !important;
+		}
+
+		.link-extension--active {
+			stroke-opacity: .8;
+		}
+
+		.node--active {
+			fill: #000 !important;
+		}
+
+		.label--active {
+			font-weight: bold;
+		}
+	}
+}
+
+// Tree controls
+#phyalign-tree__controls {
+	opacity: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+	pointer-events: none;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: calc(100% + 1rem);
+	width: 0;
+	transition: opacity .5s ease-in-out;
+}
+
+// D3 tooltip
+@import 'components/d3/_tip.scss';

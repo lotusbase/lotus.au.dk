@@ -32,7 +32,8 @@ module.exports = {
         files: [
             'src/templates/**/*.php',
             'src/templates/**/*.ini',
-            'src/templates/**/*.py'
+            'src/templates/**/*.py',
+            'src/templates/data/**/*.*'
         ],
         tasks: [
             'newer:copy'

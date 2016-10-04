@@ -94,6 +94,14 @@ form {
 			transform: translateY(-50%);
 			width: auto;
 		}
+		&.has-legend {
+			margin-top: 3rem;
+			padding-top: 2rem;
+			position: relative;
+			&:first-child {
+				margin-top: 2rem;
+			}
+		}
 	}
 	.search-again & {
 		div[role='group'], fieldset {
@@ -133,6 +141,11 @@ form {
 				inset 0 .5rem .5rem -.5rem rgba(#000,.15),
 				0 0 .5rem .25rem rgba($lotusPrimary2,.25);
 			color: darken($lotusPrimary2, 10%);
+		}
+
+		// Font faces
+		&.font-family_monospace {
+			font-family: $fontface-monospace;
 		}
 	}
 
@@ -199,6 +212,9 @@ form {
 				}
 				&:disabled {
 					opacity: 0.5;
+					& + span {
+						opacity: 0.5;
+					}
 				}
 				& + label {
 					color: #666;
@@ -592,14 +608,6 @@ form {
 		.input-mimic ~ label.error {
 			margin-bottom: 0;
 		}
-		&.has-legend {
-			margin-top: 3rem;
-			padding-top: 2rem;
-			position: relative;
-			&:first-child {
-				margin-top: 2rem;
-			}
-		}
 	}
 
 	/* If nested */
@@ -607,6 +615,8 @@ form {
 		padding-top: .75rem;
 		div[role='group'], fieldset {
 			background-color: rgba(#000,.1);
+			padding-left: 1.5rem;
+			padding-right: 1.5rem;
 		}
 	}
 
