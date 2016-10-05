@@ -275,7 +275,7 @@
 								<option value="dendrogram">Dendrogram</option>
 							</select>
 
-							<button type="button" id="tc__fit">Zoom to fit</button>
+							<button type="button" id="tc__fit">Fit tree in view</button>
 						</div>
 
 						<div class="cols has-legend tc__treeType" role="group" id="tc__radial">
