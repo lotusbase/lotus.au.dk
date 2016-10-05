@@ -750,6 +750,7 @@ $(function() {
 
 					// Draw tree
 					globalFun.phyalign.d3.tree.draw[globalVar.phyalign.d3.tree.type]();
+					globalFun.phyalign.d3.tree.zoomFit(750);
 
 					// Expose
 					globalVar.phyalign.d3.tree.bootstrap = {
@@ -757,23 +758,27 @@ $(function() {
 						colorMap: bootstrapColorMap
 					};
 				},
-				zoomFit: function() {
-					var root = d3.select('#stage');
+				zoomFit: function(transitionDuration) {
+					// Determine selector
+					var selector = '#tree';
+					if(globalVar.phyalign.d3.opts.scaleBar.show === true) selector = '#stage';
+
+					var root = d3.select(selector);
 					var bounds = root.node().getBBox();
 					var parent = root.node().parentElement;
-					var fullWidth = parent.clientWidth || parent.parentNode.clientWidth,
-						fullHeight = parent.clientHeight || parent.parentNode.clientHeight;
+					var fullWidth = parent.clientWidth || parent.parentNode.clientWidth || parent.parentNode.parentNode.clientWidth,
+						fullHeight = parent.clientHeight || parent.parentNode.clientHeight || parent.parentNode.parentNode.clientHeight;
 					var width = bounds.width,
 						height = bounds.height;
-					var midX = bounds.x + width / 2,
-						midY = bounds.y + height / 2;
+					var midX = bounds.x + (globalVar.phyalign.d3.opts.scaleBar.show ? 0 : d3.transform(d3.select(selector).attr('transform')).translate[0] ) + width / 2,
+						midY = bounds.y + (globalVar.phyalign.d3.opts.scaleBar.show ? 0 : d3.transform(d3.select(selector).attr('transform')).translate[1] ) + height / 2;
 					if (width === 0 || height === 0) return; // nothing to fit
 					var scale = 0.9 / Math.max(width / fullWidth, height / fullHeight);
 					var translate = [fullWidth / 2 - scale * midX, fullHeight / 2 - scale * midY];
 
 					root
 					.transition()
-					.duration(750)
+					.duration(transitionDuration || 0)
 					.call(globalVar.phyalign.d3.zoomListener.translate(translate).scale(scale).event);
 				},
 				draw: {
@@ -1377,6 +1382,9 @@ $(function() {
 							return globalVar.phyalign.d3.opts.scaleBar.show ? 1 : 0;
 						}
 					});
+
+					// Zoom fit
+					globalFun.phyalign.d3.tree.zoomFit(750);
 				}
 			}
 		}
@@ -1540,7 +1548,7 @@ $(function() {
 			// Render tree again
 			globalVar.phyalign.d3.tree.type = $(this).val();
 			globalFun.phyalign.d3.tree.draw[globalVar.phyalign.d3.tree.type]();
-			globalFun.phyalign.d3.tree.zoomFit();
+			globalFun.phyalign.d3.tree.zoomFit(750);
 
 			// Toggle tree controls
 			globalFun.phyalign.d3.tree.controls();
@@ -1549,7 +1557,7 @@ $(function() {
 		}
 	});
 	$('#tc__fit').on('click', function() {
-		globalFun.phyalign.d3.tree.zoomFit();
+		globalFun.phyalign.d3.tree.zoomFit(750);
 	});
 
 	// Radial tree
