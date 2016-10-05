@@ -760,7 +760,7 @@ $(function() {
 				zoomFit: function() {
 					var root = d3.select('#stage');
 					var bounds = root.node().getBBox();
-					var parent = root.node().parentElement;
+					var parent = $('#phyalign-tree__svg')[0];
 					var fullWidth = parent.clientWidth,
 						fullHeight = parent.clientHeight;
 					var width = bounds.width,
