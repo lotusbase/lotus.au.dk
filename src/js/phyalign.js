@@ -760,9 +760,9 @@ $(function() {
 				zoomFit: function() {
 					var root = d3.select('#stage');
 					var bounds = root.node().getBBox();
-					var parent = $('#phyalign-tree__svg')[0];
-					var fullWidth = parent.clientWidth,
-						fullHeight = parent.clientHeight;
+					var parent = root.node().parentElement;
+					var fullWidth = parent.clientWidth || parent.parentNode.clientWidth,
+						fullHeight = parent.clientHeight || parent.parentNode.clientHeight;
 					var width = bounds.width,
 						height = bounds.height;
 					var midX = bounds.x + width / 2,
@@ -1050,9 +1050,9 @@ $(function() {
 							'text-anchor': globalFun.phyalign.d3.label[treeType].textAnchor,
 							'font-size': function() {
 								if(treeType === 'radial') {
-									return Math.max(5, Math.min(14, Math.round(2 * Math.PI * globalVar.phyalign.d3.tree.radial.outerRadius / leaves) - 5));
+									return Math.max(5, Math.min(14, Math.round(2 * Math.PI * globalVar.phyalign.d3.tree.radial.outerRadius / leaves) - 5)) + 'px';
 								} else {
-									return 14;
+									return 14 + 'px';
 								}
 							}
 						});
@@ -1080,9 +1080,9 @@ $(function() {
 								.style({
 									'font-size': function() {
 										if(treeType === 'radial') {
-											return Math.max(5, Math.min(14, Math.round(2 * Math.PI * globalVar.phyalign.d3.tree.radial.outerRadius / leaves) - 5));
+											return Math.max(5, Math.min(14, Math.round(2 * Math.PI * globalVar.phyalign.d3.tree.radial.outerRadius / leaves) - 5)) + 'px';
 										} else {
-											return 14;
+											return 14 + 'px';
 										}
 									},
 									'text-anchor': globalFun.phyalign.d3.label[treeType].textAnchor
@@ -1202,7 +1202,7 @@ $(function() {
 										'class': 'x axis break',
 									})
 									.style({
-										'font-size': 10,
+										'font-size': '10px',
 										'text-anchor': 'middle'
 									});
 
@@ -1242,7 +1242,7 @@ $(function() {
 									'class': 'x axis break',
 								})
 								.style({
-									'font-size': 10,
+									'font-size': '10px',
 									'text-anchor': 'middle'
 								});
 
