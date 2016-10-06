@@ -368,11 +368,6 @@ a {
 					div.hit-links {
 						a {
 							text-decoration: none; 
-							&::before {
-								font-family: 'fontello';
-							}
-							&.view-sequence::before	{ content: '\e82a'; }
-							&.download::before 		{ content: '\e817'; }
 						}
 					}
 

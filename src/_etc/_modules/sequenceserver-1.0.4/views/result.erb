@@ -58,12 +58,12 @@
 												# If mactches Lotus protein ID pattern
 												if(hit.id =~ /^Lj([0-6]|mito|chloro)g\d+v.*$/i)
 												%> | <div class="dropdown"><span class="dropdown--title">More info</span><ul class="dropdown--list">
-													<li><a href="../genome/?loc=<%= hit.id %>" title="View in jBrowse"><span class="pictogram icon-map">jBrowse</span></a></li>
+													<li><a href="../genome/?loc=<%= hit.id %>" title="View in JBrowse"><span class="pictogram icon-map">JBrowse</span></a></li>
 													<li><a href="../expat/?ids=<%= hit.id %>&amp;t=6" title="Access expression data from the Expression Atlas"><span class="pictogram icon-map">Expression Atlas</span></a></li>
-													<li><a href="../lore1/search-exec?gene=<%= hit.id %>&amp;v=30" title="Search for LORE1 insertions in this gene"><span class="pictogram icon-search">LORE1 lines</span></a></li>
+													<li><a href="../lore1/search-exec?gene=<%= hit.id %>&amp;v=30" title="Search for LORE1 insertions in this gene"><span class="pictogram icon-search"><em>LORE1</em> lines</span></a></li>
 												</ul></div><% elsif(hit.id =~ /^NODE_/) %>
 													| <div class="dropdown"><span class="dropdown--title">More info</span><ul class="dropdown--list">
-														<li><a href="../genome/?loc=<%= hit.id %>" title="View in jBrowse"><span class="pictogram icon-map">jBrowse</span></a></li>
+														<li><a href="../genome/?loc=<%= hit.id %>" title="View in JBrowse"><span class="pictogram icon-map">JBrowse</span></a></li>
 													</ul></div>
 												<% end %>
 										</div>
