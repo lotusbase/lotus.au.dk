@@ -45,10 +45,10 @@ $(function() {
 	};
 			
 	// Gene functions
-	globalFun.gene = {
+	globalFun.view = {
 		init: function() {
-			globalFun.gene.corgi();
-			globalFun.gene.expat();
+			//globalFun.view.corgi();
+			//globalFun.view.expat();
 
 			// Initialize sequence tabs
 			$sequenceTabs = $('#view__sequence').tabs();
@@ -72,6 +72,19 @@ $(function() {
 				var $t = $(this),
 					$l = $('#lore1-list');
 
+				// Update badge
+				var updateBadge = function(subset, selector) {
+					var $badge = $('#view__lore1-inserts h3 span.badge');
+
+					$badge.text($l.find(selector).length);
+
+					if(subset) {
+						$badge.addClass('subset');
+					} else {
+						$badge.removeClass('subset');
+					}
+				};
+
 				// Show intronic lines
 				if($t.val() === 'intronic') {
 					$l
@@ -80,6 +93,8 @@ $(function() {
 					.siblings()
 						.not('.lore1--intronic')
 						.hide();
+
+					updateBadge(true, 'li.lore1--intronic');
 				}
 				// Show exonic lines
 				else if($t.val() === 'exonic') {
@@ -89,30 +104,37 @@ $(function() {
 						.siblings()
 						.not('.lore1--exonic')
 						.hide();
+
+					updateBadge(true, 'li.lore1--exonic');
 				}
 				// Default fallback: show all LORE1 lines
 				else {
 					$l.find('li').show();
+					updateBadge(false, 'li');
 				}
+
 			});
 
 			// Bind change event to dataset
 			$('#expat-dataset').on('change', function() {
-				globalFun.gene.corgi(
+				globalFun.view.corgi(
 					$(this).val(),
 					$(this).find('option:selected').attr('data-idtype')
 					);
 
-				globalFun.gene.expat(
+				globalFun.view.expat(
 					$(this).val(),
 					$(this).find('option:selected').attr('data-idtype')
 					);
 			});
+
+			// Stupid tables
+			$('#view__domain-prediction table, #view__function table').stupidtable();
 		}
 	};
 
 	// Get Expression Atlas data
-	globalFun.gene.expat = function(dataset, idtype) {
+	globalFun.view.expat = function(dataset, idtype) {
 		var _dataset 	= dataset || 'ljgea-geneid',
 			_idtype		= idtype || 'geneid';
 
@@ -757,7 +779,7 @@ $(function() {
 	};
 
 	// Get CORGI data
-	globalFun.gene.corgi = function(dataset, idtype) {
+	globalFun.view.corgi = function(dataset, idtype) {
 		var _dataset 	= dataset || 'ljgea-geneid',
 			_idtype		= idtype || 'geneid';
 
@@ -801,6 +823,7 @@ $(function() {
 							'<div class="dropdown button">',
 								'<span class="dropdown--title">'+g.id+'</span>',
 								'<ul class="dropdown--list">',
+									'<li><a href="../view/gene/'+gene+'" title="View gene"><span class="icon-search">View gene</span></a></li>',
 									'<li><a target="_blank" href="../tools/trex?ids='+gene+'"><span class="icon-direction">Send gene to Transcript Explorer (TREX)</span></a></li>',
 									'<li><a target="_blank" href="../lore1/search-exec?gene='+gene+'&amp;v=3.0" title="Search for LORE1 insertions in this gene"><span class="pictogram icon-search">LORE1 v3.0</span></a></li>',
 								'</ul>',
@@ -825,5 +848,5 @@ $(function() {
 	};
 
 	// Initialize
-	globalFun.gene.init();
+	globalFun.view.init();
 });

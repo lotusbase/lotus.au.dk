@@ -56,7 +56,7 @@
 				echo '<p class="user-message"><span class="icon-attention"></span>We have converted your gene (<strong>'.$_GET['id'].'</strong>) to a specific isoform (<strong>'.$gene.'</strong>).</p>';
 			}
 		?>
-		<div id="view__card">
+		<div id="view__card" class="view__facet">
 			<h3>Overview</h3>
 			<?php
 				try {
@@ -116,17 +116,17 @@
 						<table class="table--dense">
 							<thead>
 								<tr>
-									<th>Field</th>
-									<th>Value</th>
+									<th scope="col">Field</th>
+									<th scope="col">Value</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<th>Gene ID</th>
+									<th scope="row">Gene ID</th>
 									<td><?php echo $g['Gene']; ?></td>
 								</tr>
 								<tr>
-									<th>Transcript ID</th>
+									<th scope="row">Transcript ID</th>
 									<td><?php echo $g['Transcript']; ?></td>
 								</tr>
 								<?php
@@ -144,15 +144,15 @@
 									}
 								?>
 								<tr>
-									<th><em>Lotus japonicus</em> genome version</th>
+									<th scope="row"><em>Lotus japonicus</em> genome version</th>
 									<td><?php echo $g['Version']; ?></td>
 								</tr>
 								<tr>
-									<th>Description</th>
+									<th scope="row">Description</th>
 									<td><?php echo preg_replace('/\[([\w\s]+)\]?/', '[<em>$1</em>]', $g['Annotation']); ?></td>
 								</tr>
 								<tr>
-									<th>Working <em>Lj</em> name</th>
+									<th scope="row">Working <em>Lj</em> name</th>
 									<td><em><?php echo !empty($g['LjAnnotation']) ? $g['LjAnnotation'] : 'n.a.'; ?></em></td>
 								</tr>
 							</tbody>
@@ -164,18 +164,17 @@
 
 
 					$q2 = $db->prepare("SELECT
-						ip.Source AS Source,
-						ip.SourceID AS SourceID,
-						ip.SourceDescription AS SourceDescription,
-						ip.DomainStart AS DomainStart,
-						ip.DomainEnd AS DomainEnd,
-						ip.Evalue AS Evalue,
+						dompred.Source AS Source,
+						dompred.SourceID AS SourceID,
+						dompred.DomainStart AS DomainStart,
+						dompred.DomainEnd AS DomainEnd,
+						dompred.Evalue AS Evalue,
 						CASE
-							WHEN ip.InterproID IS NULL THEN 'Unassigned'
-							ELSE ip.InterproID
+							WHEN dompred.InterproID IS NULL THEN 'Unassigned'
+							ELSE dompred.InterproID
 						END AS InterproID
-					FROM interpro AS ip
-					WHERE ip.Transcript = ?
+					FROM domain_predictions AS dompred
+					WHERE dompred.Transcript = ?
 					ORDER BY DomainStart ASC
 						");
 					$q2->execute(array($gene));
@@ -198,6 +197,19 @@
 						$ip_handler = new \LotusBase\View\Interpro();
 						$ip_handler->set_ids($ip_unique);
 						$ip_data = $ip_handler->get_data();
+
+						// Collect GO predictions
+						$gos = array();
+						foreach($ip_data as $ip) {
+							$gos = array_merge($gos, $ip['fields']['GO']);
+						}
+						sort($gos);
+
+						// Retrieve Gene Ontology data
+						$go_handler = new \LotusBase\View\GeneOntology();
+						$go_handler->set_ids($gos);
+						$go_data = $go_handler->get_data();
+
 					}
 
 				} catch(PDOException $e) {
@@ -208,7 +220,7 @@
 			?>
 		</div>
 
-		<div id="view__sequence">
+		<div id="view__sequence" class="view__facet">
 			<?php
 				$sequenceDB_metadata = array(
 					'genomic' => array(
@@ -306,7 +318,7 @@
 
 		</div>
 
-		<div id="view__domain-prediction">
+		<div id="view__domain-prediction" class="view__facet">
 			<h3>Domain prediction</h3>
 			<?php
 				try {
@@ -316,14 +328,13 @@
 						<table class="table--dense">
 							<thead>
 								<tr>
-									<th>Prediction</th>
-									<th>Identifier</th>
-									<th>Description</th>
-									<th data-type="num">Start</th>
-									<th data-type="num">End</th>
-									<th data-type="num">E-value</th>
-									<th>Interpro ID</th>
-									<th>Gene Ontology</th>
+									<th data-sort＝"string" scope="col">Prediction</th>
+									<th data-sort＝"string" scope="col">Identifier</th>
+									<th data-sort＝"int" scope="col" data-type="numeric">Start</th>
+									<th data-sort＝"int" scope="col" data-type="numeric">End</th>
+									<th data-sort＝"float" scope="col" data-type="numeric">E-value</th>
+									<th data-sort＝"string" scope="col">Interpro ID</th>
+									<th data-sort＝"string" scope="col">Interpro description</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -334,13 +345,9 @@
 										if($field_name !== 'InterproID') {
 											echo '<td data-type="'.(in_array($field_name, array('DomainStart','DomainEnd','Evalue')) ? 'numeric' : '').'">'.$field_value.'</td>';
 										} else {
-											$go_annotations = $ip_data['data'][$field_value]['fields']['GO'];
+											$desc = $ip_data[$field_value]['fields']['name'][0];
 											echo '<td>'.$field_value.'</td>';
-											if(empty($go_annotations)) {
-												echo '<td>n.a.</td>';
-											} else {
-												echo '<td>'.implode(',',$go_annotations).'</td>';
-											}
+											echo '<td>'.(!empty($desc) ? $desc : 'n.a.').'</td>';
 										}
 									}
 									echo '</tr>';
@@ -352,15 +359,45 @@
 					} else {
 						throw new Exception('Unable to find any records for the transcript with the identifer <strong>'.$gene.'</strong>');
 					}
-				} catch(PDOException $e) {
-					echo '<p class="user-message warning">We have encountered an error with querying the database: '.$e->getMessage().'.</p>';
 				} catch(Exception $e) {
 					echo '<p class="user-message warning">'.$e->getMessage().'.</p>';
 				}
 			?>
 		</div>
 
-		<div id="view__jbrowse">
+		<div id="view__function" class="view__facet">
+			<h3>Gene function (GO annotation)</h3>
+			<?php
+				try {
+					if(!empty($go_data)) { ?>
+					<table class="table--dense">
+						<thead>
+							<tr>
+								<th data-sort="string" scope="col"><abbr title="Gene Ontology">GO</abbr>&nbsp;term</th>
+								<th data-sort="string" scope="col">Namespace</th>
+								<th data-sort="string" scope="col">Description</th>
+							</tr>
+						</thead>
+						<tbody>
+						<?php foreach($go_data as $g_id => $g) { ?>
+							<tr>
+								<td><?php echo $g_id; ?></td>
+								<td><?php echo ucfirst(str_replace('_', ' ', $g['fields']['namespace'][0])); ?></td>
+								<td><?php echo $g['fields']['description'][0]; ?></td>
+							</tr>
+						<?php } ?>
+						</tbody>
+					</table>
+					<?php } else {
+						throw new Exception('Unable to find any records for the transcript with the identifier.');
+					}
+				} catch(Exception $e) {
+					echo '<p class="user-message warning">'.$e->getMessage().'.</p>';
+				}
+			?>
+		</div>
+
+		<div id="view__jbrowse" class="view__facet">
 			<h3>Genome browser</h3>
 			<iframe name="jbrowse-embed" class="jbrowse-embed" src="<?php echo WEB_ROOT.'/genome/?loc='.$gene.'&amp;embed=true'; ?>"></iframe>
 			<ul class="list--reset cols flex-wrap__nowrap justify-content__flex-start jbrowse__action">
@@ -370,8 +407,8 @@
 			</ul>
 		</div>
 
-		<div id="view__lore1-inserts">
-			<h3>LORE1 insertions <?php
+		<div id="view__lore1-inserts" class="view__facet">
+			<h3><em>LORE1</em> insertions <?php
 				// Generate lore1 list
 				$genic_lore1 = explode(',', $g['GenicPlantID']);
 				$exonic_lore1 = explode(',', $g['ExonicPlantID']);
@@ -405,7 +442,7 @@
 			?>
 		</div>
 
-		<div id="view__expression" data-gene="<?php echo $gene; ?>">
+		<div id="view__expression" data-gene="<?php echo $gene; ?>" class="view__facet">
 			<h3>Expression data</h3>
 			<form id="corgi__form" class="has-group">
 				<div class="cols" role="group">
@@ -444,9 +481,9 @@
 			<table id="coexpression__table" class="table--dense hidden">
 				<thead>
 					<tr>
-						<th>ID</th>
-						<th>Score</th>
-						<th>Annotation</th>
+						<th scope="col">ID</th>
+						<th scope="col">Score</th>
+						<th scope="col">Description</th>
 					</tr>
 				</thead>
 				<tbody></tbody>
@@ -458,6 +495,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/colorbrewer.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/d3-tip.min.js"></script>
-	<script src="<?php echo WEB_ROOT; ?>/dist/js/gene.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/viewer.min.js"></script>
 </body>
 </html>

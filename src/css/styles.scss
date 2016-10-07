@@ -1101,6 +1101,32 @@ table {
 		}
 		*:last-child { margin-bottom: 0; }
 
+		// Sorted tables
+		&[data-sort] {
+			cursor: pointer;
+			padding-right: 2rem !important;
+			position: relative;
+			&::after {
+				color: #999;
+				content: '\f0dc';
+				cursor: pointer;
+				font-family: 'fontello';
+				position: absolute;
+				right: .25rem;
+				top: 50%;
+				transform: translateY(-50%);
+			}
+			// Sorting direction
+			&.sorting-asc::after {
+				color: #333;
+				content: '\f0dd';
+			}
+			&.sorting-desc::after {
+				color: #333;
+				content: '\f0de';
+			}
+		}
+
 		.button {
 			background-color: transparent;
 			border-color: transparent;

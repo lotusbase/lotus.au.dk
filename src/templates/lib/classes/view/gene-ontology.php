@@ -2,12 +2,12 @@
 
 namespace LotusBase\View;
 
-/* View\Interpro */
-class Interpro {
+/* View\GeneOntology */
+class GeneOntology {
 
 	private $_vars = array(
 		'format' => 'json',
-		'fields' => array('GO','description','name','type','INTERPRO_PARENT','PDBe','PDBeMotif','PFAM','PUBMED','domain_source','SUPERFAMILY')
+		'fields' => array('namespace','description')
 		);
 
 	// Public function: Set fields
@@ -19,7 +19,7 @@ class Interpro {
 		}
 	}
 
-	// Public function: Set Interpro IDs
+	// Public function: Set gene ontology IDs
 	public function set_ids($ids) {
 		if(is_array($ids)) {
 			$this->_vars['ids'] = $ids;
@@ -41,7 +41,7 @@ class Interpro {
 		$ch = curl_init();
 
 		// Make GET request
-		curl_setopt($ch, CURLOPT_URL, 'http://www.ebi.ac.uk/ebisearch/ws/rest/interpro/entry/'.implode(',', $this->_vars['ids']).'?format='.$this->_vars['format'].'&fields='.implode(',', $this->_vars['fields']));
+		curl_setopt($ch, CURLOPT_URL, 'http://www.ebi.ac.uk/ebisearch/ws/rest/go/entry/'.implode(',', $this->_vars['ids']).'?format='.$this->_vars['format'].'&fields='.implode(',', $this->_vars['fields']));
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 

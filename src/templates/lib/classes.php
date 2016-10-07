@@ -68,4 +68,8 @@ require_once('classes/phyalign/data.php');
 /* Get information of Interpro identifiers from the EMBL-EBI server */
 require_once('classes/view/interpro.php');
 
+/* class: View\GeneOntology */
+/* Get information of GO identifiers from the EMBL-EBI server */
+require_once('classes/view/gene-ontology.php');
+
 ?>

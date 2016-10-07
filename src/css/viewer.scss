@@ -4,8 +4,12 @@
 @import 'type';
 
 /*---------------------------------------- 
------------------- GENE ------------------
+------------------ VIEW ------------------
 ----------------------------------------*/
+.view__facet {
+	margin-bottom: 3rem;
+}
+
 #view__jbrowse {
 	iframe.jbrowse-embed {
 		border: none;
@@ -56,6 +60,31 @@ pre.sequence {
 	overflow-y: auto;
 	outline: none;
 	width: 100%;
+}
+
+// LORE1 inserts
+#view__lore1-inserts {
+	h3 {
+		span.badge {
+			@include transition;
+			&.subset {
+				background-color: $lotusPrimary3;
+				color: #fff;
+			}
+		}
+	}
+}
+
+// Domain prediction
+#view__domain-prediction {
+	table {
+		th, th {
+			&[data-type="numeric"] {
+				white-space: nowrap;
+				word-break: keep-all;
+			}
+		}
+	}
 }
 
 // D3 chart

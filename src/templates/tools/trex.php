@@ -57,15 +57,8 @@
 					anno.Gene = tc.Transcript AND
 					anno.Version = tc.Version
 				)
-				LEFT JOIN exonins AS exon ON (
-					tc.Transcript = exon.Gene AND
-					tc.Version = exon.Version
-				)
-				LEFT JOIN lore1ins AS lore ON (
-					exon.Chromosome = lore.Chromosome AND
-					exon.Position = lore.Position AND
-					exon.Orientation = lore.Orientation AND
-					exon.Version = lore.Version
+				LEFT JOIN domain_predictions AS dompred ON (
+					anno.Gene = dompred.Transcript
 				)
 				WHERE anno.Version IN (".str_repeat("?,", count($version_str)-1)."?".") AND (";
 			foreach ($vars as $trx_item) {
@@ -73,8 +66,12 @@
 					$dbq .= "anno.Gene LIKE ? OR ";
 					$exec_vars = array_merge($exec_vars, array($trx_item.'%'));
 				} else {
-					$dbq .= "MATCH(anno.Gene) AGAINST (? IN BOOLEAN MODE) OR MATCH(anno.Annotation) AGAINST (? IN BOOLEAN MODE) OR MATCH(anno.LjAnnotation) AGAINST (? IN BOOLEAN MODE) OR ";
-					$exec_vars = array_merge($exec_vars, array($trx_item, $trx_item, (preg_match('/^Lj/i', $trx_item) ? $trx_item : 'Lj'.$trx_item)));
+					$dbq .= "MATCH(anno.Gene) AGAINST (? IN BOOLEAN MODE) OR
+						MATCH(anno.Annotation) AGAINST (? IN BOOLEAN MODE) OR
+						MATCH(anno.LjAnnotation) AGAINST (? IN BOOLEAN MODE) OR
+						dompred.InterproID = ? OR 
+						dompred.SourceID = ? OR ";
+					$exec_vars = array_merge($exec_vars, array($trx_item, $trx_item, (preg_match('/^Lj/i', $trx_item) ? $trx_item : 'Lj'.$trx_item), $trx_item, $trx_item));
 				}
 				
 			}
@@ -95,15 +92,8 @@
 					tc.Transcript = anno.Gene AND
 					tc.Version = anno.Version
 				)
-				LEFT JOIN exonins AS exon ON (
-					tc.Transcript = exon.Gene AND
-					tc.Version = exon.Version
-				)
-				LEFT JOIN lore1ins AS lore ON (
-					exon.Chromosome = lore.Chromosome AND
-					exon.Position = lore.Position AND
-					exon.Orientation = lore.Orientation AND
-					exon.Version = lore.Version
+				LEFT JOIN domain_predictions AS dompred ON (
+					anno.Gene = dompred.Transcript
 				)
 				WHERE anno.Version IN (".str_repeat("?,", count($version_str)-1)."?".")
 			";
@@ -202,8 +192,9 @@
 				tc.Chromosome AS Chromosome,
 				anno.Annotation AS Annotation,
 				anno.LjAnnotation AS LjAnnotation,
-				CASE WHEN anno.LjAnnotation IS NOT NULL THEN 1 ELSE 0 END AS CustomRank,
-				GROUP_CONCAT(DISTINCT lore.PlantID ORDER BY lore.PlantID ASC) AS PlantID
+				GROUP_CONCAT(DISTINCT dompred.InterproID) AS InterproID,
+				GROUP_CONCAT(DISTINCT dompred.SourceID) AS DomPredID,
+				CASE WHEN anno.LjAnnotation IS NOT NULL THEN 1 ELSE 0 END AS CustomRank
 				".$dbq."
 				ORDER BY CustomRank DESC, tc.Transcript ASC
 				LIMIT ".($page-1)*$num.", ".$num);
@@ -241,24 +232,8 @@
 				tc.Chromosome AS Chromosome,
 				anno.Annotation AS Annotation,
 				anno.LjAnnotation AS LjAnnotation,
-				GROUP_CONCAT(DISTINCT(alllore.PlantID) ORDER BY alllore.PlantID SEPARATOR '#') AS AllPlantID,
-				GROUP_CONCAT(DISTINCT(lore.PlantID) ORDER BY lore.PlantID SEPARATOR '#') AS ExonicPlantID
 				FROM annotations AS anno
 				LEFT JOIN transcriptcoord AS tc ON (anno.Gene = tc.Transcript AND anno.Version = tc.Version)
-				LEFT JOIN exonins AS exon ON (tc.Transcript = exon.Gene AND tc.Version = exon.Version)
-				LEFT JOIN geneins AS gene ON (tc.Gene = gene.Gene AND tc.Version = gene.Version)
-				LEFT JOIN lore1ins AS lore ON (
-					exon.Chromosome = lore.Chromosome AND
-					exon.Position = lore.Position AND
-					exon.Orientation = lore.Orientation AND
-					exon.Version = lore.Version
-				)
-				LEFT JOIN lore1ins AS alllore ON (
-					gene.Chromosome = alllore.Chromosome AND
-					gene.Position = alllore.Position AND
-					gene.Orientation = alllore.Orientation AND
-					exon.Version = lore.Version
-				)
 				WHERE
 					anno.ID IN (".str_repeat("?,", count($ids)-1)."?".")
 				GROUP BY tc.Transcript ORDER BY tc.Transcript ASC");
@@ -446,13 +421,14 @@
 				<colgroup></colgroup>
 				<thead>
 					<tr>
-						<th scope="col">Transcript</td>
-						<th scope="col">Name / Function</td>
-						<th scope="col"><abbr title="Chromosome">Chr</abbr></td>
-						<th scope="col" data-type="numeric"><abbr title="Start Position">Start</abbr></td>
-						<th scope="col" data-type="numeric"><abbr title="End Position">End</abbr></td>
-						<th scope="col">Strand</td>
-						<th scope="col"><a href="#" data-modal data-modal-content="&lt;em&gt;LORE1&lt;/em&gt; insertions are deemed exonic, intronic or intergenic based on the overlap of their positions with predicted gene models. You can verify these lines by exploring the genome browser&mdash;to arrive at the correct coordinates, simply select the dropdown on the gene name on the leftmost column, and choose to view the gene/transcript in genome browser." title="Types of LORE1 insertions"><em>LORE1</em> lines with exonic insertions</a></td>
+						<th scope="col">Transcript</th>
+						<th scope="col">Name</th>
+						<th scope="col">Description</th>
+						<th scope="col"><abbr title="Chromosome">Chr</abbr></th>
+						<th scope="col" data-type="numeric"><abbr title="Start Position">Start</abbr></th>
+						<th scope="col" data-type="numeric"><abbr title="End Position">End</abbr></th>
+						<th scope="col">Strand</th>
+						<th scope="col">Domain predictions</th>
 						<?php //echo ($search_type === 'anno' ? '<th scope="col"><a href="#" data-modal data-modal-content="The score for each row is computed based on how relevant they are to the search query you have provided. The algorithm behind how this score is computed is &lt;a href=&quot;http://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html#idm140019561440400&quot;&gt;available in the official MySQL documentation&lt;/a&gt;." title="What does the score of my result row indicate?">Score</a></th>' : ''); ?>
 					</tr>
 				</thead>
@@ -481,8 +457,9 @@
 						<td class="trx">
 							<?php if($v >= 3.0) { ?>
 							<div class="dropdown button"><span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>"><?php echo $row['Transcript']; ?></a></span><ul class="dropdown--list">
-								<li><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>"><span class="icon-search">View gene</span></a></li>
-								<li><a href="../lore1/search?gene=<?php echo preg_replace('/\.\d+?/', '', $row['Transcript']); ?>&amp;v=<?php echo $row['Version']; ?>" title="Search for LORE1 insertions in this gene"><span class="icon-search"><em>LORE1</em> v<?php echo $row['Version']; ?></span></a></li>
+								<li><a href="<?php echo WEB_ROOT.'/view/gene/'.preg_replace('/\.\d+?$/', '', $row['Transcript']); ?>" title="View gene"><span class="icon-search">View gene</span></a></li>
+								<li><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>" title="View transcript"><span class="icon-search">View transcript</span></a></li>
+								<li><a href="../lore1/search?gene=<?php echo preg_replace('/\.\d+?$/', '', $row['Transcript']); ?>&amp;v=<?php echo $row['Version']; ?>" title="Search for LORE1 insertions in this gene"><span class="icon-search"><em>LORE1</em> v<?php echo $row['Version']; ?></span></a></li>
 								<li>
 									<a
 										href="../api/v1/blast/<?php echo 'lj_r30.fa/'.$row['Chromosome'].'?from='.$start.'to='.$end; ?>"
@@ -545,38 +522,91 @@
 								$vlt3++;
 							} ?>
 						</td>
-						<td class="anno">
-							<?php
-							$anno = preg_replace('/\[([\w\s]+)\]?/', '[<em>$1</em>]', $row['Annotation']);
+						<td class="name">
+						<?php
 							if (isset($row['LjAnnotation']) && !empty($row['LjAnnotation'])) { ?>
-								<span class="anno__manual"><em><?php echo $row['LjAnnotation']; ?></em>
-								<?php if(version_compare($v, '3.0', '<') && is_logged_in()) { ?>
-									<a href="<?php echo WEB_ROOT; ?>/lib/docs/gene-annotation" class="button manual-gene-anno" title="Manual gene name suggestion for <?php echo $row['Transcript']; ?>" data-gene="<?php echo $row['Transcript']; ?>"><span class="pictogram icon-bookmark">Suggest alternatives</span></a><?php } ?></span>
-									<?php if(!empty($anno)) { ?><span class="anno__generated"><?php echo $anno; ?></span>
-								<?php }?>
-							<?php } else { ?>
-								<?php if(!empty($anno)) { ?><span class="anno__generated"><?php echo $anno; ?></span><?php }?>
-								<?php if(version_compare($v, '3.0', '<') && is_logged_in()) { ?>
-									<a href="<?php echo WEB_ROOT; ?>/lib/docs/gene-annotation" class="button manual-gene-anno" title="Manual gene name suggestion for <?php echo $row['Transcript']; ?>" data-gene="<?php echo $row['Transcript']; ?>"><span class="pictogram icon-bookmark">Suggest <em>Lj</em> gene name</span></a>
-								<?php } else { echo 'n.a.'; } ?>
-							<?php } ?>
+							<span class="name__manual"><em><?php echo $row['LjAnnotation']; ?></em><?php if(version_compare($v, '3.0', '<') && is_logged_in()) { ?>
+								<a href="<?php echo WEB_ROOT; ?>/lib/docs/gene-annotation" class="button manual-gene-anno" title="Manual gene name suggestion for <?php echo $row['Transcript']; ?>" data-gene="<?php echo $row['Transcript']; ?>"><span class="pictogram icon-bookmark">Suggest alternatives</span></a>
+							<?php } ?></span>
+							<?php } else {
+								echo 'n.a.';
+							}
+						?>
+						</td>
+						<td class="desc">
+							<?php
+							if(!empty($row['Annotation'])) {
+								$desc = preg_replace('/\[([\w\s]+)\]?/', '[<em>$1</em>]', $row['Annotation']);
+								echo $desc;
+							} else {
+								echo 'n.a.';
+							} ?>
 						</td>
 						<td class="chr"><?php echo $row['Chromosome']; ?></td>
 						<td class="pos" data-type="numeric"><?php echo $row['Start']; ?></td>
 						<td class="pos" data-type="numeric"><?php echo $row['End']; ?></td>
 						<td class="str"><?php echo $row['Strand']; ?></td>
-						<td class="pid"><?php
-							if(!empty($row['PlantID'])) {
-								$pids = explode(",", $row['PlantID']);
-								echo "<ul>";
-								foreach ($pids as $pid) {
-									echo '<li><a class="button" href="../lore1/search?v='.$row['Version'].'&pid='.$pid.'">'.$pid.'</a></li>';
+						<td class="dompred">
+							<?php
+								$interpro_ids = explode(',', $row['InterproID']);
+								$dompred_ids = explode(',', $row['DomPredID']);
+
+								// Domains
+								$domains_grouped = array('interpro' => $interpro_ids);
+								foreach($dompred_ids as $d) {
+									switch (true) {
+										case (strpos($d, 'PD') === 0 ? true : false):
+											$domains['BlastProDom'][] = $d;
+											break;
+										case (strpos($d, 'coil') === 0 ? true : false):
+											$domains['Coil'][] = $d;
+											break;
+										case (strpos($d, 'PR') === 0 ? true : false):
+											$domains['FPrintScan'][] = $d;
+											break;
+										case (strpos($d, 'G3DSA') === 0 ? true : false):
+											$domains['Gene3D'][] = $d;
+											break;
+										case (strpos($d, 'MF_') === 0 ? true : false):
+											$domains['HAMAP'][] = $d;
+											break;
+										case (strpos($d, 'PTHR') === 0 ? true : false):
+											$domains['HMMPanther'][] = $d;
+											break;
+										case (strpos($d, 'PF') === 0 ? true : false):
+											$domains['HMMPfam'][] = $d;
+											break;
+										case (strpos($d, 'PIRSF') === 0 ? true : false):
+											$domains['HMMPIR'][] = $d;
+											break;
+										case (strpos($d, 'SM') === 0 ? true : false):
+											$domains['HMMSmart'][] = $d;
+											break;
+										case (strpos($d, 'TIGR') === 0 ? true : false):
+											$domains['HMMTigr'][] = $d;
+											break;
+										case (strpos($d, 'PS') === 0 ? true : false):
+											$domains['PatternProfileScan'][] = $d;
+											break;
+										case (strpos($d, 'SSF') === 0 ? true : false):
+											$domains['Superfamily'][] = $d;
+											break;
+										default:
+											break;
+									}
 								}
-								echo '<li class="search-all"><a class="button" href="../lore1/search?v='.$row['Version'].'&pid='.implode(",", $pids).'"><span class="icon-search pictogram"></span> Search all listed plant IDs</a></li></ul>';
-							} else {
-								echo "&mdash;";
-							}
-						?></td>
+
+								// Print domain predictions
+								echo '<ul>';
+								$domains = array_unique(array_merge($interpro_ids, $dompred_ids));
+								asort($domains);
+								foreach($domains as $d) {
+									echo '<li><a href="" class="button">'.$d.'</a></li>';
+								}
+								echo '</ul>';
+
+							?>
+						</td>
 					</tr>
 		<?php } ?>
 			</tbody>
