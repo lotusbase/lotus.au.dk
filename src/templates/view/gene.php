@@ -1,14 +1,14 @@
 <?php
-	require_once('config.php');
+	require_once('../config.php');
 ?>
 <!doctype html>
 <html lang="en">
 <head>
 	<title>Gene Browser &mdash; Tools &mdash; Lotus Base</title>
 	<?php include(DOC_ROOT.'/head.php'); ?>
-	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/gene.min.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/viewer.min.css" type="text/css" media="screen" />
 </head>
-<body class="gene init-scroll--disabled">
+<body class="viewer gene init-scroll--disabled">
 	<?php
 		$header = new \LotusBase\PageHeader();
 		echo $header->get_header();

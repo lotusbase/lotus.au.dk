@@ -1,0 +1,90 @@
+// Mixins
+@import 'variables';
+@import 'mixins';
+@import 'type';
+
+/*---------------------------------------- 
+------------------ GENE ------------------
+----------------------------------------*/
+#view__jbrowse {
+	iframe.jbrowse-embed {
+		border: none;
+		display: block;
+		width: 100%;
+		min-height: 500px;
+	}
+	ul.jbrowse__action {
+		background-color: #ccc;
+		li {
+			border-right: 1px solid rgba(#000,.25);
+			a {
+				color: #333;
+				display: block;
+				padding: .5rem 1rem;
+				text-decoration: none;
+				&:hover {
+					background-color: rgba(#fff,.25);
+				}
+			}
+		}
+	}
+}
+
+// Sequence
+pre.sequence {
+	background:
+		linear-gradient(#ccc 30%, rgba(204,204,204,0)),
+		linear-gradient(rgba(204,204,204,0), #ccc 70%) 0 100%,
+		radial-gradient(50% 0, farthest-side, rgba(#000,.25), rgba(#000,0)),
+		radial-gradient(50% 100%,farthest-side, rgba(#000,.25), rgba(#000,0)) 0 100%;
+	background:
+		linear-gradient(#ccc 30%, rgba(204,204,204,0)),
+		linear-gradient(rgba(204,204,204,0), #ccc 70%) 0 100%,
+		radial-gradient(farthest-side at 50% 0, rgba(#000,.25), rgba(#000,0)),
+		radial-gradient(farthest-side at 50% 100%, rgba(#000,.25), rgba(#000,0)) 0 100%;
+	background-repeat: no-repeat;
+	background-color: #ccc;
+	background-size: 100% 3em, 100% 3em, 100% 1em, 100% 1em;
+	background-attachment: local, local, scroll, scroll;
+	box-sizing: border-box;
+	border: 1px solid #aaa;
+	color: #555;
+	font-family: Consolas, monospace;
+	height: 15rem;
+	padding: .75rem 1rem;
+	resize: none;
+	overflow-y: auto;
+	outline: none;
+	width: 100%;
+}
+
+// D3 chart
+.d3-chart {
+	svg {
+		font-family: $fontface-sansSerif;
+		width: 100%;
+		path, line, rect {
+			shape-rendering: auto;
+		}
+	}
+}
+
+#view__expression {
+	.loader__wrapper {
+		background-color: #ddd;
+		margin-bottom: 1.5rem;
+		padding: 1rem 0 2rem;
+		div.loader {
+			margin-top: 0;
+		}
+	}
+}
+
+// D3 tooltip
+@import 'components/d3/_tip.scss';
+
+// ExpAt linegraph
+@import 'components/expat/_linegraph.scss';
+
+// ExpAt heatmap
+@import 'components/expat/_heatmap.scss';

@@ -64,4 +64,8 @@ require_once('classes/phyalign/submit.php');
 /* Get status and data (if any) of ClustalO job on EMBL-EBI server */
 require_once('classes/phyalign/data.php');
 
+/* class: View\Interpro */
+/* Get information of Interpro identifiers from the EMBL-EBI server */
+require_once('classes/view/interpro.php');
+
 ?>

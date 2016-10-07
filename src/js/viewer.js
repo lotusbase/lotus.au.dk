@@ -51,7 +51,7 @@ $(function() {
 			globalFun.gene.expat();
 
 			// Initialize sequence tabs
-			$sequenceTabs = $('#gene__sequence').tabs();
+			$sequenceTabs = $('#view__sequence').tabs();
 
 			// General function to check popstate events
 			$w.on('popstate', function(e) {
@@ -117,15 +117,15 @@ $(function() {
 			_idtype		= idtype || 'geneid';
 
 		// Update gene link
-		$('#gene__expat__link').attr('href', function() {
-			return $(this).data('root') + '/expat?ids=' + $('#gene__expression').data('gene') + '&dataset=' + _dataset + '&idtype=' + _idtype;
+		$('#view__expat__link').attr('href', function() {
+			return $(this).data('root') + '/expat?ids=' + $('#view__expression').data('gene') + '&dataset=' + _dataset + '&idtype=' + _idtype;
 		});
 
 		// Show loader
 		$('#expat__loader').slideDown(500);
 
 		// Hide chart
-		$('#gene__expat')
+		$('#view__expat')
 		.slideUp(500)
 		.empty();
 
@@ -137,7 +137,7 @@ $(function() {
 				type: 'POST',
 				url: root + '/api/v1/expat',
 				data: {
-					ids: $('#gene__expression').attr('data-gene'),
+					ids: $('#view__expression').attr('data-gene'),
 					dataset: _dataset,
 					idtype: _idtype
 				},
@@ -187,7 +187,7 @@ $(function() {
 			expat.chart.innerWidth = expat.chart.outerWidth - expat.chart.margin.left - expat.chart.margin.right;
 
 			// Create SVG element
-			$('#gene__expat')
+			$('#view__expat')
 			.removeClass('hidden')
 			.append('<div class="d3-chart" id="expat-chart"></div>');
 
@@ -748,7 +748,7 @@ $(function() {
 			});
 
 			// Show expression data
-			$('#gene__expat').slideDown(500);
+			$('#view__expat').slideDown(500);
 
 		})
 		.fail(function() {
@@ -774,7 +774,7 @@ $(function() {
 			.empty();
 
 		$.ajax({
-			url: root + '/api/v1/corgi/' + $('#gene__expression').attr('data-gene'),
+			url: root + '/api/v1/corgi/' + $('#view__expression').attr('data-gene'),
 			data: {
 				dataset: _dataset,
 				idtype: _idtype,

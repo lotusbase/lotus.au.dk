@@ -480,8 +480,8 @@
 					>
 						<td class="trx">
 							<?php if($v >= 3.0) { ?>
-							<div class="dropdown button"><span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/gene/'.$row['Transcript']; ?>"><?php echo $row['Transcript']; ?></a></span><ul class="dropdown--list">
-								<li><a href="<?php echo WEB_ROOT.'/gene/'.$row['Transcript']; ?>"><span class="icon-search">View gene</span></a></li>
+							<div class="dropdown button"><span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>"><?php echo $row['Transcript']; ?></a></span><ul class="dropdown--list">
+								<li><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>"><span class="icon-search">View gene</span></a></li>
 								<li><a href="../lore1/search?gene=<?php echo preg_replace('/\.\d+?/', '', $row['Transcript']); ?>&amp;v=<?php echo $row['Version']; ?>" title="Search for LORE1 insertions in this gene"><span class="icon-search"><em>LORE1</em> v<?php echo $row['Version']; ?></span></a></li>
 								<li>
 									<a
