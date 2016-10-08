@@ -175,4 +175,7 @@ include_once('./routes/registration.php');
 // Routes for PhyAlign
 include_once('./routes/phyalign.php');
 
+// Routes for view
+include_once('./routes/view.php');
+
 $api->run();

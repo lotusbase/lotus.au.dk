@@ -592,14 +592,14 @@ $(function() {
 		if(this.href && this.href.indexOf('#') < 0 && !/(jpe?g|gif|png|svg|bmp)/gi.test(this.href)) {
 			// Load content of remote file
 			$.ajax(this.href, {
-				dataType: 'html',
-				success: function(data) {
-					globalFun.modal.open({
-						'title': title,
-						'content': data,
-						'class': modalClass
-					});
-				}
+				dataType: 'html'
+			})
+			.done(function() {
+				globalFun.modal.open({
+					'title': title,
+					'content': data,
+					'class': modalClass
+				});
 			});
 		} else {
 			globalFun.modal.open({

@@ -194,7 +194,8 @@
 						}
 
 						// Get Interpro data
-						$ip_handler = new \LotusBase\View\Interpro();
+						$ip_handler = new \LotusBase\EBI\EBeye();
+						$ip_handler->set_domain('interpro');
 						$ip_handler->set_ids($ip_unique);
 						$ip_data = $ip_handler->get_data();
 
@@ -206,7 +207,8 @@
 						sort($gos);
 
 						// Retrieve Gene Ontology data
-						$go_handler = new \LotusBase\View\GeneOntology();
+						$go_handler = new \LotusBase\EBI\EBeye();
+						$go_handler->set_domain('go');
 						$go_handler->set_ids($gos);
 						$go_data = $go_handler->get_data();
 
@@ -318,7 +320,7 @@
 
 		</div>
 
-		<div id="view__domain-prediction" class="view__facet">
+		<div id="view__domain-prediction" class="view__facet d3-chart">
 			<h3>Domain prediction</h3>
 			<?php
 				try {
@@ -328,30 +330,45 @@
 						<table class="table--dense">
 							<thead>
 								<tr>
-									<th data-sort＝"string" scope="col">Prediction</th>
-									<th data-sort＝"string" scope="col">Identifier</th>
-									<th data-sort＝"int" scope="col" data-type="numeric">Start</th>
-									<th data-sort＝"int" scope="col" data-type="numeric">End</th>
-									<th data-sort＝"float" scope="col" data-type="numeric">E-value</th>
-									<th data-sort＝"string" scope="col">Interpro ID</th>
-									<th data-sort＝"string" scope="col">Interpro description</th>
+									<th data-sort="string" scope="col">Prediction</th>
+									<th data-sort="string" scope="col">Identifier</th>
+									<th data-sort="int" scope="col" data-type="numeric">Start</th>
+									<th data-sort="int" scope="col" data-type="numeric">End</th>
+									<th data-sort="int" scope="col" data-type="numeric">Length</th>
+									<th data-sort="float" scope="col" data-type="numeric">E-value</th>
+									<th data-sort="string" scope="col">Interpro ID</th>
 								</tr>
 							</thead>
 							<tbody>
-							<?php
-								foreach($_ip as $key => $item) {
-									echo '<tr>';
-									foreach($item as $field_name => $field_value) {
-										if($field_name !== 'InterproID') {
-											echo '<td data-type="'.(in_array($field_name, array('DomainStart','DomainEnd','Evalue')) ? 'numeric' : '').'">'.$field_value.'</td>';
-										} else {
-											$desc = $ip_data[$field_value]['fields']['name'][0];
-											echo '<td>'.$field_value.'</td>';
-											echo '<td>'.(!empty($desc) ? $desc : 'n.a.').'</td>';
+							<?php foreach($_ip as $key => $item) { ?>
+								<tr>
+									<td><?php echo $item['Source']; ?></td>
+									<td><?php
+										try {
+											$sourceHandler = new \LotusBase\View\SourceLink();
+											$sourceHandler->set_source($item['Source']);
+											$sourceHandler->set_id($item['SourceID']);
+											echo $sourceHandler->get_HTML();
+										} catch(Exception $e) {
+											echo 'n.a.';
 										}
-									}
-									echo '</tr>';
-								} ?>
+									?></td>
+									<td data-type="numeric"><?php echo $item['DomainStart']; ?></td>
+									<td data-type="numeric"><?php echo $item['DomainEnd']; ?></td>
+									<td data-type="numeric"><?php echo $item['DomainEnd'] - $item['DomainStart'] + 1; ?></td>
+									<td data-type="numeric"><?php echo $item['Evalue']; ?></td>
+									<td><?php if($item['InterproID'] !== 'Unassigned') { ?>
+										<div class="dropdown button">
+											<span class="dropdown--title"><?php echo $item['InterproID']; ?></span>
+											<ul class="dropdown--list">
+												<li><a href="<?php echo WEB_ROOT.'/api/v1/view/domain/interpro/'.$item['InterproID']; ?>" data-desc-id="<?php echo $item['InterproID']; ?>" data-desc-source="interpro"><span class="icon-eye">Show description</span></a></li>
+												<li><a href="http://www.ebi.ac.uk/interpro/entry/<?php echo $item['InterproID']; ?>"><span class="icon-link-ext">View external data</span></a></li>
+												<li><a href="<?php echo WEB_ROOT; ?>/tools/trex/?ids=<?php echo $item['InterproID']; ?>" title="Search for proteins/transripts with this domain"><span class="icon-search">Search for proteins/transripts with this domain</span></a></li>
+											</ul>
+										</div>
+									<?php } else { echo '&ndash;'; } ?></td>
+								</tr>
+							<?php } ?>
 							</tbody>
 						</table>
 						<?php
@@ -366,7 +383,7 @@
 		</div>
 
 		<div id="view__function" class="view__facet">
-			<h3>Gene function (GO annotation)</h3>
+			<h3>Gene function (<abbr title="Gene Ontology">GO</abbr> predictions)</h3>
 			<?php
 				try {
 					if(!empty($go_data)) { ?>
@@ -381,7 +398,14 @@
 						<tbody>
 						<?php foreach($go_data as $g_id => $g) { ?>
 							<tr>
-								<td><?php echo $g_id; ?></td>
+								<td><div class="dropdown button">
+									<span class="dropdown--title"><?php echo $g_id; ?></span>
+									<ul class="dropdown--list">
+										<li><a href="http://www.ebi.ac.uk/interpro/search?q=<?php echo $g_id; ?>"><span class="icon-link-ext">EMBL-EBI InterPro</span></a></li>
+										<li><a href="http://www.ebi.ac.uk/QuickGO/GTerm?id=<?php echo $g_id; ?>"><span class="icon-link-ext">EMBL-EBI QuickGO (legacy)</span></a></li>
+										<li><a href="http://www.ebi.ac.uk/QuickGO-Beta/term/<?php echo $g_id; ?>"><span class="icon-link-ext">EMBL-EBI QuickGO (beta)</span></a></li>
+									</ul>
+								</div></td>
 								<td><?php echo ucfirst(str_replace('_', ' ', $g['fields']['namespace'][0])); ?></td>
 								<td><?php echo $g['fields']['description'][0]; ?></td>
 							</tr>
@@ -419,6 +443,9 @@
 					echo '<span class="badge">'.count($genic_lore1).'</span>';
 				}
 			?></h3>
+			<?php
+
+			?>
 			<form id="lore1-filter__form" action="#" method="get" class="has-group">
 				<div class="cols" role="group">
 					<label class="col-one" for="lore1-type">Insertion filter</label>

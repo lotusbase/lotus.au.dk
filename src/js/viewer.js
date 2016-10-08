@@ -49,6 +49,7 @@ $(function() {
 		init: function() {
 			//globalFun.view.corgi();
 			//globalFun.view.expat();
+			globalFun.view.domain();
 
 			// Initialize sequence tabs
 			$sequenceTabs = $('#view__sequence').tabs();
@@ -65,6 +66,106 @@ $(function() {
 			$d.on('click', '.ui-tabs a.ui-tabs-anchor', function(e) {
 				e.preventDefault();
 				window.history.pushState({lotusbase: true}, '', $(this).attr('href'));
+			});
+
+			// Modal box for domain prediction links
+			$d.on('click', 'a[data-desc-id][data-desc-source]', function(e) {
+				e.preventDefault();
+
+				var $t = $(this),
+					domainAJAX = $.ajax({
+						url: '/api/v1/view/domain/'+$t.attr('data-desc-source')+'/'+$t.attr('data-desc-id'),
+						dataType: 'json'
+					});
+
+				// Open modal
+				globalFun.modal.open({
+					'title': 'Predicted domain '+$t.attr('data-desc-id'),
+					'content': '<div class="loader"><svg><circle class="path" cx="40" cy="40" r="30" /></svg></div><p class="align-center">Loading data&hellip;</p>'
+				});
+
+				// AJAX promise
+				domainAJAX
+				.done(function(d) {
+					console.log(d);
+					var p = d.data,
+						linklist = function(a, s) {
+							var o = '',
+								_s = {
+									'go': 'http://www.ebi.ac.uk/interpro/search?q=',
+									'pubmed': 'https://www.ncbi.nlm.nih.gov/pubmed/',
+									'pfam': 'http://pfam.xfam.org/family/'
+								};
+							for (var i = 0; i < a.length; i++) {
+								o += '<li><a href="'+_s[s]+a[i]+'"><span class="icon-link-ext">'+a[i]+'</span></a></li>';
+							}
+							return o;
+						};
+
+					// Show modal
+					globalFun.modal.update((function(domain){
+						var o;
+						if(domain === 'interpro') {
+							o = {
+									'title': 'Predicted domain '+$t.attr('data-desc-id')+': '+p.fields.name.join(', '),
+									'content': [
+										'<p><strong>'+p.id+'</strong> is a '+p.fields.name.join(', ')+'.</p>',
+										'<p>'+p.fields.description.join('. ')+'</p>',
+										'<table class="table--dense">',
+											'<thead>',
+												'<tr>',
+													'<th scope="col" style="width: 25%">Field</th>',
+													'<th scope="col">Value</th>',
+												'</tr>',
+											'</thead>',
+											'<tbody>',
+												(p.id 								? '<tr><th scope="row">ID</th><td>'+p.id+'</td></tr>' : ''),
+												(p.fields.INTERPRO_PARENT.length	? '<tr><th scope="row">Associated parent</th><td>'+p.fields.INTERPRO_PARENT+'</td></tr>' : ''),
+												(p.fields.domain_source.length		? '<tr><th scope="row">Domain source</th><td>'+p.fields.domain_source.join(', ')+'</td></tr>' : ''),
+												(p.fields.type.length				? '<tr><th scope="row">Type</th><td>'+p.fields.type.join(', ')+'</td></tr>' : ''),
+												(p.fields.GO.length					? '<tr><th scope="row"><abbr title="Gene Ontology">GO</abbr> '+globalFun.pl(p.fields.GO.length, 'prediction')+'</th><td><ul class="list--floated">'+linklist(p.fields.GO, 'go')+'</ul></td></tr>' : ''),
+												(p.fields.PUBMED.length 			? '<tr><th scope="row">PubMed references</th><td><ul class="list--floated">'+linklist(p.fields.PUBMED, 'pubmed')+'</ul></td></tr>' : ''),
+												(p.fields.PFAM.length				? '<tr><th scope="row">Related Pfam entries</th><td><ul class="list--floated">'+linklist(p.fields.PFAM, 'pfam')+'</ul></td></tr>' : ''),
+											'</tbody>',
+										'</table>'
+									].join(''),
+									'class': 'wide'
+								};
+							} else if(domain === 'pfam') {
+								o = {
+									'title': 'Predicted domain '+$t.attr('data-desc-id')+': '+p.fields.description.join(', '),
+									'content': [
+										'<p><strong>'+p.id+'</strong> is a '+p.fields.description.join(', ')+'.</p>',
+										'<table class="table--dense">',
+											'<thead>',
+												'<tr>',
+													'<th scope="col" style="width: 25%">Field</th>',
+													'<th scope="col">Value</th>',
+												'</tr>',
+											'</thead>',
+											'<tbody>',
+												(p.acc 								? '<tr><th scope="row">Accession</th><td>'+p.acc+'</td></tr>' : ''),
+												(p.id 								? '<tr><th scope="row">ID</th><td>'+p.id+'</td></tr>' : ''),
+												(p.fields.domain_source.length		? '<tr><th scope="row">Domain source</th><td>'+p.fields.domain_source.join(', ')+'</td></tr>' : ''),
+												(p.fields.type.length				? '<tr><th scope="row">Type</th><td>'+p.fields.type.join(', ')+'</td></tr>' : ''),
+												(p.fields.PUBMED.length 			? '<tr><th scope="row">PubMed references</th><td><ul class="list--floated">'+linklist(p.fields.PUBMED, 'pubmed')+'</ul></td></tr>' : ''),
+											'</tbody>',
+										'</table>'
+									].join('')
+								};
+							}
+							return o;
+					})($t.attr('data-desc-source')));
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					globalFun.modal.update({
+						'title': errorThrown,
+						'content': '<p>We have encountered an error '+(d.status ? '(error code: <code>'+d.status+'</code>) ' : '')+'while processing your request.</p>'+(d.message ? '<p>'+d.message+'</p>' : ''),
+						'class': 'warning'
+					});
+				});
+
+				
 			});
 
 			// Bind change event to LORE1 filtering
@@ -129,8 +230,122 @@ $(function() {
 			});
 
 			// Stupid tables
-			$('#view__domain-prediction table, #view__function table').stupidtable();
+			$('#view__domain-prediction table').stupidtable();
+			$('#view__function table').stupidtable();
 		}
+	};
+
+	// Get domain data
+	globalFun.view.domain = function() {
+		// Perform AJAX call
+		var domainsAJAX = $.ajax({
+			type: 'GET',
+			url: root + '/api/v1/view/domains/'+$('#domain-prediction').attr('data-protein'),
+			dataType: 'json'
+		});
+		domainsAJAX
+		.done(function(d) {
+
+			// Settings and data
+			var domain = {
+					chart: {
+						width: 960,
+						rowHeight: 10,
+						domainHeight: 6,
+						margin: {
+							top: 10,
+							bottom: 40,
+							left: 10,
+							right: 10
+						}
+					}
+				},
+				p = d.data;
+
+			var svg = d3.select('#domain-prediction')
+				.attr({
+					'viewBox': '0 0 ' + domain.chart.width + ' ' + (domain.chart.margin.top + domain.chart.margin.bottom + domain.chart.rowHeight * p.length),
+					'preserveAspectRatio': 'xMidYMid meet'
+				})
+				.style('font-family', 'Arial');
+
+			svg.append('rect')
+				.attr({
+					'transform': 'translate('+(domain.chart.margin.left*0.5)+','+(domain.chart.margin.top*0.5)+')',
+					'width': domain.chart.width - (domain.chart.margin.left + domain.chart.margin.right)*0.5,
+					'height': domain.chart.rowHeight * p.length + domain.chart.margin.top
+				})
+				.style({
+					'stroke': '#999',
+					'stroke-width': 1,
+					'fill': '#ddd'
+				});
+
+			var stage = svg.append('g')
+				.attr({
+					'id': 'stage',
+					'transform': 'translate('+domain.chart.margin.left+','+domain.chart.margin.top+')'
+				});
+
+			// Fills
+			var fills = ['#33658A','#338A84'];
+
+			// Scales
+			var scaleX = d3.scale.linear().range([0, domain.chart.width - domain.chart.margin.left - domain.chart.margin.right]).domain([1, d3.max(p, function(g) { return +g.DomainEnd; })]),
+				scaleFill1 = d3.scale.linear().range([0, 1]).domain([1, d3.max(p, function(g) { return +g.DomainEnd; })]),
+				scaleFill2 = d3.scale.linear().range(fills).domain(d3.range(0, 1, 1.0 / (fills.length - 1)));
+
+			// Axes
+			var domainXAxis = d3.svg.axis().scale(scaleX).orient('bottom').innerTickSize(-1 * (domain.chart.rowHeight * p.length + domain.chart.margin.top)).outerTickSize(0);
+
+			// Draw x axis
+			var xAxis = stage.append('g')
+			.attr({
+				'class': 'x axis',
+				'transform': 'translate(0,'+(domain.chart.rowHeight * p.length + domain.chart.margin.top*0.5)+')'
+			})
+			.call(domainXAxis);
+
+			xAxis.selectAll('text')
+				.style({
+					'text-anchor': 'middle',
+					'font-size': 10
+				});
+			xAxis.selectAll('line')
+				.style({
+					'stroke': '#999',
+					'stroke-dasharray': '2,2'
+				});
+
+			// Append domains
+			var doms = stage.append('g').attr('class', 'domains');
+			doms.selectAll('rect.domain')
+			.data(p)
+				.enter().append('rect')
+					.attr({
+						'class': 'domain',
+						'x': function(d) {
+							return scaleX(+d.DomainStart);
+						},
+						'y': function(d, i) {
+							return domain.chart.rowHeight * i + 0.5 * (domain.chart.rowHeight - domain.chart.domainHeight);
+						},
+						'width': function(d) {
+							return scaleX(d.DomainEnd - d.DomainStart);
+						},
+						'height': domain.chart.domainHeight,
+						'rx': 0.5 * domain.chart.domainHeight,
+						'ry': 0.5 * domain.chart.domainHeight
+					})
+					.style({
+						'fill': '#338A84',
+						'stroke': '#33658A'
+					});
+
+		})
+		.fail(function() {
+
+		});
 	};
 
 	// Get Expression Atlas data

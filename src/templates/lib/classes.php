@@ -64,12 +64,12 @@ require_once('classes/phyalign/submit.php');
 /* Get status and data (if any) of ClustalO job on EMBL-EBI server */
 require_once('classes/phyalign/data.php');
 
-/* class: View\Interpro */
-/* Get information of Interpro identifiers from the EMBL-EBI server */
-require_once('classes/view/interpro.php');
+/* class: EBI\EBeye */
+/* General class for retrieving data from EMBI-EBI server */
+require_once('classes/ebi/eb-eye.php');
 
-/* class: View\GeneOntology */
-/* Get information of GO identifiers from the EMBL-EBI server */
-require_once('classes/view/gene-ontology.php');
+/* class: View\SourceLink */
+/* Generate HTML string for source dropdown */
+require_once('classes/view/source-link.php');
 
 ?>

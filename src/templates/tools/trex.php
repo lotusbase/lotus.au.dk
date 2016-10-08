@@ -283,7 +283,7 @@
 
 	<section class="wrapper">
 		<h2>TREX</h2>
-		<span class="byline"><strong>Transcript Explorer</strong><br />for <em>L.</em> japonicus reference genomes</span>
+		<span class="byline"><strong>Transcript Explorer</strong><br />for <em>L. japonicus</em> reference genomes</span>
 		<p>The <strong>Transcript Explorer</strong> tool can be used to search for candidate <em>Lotus</em> genes using user-defined keywords, or to comb a specific genomic interval&mdash;a combination of chromosome and position range&mdash;for genes of interest.</p>
 
 		<?php 
