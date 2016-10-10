@@ -47,6 +47,13 @@
 			font-weight: bold;
 		}
 
+		span.pill {
+			background-color: #999;
+			color: #fff;
+			padding: .125rem .5rem;
+			border-radius: .75rem;
+		}
+
 		&.leaf-list {
 			max-height: 20rem;
 			overflow-y: auto;

@@ -28,11 +28,17 @@ $api->get('/view/domain[/{source}/{id}]', function($request, $response, $args) {
 		// Retrieve description from EB-eye service
 		$ebeye_handler = new \LotusBase\EBI\EBeye();
 		$ebeye_handler->set_domain($source);
-		$ebeye_handler->set_ids($id);
+		$ebeye_handler->set_ids(explode(',', $id));
 		$data = $ebeye_handler->get_data();
 
 		if(!$data) {
 			throw new \Exception('No data returned', 400);
+		} else {
+			if(count($data) === 1) {
+				$_data = $data[$id];
+			} else {
+				$_data = $data;
+			}
 		}
 
 		// Return response
@@ -41,7 +47,7 @@ $api->get('/view/domain[/{source}/{id}]', function($request, $response, $args) {
 			->withHeader('Content-Type', 'application/json')
 			->write(json_encode(array(
 				'status' => 200,
-				'data' => $data[$id]
+				'data' => $_data
 				)));
 
 	} catch(\Exception $e) {
@@ -74,9 +80,12 @@ $api->get('/view/domains[/{id}]', function($request, $response, $args) {
 			dompred.SourceID AS SourceID,
 			dompred.DomainStart AS DomainStart,
 			dompred.DomainEnd AS DomainEnd,
+			dompred.DomainEnd - dompred.DomainStart AS DomainLength,
 			dompred.Evalue AS Evalue,
-			dompred.InterproID AS InterproID
+			dompred.InterProID AS InterProID,
+			dommeta.SourceDescription AS SourceDescription
 		FROM domain_predictions AS dompred
+		LEFT JOIN domain_metadata AS dommeta ON dompred.SourceID = dommeta.SourceID
 		WHERE dompred.Transcript = ?
 		ORDER BY DomainStart ASC
 			");
@@ -85,9 +94,37 @@ $api->get('/view/domains[/{id}]', function($request, $response, $args) {
 		if($q->rowCount() > 0) {
 			while($r = $q->fetch(PDO::FETCH_ASSOC)) {
 				$row[] = $r;
+
+				// Also collect Interpro IDs
+				if($r['InterProID']) {
+					$ips[] = $r['InterProID'];
+				}
 			}
 		} else {
 			throw new \Exception('No entries are found matching the protein or transcript ID provided.', 404);
+		}
+
+		// Merge InterPro data with current result set
+		$ip_handler = new \LotusBase\EBI\EBeye();
+		$ip_handler->set_domain('interpro');
+		$ip_handler->set_ids(array_values(array_unique($ips)));
+		$ip_data = $ip_handler->get_data();
+
+		// Collect type
+		$ip_data_itemised = array(
+			'type' => array()
+			);
+		foreach($ip_data as $ip) {
+			$ip_data_itemised['type'][$ip['id']] = str_replace('_', ' ', $ip['fields']['type'][0]);
+		}
+
+		// Merge
+		foreach($row as &$r) {
+			if($r['InterProID']) {
+				$r['InterProType'] = $ip_data_itemised['type'][$r['InterProID']];
+			} else {
+				$r['InterProType'] = null;
+			}
 		}
 
 		// Return response

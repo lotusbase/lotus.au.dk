@@ -69,6 +69,15 @@ class EBeye {
 		// Since Interpro IDs are unique, use them as keys
 		foreach($response['entries'] as $entry) {
 			$_response[$entry[$this->_vars['id'][$this->_vars['domain']]]] = $entry;
+
+			// Map keys
+			if($this->_vars['domain'] === 'pfam') {
+				foreach($_response as &$e) {
+					$e['short_name'] = $e['id'];
+					$e['id'] = $e['acc'];
+					unset($e['acc']);
+				}
+			}
 		}
 
 		return $_response;

@@ -74,6 +74,11 @@ function array_sort_by_column(&$arr, $col, $dir = SORT_ASC) {
 	}
 }
 
+// Flatten array
+function array_flatten($arg) {
+  return is_array($arg) ? array_reduce($arg, function ($c, $a) { return array_merge($c, array_flatten($a)); },[]) : [$arg];
+}
+
 // Get client IP
 function get_ip() {
 	$headers = $_SERVER;

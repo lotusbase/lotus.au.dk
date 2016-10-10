@@ -10,7 +10,8 @@
 	font-style: normal;
 }
 /* Glyphicons */
-*[class*='icon-'] {
+*[class*='icon-'],
+.icon {
 	display: inline-block;
 	&::before {
 		@include transition;

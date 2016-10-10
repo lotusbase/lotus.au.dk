@@ -77,6 +77,17 @@ pre.sequence {
 
 // Domain prediction
 #view__domain-prediction {
+
+	#domain-prediction {
+		position: relative;
+		svg {
+			rect.domain {
+				cursor: pointer;
+			}
+			position: relative;
+			z-index: 1;
+		}
+	}
 	table {
 		th, th {
 			&[data-type="numeric"] {
@@ -110,10 +121,16 @@ pre.sequence {
 }
 
 // D3 tooltip
-@import 'components/d3/_tip.scss';
+@import 'components/d3/tip';
 
 // ExpAt linegraph
-@import 'components/expat/_linegraph.scss';
+@import 'components/expat/linegraph';
 
 // ExpAt heatmap
-@import 'components/expat/_heatmap.scss';
+@import 'components/expat/heatmap';
+
+// Floating controls
+@import 'components/floating-controls';
+
+// Faceted view
+@import 'components/facet';

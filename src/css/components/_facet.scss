@@ -1,0 +1,88 @@
+// Facets
+.facet {
+	margin-bottom: 1.5rem;
+	position: relative;
+	left: 0;
+	transition: all .5s ease-in-out;
+
+	// Stage
+	.facet__stage {
+		width: 100%;
+	}
+
+	// Controls
+	.facet__controls {
+		background:
+			linear-gradient(#eee 30%, rgba(204,204,204,0)),
+			linear-gradient(rgba(204,204,204,0), #eee 70%) 0 100%,
+			radial-gradient(50% 0, farthest-side, rgba(#000,.25), rgba(#000,0)),
+			radial-gradient(50% 100%,farthest-side, rgba(#000,.25), rgba(#000,0)) 0 100%;
+		background:
+			linear-gradient(#eee 30%, rgba(204,204,204,0)),
+			linear-gradient(rgba(204,204,204,0), #eee 70%) 0 100%,
+			radial-gradient(farthest-side at 50% 0, rgba(#000,.25), rgba(#000,0)),
+			radial-gradient(farthest-side at 50% 100%, rgba(#000,.25), rgba(#000,0)) 0 100%;
+		background-repeat: no-repeat;
+		background-color: #eee;
+		background-size: 100% 3em, 100% 3em, 100% 1em, 100% 1em;
+		background-attachment: local, local, scroll, scroll;
+		opacity: 0;
+		overflow-x: hidden;
+		overflow-y: auto;
+		pointer-events: none;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: calc(100% + 1rem);
+		transition: all .5s ease-in-out;
+		width: 50%;
+	}
+
+	// State
+	&.controls--visible {
+		left: calc(-25% - .75rem);
+
+		// Controls
+		.facet__controls {
+			opacity: 1;
+			pointer-events: auto;
+		}
+	}
+	&.floating-controls__hide {
+		.facet__stage {
+			.floating-controls {
+				opacity: 0;
+				pointer-events: none;
+				&:hover {
+					opacity: 1;
+					pointer-events: auto;
+				}
+			}
+			& > *:hover + .floating-controls {
+				opacity: 1;
+				pointer-events: auto;
+			}
+		}
+	}
+}
+
+@media (max-width: 1200px) {
+	.facet {
+		.facet__controls {
+			opacity: 1;
+			overflow: hidden;
+			position: static;
+			width: 100%;
+		}
+		&.controls--visible {
+			left: 0;
+		}
+		&.floating-controls__hide {
+			.facet__stage {
+				.floating-controls {
+					display: none;
+				}
+			}
+		}
+	}
+}

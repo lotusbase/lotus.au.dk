@@ -69,7 +69,7 @@
 					$dbq .= "MATCH(anno.Gene) AGAINST (? IN BOOLEAN MODE) OR
 						MATCH(anno.Annotation) AGAINST (? IN BOOLEAN MODE) OR
 						MATCH(anno.LjAnnotation) AGAINST (? IN BOOLEAN MODE) OR
-						dompred.InterproID = ? OR 
+						dompred.InterProID = ? OR 
 						dompred.SourceID = ? OR ";
 					$exec_vars = array_merge($exec_vars, array($trx_item, $trx_item, (preg_match('/^Lj/i', $trx_item) ? $trx_item : 'Lj'.$trx_item), $trx_item, $trx_item));
 				}

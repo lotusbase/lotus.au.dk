@@ -87,7 +87,6 @@ $(function() {
 				// AJAX promise
 				domainAJAX
 				.done(function(d) {
-					console.log(d);
 					var p = d.data,
 						linklist = function(a, s) {
 							var o = '',
@@ -97,7 +96,7 @@ $(function() {
 									'pfam': 'http://pfam.xfam.org/family/'
 								};
 							for (var i = 0; i < a.length; i++) {
-								o += '<li><a href="'+_s[s]+a[i]+'"><span class="icon-link-ext">'+a[i]+'</span></a></li>';
+								o += '<li><a href="'+_s[s]+a[i]+'" class="link--reset" target="_blank">'+a[i]+'</a></li>';
 							}
 							return o;
 						};
@@ -107,9 +106,9 @@ $(function() {
 						var o;
 						if(domain === 'interpro') {
 							o = {
-									'title': 'Predicted domain '+$t.attr('data-desc-id')+': '+p.fields.name.join(', '),
+									'title': 'Predicted domain '+$t.attr('data-desc-id'),
 									'content': [
-										'<p><strong>'+p.id+'</strong> is a '+p.fields.name.join(', ')+'.</p>',
+										'<p class="align-center"><strong>'+p.id+'</strong> is a '+p.fields.name.join(', ')+'.</p>',
 										'<p>'+p.fields.description.join('. ')+'</p>',
 										'<table class="table--dense">',
 											'<thead>',
@@ -133,9 +132,9 @@ $(function() {
 								};
 							} else if(domain === 'pfam') {
 								o = {
-									'title': 'Predicted domain '+$t.attr('data-desc-id')+': '+p.fields.description.join(', '),
+									'title': 'Predicted domain '+$t.attr('data-desc-id'),
 									'content': [
-										'<p><strong>'+p.id+'</strong> is a '+p.fields.description.join(', ')+'.</p>',
+										'<p class="align-center"><strong>'+p.id+'</strong> is a '+p.fields.description.join(', ')+'.</p>',
 										'<table class="table--dense">',
 											'<thead>',
 												'<tr>',
@@ -144,8 +143,8 @@ $(function() {
 												'</tr>',
 											'</thead>',
 											'<tbody>',
-												(p.acc 								? '<tr><th scope="row">Accession</th><td>'+p.acc+'</td></tr>' : ''),
 												(p.id 								? '<tr><th scope="row">ID</th><td>'+p.id+'</td></tr>' : ''),
+												(p.short_name 						? '<tr><th scope="row">Accession</th><td>'+p.short_name+'</td></tr>' : ''),
 												(p.fields.domain_source.length		? '<tr><th scope="row">Domain source</th><td>'+p.fields.domain_source.join(', ')+'</td></tr>' : ''),
 												(p.fields.type.length				? '<tr><th scope="row">Type</th><td>'+p.fields.type.join(', ')+'</td></tr>' : ''),
 												(p.fields.PUBMED.length 			? '<tr><th scope="row">PubMed references</th><td><ul class="list--floated">'+linklist(p.fields.PUBMED, 'pubmed')+'</ul></td></tr>' : ''),
@@ -237,6 +236,66 @@ $(function() {
 
 	// Get domain data
 	globalFun.view.domain = function() {
+		// Variables for d3 charts
+		var domain = {
+				chart: {
+					width: 960,
+					rowHeight: 10,
+					domainHeight: 6,
+					margin: {
+						top: 10,
+						bottom: 80,
+						left: 10,
+						right: 20
+					}
+				}
+			};
+
+		// Colors
+		var colors = {
+				'interpro_type': {
+					label: 'InterPro type',
+					dataType: 'discrete',
+					domain: ['domain','repeat','family','active_site'],
+					range: function() { return ['#44c83a','#ff7f2b','#ef211f','#bc53d0']; },
+					value: function(s) {
+						return s.toLowerCase().replace(' ','_');
+					},
+					key: 'InterProType'
+				},
+				'prediction_algorithm': {
+					label: 'Prediction algorithm',
+					dataType: 'discrete',
+					domain: ['HMMTigr','Superfamily','HMMSmart','Gene3D','PatternScan','BlastProDom','ProfileScan','HAMAP','HMMPIR','HMMPanther','Coil','HMMPfam','FPrintScan'],
+					range: function(d) {
+						var c = [];
+						for (var i = 0; i < d.length; i++) {
+							c.push(d3.hcl((i*(360/d.length))%360, 40, 70).toString());
+						}
+						return c;
+					},
+					value: function(s) { return s; },
+					key: 'Source'
+				}
+			},
+			colorType = 'interpro_type',	// Default: highlight by InterPro type
+			p;								// Store API data
+
+		// Functions
+		var computeColors = function(type, valueIn, valuesIn) {
+
+				// Coerce type
+				if(!type) type = colorType;
+
+				var scale = d3.scale.ordinal().range(colors[type].range(colors[type].domain)).domain(colors[type].domain);
+
+				if(!valueIn) {
+					return '#999999';
+				} else {
+					return scale(colors[type].value(valueIn));
+				}
+			};
+
 		// Perform AJAX call
 		var domainsAJAX = $.ajax({
 			type: 'GET',
@@ -246,23 +305,11 @@ $(function() {
 		domainsAJAX
 		.done(function(d) {
 
-			// Settings and data
-			var domain = {
-					chart: {
-						width: 960,
-						rowHeight: 10,
-						domainHeight: 6,
-						margin: {
-							top: 10,
-							bottom: 40,
-							left: 10,
-							right: 10
-						}
-					}
-				},
-				p = d.data;
+			// Data
+			p = d.data;
 
 			var svg = d3.select('#domain-prediction')
+				.insert('svg', ':first-child')
 				.attr({
 					'viewBox': '0 0 ' + domain.chart.width + ' ' + (domain.chart.margin.top + domain.chart.margin.bottom + domain.chart.rowHeight * p.length),
 					'preserveAspectRatio': 'xMidYMid meet'
@@ -271,14 +318,22 @@ $(function() {
 
 			svg.append('rect')
 				.attr({
-					'transform': 'translate('+(domain.chart.margin.left*0.5)+','+(domain.chart.margin.top*0.5)+')',
-					'width': domain.chart.width - (domain.chart.margin.left + domain.chart.margin.right)*0.5,
+					'transform': 'translate('+(domain.chart.margin.left)+','+(domain.chart.margin.top*0.5)+')',
+					'width': domain.chart.width - (domain.chart.margin.left + domain.chart.margin.right),
 					'height': domain.chart.rowHeight * p.length + domain.chart.margin.top
 				})
 				.style({
-					'stroke': '#999',
-					'stroke-width': 1,
 					'fill': '#ddd'
+				});
+			svg.append('line')
+				.attr({
+					'x1': domain.chart.margin.left,
+					'y1': domain.chart.margin.top*0.5,
+					'x2': domain.chart.width - domain.chart.margin.right,
+					'y2': domain.chart.margin.top*0.5
+				})
+				.style({
+					stroke: '#999'
 				});
 
 			var stage = svg.append('g')
@@ -287,16 +342,20 @@ $(function() {
 					'transform': 'translate('+domain.chart.margin.left+','+domain.chart.margin.top+')'
 				});
 
-			// Fills
-			var fills = ['#33658A','#338A84'];
-
 			// Scales
 			var scaleX = d3.scale.linear().range([0, domain.chart.width - domain.chart.margin.left - domain.chart.margin.right]).domain([1, d3.max(p, function(g) { return +g.DomainEnd; })]),
-				scaleFill1 = d3.scale.linear().range([0, 1]).domain([1, d3.max(p, function(g) { return +g.DomainEnd; })]),
-				scaleFill2 = d3.scale.linear().range(fills).domain(d3.range(0, 1, 1.0 / (fills.length - 1)));
+				ticksX = scaleX.ticks();
+
+			// Add custom tick at position 1 and max value, but ensure that max value is only added when there is sufficient clearest with the computed last tick
+			ticksX.push(1);
+			var maxX = d3.max(p, function(g) { return +g.DomainEnd; }),
+				lastTickDistance = scaleX(maxX - Math.max.apply(null, ticksX));
+			if(lastTickDistance > 20) {
+				ticksX.push(maxX);
+			}
 
 			// Axes
-			var domainXAxis = d3.svg.axis().scale(scaleX).orient('bottom').innerTickSize(-1 * (domain.chart.rowHeight * p.length + domain.chart.margin.top)).outerTickSize(0);
+			var domainXAxis = d3.svg.axis().scale(scaleX).orient('bottom').innerTickSize(-1 * (domain.chart.rowHeight * p.length + domain.chart.margin.top)).outerTickSize(0).tickValues(ticksX);
 
 			// Draw x axis
 			var xAxis = stage.append('g')
@@ -316,6 +375,30 @@ $(function() {
 					'stroke': '#999',
 					'stroke-dasharray': '2,2'
 				});
+			xAxis.select('path.domain')
+				.style({
+					stroke: '#999'
+				});
+
+			// Tips
+			var domTip = d3.tip()
+			.attr({
+				'class': 'd3-tip tip--bottom',
+				'id': 'domain-tip'
+			})
+			.offset([-15,0])
+			.direction('n')
+			.html(function(d) {
+				var type = d.InterProType;
+				return ['<ul>',
+					'<li><strong>Prediction algorithm (source)</strong>: '+d.Source+'</li>',
+					'<li><strong>Domain identifier</strong>: '+d.SourceID+'</li>',
+					(d.SourceDescription ? '<li><strong>Description</strong>: '+d.SourceDescription+'</li>' : ''),
+					(d.InterProID ? '<li><strong>InterPro mapping</strong>: '+d.InterProID+(type ? ' <span class="pill" style="background-color: '+computeColors('interpro_type', type)+'"> '+type+'</span>' : '')+'</li>' : ''),
+					'<li><strong>Span</strong>: '+d.DomainStart+'&ndash;'+d.DomainEnd+' (length: '+(d.DomainEnd - d.DomainStart + 1)+')</li>',
+					'<li><strong>E-value</strong>: '+d.Evalue+'</li>',
+				'</ul>'].join('');
+			});
 
 			// Append domains
 			var doms = stage.append('g').attr('class', 'domains');
@@ -338,12 +421,128 @@ $(function() {
 						'ry': 0.5 * domain.chart.domainHeight
 					})
 					.style({
-						'fill': '#338A84',
-						'stroke': '#33658A'
+						'fill': function(d) {
+							return computeColors(colorType, d[colors[colorType].key]);
+						},
+						'stroke': function(d) {
+							return globalFun.color.darken(computeColors(colorType, d[colors[colorType].key]),20);
+						}
+					})
+					.call(domTip)
+					.on('mouseover', domTip.show)
+					.on('mouseout', domTip.hide)
+					.on('mousemove', function(e) {
+						domTip.style({
+							'left': (d3.event.pageX - 0.5 * $('#domain-tip').outerWidth()) + 'px'
+						});
 					});
 
+			// Draw domains
+			var legend = svg.append('g').attr('class', 'legends');
 		})
 		.fail(function() {
+			// Disable all the controls
+			$('#domain__controls :input').prop('disabled', true);
+
+		});
+
+		// Domain controls
+		$('#domain-controls__toggle').click(function(e) {
+			e.preventDefault();
+			$(this).closest('.facet').toggleClass('controls--visible');
+		});
+
+		// Update colors
+		$('#dc__fill').on('change', function() {
+			var $t = $(this),
+				colorType = $t.val(),
+				dataKey = $t.find('option:selected').attr('data-key');
+
+			var stage = d3.select('#stage'),
+				doms = stage.selectAll('rect.domain');
+
+			doms
+			.transition()
+			.duration(500)
+			.style({
+				'fill': function(d) {
+					return computeColors(colorType, d[colors[colorType].key]);
+				},
+				'stroke': function(d) {
+					return globalFun.color.darken(computeColors(colorType, d[colors[colorType].key]),20);
+				}
+			});
+		});
+
+		// Update filters
+		$('.dc__filter').on('change', function() {
+			var checked = this.checked,
+				pred = this.value,
+				stage = d3.select('#stage'),
+				doms = stage.selectAll('rect.domain');
+
+			doms
+			.transition()
+			.duration(500)
+			.style({
+				'opacity': function(d) {
+					if(d.Source === pred) {
+						return checked ? 1 : 0;
+					} else {
+						return $('#dc__source-'+d.Source)[0].checked ? 1 : 0;
+					}
+				}
+			});
+		});
+
+		// Update sorting order
+		$('#dc__sort').on('change', function() {
+			var $t = $(this),
+				sortBy = $t.val(),
+				mapping = {
+					'start': {
+						'key': 'DomainStart',
+						'dataType': 'numeric'
+					},
+					'end': {
+						'key': 'DomainEnd',
+						'dataType': 'numeric'
+					},
+					'length': {
+						'key': 'DomainLength',
+						'dataType': 'numeric'
+					},
+					'prediction_algorithm': {
+						'key': 'Source',
+						'dataType': 'string'
+					},
+					'interpro_id': {
+						'key': 'InterProID',
+						'dataType': 'string'
+					},
+					'interpro_namespace': {
+						'key': 'InterProType',
+						'dataType': 'string'
+					}
+				},
+				stage = d3.select('#stage'),
+				doms = stage.selectAll('rect.domain');
+
+			doms.sort(function(a,b) {
+				if(mapping[sortBy].dataType === 'numeric') {
+					return a[mapping[sortBy].key] - b[mapping[sortBy].key];
+				} else {
+					var _a = (a[mapping[sortBy].key] === null) ? "" : "" + a[mapping[sortBy].key],
+						_b = (b[mapping[sortBy].key] === null) ? "" : "" + b[mapping[sortBy].key];
+					return d3.ascending(_a, _b);
+				}
+			});
+			doms.transition().duration(500)
+				.attr({
+					'y': function(d, i) {
+						return domain.chart.rowHeight * i + 0.5 * (domain.chart.rowHeight - domain.chart.domainHeight);
+					}
+				});
 
 		});
 	};

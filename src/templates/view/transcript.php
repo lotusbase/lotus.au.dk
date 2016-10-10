@@ -162,7 +162,6 @@
 						throw new Exception('Unable to find any records for the transcript with the identifer <strong>'.$gene.'</strong>');
 					}
 
-
 					$q2 = $db->prepare("SELECT
 						dompred.Source AS Source,
 						dompred.SourceID AS SourceID,
@@ -170,9 +169,9 @@
 						dompred.DomainEnd AS DomainEnd,
 						dompred.Evalue AS Evalue,
 						CASE
-							WHEN dompred.InterproID IS NULL THEN 'Unassigned'
-							ELSE dompred.InterproID
-						END AS InterproID
+							WHEN dompred.InterProID IS NULL THEN 'Unassigned'
+							ELSE dompred.InterProID
+						END AS InterProID
 					FROM domain_predictions AS dompred
 					WHERE dompred.Transcript = ?
 					ORDER BY DomainStart ASC
@@ -187,9 +186,9 @@
 						// Group by interpro ID
 						$ip_unique = array();
 						foreach($_ip as $key => $item) {
-							$ip_grouped[$item['InterproID']][] = $item;
-							if(!in_array($item['InterproID'], $ip_unique) && $item['InterproID'] !== 'Unassigned') {
-								$ip_unique[] = $item['InterproID'];
+							$ip_grouped[$item['InterProID']][] = $item;
+							if(!in_array($item['InterProID'], $ip_unique) && $item['InterProID'] !== 'Unassigned') {
+								$ip_unique[] = $item['InterProID'];
 							}
 						}
 
@@ -199,20 +198,47 @@
 						$ip_handler->set_ids($ip_unique);
 						$ip_data = $ip_handler->get_data();
 
-						// Collect GO predictions
-						$gos = array();
+						// Collect GO predictions and type
+						$ip_data_itemised = array(
+							'go' => array()
+							);
 						foreach($ip_data as $ip) {
-							$gos = array_merge($gos, $ip['fields']['GO']);
+							$ip_data_itemised['go'][$ip['id']] = $ip['fields']['GO'];
 						}
-						sort($gos);
+						
+						// Flatten GO array
+//						$gos = array_unique(array_flatten($ip_data_itemised['go']));
+//
+//						// Retrieve Gene Ontology data
+//						$go_handler = new \LotusBase\EBI\EBeye();
+//						$go_handler->set_domain('go');
+//						$go_handler->set_ids($gos);
+//						$go_data = $go_handler->get_data();
 
-						// Retrieve Gene Ontology data
-						$go_handler = new \LotusBase\EBI\EBeye();
-						$go_handler->set_domain('go');
-						$go_handler->set_ids($gos);
-						$go_data = $go_handler->get_data();
-
+					} else {
+						throw new Exception('No InterPro domain data available');
 					}
+
+					$q3 = $db->prepare("SELECT
+						GROUP_CONCAT(ip_go.InterPro_ID) AS InterPro,
+						ip_go.GO_ID AS GeneOntology,
+						go.NameSpace AS Namespace,
+						go.Definition AS Definition,
+						go.ExtraData AS ExtraData,
+						go.SubtermOf AS SubtermOf,
+						go.Relationships AS Relationships,
+						go.URL AS URL,
+						go_lotus.Description AS Description
+					FROM interpro_go_mapping AS ip_go
+					LEFT JOIN gene_ontology AS go
+						ON ip_go.GO_ID = go.GO_ID
+					LEFT JOIN gene_ontology_lotus AS go_lotus
+						ON ip_go.GO_ID = go_lotus.GO_ID
+					WHERE ip_go.InterPro_ID IN (".str_repeat("?,", count($ip_unique)-1)."?)
+					GROUP BY ip_go.GO_ID
+					ORDER BY ip_go.GO_ID ASC
+						");
+					$q3->execute($ip_unique);
 
 				} catch(PDOException $e) {
 					echo '<p class="user-message warning">We have encountered an error with querying the database: '.$e->getMessage().'.</p>';
@@ -322,11 +348,57 @@
 
 		<div id="view__domain-prediction" class="view__facet d3-chart">
 			<h3>Domain prediction</h3>
+			<p>Data for domain prediction are provided by the <a href="http://www.kazusa.or.jp/lotus/">Kazusa DNA Research Institute</a>, and merged with InterPro data obtained from the <a href="http://www.ebi.ac.uk/Tools/webservices/services/eb-eye_rest">EB-eye REST service</a>.</p>
 			<?php
 				try {
 					if($q2->rowCount()) {
 						?>
-						<svg id="domain-prediction" data-protein="<?php echo $gene; ?>"></svg>
+						<div class="facet floating-controls__hide">
+							<div class="facet__stage" id="domain-prediction" data-protein="<?php echo $gene; ?>">
+								<ul class="floating-controls position--right">
+									<li><a id="domain-controls__toggle" href="#" class="icon-cog icon--no-spacing" title="Toggle controls"></a></li>
+								</ul>
+							</div>
+							<form class="facet__controls has-group" id="domain__controls" action="#" method="get">
+								<div class="has-legend cols" role="group">
+									<p class="legend">Domains</p>
+									<label for="dc__fill" class="col-one">Color</label>
+									<select id="dc__fill" name="dc__fill" class="col-two">
+										<option value="interpro_type" selected>InterPro domain type (default)</option>
+										<option value="prediction_algorithm">Prediction algorithm</option>
+									</select>
+
+									<label class="col-one">Filter</label>
+									<div class="col-two">
+										<?php
+											$pred = array();
+											foreach($_ip as $key => $item) {
+												if(!in_array($item['Source'], $pred)) {
+													$pred[] = $item['Source'];
+												}
+											}
+											sort($pred);
+											foreach($pred as $p) {
+												echo '<label for="dc__source-'.$p.'"><input type="checkbox" class="dc__filter prettify" id="dc__source-'.$p.'" value="'.$p.'" checked>'.$p.'</label>';
+											}
+										?>
+									</div>
+								</div>
+
+								<div class="has-legend cols" role="group">
+									<p class="legend">Sorting</p>
+									<label for="dc__sort" class="col-one">Sort</label>
+									<select id="dc__sort" name="dc__sort" class="col-two">
+										<option value="start" seleted>Start position (default)</option>
+										<option value="end">End position</option>
+										<option value="length">Length</option>
+										<option value="prediction_algorithm">Prediction algorithm</option>
+										<option value="interpro_id">InterPro ID</option>
+										<option value="interpro_namespace">InterPro namespace</option>
+									</select>
+								</div>
+							</form>
+						</div>
 						<table class="table--dense">
 							<thead>
 								<tr>
@@ -336,7 +408,7 @@
 									<th data-sort="int" scope="col" data-type="numeric">End</th>
 									<th data-sort="int" scope="col" data-type="numeric">Length</th>
 									<th data-sort="float" scope="col" data-type="numeric">E-value</th>
-									<th data-sort="string" scope="col">Interpro ID</th>
+									<th data-sort="string" scope="col">InterPro ID</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -357,13 +429,13 @@
 									<td data-type="numeric"><?php echo $item['DomainEnd']; ?></td>
 									<td data-type="numeric"><?php echo $item['DomainEnd'] - $item['DomainStart'] + 1; ?></td>
 									<td data-type="numeric"><?php echo $item['Evalue']; ?></td>
-									<td><?php if($item['InterproID'] !== 'Unassigned') { ?>
+									<td><?php if($item['InterProID'] !== 'Unassigned') { ?>
 										<div class="dropdown button">
-											<span class="dropdown--title"><?php echo $item['InterproID']; ?></span>
+											<span class="dropdown--title"><?php echo $item['InterProID']; ?></span>
 											<ul class="dropdown--list">
-												<li><a href="<?php echo WEB_ROOT.'/api/v1/view/domain/interpro/'.$item['InterproID']; ?>" data-desc-id="<?php echo $item['InterproID']; ?>" data-desc-source="interpro"><span class="icon-eye">Show description</span></a></li>
-												<li><a href="http://www.ebi.ac.uk/interpro/entry/<?php echo $item['InterproID']; ?>"><span class="icon-link-ext">View external data</span></a></li>
-												<li><a href="<?php echo WEB_ROOT; ?>/tools/trex/?ids=<?php echo $item['InterproID']; ?>" title="Search for proteins/transripts with this domain"><span class="icon-search">Search for proteins/transripts with this domain</span></a></li>
+												<li><a href="<?php echo WEB_ROOT.'/api/v1/view/domain/interpro/'.$item['InterProID']; ?>" data-desc-id="<?php echo $item['InterProID']; ?>" data-desc-source="interpro"><span class="icon-eye">Show description</span></a></li>
+												<li><a href="http://www.ebi.ac.uk/interpro/entry/<?php echo $item['InterProID']; ?>"><span class="icon-link-ext">View external data</span></a></li>
+												<li><a href="<?php echo WEB_ROOT; ?>/tools/trex/?ids=<?php echo $item['InterProID']; ?>" title="Search for proteins/transripts with this domain"><span class="icon-search">Search for proteins/transripts with this domain</span></a></li>
 											</ul>
 										</div>
 									<?php } else { echo '&ndash;'; } ?></td>
@@ -384,36 +456,63 @@
 
 		<div id="view__function" class="view__facet">
 			<h3>Gene function (<abbr title="Gene Ontology">GO</abbr> predictions)</h3>
+			<p><abbr title="Gene Ontology">GO</abbr> predictions are based solely on the InterPro to GO mapping published by EMBL-EBI, which is in turn based on the <a href="#view__domain-prediction">predicted domains to InterPro domain mapping</a>. The <abbr title="Gene Ontology">GO</abbr> metadata was last updated on October 10, 2016.</p>
 			<?php
 				try {
-					if(!empty($go_data)) { ?>
+					if($q3->rowCount()) { ?>
 					<table class="table--dense">
 						<thead>
 							<tr>
 								<th data-sort="string" scope="col"><abbr title="Gene Ontology">GO</abbr>&nbsp;term</th>
 								<th data-sort="string" scope="col">Namespace</th>
 								<th data-sort="string" scope="col">Description</th>
+								<th scope="col">Definition</th>
+								<th scope="col">Relationships</th>
 							</tr>
 						</thead>
 						<tbody>
-						<?php foreach($go_data as $g_id => $g) { ?>
+						<?php while($g = $q3->fetch(PDO::FETCH_ASSOC)) {
+							$go_term = $g['GeneOntology'];
+							$go_namespace = array(
+								'p' => 'Biological process',
+								'f' => 'Molecular function',
+								'c' => 'Cellular component'
+								);
+							?>
 							<tr>
 								<td><div class="dropdown button">
-									<span class="dropdown--title"><?php echo $g_id; ?></span>
+									<span class="dropdown--title"><?php echo $go_term; ?></span>
 									<ul class="dropdown--list">
-										<li><a href="http://www.ebi.ac.uk/interpro/search?q=<?php echo $g_id; ?>"><span class="icon-link-ext">EMBL-EBI InterPro</span></a></li>
-										<li><a href="http://www.ebi.ac.uk/QuickGO/GTerm?id=<?php echo $g_id; ?>"><span class="icon-link-ext">EMBL-EBI QuickGO (legacy)</span></a></li>
-										<li><a href="http://www.ebi.ac.uk/QuickGO-Beta/term/<?php echo $g_id; ?>"><span class="icon-link-ext">EMBL-EBI QuickGO (beta)</span></a></li>
+										<li><a target="_blank" href="http://amigo.geneontology.org/amigo/medial_search?q=<?php echo $go_term; ?>">AmiGO</a></li>
+										<li><a target="_blank" href="http://www.ebi.ac.uk/interpro/search?q=<?php echo $go_term; ?>">EMBL-EBI InterPro</a></li>
+										<li><a target="_blank" href="http://www.ebi.ac.uk/QuickGO/GTerm?id=<?php echo $go_term; ?>">EMBL-EBI QuickGO (legacy)</a></li>
+										<li><a target="_blank" href="http://www.ebi.ac.uk/QuickGO-Beta/term/<?php echo $go_term; ?>">EMBL-EBI QuickGO (beta)</a></li>
 									</ul>
 								</div></td>
-								<td><?php echo ucfirst(str_replace('_', ' ', $g['fields']['namespace'][0])); ?></td>
-								<td><?php echo $g['fields']['description'][0]; ?></td>
+								<td><?php echo $go_namespace[$g['Namespace']]; ?></td>
+								<td><?php echo $g['Description']; ?>
+								<td><?php echo $g['Definition']; ?></td>
+								<td><?php
+									$go_rels = json_decode($g['Relationships'], true);
+									foreach($go_rels as $type => $r) {
+										if(is_array($r) && count($r)) {
+											if($type === 'is_a') {
+												$type = 'Subterm of';
+											}
+											echo '<div class="dropdown button"><span class="dropdown--title">'.ucfirst(str_replace('_', ' ', $type)).'</span><ul class="dropdown--list">';
+											foreach($r as $_r) {
+												echo '<li><a href="'.$_r.'">'.$_r.'</a></li>';
+											}
+											echo '</ul></div>';
+										}
+									}
+								?></td>
 							</tr>
 						<?php } ?>
 						</tbody>
 					</table>
 					<?php } else {
-						throw new Exception('Unable to find any records for the transcript with the identifier.');
+						throw new Exception('Unable to find any records for the transcript with the identifier');
 					}
 				} catch(Exception $e) {
 					echo '<p class="user-message warning">'.$e->getMessage().'.</p>';
