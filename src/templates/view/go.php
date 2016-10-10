@@ -147,6 +147,81 @@
 			?>
 		</div>
 
+		<div id="view__relationship" class="view__facet">
+			<h3>Relationships</h3>
+			<p>The relationship of <strong><?php echo $id; ?></strong> with other <abbr title="Gene Ontology">GO</abbr> terms.</p>
+			<?php
+				$rels = json_decode($go_data['Relationships'], true);
+
+				// Check if all sub-arrays are empty
+				$empty = true;
+				foreach($rels as $rel_type => $rel_items) {
+					if(count($rel_items)) {
+						$empty = false;
+						break;
+					}
+				}
+
+				if($empty) {
+					echo '<p class="user-message reminder">This GO term do not have any relationships.</p>';
+				} else { ?>
+					<table class="table--dense">
+						<thead>
+							<tr>
+								<th scope="col">Relationship type</th>
+								<th scope="col">GO terms</th>
+							</tr>
+						</thead>
+						<tbody><?php ksort($rels); foreach($rels as $rel_type => $rel_items) { ?>
+							<tr>
+								<th scope="row"><?php echo ucfirst(str_replace('_', ' ', $rel_type)); ?></th>
+								<td><?php
+								if(count($rel_items)) {
+									echo '<ul class="list--floated">';
+									asort($rel_items);
+									foreach($rel_items as $ri) {
+										echo '<li><a href="'.WEB_ROOT.'/view/go/'.$ri.'" class="link--reset">'.$ri.'</a></li>';
+									}
+									echo '</ul>';
+								} else {
+									echo 'n.a.';
+								} ?></td>
+							</tr>
+						<?php } ?></tbody>
+					</table>
+				<?php }
+			?>
+		</div>
+
+		<?php
+			if($go_data['ExtraData'] || $go_data['URL']) {
+				$extra_data = json_decode($go_data['ExtraData'], true);
+				if(count($extra_data) || $go_data['URL']) {
+				?>
+				<div id="view__extra-data" class="view__facet">
+					<h3>Additional data</h3>
+					<p>This table contains additional metadata associated with the <abbr title="Gene Ontology">GO</abbr> entry's definition field.</p>
+					<table class="table--dense">
+						<thead>
+							<tr>
+								<th scope="col">Field</th>
+								<th scope="col">Value</th>
+							</tr>
+						</thead>
+						<tbody><?php
+							foreach($extra_data as $key => $value) {
+								echo '<tr><th scope="row">'.$key.'</th><td>'.$value.'</td></tr>';
+							}
+							if($go_data['URL']) {
+								echo '<tr><th scope="row">URL</th><td>'.$go_data['URL'].'</td></tr>';
+							}
+						?></tbody>
+					</table>
+				</div>
+				<?php }
+			}
+		?>
+
 		<div id="view__transcript" class="view__facet">
 			<h3>Associated <em>Lotus</em> transcripts<?php
 				if($q2->rowCount()) {
@@ -184,34 +259,6 @@
 			} ?>
 		</div>
 
-		<?php
-			if($go_data['ExtraData'] || $go_data['URL']) {
-				$extra_data = json_decode($go_data['ExtraData'], true);
-				if(count($extra_data) || $go_data['URL']) {
-				?>
-				<div id="view__extra-data" class="view__facet">
-					<h3>Additional data</h3>
-					<p>This table contains additional metadata associated with the <abbr title="Gene Ontology">GO</abbr> entry's definition field.</p>
-					<table class="table--dense display compact">
-						<thead>
-							<tr>
-								<th scope="col">Field</th>
-								<th scope="col">Value</th>
-							</tr>
-						</thead>
-						<tbody><?php
-							foreach($extra_data as $key => $value) {
-								echo '<tr><th scope="row">'.$key.'</th><td>'.$value.'</td></tr>';
-							}
-							if($go_data['URL']) {
-								echo '<tr><th scope="row">URL</th><td>'.$go_data['URL'].'</td></tr>';
-							}
-						?></tbody>
-					</table>
-				</div>
-				<?php }
-			}
-		?>
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
