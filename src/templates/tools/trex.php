@@ -46,7 +46,7 @@
 			if(is_array($trx)) {
 				$vars = array_filter($trx);
 			} else {
-				$trx_rep = preg_match_all('/(\w+|[\"\'][\w\s]*[\"\'])+/' , $trx , $trx_matched);
+				$trx_rep = preg_match_all('/([\.\w\+\:<>]+|[\"\'][\.\w\s\+\:<>]*[\"\'])+/' , $trx , $trx_matched);
 				$vars = $trx_matched[0];
 			}
 
@@ -60,6 +60,9 @@
 				LEFT JOIN domain_predictions AS dompred ON (
 					anno.Gene = dompred.Transcript
 				)
+				LEFT JOIN interpro_go_mapping AS ip_go ON (
+					dompred.InterProID = ip_go.Interpro_ID
+				)
 				WHERE anno.Version IN (".str_repeat("?,", count($version_str)-1)."?".") AND (";
 			foreach ($vars as $trx_item) {
 				if(preg_match('/^chr\d+/', $trx_item)) {
@@ -70,8 +73,9 @@
 						MATCH(anno.Annotation) AGAINST (? IN BOOLEAN MODE) OR
 						MATCH(anno.LjAnnotation) AGAINST (? IN BOOLEAN MODE) OR
 						dompred.InterProID = ? OR 
-						dompred.SourceID = ? OR ";
-					$exec_vars = array_merge($exec_vars, array($trx_item, $trx_item, (preg_match('/^Lj/i', $trx_item) ? $trx_item : 'Lj'.$trx_item), $trx_item, $trx_item));
+						dompred.SourceID = ? OR
+						ip_go.GO_ID = ? OR ";
+					$exec_vars = array_merge($exec_vars, array($trx_item, $trx_item, (preg_match('/^Lj/i', $trx_item) ? $trx_item : 'Lj'.$trx_item), $trx_item, $trx_item, $trx_item));
 				}
 				
 			}
@@ -192,8 +196,9 @@
 				tc.Chromosome AS Chromosome,
 				anno.Annotation AS Annotation,
 				anno.LjAnnotation AS LjAnnotation,
-				GROUP_CONCAT(DISTINCT dompred.InterproID) AS InterproID,
-				GROUP_CONCAT(DISTINCT dompred.SourceID) AS DomPredID,
+				GROUP_CONCAT(DISTINCT dompred.InterproID) AS Interpro_ID,
+				GROUP_CONCAT(DISTINCT dompred.SourceID) AS DomPred_ID,
+				GROUP_CONCAT(DISTINCT ip_go.GO_ID) AS GO_ID,
 				CASE WHEN anno.LjAnnotation IS NOT NULL THEN 1 ELSE 0 END AS CustomRank
 				".$dbq."
 				ORDER BY CustomRank DESC, tc.Transcript ASC
@@ -429,6 +434,7 @@
 						<th scope="col" data-type="numeric"><abbr title="End Position">End</abbr></th>
 						<th scope="col">Strand</th>
 						<th scope="col">Domain predictions</th>
+						<th scope="col"><abbr title="Gene Ontology">GO</abbr> predictions</th>
 						<?php //echo ($search_type === 'anno' ? '<th scope="col"><a href="#" data-modal data-modal-content="The score for each row is computed based on how relevant they are to the search query you have provided. The algorithm behind how this score is computed is &lt;a href=&quot;http://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html#idm140019561440400&quot;&gt;available in the official MySQL documentation&lt;/a&gt;." title="What does the score of my result row indicate?">Score</a></th>' : ''); ?>
 					</tr>
 				</thead>
@@ -548,8 +554,9 @@
 						<td class="str"><?php echo $row['Strand']; ?></td>
 						<td class="dompred">
 							<?php
-								$interpro_ids = explode(',', $row['InterproID']);
-								$dompred_ids = explode(',', $row['DomPredID']);
+								$interpro_ids = explode(',', $row['Interpro_ID']);
+								$dompred_ids = explode(',', $row['DomPred_ID']);
+								$go_ids = explode(',', $row['GO_ID']);
 
 								// Domains
 								$domains_grouped = array('interpro' => $interpro_ids);
@@ -597,16 +604,21 @@
 								}
 
 								// Print domain predictions
-								echo '<ul>';
+								echo '<ul class="list--floated">';
 								$domains = array_unique(array_merge($interpro_ids, $dompred_ids));
 								asort($domains);
 								foreach($domains as $d) {
-									echo '<li><a href="" class="button">'.$d.'</a></li>';
+									echo '<li><a href="'.WEB_ROOT.'/view/domain/'.$d.'" class="link--reset">'.$d.'</a></li>';
 								}
 								echo '</ul>';
 
 							?>
 						</td>
+						<td><ul class="list--floated"><?php
+							foreach($go_ids as $go) {
+								echo '<li><a href="'.WEB_ROOT.'/view/go/'.$go.'" class="link--reset">'.$go.'</a></li>';
+							}
+						?></ul></td>
 					</tr>
 		<?php } ?>
 			</tbody>

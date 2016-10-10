@@ -78,8 +78,8 @@ class Paginate {
 
 				// If not on first page, allow users to navigate to previous pages
 				if($current_page !== 1) {
-					$nav .= '<a role="secondary" href="'.$_SERVER['PHP_SELF'].'?'.$query.'&p=1&n='.$rows_per_page.'&version='.$version.'" title="&laquo; First page" class="arrow button"><span class="icon-left-open-big"></span><span class="icon-left-open-big"></span></a><!--
-						  --><a role="secondary" href="'.$_SERVER['PHP_SELF'].'?'.$query.'&p='.$prev.'&n='.$rows_per_page.'&version='.$version.'" title="&laquo; Previous page" class="arrow button"><span class="icon-left-open-big"></span></a>';
+					$nav .= '<a role="secondary" href="'.$_SERVER['PHP_SELF'].'?'.$query.'&p=1&n='.$rows_per_page.'&version='.$version.'" title="&laquo; First page" class="arrow button"><span class="icon-left-open-big icon--no-spacing"></span><span class="icon-left-open-big icon--no-spacing"></span></a><!--
+						  --><a role="secondary" href="'.$_SERVER['PHP_SELF'].'?'.$query.'&p='.$prev.'&n='.$rows_per_page.'&version='.$version.'" title="&laquo; Previous page" class="arrow button"><span class="icon-left-open-big icon--no-spacing"></span></a>';
 				}
 
 				// If there are less than 10 pages, list all of them
@@ -111,8 +111,8 @@ class Paginate {
 
 				// If not on last page, allow users to navigate to next pages
 				if($current_page < $last) {
-					$nav .= '<a role="secondary" href="'.$_SERVER['PHP_SELF'].'?'.$query.'&p='.$next.'&n='.$rows_per_page.'&version='.$version.'" title="Next Page &raquo;" class="arrow button"><span class="icon-right-open-big"></span></a><!--
-						  --><a role="secondary" href="'.$_SERVER['PHP_SELF'].'?'.$query.'&p='.$last.'&n='.$rows_per_page.'&version='.$version.'" title="Last Page &raquo;" class="arrow button"><span class="icon-right-open-big"></span><span class="icon-right-open-big"></span></a>';
+					$nav .= '<a role="secondary" href="'.$_SERVER['PHP_SELF'].'?'.$query.'&p='.$next.'&n='.$rows_per_page.'&version='.$version.'" title="Next Page &raquo;" class="arrow button"><span class="icon-right-open-big icon--no-spacing"></span></a><!--
+						  --><a role="secondary" href="'.$_SERVER['PHP_SELF'].'?'.$query.'&p='.$last.'&n='.$rows_per_page.'&version='.$version.'" title="Last Page &raquo;" class="arrow button"><span class="icon-right-open-big icon--no-spacing"></span><span class="icon-right-open-big icon--no-spacing"></span></a>';
 				}
 			}
 

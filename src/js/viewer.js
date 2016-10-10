@@ -1,5 +1,8 @@
 $(function() {
 
+	// Global variables
+	globalVar.view = {};
+
 	// ExpAt functions
 	globalFun.expat = {
 		replaceIDClass: function(string) {
@@ -157,6 +160,7 @@ $(function() {
 					})($t.attr('data-desc-source')));
 				})
 				.fail(function(jqXHR, textStatus, errorThrown) {
+					var d = jqXHR.responseJSON;
 					globalFun.modal.update({
 						'title': errorThrown,
 						'content': '<p>We have encountered an error '+(d.status ? '(error code: <code>'+d.status+'</code>) ' : '')+'while processing your request.</p>'+(d.message ? '<p>'+d.message+'</p>' : ''),
@@ -244,7 +248,7 @@ $(function() {
 					domainHeight: 6,
 					margin: {
 						top: 10,
-						bottom: 80,
+						bottom: 20,
 						left: 10,
 						right: 20
 					}
@@ -342,9 +346,14 @@ $(function() {
 					'transform': 'translate('+domain.chart.margin.left+','+domain.chart.margin.top+')'
 				});
 
-			// Scales
+			// Scale width
 			var scaleX = d3.scale.linear().range([0, domain.chart.width - domain.chart.margin.left - domain.chart.margin.right]).domain([1, d3.max(p, function(g) { return +g.DomainEnd; })]),
 				ticksX = scaleX.ticks();
+
+			// Scale height
+			var scaleY = function(valueIn, length) {
+				return d3.scale.linear().domain([0, length - 1]).range([0, domain.chart.rowHeight * p.length - (domain.chart.rowHeight - domain.chart.domainHeight)])(valueIn);
+			};
 
 			// Add custom tick at position 1 and max value, but ensure that max value is only added when there is sufficient clearest with the computed last tick
 			ticksX.push(1);
@@ -368,7 +377,8 @@ $(function() {
 			xAxis.selectAll('text')
 				.style({
 					'text-anchor': 'middle',
-					'font-size': 10
+					'font-size': '12px',
+					'dy': '0.35em'
 				});
 			xAxis.selectAll('line')
 				.style({
@@ -411,7 +421,8 @@ $(function() {
 							return scaleX(+d.DomainStart);
 						},
 						'y': function(d, i) {
-							return domain.chart.rowHeight * i + 0.5 * (domain.chart.rowHeight - domain.chart.domainHeight);
+							//return domain.chart.rowHeight * i + 0.5 * (domain.chart.rowHeight - domain.chart.domainHeight);
+							return scaleY(i, p.length);
 						},
 						'width': function(d) {
 							return scaleX(d.DomainEnd - d.DomainStart);
@@ -439,6 +450,17 @@ $(function() {
 
 			// Draw domains
 			var legend = svg.append('g').attr('class', 'legends');
+
+			// Expose scale
+			$.extend(globalVar.view, {
+				'd3': {
+					'domains': {
+						'scaleX': scaleX,
+						'scaleY': scaleY,
+						'tip': domTip
+					}
+				}
+			});
 		})
 		.fail(function() {
 			// Disable all the controls
@@ -479,20 +501,83 @@ $(function() {
 			var checked = this.checked,
 				pred = this.value,
 				stage = d3.select('#stage'),
-				doms = stage.selectAll('rect.domain');
+				scaleX = globalVar.view.d3.domains.scaleX,
+				scaleY = globalVar.view.d3.domains.scaleY,
+				domTip = globalVar.view.d3.domains.tip;
 
-			doms
-			.transition()
-			.duration(500)
-			.style({
-				'opacity': function(d) {
-					if(d.Source === pred) {
-						return checked ? 1 : 0;
-					} else {
-						return $('#dc__source-'+d.Source)[0].checked ? 1 : 0;
-					}
+			// Collect all checked prediction algorithms
+			var c = $('.dc__filter').map(function() {
+				if(this.checked) {
+					return this.value;
+				}
+			}).get();
+
+			// Filter data
+			var _p = p.filter(function(d) {
+				if(c.indexOf(d.Source) >= 0) {
+					return d;
 				}
 			});
+
+			// Transition
+			var doms = stage.selectAll('rect.domain').data(_p);
+			doms
+			.attr({
+				'x': function(d) {
+					return scaleX(+d.DomainStart);
+				},
+				'width': function(d) {
+					return scaleX(d.DomainEnd - d.DomainStart);
+				}
+			})
+			.style({
+				'fill': function(d) {
+					return computeColors(colorType, d[colors[colorType].key]);
+				},
+				'stroke': function(d) {
+					return globalFun.color.darken(computeColors(colorType, d[colors[colorType].key]),20);
+				}
+			});
+
+			doms.enter().append('rect')
+			.attr({
+				'class': 'domain',
+				'x': function(d) {
+					return scaleX(+d.DomainStart);
+				},
+				'width': function(d) {
+					return scaleX(d.DomainEnd - d.DomainStart);
+				},
+				'height': domain.chart.domainHeight,
+				'rx': 0.5 * domain.chart.domainHeight,
+				'ry': 0.5 * domain.chart.domainHeight
+			})
+			.style({
+				'fill': function(d) {
+					return computeColors(colorType, d[colors[colorType].key]);
+				},
+				'stroke': function(d) {
+					return globalFun.color.darken(computeColors(colorType, d[colors[colorType].key]),20);
+				}
+			});
+
+			// Finalise y position
+			stage.selectAll('rect.domain').attr({
+				'y': function(d, i) {
+					return scaleY(i, _p.length);
+				}
+			})
+			.call(domTip)
+			.on('mouseover', domTip.show)
+			.on('mouseout', domTip.hide)
+			.on('mousemove', function(e) {
+				domTip.style({
+					'left': (d3.event.pageX - 0.5 * $('#domain-tip').outerWidth()) + 'px'
+				});
+			});
+
+			doms.exit().remove();
+
 		});
 
 		// Update sorting order

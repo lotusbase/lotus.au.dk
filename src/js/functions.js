@@ -397,7 +397,7 @@ var globalFun = {
 					return string.replace(/([\s\,;\|#]+)/gi, ' ').split(' ').filter(function(n) { return typeof n !== typeof undefined; });
 				} else {
 					// If we are using boolean mode:
-					return string.match(/([\.\w\+<>]+|[\"\'][\.\w\s\+<>]*[\"\'])+/gi);
+					return string.match(/([\.\w\+\:<>]+|[\"\'][\.\w\s\+\:<>]*[\"\'])+/gi);
 				}
 			} else {
 				return false;
@@ -820,6 +820,7 @@ $(function() {
 			// Sometimes if the user types really fast, we missed capturing separator keys
 			// ... so parsing is still required
 			var strings = globalFun.multipleTextInput.parse.call($t[0], booleanMode);
+			console.log(strings);
 
 			// Update list
 			globalFun.multipleTextInput.updateInputList.call($t[0], booleanMode, strings);

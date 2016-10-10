@@ -471,8 +471,8 @@
 							</tr>
 						</thead>
 						<tbody>
-						<?php while($g = $q3->fetch(PDO::FETCH_ASSOC)) {
-							$go_term = $g['GeneOntology'];
+						<?php while($go = $q3->fetch(PDO::FETCH_ASSOC)) {
+							$go_term = $go['GeneOntology'];
 							$go_namespace = array(
 								'p' => 'Biological process',
 								'f' => 'Molecular function',
@@ -489,19 +489,20 @@
 										<li><a target="_blank" href="http://www.ebi.ac.uk/QuickGO-Beta/term/<?php echo $go_term; ?>">EMBL-EBI QuickGO (beta)</a></li>
 									</ul>
 								</div></td>
-								<td><?php echo $go_namespace[$g['Namespace']]; ?></td>
-								<td><?php echo $g['Description']; ?>
-								<td><?php echo $g['Definition']; ?></td>
+								<td><?php echo $go_namespace[$go['Namespace']]; ?></td>
+								<td><?php echo $go['Description']; ?>
+								<td><?php echo $go['Definition']; ?></td>
 								<td><?php
-									$go_rels = json_decode($g['Relationships'], true);
+									$go_rels = json_decode($go['Relationships'], true);
 									foreach($go_rels as $type => $r) {
 										if(is_array($r) && count($r)) {
 											if($type === 'is_a') {
 												$type = 'Subterm of';
 											}
 											echo '<div class="dropdown button"><span class="dropdown--title">'.ucfirst(str_replace('_', ' ', $type)).'</span><ul class="dropdown--list">';
+											asort($r);
 											foreach($r as $_r) {
-												echo '<li><a href="'.$_r.'">'.$_r.'</a></li>';
+												echo '<li><a href="'.WEB_ROOT.'/view/go/'.$_r.'">'.$_r.'</a></li>';
 											}
 											echo '</ul></div>';
 										}
@@ -542,9 +543,6 @@
 					echo '<span class="badge">'.count($genic_lore1).'</span>';
 				}
 			?></h3>
-			<?php
-
-			?>
 			<form id="lore1-filter__form" action="#" method="get" class="has-group">
 				<div class="cols" role="group">
 					<label class="col-one" for="lore1-type">Insertion filter</label>
