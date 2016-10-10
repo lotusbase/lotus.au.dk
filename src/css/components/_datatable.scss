@@ -1,0 +1,227 @@
+// Data tables
+table.dataTable {
+	width: 100%;
+	margin: 0 auto .75rem;
+	clear: both;
+	border-spacing: 0;
+
+	// Table head
+	thead {
+		.sorting,
+		.sorting_asc,
+		.sorting_desc {
+		   cursor: pointer;
+		}
+
+		th, td {
+			&:active {
+				outline: none;
+			}
+		}
+
+		.sorting,
+		.sorting_asc,
+		.sorting_desc {
+			cursor: pointer;
+			padding-right: 2rem !important;
+			position: relative;
+			&::after {
+				color: #999;
+				cursor: pointer;
+				font-family: 'fontello';
+				position: absolute;
+				right: .25rem;
+				top: 50%;
+				transform: translateY(-50%);
+			}
+		}
+		.sorting::after { content: '\f0dc'; }
+		.sorting_asc::after {
+			color: #333;
+			content: '\f0dd';
+		}
+		.sorting_desc::after {
+			color: #333;
+			content: '\f0de';
+		}
+	}
+}
+
+.dataTables_wrapper {
+	clear: both;
+	position: relative;
+	&::after {
+		visibility: hidden;
+		display: block;
+		content: "";
+		clear: both;
+		height: 0;
+	}
+
+	// General input styles
+	label {
+		cursor: pointer;
+	}
+	select, input {
+		background-color: rgba(#fff,.65);
+		border: 1px solid rgba(#000,.25);
+		box-sizing: border-box;
+		color: #555;
+		display: inline-block;
+		font-family: $fontface-sansSerif;
+		padding: .125rem;
+		@include transition;
+
+		&:hover {
+			border-color: rgba(#000,.25);
+			box-shadow: inset 0 .5rem .5rem -.5rem rgba(#000,.15);
+		}
+		&:focus, &.focus {
+			border-color: rgba($lotusPrimary4,.5);
+			box-shadow:
+				inset 0 .5rem .5rem -.5rem rgba(#000,.15),
+				0 0 .5rem .25rem rgba($lotusPrimary3,.25);
+			color: darken($lotusPrimary3, 10%);
+			outline: none;
+		}
+	}
+	input {
+		appearance: none;
+		@include placeholder { color: #aaa; }
+		&:focus { @include placeholder { color: #999; } }
+	}
+	select {
+		appearance: none;
+		background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill="#555" d="M4.516,7.548c0.436-0.446,1.043-0.481,1.576,0L10,11.295l3.908-3.747c0.533-0.481,1.141-0.446,1.574,0 c0.436,0.445,0.408,1.197,0,1.615c-0.406,0.418-4.695,4.502-4.695,4.502C10.57,13.888,10.285,14,10,14s-0.57-0.112-0.789-0.335 c0,0-4.287-4.084-4.695-4.502C4.107,8.745,4.08,7.993,4.516,7.548z"/></svg>');
+		background-repeat: no-repeat;
+		background-position: right center;
+		background-position: calc(100% - .4rem) center;
+		background-size: 1rem 1rem;
+		border-radius: 0;
+		min-width: 3.5rem;
+		padding: .125rem .5rem;
+	}
+
+	// Length
+	.dataTables_length {
+		float: left;
+		margin-bottom: .5rem;
+	}
+
+	// Filter
+	.dataTables_filter {
+		float: right;
+		margin-bottom: .5rem;
+		text-align: right;
+
+		input {
+			margin-left: 0.5rem;
+		}
+	}
+
+	// Info
+	.dataTables_info {
+		clear: both;
+		float: left;
+		padding-top: .75rem;
+	}
+
+	// Pagination
+	.dataTables_paginate {
+		float: right;
+		padding-top: .5rem;
+		text-align: right;
+
+		.paginate_button {
+			border: 1px solid rgba(0, 0, 0, .1);
+			border-bottom: 2px solid rgba(0, 0, 0, .2);
+			border-radius: 4px;
+			box-sizing: border-box;
+			cursor: pointer;
+			color: #333;
+			display: inline-block;
+			line-height: 1.5em;
+			margin-left: .25rem;
+			min-width: 1.5rem;
+			padding: .25rem .75rem;
+			text-align: center;
+			text-decoration: none !important;
+
+			&.current,
+			&.current:hover {
+				background-color: $lotusPrimary4;
+				color: #eee;
+			}
+
+			&.disabled,
+			&.disabled:hover,
+			&.disabled:active {
+				color: #777;
+				border-color: transparent;
+				box-shadow: none;
+			}
+
+			&:hover {
+				background-color: $lotusPrimary4;
+				color: #eee;
+			}
+
+			&:active {
+				box-shadow: inset 0 0 3px rgba(#000,.15);
+			}
+		}
+
+		.ellipsis {
+			padding: 0 .75rem;
+		}
+	}
+}
+
+
+.dataTables_wrapper .dataTables_processing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 40px;
+  margin-left: -50%;
+  margin-top: -25px;
+  padding-top: 20px;
+  text-align: center;
+  font-size: 1.2em;
+  background-color: white;
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(25%, rgba(255, 255, 255, 0.9)), color-stop(75%, rgba(255, 255, 255, 0.9)), color-stop(100%, rgba(255, 255, 255, 0)));
+  background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 25%, rgba(255, 255, 255, 0.9) 75%, rgba(255, 255, 255, 0) 100%);
+  background: -moz-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 25%, rgba(255, 255, 255, 0.9) 75%, rgba(255, 255, 255, 0) 100%);
+  background: -ms-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 25%, rgba(255, 255, 255, 0.9) 75%, rgba(255, 255, 255, 0) 100%);
+  background: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 25%, rgba(255, 255, 255, 0.9) 75%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 25%, rgba(255, 255, 255, 0.9) 75%, rgba(255, 255, 255, 0) 100%);
+}
+
+
+
+@media screen and (max-width: 767px) {
+	.dataTables_wrapper {
+		.dataTables_info,
+		.dataTables_paginate {
+		  float: none;
+		  text-align: center;
+		}
+
+		.dataTables_paginate {
+			margin-top: 0.5rem;
+		}
+	}
+}
+@media screen and (max-width: 640px) {
+	.dataTables_wrapper {
+		.dataTables_length,
+		.dataTables_filter {
+			float: none;
+			text-align: center;
+		}
+		.dataTables_filter {
+			margin-top: 0.5rem;
+		}
+	}
+}

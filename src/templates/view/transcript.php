@@ -10,7 +10,7 @@
 				exit();
 			} else if(!preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/', $id)) {
 				// If ID fails pattern check
-				$_SESSION['view_error'] = 'Invalid transcript ID format detected. Please ensure that your transcript follows the format <code>Lj{chr}g{version}v{id}</code>.';
+				$_SESSION['view_error'] = 'Invalid transcript ID format detected. Please ensure that your transcript follows the format <code>Lj{chr}g{version}v{id}</code>';
 				throw new Exception;
 			}
 		} else {
@@ -26,11 +26,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>Gene Browser &mdash; Tools &mdash; Lotus Base</title>
+	<title>Transcript &mdash; View &mdash; Lotus Base</title>
 	<?php include(DOC_ROOT.'/head.php'); ?>
-	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/viewer.min.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/view.min.css" type="text/css" media="screen" />
 </head>
-<body class="viewer gene init-scroll--disabled">
+<body class="view transcript init-scroll--disabled">
 	<?php
 		$header = new \LotusBase\PageHeader();
 		echo $header->get_header();
@@ -40,7 +40,7 @@
 
 	<section class="wrapper">
 	<?php
-		// Coerge gene ID to transcript ID
+		// Coerce gene ID to transcript ID
 		$coerced = false;
 		if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/', $_GET['id'])) {
 			$gene = $_GET['id'];
@@ -326,7 +326,7 @@
 						echo $gene;
 
 					} else {
-						throw new Exception('Invalid database type detected.');
+						throw new Exception('Invalid database type detected');
 					}
 
 					$blast_db = new \LotusBase\BLAST\DBMetadata();
@@ -481,8 +481,9 @@
 							?>
 							<tr>
 								<td><div class="dropdown button">
-									<span class="dropdown--title"><?php echo $go_term; ?></span>
+									<span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/go/'.$go_term; ?>"><?php echo $go_term; ?></a></span>
 									<ul class="dropdown--list">
+										<li><a href="<?php echo WEB_ROOT.'/view/go/'.$go_term; ?>"><span class="icon-eye">View details of <?php echo $go_term; ?></span></a></li>
 										<li><a target="_blank" href="http://amigo.geneontology.org/amigo/medial_search?q=<?php echo $go_term; ?>">AmiGO</a></li>
 										<li><a target="_blank" href="http://www.ebi.ac.uk/interpro/search?q=<?php echo $go_term; ?>">EMBL-EBI InterPro</a></li>
 										<li><a target="_blank" href="http://www.ebi.ac.uk/QuickGO/GTerm?id=<?php echo $go_term; ?>">EMBL-EBI QuickGO (legacy)</a></li>
@@ -532,7 +533,7 @@
 		</div>
 
 		<div id="view__lore1-inserts" class="view__facet">
-			<h3><em>LORE1</em> insertions <?php
+			<h3><em>LORE1</em> insertions<?php
 				// Generate lore1 list
 				$genic_lore1 = explode(',', $g['GenicPlantID']);
 				$exonic_lore1 = explode(',', $g['ExonicPlantID']);
@@ -540,7 +541,7 @@
 
 				// Display count
 				if(count($genic_lore1)) {
-					echo '<span class="badge">'.count($genic_lore1).'</span>';
+					echo ' <span class="badge">'.count($genic_lore1).'</span>';
 				}
 			?></h3>
 			<form id="lore1-filter__form" action="#" method="get" class="has-group">
@@ -620,6 +621,6 @@
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/colorbrewer.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/d3-tip.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.min.js"></script>
-	<script src="<?php echo WEB_ROOT; ?>/dist/js/viewer.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/view/transcript.min.js"></script>
 </body>
 </html>

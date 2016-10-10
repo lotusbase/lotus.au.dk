@@ -463,9 +463,9 @@
 						<td class="trx">
 							<?php if($v >= 3.0) { ?>
 							<div class="dropdown button"><span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>"><?php echo $row['Transcript']; ?></a></span><ul class="dropdown--list">
-								<li><a href="<?php echo WEB_ROOT.'/view/gene/'.preg_replace('/\.\d+?$/', '', $row['Transcript']); ?>" title="View gene"><span class="icon-search">View gene</span></a></li>
-								<li><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>" title="View transcript"><span class="icon-search">View transcript</span></a></li>
-								<li><a href="../lore1/search?gene=<?php echo preg_replace('/\.\d+?$/', '', $row['Transcript']); ?>&amp;v=<?php echo $row['Version']; ?>" title="Search for LORE1 insertions in this gene"><span class="icon-search"><em>LORE1</em> v<?php echo $row['Version']; ?></span></a></li>
+								<li><a href="<?php echo WEB_ROOT.'/view/gene/'.preg_replace('/\.\d+?$/', '', $row['Transcript']); ?>" title="View gene"><span class="icon-eye">View gene</span></a></li>
+								<li><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>" title="View transcript"><span class="icon-eye">View transcript</span></a></li>
+								<li><a href="../lore1/search?gene=<?php echo preg_replace('/\.\d+?$/', '', $row['Transcript']); ?>&amp;v=<?php echo $row['Version']; ?>" title="Search for LORE1 insertions in this gene"><span class="icon-leaf"><em>LORE1</em> v<?php echo $row['Version']; ?></span></a></li>
 								<li>
 									<a
 										href="../api/v1/blast/<?php echo 'lj_r30.fa/'.$row['Chromosome'].'?from='.$start.'to='.$end; ?>"
