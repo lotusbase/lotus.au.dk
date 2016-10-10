@@ -48,6 +48,11 @@
 			background-color: $ui_warning;
 		}
 
+		// Centered
+		&.align-center {
+			margin: 0 auto;
+		}
+
 		span.pictogram {
 			&:not(.icon--no-spacing)::before {
 				margin-right: .5rem;

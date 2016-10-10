@@ -55,7 +55,7 @@ class SourceLink {
 		// Generate output
 		$out = '<div class="dropdown button">';
 		$out .= '<span class="dropdown--title">'.$this->_vars['SourceID'].'</span>';
-		$out .= '<ul>';
+		$out .= '<ul class="dropdown--list">';
 		if(array_key_exists($this->_vars['Source'], $this->_vars['domain'])) {
 			$out .= '<li><a href="'.WEB_ROOT.'/api/v1/view/domain/'.$this->_vars['domain'][$this->_vars['Source']].'/'.$this->_vars['SourceID'].'" data-desc-id="'.$this->_vars['SourceID'].'" data-desc-source="'.$this->_vars['domain'][$this->_vars['Source']].'"><span class="icon-eye">Show description</span></a></li>';
 		}

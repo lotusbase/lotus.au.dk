@@ -44,6 +44,18 @@
 
 	<section class="wrapper">
 		<h2><?php echo $id; ?></h2>
+		<div class="align-center">
+			<div class="dropdown button button--small" role="secondary">
+				<span class="dropdown--title">View this GO term in other databases</span>
+				<ul class="dropdown--list">
+					<?php
+						$go_links_handler = new \LotusBase\View\GOLink();
+						$go_links_handler->set_id($id);
+						echo $go_links_handler->get_html();
+					?>
+				</ul>
+			</div>
+		</div>
 		<div id="view__card" class="view__facet">
 			<h3>Overview</h3>
 			<?php
@@ -228,6 +240,7 @@
 					echo ' <span class="badge">'.$q2->rowCount().'</span>';
 				}
 			?></h3>
+			<p><abbr title="Gene Ontology">GO</abbr> predictions are based solely on the InterPro to GO mapping published by EMBL-EBI, which is in turn based on the mapping of predicted domains to the InterPro dataset. The <abbr title="Gene Ontology">GO</abbr> metadata was last updated on October 10, 2016.</p>
 			<?php if($q2->rowCount()) { ?>
 			<table class="table--dense">
 				<thead>

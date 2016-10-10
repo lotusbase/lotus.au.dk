@@ -483,11 +483,12 @@
 								<td><div class="dropdown button">
 									<span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/go/'.$go_term; ?>"><?php echo $go_term; ?></a></span>
 									<ul class="dropdown--list">
-										<li><a href="<?php echo WEB_ROOT.'/view/go/'.$go_term; ?>"><span class="icon-eye">View details of <?php echo $go_term; ?></span></a></li>
-										<li><a target="_blank" href="http://amigo.geneontology.org/amigo/medial_search?q=<?php echo $go_term; ?>">AmiGO</a></li>
-										<li><a target="_blank" href="http://www.ebi.ac.uk/interpro/search?q=<?php echo $go_term; ?>">EMBL-EBI InterPro</a></li>
-										<li><a target="_blank" href="http://www.ebi.ac.uk/QuickGO/GTerm?id=<?php echo $go_term; ?>">EMBL-EBI QuickGO (legacy)</a></li>
-										<li><a target="_blank" href="http://www.ebi.ac.uk/QuickGO-Beta/term/<?php echo $go_term; ?>">EMBL-EBI QuickGO (beta)</a></li>
+										<?php
+											$go_links_handler = new \LotusBase\View\GOLink();
+											$go_links_handler->set_id($go_term);
+											$go_links_handler->add_internal_link();
+											echo $go_links_handler->get_html();
+										?>
 									</ul>
 								</div></td>
 								<td><?php echo $go_namespace[$go['Namespace']]; ?></td>
