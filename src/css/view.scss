@@ -120,6 +120,14 @@ pre.sequence {
 	}
 }
 
+// Book
+.book {
+	p {
+		margin-bottom: .75rem;
+	}
+	span.book__authors { font-weight: bold; }
+}
+
 // D3 tooltip
 @import 'components/d3/tip';
 

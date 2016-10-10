@@ -484,7 +484,7 @@
 									<span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/go/'.$go_term; ?>"><?php echo $go_term; ?></a></span>
 									<ul class="dropdown--list">
 										<?php
-											$go_links_handler = new \LotusBase\View\GOLink();
+											$go_links_handler = new \LotusBase\View\GO\Link();
 											$go_links_handler->set_id($go_term);
 											$go_links_handler->add_internal_link();
 											echo $go_links_handler->get_html();

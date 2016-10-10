@@ -49,7 +49,7 @@
 				<span class="dropdown--title">View this GO term in other databases</span>
 				<ul class="dropdown--list">
 					<?php
-						$go_links_handler = new \LotusBase\View\GOLink();
+						$go_links_handler = new \LotusBase\View\GO\Link();
 						$go_links_handler->set_id($id);
 						echo $go_links_handler->get_html();
 					?>
@@ -222,7 +222,10 @@
 						</thead>
 						<tbody><?php
 							foreach($extra_data as $key => $value) {
-								echo '<tr><th scope="row">'.$key.'</th><td>'.$value.'</td></tr>';
+								$go_metadata = new \LotusBase\View\GO\Metadata();
+								$go_metadata->set_field($key);
+								$go_metadata->set_value($value);
+								echo '<tr><th scope="row">'.$key.'</th><td>'.$go_metadata->get_html().'</td></tr>';
 							}
 							if($go_data['URL']) {
 								echo '<tr><th scope="row">URL</th><td>'.$go_data['URL'].'</td></tr>';

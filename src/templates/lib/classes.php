@@ -72,8 +72,8 @@ require_once('classes/ebi/eb-eye.php');
 /* Generate HTML string for source dropdown */
 require_once('classes/view/source-link.php');
 
-/* class: View\GOLink */
-/* Generate HTML string for GO links */
-require_once('classes/view/go-link.php');
+/* class: View\GO */
+/* Classes for Gene Ontology */
+require_once('classes/view/go.php');
 
 ?>
