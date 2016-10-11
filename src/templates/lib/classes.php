@@ -24,9 +24,13 @@ require_once('classes/site-search-form.php');
 /* Generates page header content */
 require_once('classes/page-header.php');
 
-/* class: LjGenomeVersion
+/* class: LjGenomeVersion */
 /* Checks if a given string matches currently used Lj genome version(s) */
 require_once('classes/lj-genome-version.php');
+
+/* class: Components */
+/* Load site components */
+require_once('classes/component.php');
 
 /* class: ExpAt\Query */
 /* Performs query and data manipulation for ExpAt */

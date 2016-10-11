@@ -62,19 +62,6 @@ pre.sequence {
 	width: 100%;
 }
 
-// LORE1 inserts
-#view__lore1-inserts {
-	h3 {
-		span.badge {
-			@include transition;
-			&.subset {
-				background-color: $lotusPrimary3;
-				color: #fff;
-			}
-		}
-	}
-}
-
 // Domain prediction
 #view__domain-prediction {
 
@@ -120,12 +107,39 @@ pre.sequence {
 	}
 }
 
-// Book
-.book {
-	p {
-		margin-bottom: .75rem;
+// Media
+.media {
+	padding: .5rem .25rem;
+
+	// General styles
+	.media__title {
+		display: block;
+		font-weight: bold;
+		font-size: 1rem;
+		line-height: 1.5rem;
 	}
-	span.book__authors { font-weight: bold; }
+	.media__id {
+		font-weight: bold;
+	}
+	a:not(.button) {
+		color: $lotusPrimary5;
+	}
+
+	// Book
+	&.media__book {
+		.book__title {
+			margin-bottom: .5rem;
+		}
+		p {
+			margin-bottom: .75rem;
+		}
+		span.book__authors { font-weight: bold; }
+	}
+
+	// Article
+	&.media__article {
+
+	}
 }
 
 // D3 tooltip
