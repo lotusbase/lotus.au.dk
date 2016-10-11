@@ -153,7 +153,7 @@
 					anno.Gene AS Transcript,
 					anno.Annotation AS Description,
 					anno.LjAnnotation AS LotusName,
-					GROUP_CONCAT(DISTINCT ip_go.GO_ID) AS GOTerm
+					GROUP_CONCAT(DISTINCT ip_go2.GO_ID ORDER BY ip_go2.GO_ID ASC) AS GOTerm
 				FROM annotations AS anno
 				LEFT JOIN domain_predictions AS dompred ON (
 					anno.Gene = dompred.Transcript
@@ -163,6 +163,9 @@
 				)
 				LEFT JOIN gene_ontology AS go ON (
 					ip_go.GO_ID = go.GO_ID
+				)
+				LEFT JOIN interpro_go_mapping AS ip_go2 ON (
+					dompred.InterProID = ip_go2.InterPro_ID
 				)
 				WHERE go.GO_ID = ?
 				GROUP BY anno.Gene");
@@ -281,6 +284,7 @@
 						<td><?php 
 							$go_terms = explode(',', $t['GOTerm']);
 
+							$go_terms_data = array();
 							foreach($go_terms as $go_term) {
 								$go_terms_data[] = array(
 									'link' => WEB_ROOT.'/view/go/'.$go_term,
