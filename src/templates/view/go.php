@@ -219,6 +219,12 @@
 			?>
 		</div>
 
+		<div id="view__tree" class="view__facet">
+			<h3>Ancestor tree</h3>
+			<p>A force layout showing the ancestor tree for <strong><?php echo $id; ?></strong>, and its immediate children. Mouseover each node to glean more information, click on each note to navigate to a specific GO term.</p>
+			<div class="d3-chart" ><svg id="go-ancestor" viewbox="0 0 960 600"></svg></div>
+		</div>
+
 		<?php
 			if($go_data['ExtraData'] || $go_data['URL']) {
 				$extra_data = json_decode($go_data['ExtraData'], true);
@@ -266,6 +272,7 @@
 						<th scope="col">Name</th>
 						<th scope="col">Description</th>
 						<th scope="col">GO terms</th>
+						<th scope="col">GO count</th>
 					</tr>
 				</thead>
 				<tbody><?php while($t = $q2->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -294,10 +301,10 @@
 
 							$dd_handler = new \LotusBase\Component\Dropdown();
 							$dd_handler->set_title('GO terms');
-							$dd_handler->set_title_counter(count($go_terms));
 							$dd_handler->set_data($go_terms_data);
 							echo $dd_handler->get_html();
 						?></td>
+						<td><?php echo count($go_terms) ?></td>
 					</tr>
 				<?php } ?></tbody>
 			</table>
@@ -317,6 +324,9 @@
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/colorbrewer.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/d3-tip.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/view/go.min.js"></script>
