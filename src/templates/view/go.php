@@ -61,12 +61,9 @@
 					go.SubtermOf AS SubtermOf,
 					go.Relationships AS Relationships,
 					go.URL AS URL,
-					go_lotus.Description AS Description,
+					go.Name AS Name,
 					GROUP_CONCAT(DISTINCT ip_go.InterPro_ID) AS InterPro
 				FROM gene_ontology AS go
-				LEFT JOIN gene_ontology_lotus AS go_lotus ON (
-					go.GO_ID = go_lotus.GO_ID
-				)
 				LEFT JOIN interpro_go_mapping AS ip_go ON (
 					go.GO_ID = ip_go.GO_ID
 				)
@@ -121,12 +118,10 @@
 							<th scope="row">Namespace</th>
 							<td><?php echo $go_namespace[$go_data['Namespace']]; ?></td>
 						</tr>
-						<?php if($go_data['Description']) { ?>
 						<tr>
 							<th scope="row">Short description</th>
-							<td><?php echo $go_data['Description']; ?></td>
+							<td><?php echo $go_data['Name']; ?></td>
 						</tr>
-						<?php } ?>
 						<tr>
 							<th scope="row">Full defintion</th>
 							<td><?php echo $go_data['Definition']; ?></td>
@@ -222,7 +217,7 @@
 		<div id="view__tree" class="view__facet">
 			<h3>Ancestor tree</h3>
 			<p>A force layout showing the ancestor tree for <strong><?php echo $id; ?></strong>, and its immediate children. Mouseover each node to glean more information, click on each note to navigate to a specific GO term.</p>
-			<div class="d3-chart" ><svg id="go-ancestor" viewbox="0 0 960 600" data-go="<?php echo $id; ?>"></svg></div>
+			<div class="d3-chart" ><svg id="go-ancestor" data-go="<?php echo $id; ?>"></svg></div>
 		</div>
 
 		<?php

@@ -7,7 +7,7 @@ module.exports = {
 
     scripts: {
         files: [
-            'src/js/**/*.js',
+            'src/js/**/*.js'
         ],
         tasks: [
             'newer:copy',

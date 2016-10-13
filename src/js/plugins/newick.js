@@ -63,16 +63,15 @@
     var tree = {};
     var tokens = s.split(/\s*(;|\(|\)|,|:)\s*/);
     for (var i=0; i<tokens.length; i++) {
-      var token = tokens[i];
+      var token = tokens[i],
+          subtree = {};
       switch (token) {
         case '(': // new branchset
-          var subtree = {};
           tree.branchset = [subtree];
           ancestors.push(tree);
           tree = subtree;
           break;
         case ',': // another branch
-          var subtree = {};
           ancestors[ancestors.length-1].branchset.push(subtree);
           tree = subtree;
           break;
