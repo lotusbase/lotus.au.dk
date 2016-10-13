@@ -19,44 +19,47 @@ $(function() {
 		}
 	});
 
-	// Ancestor tree
-	// Initialize chart
+	// GO ancestor tree
 	var width = 960,
-		height = 600;
+		height = 500;
 
-	// Force layout
 	var force = d3.layout.force()
 		.charge(-2000)
 		.linkDistance(20)
 		.theta(0.5)
 		.gravity(0.5)
 		.size([width, height]);
-		 
-	// Create chart
-	var svg = d3.select('#go-ancestor');
 
-	// Tip
-	var goTip = d3.tip()
-			.attr({
-				'class': 'd3-tip tip--bottom',
-				'id': 'go-tip'
-			})
-			.offset([-15,0])
-			.direction('n')
-			.html(function(d) {
-				var parents_markup = '';
+	var drag = force.drag()
+		.on("dragstart", function(d) {
+			console.log(d.is);
+			d3.select(this).classed("fixed", d.fixed = true);
+		});
 
-				if(d.p.length) {
-					$.each(d.p, function(i, v) {
-						parents_markup += '<li>'+v[0]+'</li>';
-					});
-				}
+	var svg = d3.select("#go-ancestor");
 
-				return ['<ul>',
-					'<li><strong>GO identifier</strong>: '+d.id+'</li>',
-					(d.p.length ? '<li><strong>'+globalFun.pl(d.p.length, 'Parent')+'</strong>: <ul class="list--floated">'+parents_markup+'</ul></li>' : ''),
-				'</ul>'].join('');
-			});
+	// Link color
+	// ['is_a', 'regulates', 'part_of', 'negatively_regulates', 'positively_regulates']
+	var colors = {
+		relationship: d3.scale.ordinal().range([
+				'#777',
+				'#EFC94C',
+				'#467894',
+				'#8E2800',
+				'#386E52'
+			]).domain(d3.range(0, 5)),
+		node: d3.scale.ordinal().range([
+				'#332532',
+				'#644D52',
+				'#F77A52',
+				'#A49A87'
+			]).domain([
+				'root',
+				'target',
+				'child',
+				'node'
+			])
+		};
 
 	// Chart functions
 	var go = {
@@ -123,7 +126,7 @@ $(function() {
 				// Create node object
 				var node = {
 					'id': go_term,
-					'r': 10,
+					'r': 7.5,
 					'is': 'node',
 					'p': [],
 					'c': []
@@ -150,8 +153,8 @@ $(function() {
 						if (parent_go_term === target) {
 
 							// Set attributes for the GO term of interest
-							nodes[i]['is'] = 'child';
-							nodes[i]['r'] = 10;
+							nodes[i].is = 'child';
+							nodes[i].r = 7.5;
 							nodes[i].y = height - 50;
 
 						}
@@ -173,112 +176,64 @@ $(function() {
 
 					}
 				} else {		
-
 					// We have the root		
 					nodes[i].fixed = true;
 					nodes[i].x = width / 2;
 					nodes[i].y = 50;
-					nodes[i]['is'] = 'root';
+					nodes[i].is = 'root';
+					nodes[i].r = 10;
 				}
 			}
 
-			if(nodes[nodeIndex[target]]['is'] != 'root') {
+			if(nodes[nodeIndex[target]].is != 'root') {
 				nodes[nodeIndex[target]].fixed = true;
 				nodes[nodeIndex[target]].x = width / 2;
 				nodes[nodeIndex[target]].y = height - 200;
-				nodes[nodeIndex[target]]['is'] = 'target';
+				nodes[nodeIndex[target]].is = 'target';
 			} else {
 				nodes[nodeIndex[target]].fixed = true;
 				nodes[nodeIndex[target]].x = width / 2;
 				nodes[nodeIndex[target]].y = height / 2;
 			}
+			nodes[nodeIndex[target]].r = 10;
 
 			return {'nodes' : nodes, 'links' : links};
 		},
 		draw: function(s) {
 
-			force
-				.nodes(s.nodes)
-				.links(s.links);
+			var link = svg.selectAll(".link"),
+				node = svg.selectAll(".node");
 
-			// Events, modified from http://bl.ocks.org/norrs/2883411
-			var node_drag = force.drag()
-					.on('dragstart', dragstart),
-
-				dragstart = function(d) {
-					d3.select(this).classed("fixed", d.fixed = true);
-				},
-
-				tick = function(e) {
-					// Modified from http://mbostock.github.io/d3/talk/20110921/parent-foci.html
-					var kx = 0.04 * e.alpha,
+			var tick = function(e) {
+				var kx = 0.04 * e.alpha,
 						ky = 1.4 * e.alpha;
 
-					s.links.forEach(function(d, i) {
-						d.target.x += (d.source.x - d.target.x) * kx;
-						d.target.y += (d.source.y + 50 - d.target.y) * ky;
-					});
+				s.links.forEach(function(d, i) {
+					d.target.x += (d.source.x - d.target.x) * kx;
+					d.target.y += (d.source.y + 50 - d.target.y) * ky;
+				});
 
-					path.attr('d', function(d) {
-						var dx = d.target.x - d.source.x,
-						dy = d.target.y - d.source.y,
-						dr = Math.sqrt(dx * dx + dy * dy);
-						return 'M' + 
-						d.source.x + ',' + 
-						d.source.y + 'L' + 
-						d.target.x + ',' + 
-						d.target.y;
-					});
-			 
-					nodeIcon.attr({
-						'cx': function(d) { return d.x; },
-						'cy': function(d) { return d.y; }
-					});
+				link.attr('d', function(d) {
+					var dx = d.target.x - d.source.x,
+					dy = d.target.y - d.source.y,
+					dr = Math.sqrt(dx * dx + dy * dy);
+					return 'M' + 
+					d.source.x + ',' + 
+					d.source.y + 'L' + 
+					d.target.x + ',' + 
+					d.target.y;
+				});
 
-					nodeText.attr({
-						'x': function(d) { return d.x; },
-						'y': function(d) { return d.y + d.r + 8; },
-						'dy': '0.35em'
-					})
-					.style({
-						'font-weight': 'bold',
-						'text-anchor': 'middle',
-						'stroke': '#fff',
-						'stroke-width': 0.25
-					});
+				node.attr('transform', function (d) {
+					return 'translate(' + d.x + ',' + d.y + ')';
+				});
+			};
 
-					nodeTextBG.attr({
-						'x': function(d) { return d.x - 0.5*(d.bbox.width + 8); },
-						'y': function(d) { return d.y + d.r + 8 - 0.5*(d.bbox.height + 4); }
-					});
-				},
-				makeTextBox = function(d) {
-					d.each(function(d) {
-						d.bbox = this.getBBox();
-					});
-				};
-
-
-			// Link color
-			// ['is_a', 'regulates', 'part_of', 'negatively_regulates', 'positively_regulates']
-			var strokeColor = d3.scale.ordinal().range([
-						'#777',
-						'#EFC94C',
-						'#467894',
-						'#8E2800',
-						'#386E52'
-					]).domain([0, 1, 2, 3, 4]),
-				fillColor = d3.scale.ordinal().range([
-						'#332532',
-						'#644D52',
-						'#F77A52',
-						'#A49A87'
-					]).domain([
-						'root',
-						'target',
-						'child',
-						'node'
-					]);
+			force
+				.nodes(s.nodes)
+				.links(s.links)
+				.start()
+				.on('tick', tick);
 
 			// Update links
 			svg.selectAll('path.link').remove();
@@ -286,11 +241,10 @@ $(function() {
 			// Update nodes
 			svg.selectAll('g.node').remove();
 
-			// Build arrow
-			// build the arrow.
+			// Build arrows for chart
 			svg.append('svg:defs').selectAll('marker')
-				.data(d3.range(0, 9))					// Different link/path types can be defined here
-				.enter().append('svg:marker')		// This section adds in the arrows
+				.data(d3.range(0, 5))					// Different link/path types can be defined here
+				.enter().append('svg:marker')			// This section adds in the arrows
 					.attr({
 						'id': function(d) { return 'start-'+d; },
 						'viewBox': '0 -5 10 10',
@@ -303,11 +257,11 @@ $(function() {
 					.append('svg:path')
 						.attr('d', 'M0,0L10,5L10,-5')
 						.style('fill', function(d) {
-							return strokeColor(d);
+							return colors.relationship(+d);
 						});
 
-			var path = svg.append('g').selectAll('path')
-				.data(force.links())
+			// Generate link
+			link = link.data(force.links())
 				.enter().append('path')
 					.attr({
 						'class': 'link',
@@ -317,76 +271,142 @@ $(function() {
 					})
 					.style({
 						'stroke': function(d) {
-							return strokeColor(+d.rel);
+							return colors.relationship(+d.rel);
 						},
 						'stroke-opacity': 0.75,
 						'stroke-width': 1.5
 					});
-		 
-			var node = svg.selectAll('g.node')
-				.data(s.nodes)
-				.enter().append('g').attr('class', 'node')
-				.on('click', function(d,i) {
-					force.stop();
-					if(d.id !== go_current) {
-						go.update(d.id);
-					}
-				})
-				.call(node_drag)
-				.call(goTip)
-				.on('mouseover', goTip.show)
-				.on('mouseout', goTip.hide);
 
-			var nodeIcon = node.append('circle')
+			// Generate node
+			node = node.data(s.nodes)
+				.enter().append('g')
+					.attr({
+						'class': 'node',
+						'id': function(d) {
+							if(d.is === 'target' || d.is === 'root') {
+								return 'node-'+d.is;
+							}
+						}
+					})
+					.on('dblclick', function(d) {
+						d3.select(this).classed("fixed", d.fixed = false);
+					})
+					.call(drag);
+
+			nodeIcon = node
+				.append('circle')
 				.attr({
+					'cx': 0,
+					'cy': 0,
 					'r': function(d) {
 						return d.r;
 					}
 				})
 				.style({
 					'fill': function(d,i) {
-						return fillColor(d.is);
+						return colors.node(d.is);
 					},
-					'cursor': 'pointer',
+					'cursor': 'move',
 					'stroke': '#fff',
 					'stroke-width': 1.5
 				});
 
-			var nodeText = node.append('text')
-				.attr('class', 'node')
+			nodeText = node.append('text')
+				.attr({
+					'class': 'node',
+					'dy': '0.35em',
+					'transform': function(d) {
+						return 'translate(0,'+d.r*2+')';
+					}
+				})
 				.style({
 					'cursor': 'pointer',
-					'font-size': '10px'
+					'font-size': '10px',
+					'font-weight': 'bold',
+					'text-anchor': 'middle',
+					'stroke': '#fff',
+					'stroke-width': 0.25
 				})
-				.text(function(d) { return d.id;})
-				.call(makeTextBox);
+				.text(function(d) { return d.id; })
+				.each(function(d) {
+					d.bbox = this.getBBox();
+				});
 
-			var nodeTextBG = node.insert('rect', 'text')
-			.attr({
-				'width': function(d) { return d.bbox.width + 8; },
-				'height': function(d) { return d.bbox.height + 4; },
-				'rx': 4,
-				'ry': 4
-			})
-			.style({
-				'fill': '#fff',
-				'fill-opacity': 0.5
-			});
-		 
-			force.on('tick', tick);
+			nodeTextBG = node.insert('rect', 'text')
+				.attr({
+					'width': function(d) { return d.bbox.width + 8; },
+					'height': function(d) { return d.bbox.height + 4; },
+					'transform': function(d) {
+						return 'translate('+(d.bbox.width + 8) * -0.5+','+((d.bbox.height + 4) * -0.5 + d.r * 2)+')'
+					},
+					'rx': 4,
+					'ry': 4
+				})
+				.style({
+					'fill': '#fff',
+					'fill-opacity': 0.5
+				});
 
-			force.start();
-			var n = 100;
-			for (var i = n * n; i > 0; --i) force.tick();
-			force.stop();
+			// Generate legends
+			var linkLegend = svg.append('g').attr({
+					'class': 'legend__link',
+					'transform': 'translate(0,'+(height-25)+')'
+				});
+			var linkLegendItem = linkLegend.selectAll('g.legend__item').data(colors.relationship.domain())
+				.enter().append('g')
+					.attr({
+						'class': 'legend__item',
+						'transform': function(d,i) {
+							return 'translate('+i*100+','+0+')';
+						}
+					});
+			linkLegendItem.append('path')
+				.attr({
+					'd': 'M0,0 L15,0',
+				})
+				.style({
+					'stroke': function(d) {
+						return colors.relationship(+d);
+					},
+					'stroke-opacity': 0.75,
+					'stroke-width': 1.5
+				});
+			linkLegendItem.append('polygon')
+				.attr({
+					'points': '0,-5 10,0 0,5',
+					'transform': 'translate(10,0)'
+				})
+				.style({
+					'fill': function(d) {
+						return colors.relationship(+d);
+					}
+				});
+			var linkLegendDesc = ['is_a', 'regulates', 'part_of', 'negatively_regulates', 'positively_regulates'];
+			linkLegendItem.append('text')
+				.attr({
+					'x': 25,
+					'y': 0,
+					'dy': '0.35em',
+				})
+				.style({
+					'font-size': '14px'
+				})
+				.text(function(d) {
+					return linkLegendDesc[d];
+				});
+
 		}
 	};
 
-	var go_data,
-		go_current;
-	d3.json('/data/go/go.json', function(data) {
-		go_data = data,
-		go.update('GO:0000018');
+	var go_data = null,
+		go_current = null;
+	d3.json('/data/go/go.json', function(error, data) {
+		if(error) {
+			$('#go-ancestor').hide().after('<div class="user-message warning"><span class="icon-attention"></span>Unable to load GO relational data. We have encountered a <strong>'+error.status+' '+error.statusText+'</strong> error.</div>');
+		} else {
+			go_data = data,
+			go.update($('#go-ancestor').attr('data-go'));
+		}
 	});
 	
 });

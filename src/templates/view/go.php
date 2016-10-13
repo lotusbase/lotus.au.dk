@@ -222,7 +222,7 @@
 		<div id="view__tree" class="view__facet">
 			<h3>Ancestor tree</h3>
 			<p>A force layout showing the ancestor tree for <strong><?php echo $id; ?></strong>, and its immediate children. Mouseover each node to glean more information, click on each note to navigate to a specific GO term.</p>
-			<div class="d3-chart" ><svg id="go-ancestor" viewbox="0 0 960 600"></svg></div>
+			<div class="d3-chart" ><svg id="go-ancestor" viewbox="0 0 960 600" data-go="<?php echo $id; ?>"></svg></div>
 		</div>
 
 		<?php
@@ -324,7 +324,7 @@
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	<script type="text/javascript" src="//d3js.org/d3.v3.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/colorbrewer.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/d3-tip.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
