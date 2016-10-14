@@ -594,7 +594,7 @@ $(function() {
 			$.ajax(this.href, {
 				dataType: 'html'
 			})
-			.done(function() {
+			.done(function(data) {
 				globalFun.modal.open({
 					'title': title,
 					'content': data,

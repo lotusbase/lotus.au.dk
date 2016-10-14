@@ -356,7 +356,7 @@
 						<div class="facet floating-controls__hide">
 							<div class="facet__stage" id="domain-prediction" data-protein="<?php echo $gene; ?>">
 								<ul class="floating-controls position--right">
-									<li><a id="domain-controls__toggle" href="#" class="icon-cog icon--no-spacing" title="Toggle controls"></a></li>
+									<li><a href="#" class="icon-cog icon--no-spacing controls__toggle" title="Toggle controls"></a></li>
 								</ul>
 							</div>
 							<form class="facet__controls has-group" id="domain__controls" action="#" method="get">

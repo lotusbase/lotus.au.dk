@@ -39,15 +39,6 @@
 	}
 
 	// State
-	&.controls--visible {
-		left: calc(-25% - .75rem);
-
-		// Controls
-		.facet__controls {
-			opacity: 1;
-			pointer-events: auto;
-		}
-	}
 	&.floating-controls__hide {
 		.facet__stage {
 			.floating-controls {
@@ -59,6 +50,23 @@
 				}
 			}
 			& > *:hover + .floating-controls {
+				opacity: 1;
+				pointer-events: auto;
+			}
+		}
+	}
+	&.controls--visible {
+		left: calc(-25% - .75rem);
+
+		// Controls
+		.facet__controls {
+			opacity: 1;
+			pointer-events: auto;
+		}
+
+		// Floating controls
+		.facet__stage {
+			.floating-controls {
 				opacity: 1;
 				pointer-events: auto;
 			}

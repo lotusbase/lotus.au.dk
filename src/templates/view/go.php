@@ -216,8 +216,24 @@
 
 		<div id="view__tree" class="view__facet">
 			<h3>Ancestor tree</h3>
-			<p>A force layout showing the ancestor tree for <strong><?php echo $id; ?></strong>, and its immediate children. Mouseover each node to glean more information, click on each note to navigate to a specific GO term.</p>
-			<div class="d3-chart" ><svg id="go-ancestor" data-go="<?php echo $id; ?>"></svg></div>
+			<p>A force layout showing the ancestor tree for <strong><?php echo $id; ?></strong>, and its immediate children. Mouseover each node to glean more information; click and drag nodes to reposition them; double click on nodes to unfix them.</p>
+			<div class="facet floating-controls__hide">
+				<div class="facet__stage">
+					<svg id="go-ancestor" data-go="<?php echo $id; ?>"></svg>
+					<ul class="floating-controls position--right">
+						<li><a href="#" class="icon-cog icon--no-spacing controls__toggle" title="Toggle controls"></a></li>
+					</ul>
+				</div>
+				<form class="facet__controls has-group" id="go-ancestor__controls" action="#" method="get">
+					<div role="group" class="has-legend">
+						<p class="legend">Controls</p>
+						<div class="cols">
+							<button type="button" class="button button--small" id="go-ancestor__reset"><span class="icon-eye">Reset view</span></button>
+							<button type="button" class="button button--small" id="go-ancestor__play-pause" data-state="playing"><span class="icon-pause">Pause</span></button>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
 
 		<?php

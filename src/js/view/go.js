@@ -20,20 +20,24 @@ $(function() {
 	});
 
 	// GO ancestor tree
+	$('.controls__toggle').click(function(e) {
+		e.preventDefault();
+		$(this).closest('.facet').toggleClass('controls--visible');
+	});
+
 	var width = 960,
-		marginLeft = 360,
+		marginLeft = 200,
 		height = 620;
 
 	var force = d3.layout.force()
 		.charge(-2000)
-		.linkDistance(20)
+		.linkDistance(10)
 		.theta(0.5)
 		.gravity(0.5)
 		.size([(width - marginLeft), height]);
 
 	var drag = force.drag()
 		.on("dragstart", function(d) {
-			console.log(d.is);
 			d3.select(this).classed("fixed", d.fixed = true);
 		});
 
@@ -52,8 +56,8 @@ $(function() {
 	var colors = {
 		relationship: d3.scale.ordinal().range([
 				'#777',
-				'#EFC94C',
-				'#467894',
+				'#614BB8',
+				'#E85B0C',
 				'#8E2800',
 				'#386E52'
 			]).domain(d3.range(0, 5)),
@@ -237,10 +241,6 @@ $(function() {
 					'c': 'Cellular component'
 				};
 
-				// Start drawing proper
-				var link = stage.selectAll(".link"),
-					node = stage.selectAll(".node");
-
 				var tick = function(e) {
 					var kx = 0.04 * e.alpha,
 							ky = 1.4 * e.alpha;
@@ -278,21 +278,24 @@ $(function() {
 							'<li><strong>GO term</strong>: '+d.id+'</li>',
 							(!error && goAPIdata[d.id] && goAPIdata[d.id].Namespace ? '<li><strong>Namespace</strong>: '+namespace[goAPIdata[d.id].Namespace]+'</li>' : ''),
 							(!error && goAPIdata[d.id] && goAPIdata[d.id].Name ? '<li><strong>Description</strong>: '+goAPIdata[d.id].Name+'</li>' : ''),
-							(!error && goAPIdata[d.id] && goAPIdata[d.id].Definition ? '<li><strong>Definition</strong>: '+goAPIdata[d.id].Definition+'</li>' : ''),
 						'</ul>'].join('');
 					});
+
+				// Remove elements
+				svg.select('#legend').remove();
+				stage.selectAll('defs').remove();
+				stage.selectAll('g.node').remove();
+				stage.selectAll('path.link').remove();
+
+				// Start drawing proper
+				var link = stage.selectAll(".link"),
+					node = stage.selectAll(".node");
 
 				force
 					.nodes(s.nodes)
 					.links(s.links)
 					.start()
 					.on('tick', tick);
-
-				// Update links
-				stage.selectAll('path.link').remove();
-
-				// Update nodes
-				stage.selectAll('g.node').remove();
 
 				// Build arrows for chart
 				stage.append('svg:defs').selectAll('marker')
@@ -372,7 +375,7 @@ $(function() {
 						'class': 'node',
 						'dy': '0.35em',
 						'transform': function(d) {
-							return 'translate(0,'+d.r*2+')';
+							return 'translate(0,'+d.r*-2+')';
 						}
 					})
 					.style({
@@ -393,7 +396,7 @@ $(function() {
 						'width': function(d) { return d.bbox.width + 8; },
 						'height': function(d) { return d.bbox.height + 4; },
 						'transform': function(d) {
-							return 'translate('+(d.bbox.width + 8) * -0.5+','+((d.bbox.height + 4) * -0.5 + d.r * 2)+')';
+							return 'translate('+(d.bbox.width + 8) * -0.5+','+((d.bbox.height + 4) * -0.5 + d.r * -2)+')';
 						},
 						'rx': 4,
 						'ry': 4
@@ -412,8 +415,22 @@ $(function() {
 				linkLegend.append('text').attr('class', 'legend__title').text('RELATIONSHIPS').style({
 					'font-size': '14px',
 					'font-weight': 'bold',
-					'dy': '0.35em'
-				});
+					'dy': '0.35em',
+					'cursor': 'help'
+				})
+				.on('click', function() {
+					globalFun.modal.open({
+						'title': 'Ontology relationships',
+						'content': [
+							'<p>Ontology relationships presented in this force layout graph are extracted from the OBO file format obtained from GOC.</p>',
+							'<p>Refer to the Gene Ontology Consortium\'s <a href="http://geneontology.org/page/ontology-relations" target="_blank">ontology relations page</a> for further information.</p>'
+						].join('')
+					});
+				})
+				.append('tspan')
+					.attr('baseline-shift', 'super')
+					.style('font-size', '.75em')
+					.text('?');
 				var linkLegendItem = linkLegend.selectAll('g.legend__item').data(colors.relationship.domain())
 					.enter().append('g')
 						.attr({
@@ -443,7 +460,7 @@ $(function() {
 							return colors.relationship(+d);
 						}
 					});
-				var linkLegendDesc = ['Is a', 'Regulates', 'Part of', 'Negatively regulates', 'Positively regulates'];
+				var linkLegendLabel = ['Is a', 'Regulates', 'Part of', 'Negatively regulates', 'Positively regulates'];
 				linkLegendItem.append('text')
 					.attr({
 						'x': 25,
@@ -451,10 +468,22 @@ $(function() {
 						'dy': '0.35em',
 					})
 					.style({
-						'font-size': '12px'
+						'font-size': '12px',
+						'cursor': 'help'
 					})
 					.text(function(d) {
-						return linkLegendDesc[d];
+						return linkLegendLabel[d];
+					})
+					.on('click', function(d) {
+						$.ajax('/data/go/'+linkLegendLabel[d].toLowerCase().replace(' ','_'), {
+							dataType: 'html'
+						})
+						.done(function(data) {
+							globalFun.modal.open({
+								'title': 'Relationship type: <em>'+linkLegendLabel[d]+'</em>',
+								'content': '<p>Definition and content obtained from the Gene Ontology Consortium\'s <a href="http://geneontology.org/page/ontology-relations" target="_blank">ontology relations page</a>.</p><hr />'+data,
+							});
+						});
 					});
 
 				var nodeLegend = legend.append('g').attr({
@@ -536,6 +565,28 @@ $(function() {
 		} else {
 			go_data = data;
 			go.update($('#go-ancestor').attr('data-go'));
+		}
+	});
+
+	// Facet controls
+	$('#go-ancestor__reset').on('click', function(e) {
+		e.preventDefault();
+		go.update($('#go-ancestor').attr('data-go'));
+	});
+	$('#go-ancestor__play-pause').on('click', function() {
+		var $t = $(this);
+		if(!$t.attr('data-state') || $t.attr('data-state') === 'playing') {
+			// Pause
+			$t
+			.attr('data-state', 'paused')
+			.find('span').removeClass().addClass('icon-play').text('Play');
+			force.stop();
+		} else {
+			// Play
+			$t
+			.attr('data-state', 'playing')
+			.find('span').removeClass().addClass('icon-pause').text('Pause');
+			force.start();
 		}
 	});
 	

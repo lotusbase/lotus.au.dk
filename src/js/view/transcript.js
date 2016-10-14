@@ -469,7 +469,7 @@ $(function() {
 		});
 
 		// Domain controls
-		$('#domain-controls__toggle').click(function(e) {
+		$('.controls__toggle').click(function(e) {
 			e.preventDefault();
 			$(this).closest('.facet').toggleClass('controls--visible');
 		});
