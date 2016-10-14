@@ -295,7 +295,13 @@ $(function() {
 					.nodes(s.nodes)
 					.links(s.links)
 					.start()
-					.on('tick', tick);
+					.on('tick', tick)
+					.on('end', function() {
+						// Change status
+						$('#go-ancestor__play-pause')
+						.attr('data-state', 'ended')
+						.find('span').removeClass().addClass('icon-play').text('Play');
+					});
 
 				// Build arrows for chart
 				stage.append('svg:defs').selectAll('marker')
