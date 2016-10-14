@@ -145,7 +145,9 @@ $(function() {
 					'r': 7.5,
 					'is': 'node',
 					'p': [],
-					'c': []
+					'c': [],
+					'x': (width - marginLeft) * Math.random(),
+					'y': height * Math.random()
 				};
 
 				// Push node to index
