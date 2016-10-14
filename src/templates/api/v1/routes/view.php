@@ -1,8 +1,75 @@
 <?php
 // View API
 $api->get('/view', function ($request, $response) {
-	$response->write('Welcome to Lotus base view API v1');
+	$response->write('Welcome to Lotus Base View API v1');
 	return $response;
+});
+
+// Get GO metadata
+$api->get('/view/go[/{term}]', function($request, $response, $args) {
+	try {
+
+		if(!empty($args['term'])) {
+			$go_term = $args['term'];
+		} else if(!empty($request->getParam('term'))) {
+			$go_term = $request->getParam('term');
+		} else {
+			throw new \Exception('GO term is missing from request.', 400);
+		}
+
+		// Explode comma separated term
+		if(!is_array($go_term)) {
+			$go_terms = explode(',', $go_term);
+		} else {
+			$go_terms = $go_term;
+		}
+
+		// Database connection and query
+		$db = $this->get('db');
+		$q = $db->prepare("SELECT
+			go.Namespace AS Namespace,
+			go.Name AS Name,
+			go.Definition AS Definition,
+			go.GO_ID AS GOTerm
+			FROM gene_ontology AS go
+			WHERE go.GO_ID IN (".str_repeat('?,', count($go_terms)-1)."?)
+			");
+		$q->execute($go_terms);
+
+		if($q->rowCount() > 0) {
+			while($r = $q->fetch(PDO::FETCH_ASSOC)) {
+				$row[$r['GOTerm']] = $r;
+			}
+
+			// Return response
+			return $response
+				->withStatus(200)
+				->withHeader('Content-Type', 'application/json')
+				->write(json_encode(array(
+					'status' => 200,
+					'data' => $row
+					)));
+		} else {
+			throw new \Exception('No entries are found matching the protein or transcript ID provided.', 404);
+		}
+
+	} catch(\PDOException $e) {
+		return $response
+			->withStatus(500)
+			->withHeader('Content-Type', 'application/json')
+			->write(json_encode(array(
+				'status' => 500,
+				'message' => $e->getMessage()
+				)));
+	} catch(\Exception $e) {
+		return $response
+			->withStatus($e->getCode())
+			->withHeader('Content-Type', 'application/json')
+			->write(json_encode(array(
+				'status' => $e->getCode(),
+				'message' => $e->getMessage()
+				)));
+	}
 });
 
 // Get domain description
@@ -136,6 +203,14 @@ $api->get('/view/domains[/{id}]', function($request, $response, $args) {
 				'data' => $row
 				)));
 
+	} catch(\PDOException $e) {
+		return $response
+			->withStatus(500)
+			->withHeader('Content-Type', 'application/json')
+			->write(json_encode(array(
+				'status' => 500,
+				'message' => $e->getMessage()
+				)));
 	} catch(\Exception $e) {
 		return $response
 			->withStatus($e->getCode())

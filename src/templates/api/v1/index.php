@@ -25,7 +25,7 @@ try {
 
 // Override the default Not Found Handler
 $c['notFoundHandler'] = function ($c) {
-	return function ($request, $response, $exception) use ($c) {
+	return function ($request, $response) use ($c) {
 		return $c['response']
 			->withStatus(404)
 			->withHeader('Content-Type', 'application/json')
