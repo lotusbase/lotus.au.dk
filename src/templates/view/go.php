@@ -61,15 +61,8 @@
 					go.SubtermOf AS SubtermOf,
 					go.Relationships AS Relationships,
 					go.URL AS URL,
-					go.Name AS Name,
-					GROUP_CONCAT(DISTINCT ip_go.InterPro_ID) AS InterPro
+					go.Name AS Name
 				FROM gene_ontology AS go
-				LEFT JOIN interpro_go_mapping AS ip_go ON (
-					go.GO_ID = ip_go.GO_ID
-				)
-				LEFT JOIN domain_predictions AS dompred ON (
-					ip_go.InterPro_ID = dompred.InterProID
-				)
 				WHERE go.GO_ID = ?
 				GROUP BY go.GO_ID");
 			$q1->execute(array($id));
@@ -184,16 +177,16 @@
 				}
 
 				if($empty) {
-					echo '<p class="user-message reminder">This GO term does not have any relationships with other terms.</p>';
+					echo '<p class="user-message reminder">This <abbr title="Gene Ontology">GO</abbr> term does not have any relationships with other terms.</p>';
 				} else { ?>
 					<table class="table--dense">
 						<thead>
 							<tr>
 								<th scope="col">Relationship type</th>
-								<th scope="col">GO terms</th>
+								<th scope="col"><abbr title="Gene Ontology">GO</abbr> terms</th>
 							</tr>
 						</thead>
-						<tbody><?php ksort($rels); foreach($rels as $rel_type => $rel_items) { ?>
+						<tbody><?php foreach($rels as $rel_type => $rel_items) { ?>
 							<tr>
 								<th scope="row"><?php echo ucfirst(str_replace('_', ' ', $rel_type)); ?></th>
 								<td><?php
@@ -274,7 +267,7 @@
 					echo ' <span class="badge">'.$q2->rowCount().'</span>';
 				}
 			?></h3>
-			<p><abbr title="Gene Ontology">GO</abbr> predictions are based solely on the InterPro to GO mapping published by EMBL-EBI, which is in turn based on the mapping of predicted domains to the InterPro dataset. The <abbr title="Gene Ontology">GO</abbr> metadata was last updated on October 10, 2016.</p>
+			<p><abbr title="Gene Ontology">GO</abbr> predictions are based solely on the InterPro to <abbr title="Gene Ontology">GO</abbr> mapping published by EMBL-EBI, which is in turn based on the mapping of predicted domains to the InterPro dataset. The <abbr title="Gene Ontology">GO</abbr> metadata was last updated on October 10, 2016.</p>
 			<?php if($q2->rowCount()) { ?>
 			<table class="table--dense">
 				<thead>
@@ -282,8 +275,8 @@
 						<th scope="col">Transcript</th>
 						<th scope="col">Name</th>
 						<th scope="col">Description</th>
-						<th scope="col">GO terms</th>
-						<th scope="col">GO count</th>
+						<th scope="col"><abbr title="Gene Ontology">GO</abbr> terms</th>
+						<th scope="col"><abbr title="Gene Ontology">GO</abbr> count</th>
 					</tr>
 				</thead>
 				<tbody><?php while($t = $q2->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -304,14 +297,18 @@
 
 							$go_terms_data = array();
 							foreach($go_terms as $go_term) {
+								// Generate array to be added to dropdown link
 								$go_terms_data[] = array(
 									'link' => WEB_ROOT.'/view/go/'.$go_term,
 									'text' => $go_term
 									);
+
+								// Append to matrix for co-occurrence analysis
+								$go_term_matrix[$go_term]['count'] += 1;
 							}
 
 							$dd_handler = new \LotusBase\Component\Dropdown();
-							$dd_handler->set_title('GO terms');
+							$dd_handler->set_title('<abbr title="Gene Ontology">GO</abbr> terms');
 							$dd_handler->set_data($go_terms_data);
 							echo $dd_handler->get_html();
 						?></td>
@@ -323,6 +320,71 @@
 				echo '<p class="user-message reminder">No transcripts are associated with this gene ontology identifier.</p>';
 			} ?>
 		</div>
+
+		<?php if($q2->rowCount()) { ?>
+		<div id="view__co-occurring" class="view__facet">
+			<h3>Co-occuring <abbr title="Gene Ontology">GO</abbr> terms<?php
+				if(count($go_term_matrix)) {
+					echo ' <span class="badge">'.count($go_term_matrix).'</span>';
+				}
+			?></h3>
+			<p>A list of co-occurring <abbr title="Gene Ontology">GO</abbr> terms within the <em>L. japonicus</em> gene space:</p>
+			<table class="table--dense">
+				<thead>
+					<tr>
+						<th scope="col"><abbr title="Gene Ontology">GO</abbr> term</th>
+						<th scope="col">Namespace</th>
+						<th scope="col">Name</th>
+						<th scope="col">Observations</th>
+						<th scope="col">Saturation (%)</th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php
+					arsort($go_term_matrix);
+
+					// Database connection and query
+					$q3 = $db->prepare("SELECT
+						go.Namespace AS Namespace,
+						go.Name AS Name,
+						go.GO_ID AS GOTerm
+						FROM gene_ontology AS go
+						WHERE go.GO_ID IN (".str_repeat('?,', count(array_keys($go_term_matrix))-1)."?)
+						");
+					$q3->execute(array_keys($go_term_matrix));
+
+					if($q3->rowCount()) {
+						while($r = $q3->fetch(PDO::FETCH_ASSOC)) {
+							$go_term_matrix[$r['GOTerm']]['Namespace'] = $r['Namespace'];
+							$go_term_matrix[$r['GOTerm']]['Name'] = $r['Name'];
+						}
+					}
+
+					foreach($go_term_matrix as $go_term => $data) {
+
+						// Generate GO dropdown
+						$go_links_handler = new \LotusBase\View\GO\Link();
+						$go_links_handler->set_id($go_term);
+						$go_links_handler->add_internal_link();
+
+						echo '<tr>
+							<td>
+								<div class="dropdown button">
+									<span class="dropdown--title"><a href="'.WEB_ROOT.'/view/go/'.$go_term.'">'.$go_term.'</a></span>
+									<ul class="dropdown--list">'.$go_links_handler->get_html().'</ul>
+								</div>
+							</td>
+							<td>'.$go_namespace[$data['Namespace']].'</td>
+							<td>'.$data['Name'].'</td>
+							<td>'.$data['count'].'</td>
+							<td>'.number_format($data['count']*100/($q2->rowCount()), 2, '.', '').'</td>
+						</tr>';
+					}
+				?>
+				</tbody>
+			</table>
+		</div>
+		<?php } ?>
 
 		<?php
 			} catch(PDOException $e) {

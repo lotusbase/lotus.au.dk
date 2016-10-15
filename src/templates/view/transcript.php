@@ -34,9 +34,8 @@
 	<?php
 		$header = new \LotusBase\PageHeader();
 		echo $header->get_header();
+		echo get_breadcrumbs();
 	?>
-
-	<?php echo get_breadcrumbs(); ?>
 
 	<section class="wrapper">
 	<?php
@@ -223,28 +222,26 @@
 						GROUP_CONCAT(ip_go.InterPro_ID) AS InterPro,
 						ip_go.GO_ID AS GeneOntology,
 						go.NameSpace AS Namespace,
+						go.Name AS Name,
 						go.Definition AS Definition,
 						go.ExtraData AS ExtraData,
 						go.SubtermOf AS SubtermOf,
 						go.Relationships AS Relationships,
-						go.URL AS URL,
-						go_lotus.Description AS Description
+						go.URL AS URL
 					FROM interpro_go_mapping AS ip_go
 					LEFT JOIN gene_ontology AS go
 						ON ip_go.GO_ID = go.GO_ID
-					LEFT JOIN gene_ontology_lotus AS go_lotus
-						ON ip_go.GO_ID = go_lotus.GO_ID
 					WHERE ip_go.InterPro_ID IN (".str_repeat("?,", count($ip_unique)-1)."?)
 					GROUP BY ip_go.GO_ID
 					ORDER BY ip_go.GO_ID ASC
 						");
 					$q3->execute($ip_unique);
 
-				} catch(PDOException $e) {
-					echo '<p class="user-message warning">We have encountered an error with querying the database: '.$e->getMessage().'.</p>';
-				} catch(Exception $e) {
-					echo '<p class="user-message warning">'.$e->getMessage().'.</p>';
-				}
+				} catch(PDOException $e) { ?>
+					<p class="user-message warning">We have encountered an error with querying the database: <?php echo $e->getMessage(); ?></p>
+				<?php } catch(Exception $e) { ?>
+					<p class="user-message warning">We have encountered a general error: <?php echo $e->getMessage(); ?></p>
+				<?php }
 			?>
 		</div>
 
@@ -465,7 +462,7 @@
 							<tr>
 								<th data-sort="string" scope="col"><abbr title="Gene Ontology">GO</abbr>&nbsp;term</th>
 								<th data-sort="string" scope="col">Namespace</th>
-								<th data-sort="string" scope="col">Description</th>
+								<th scope="col">Name</th>
 								<th scope="col">Definition</th>
 								<th scope="col">Relationships</th>
 							</tr>
@@ -492,7 +489,7 @@
 									</ul>
 								</div></td>
 								<td><?php echo $go_namespace[$go['Namespace']]; ?></td>
-								<td><?php echo $go['Description']; ?>
+								<td><?php echo $go['Name']; ?>
 								<td><?php echo $go['Definition']; ?></td>
 								<td><?php
 									$go_rels = json_decode($go['Relationships'], true);
@@ -591,7 +588,7 @@
 			</form>
 
 			<h4>Expression pattern</h4>
-			<p>Expression pattern of <strong><?php echo $gene; ?></strong>, powered by <a href="<?php echo WEB_ROOT; ?>/expat" title="Expression Atlas">ExpAt</a>. For advanced configuration, data transformation and export options, <a id="view__expat__link" href="<?php echo WEB_ROOT; ?>/expat?ids=<?php echo gene; ?>&amp;dataset=ljgea-geneid&amp;idtype=geneid" title="" data-root="<?php echo WEB_ROOT; ?>">view expression data in the ExpAt application</a>.</p>
+			<p>Expression pattern of <strong><?php echo $gene; ?></strong>, powered by <a href="<?php echo WEB_ROOT; ?>/expat" title="Expression Atlas">ExpAt</a>. For advanced configuration, data transformation and export options, <a id="view__expat__link" href="<?php echo WEB_ROOT; ?>/expat?ids=<?php echo $gene; ?>&amp;dataset=ljgea-geneid&amp;idtype=geneid" title="" data-root="<?php echo WEB_ROOT; ?>">view expression data in the ExpAt application</a>.</p>
 			<div id="expat__loader" class="align-center loader__wrapper">
 				<div class="loader"><svg class="loader"><circle class="path" cx="40" cy="40" r="30" /></svg></div>
 				<p>Loading expression data from <span id="expat__loader__dataset">ljgea-geneid</span>. Please wait&hellip;</p>
