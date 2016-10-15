@@ -122,6 +122,7 @@ class PageHeader {
 							<li><a href="'.WEB_ROOT.'/tools/seqret" title="Sequence Retrieval (SeqRet)">Sequence Retrieval (<strong>SeqRet</strong>)</a></li>
 							<li><a href="'.WEB_ROOT.'/tools/tram" title="Transcript Mapper (TRAM)">Transcript Mapper (<strong>TRAM</strong>)</a></li>
 							<li><a href="'.WEB_ROOT.'/tools/trex" title="Transcript Explorer (TREX>)">Transcript Explorer (<strong>TREX</strong>)</a></li>
+							'.(is_intranet_client() ? '<li><a href="'.WEB_ROOT.'/view/" title="View">View <span class="badge">BETA</span></a></li>' : '').'
 						</ul>
 					</li>
 					<li class="h-data" data-group="data"><a href="'.WEB_ROOT.'/data/" title="Data">Data</a>
