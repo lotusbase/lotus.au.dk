@@ -65,6 +65,12 @@
 					<div class="tool-desc"><h3>Transcript Explorer</h3><p>Retrieve metadata for <em>Lotus</em> v3.0 transcripts, such as genome coordinates, genome browser uplink, exonic LORE1 insertions and more.</p></div>
 				</a>
 			</li>
+			<li class="tool-view">
+				<a href="'.WEB_ROOT.'/view" title="View">
+					<div class="tool-icon"><span class="pictogram icon--no-spacing icon-eye"></span></div>
+					<div class="tool-desc"><h3>View</h3><p>A data mining tool for <em>Lotus japonicus</em> gene, transcript, and associated <abbr title="Gene Ontology">GO</abbr> terms.</p></div>
+				</a>
+			</li>
 		</ul>');
 		echo $header->get_header();
 	?>
