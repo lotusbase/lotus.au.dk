@@ -111,7 +111,7 @@
 	<?php
 		$header = new \LotusBase\PageHeader();
 		echo $header->get_header();
-		echo get_breadcrumbs();
+		echo get_breadcrumbs(array('page_title' => 'GO Enrichment'));
 	?>
 
 	<section class="wrapper">
