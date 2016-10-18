@@ -416,7 +416,12 @@ form {
 	}
 
 	/* Miscellaneous components */
-	small { line-height: 1;}
+	small {
+		line-height: 1;
+		a {
+			color: darken($lotusPrimary3, 15%)
+		}
+	}
 	.separator  {
 		clear: both;
 		color: #666;
