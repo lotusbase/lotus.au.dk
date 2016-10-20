@@ -33,6 +33,7 @@ module.exports = {
             'src/templates/**/*.php',
             'src/templates/**/*.ini',
             'src/templates/**/*.py',
+            'src/templates/**/*.sh',
             'src/templates/data/**/*.*'
         ],
         tasks: [
