@@ -714,7 +714,7 @@ $(function() {
 								'<button type="button" id="sigma-info"><span class="icon-network">View network information</span></button>',
 								'<div class="dropdown button">',
 									'<span class="dropdown--title"><span class="icon-download">Export</span></span><ul class="dropdown--list">',
-										(jobMeta.layout.edge_count <= 100000 && jobMeta.layout.node_count <= 3500 ? '<li class="align-left"><a id="cornat-download__canvas-svg" class="disabled" data-resource-type="svg"><span class="icon-file-image">Drawing canvas&hellip;</span></a></li>' : ''),
+										(jobMeta.layout.edge_count <= 100000 && jobMeta.layout.node_count <= 3500 ? '<li class="align-left"><a id="cornea-download__canvas-svg" class="disabled" data-resource-type="svg"><span class="icon-file-image">Drawing canvas&hellip;</span></a></li>' : ''),
 										'<li class="align-left"><a id="cornea-download__canvas-png" class="disabled" data-resource-type="png"><span class="icon-file-image">Drawing canvas&hellip;</span></a></li>',
 										(!f && jobMeta.layout.edge_count <= 100000 && jobMeta.layout.node_count <= 3500 ? '<li><a id="cornea-download__json" class="disabled" data-resource-type="file" data-file-path="data/cornea/jobs/'+(staticJob ? 'standard_' : '')+jobMeta.job.id+'.json.gz"><span class="icon-file-archive">Loading data file&hellip;</span></a></li>' : ''),
 									'</ul>',
