@@ -366,11 +366,14 @@ def create_correlation_network(dataset, candidates, columns, verbose, out_file, 
                 if verbose:
                     print("Job entry not found in database, not writing anything.")
 
+        clustered_nodes = [[node_labels[i] for i in j] for j in clusters]
+        print(json.dumps(clustered_nodes))
+
         # Generate output
         out.write("{\"metadata\":{\"settings\":{".encode('utf-8'))
         out.write("\"dataset\":\"{0}\",\"id_type\":\"{1}\",\"columns\":{2},\"threshold\":{3},\"minimum_cluster_size\":{4}".format(dataset.option, dataset.name_column, json.dumps(list(columns_filtered)), threshold, minimum_cluster_size).encode('utf-8'))
         out.write("},\"layout\": {".encode('utf-8'))
-        out.write("\"edge_count\":{0},\"node_count\":{1},\"cluster_count\":{2}".format(len(zipped_edges), len(nodes), len(clusters)).encode('utf-8'))
+        out.write("\"edge_count\":{0},\"node_count\":{1},\"cluster_count\":{2},\"clustered_nodes\":{3}".format(len(zipped_edges), len(nodes), len(clusters), json.dumps(clustered_nodes)).encode('utf-8'))
         out.write("},\"job\":{".encode('utf-8'))
         out.write("\"id\":\"{0}\",\"owner\":\"{1}\",\"time_elapsed\":{2},\"total_time_elapsed\":{3},\"start_time\":\"{4}\",\"end_time\":\"{5}\"".format(hash_id, owner, json.dumps(time_points), total_time_elapsed, start_timestamp, dt.datetime.now()).encode('utf-8'))
         out.write("}".encode('utf-8'))
