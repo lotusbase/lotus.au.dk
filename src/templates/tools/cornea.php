@@ -330,7 +330,7 @@
 				<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get" id="upload-job__drop" class="form--reset">
 					<p>Select, or drag and drop your CORNEA job output into the box below. You can provide either a <code>.json</code> or <code>.json.gz</code> file.</p>
 					<div class="dropzone" data-dropzone-type="job">
-						<label for="upload-job__input-file"><span class="icon-upload icon--big icon--no-spacing"></span>Choose a file, or drag and drop a file here</label>
+						<label for="upload-job__input-file"><span class="icon-upload icon--big icon--no-spacing">Choose a file, or drag and drop a file here</span></label>
 						<input type="file" id="upload-job__input-file" name="corneaFile" class="dropzone__input-file" accept="application/x-gzip, application/json" />
 						<div class="dropzone__message dropzone__message--normal">
 							<div class="dropzone__progress"><span></span></div>
