@@ -47,6 +47,12 @@ table.dataTable {
 	}
 }
 
+div[role="group"] table.dataTable {
+	td, th {
+		border-right-color: #ddd;
+	}
+}
+
 .dataTables_wrapper {
 	clear: both;
 	position: relative;
@@ -61,6 +67,7 @@ table.dataTable {
 	// General input styles
 	label {
 		cursor: pointer;
+		line-height: 1.5em;
 	}
 	select, input {
 		background-color: rgba(#fff,.65);
@@ -86,9 +93,12 @@ table.dataTable {
 		}
 	}
 	input {
-		appearance: none;
-		@include placeholder { color: #aaa; }
-		&:focus { @include placeholder { color: #999; } }
+		display: inline-block;
+		&[type="text"], &[type="search"] {
+			appearance: none;
+			@include placeholder { color: #aaa; }
+			&:focus { @include placeholder { color: #999; } }
+		}
 	}
 	select {
 		appearance: none;

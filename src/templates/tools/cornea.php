@@ -402,6 +402,7 @@
 	<!-- File parsing -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/0.2.8/pako.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
 
 	<!-- Visualization -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>

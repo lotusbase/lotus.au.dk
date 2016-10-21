@@ -3,6 +3,9 @@
 @import 'mixins';
 @import 'type';
 
+// Components
+@import 'components/_datatable';
+
 @keyframes ping {
 	0% { opacity: 0.5; transform: scale(1); }
 	100% { opacity: 0; transform: scale(2); }
@@ -570,62 +573,35 @@ body.tools {
 
 	// Searchform
 	#sigma-searchform {
-		display: flex;
 		margin-bottom: 1.5rem;
-		& > * {
-			flex: 1 1 auto;
-		}
 		.sigma-searchform__inputs {
+			margin-bottom: 1.5rem;
 			.sigma-searchform__input {
-				display: none;
 				perspective: 1000px;
 				position: relative;
-				&.active {
-					display: block;
-				}
 			}
 		}
-		.sigma-searchform__controls {
-			flex: 0 1 auto;
-			margin-left: 1.5rem;
-			.sigma-searchform__control {
-				display: none;
-				&.active {
-					display: block;
-					margin-top: .5rem;
-				}
-			}
-			.input-group button, button {
-				flex-grow: 1;
-				height: 2.25rem;
-				padding-top: 0;
-				padding-bottom: 0;
+		#sigma-searchform__controls {
+			button {
+				margin: 0 .75rem;
 			}
 		}
 		textarea {
 			height: 12rem;
 		}
-		.dropzone {
+		.dropzone { 
+			background-color: rgba(#ddd,.5);
 			opacity: 1;
 			pointer-events: auto;
 			position: absolute;
 			top: 0;
 			height: 12rem;
-			@include transition;
 			transform-origin: 50% 50%;
-			& ~ small {
-				opacity: 0;
-				pointer-events: none;
-				@include transition;
-			}
+			@include transition;
 			&.hidden {
 				opacity: 0;
 				pointer-events: none;
 				transform: rotateX(90deg);
-				& ~ small {
-					opacity: 1;
-					pointer-events: auto;
-				}
 			}
 		}
 	}

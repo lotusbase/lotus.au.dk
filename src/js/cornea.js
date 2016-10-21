@@ -817,6 +817,77 @@ $(function() {
 					'y': 8,
 					'font-size': 16
 				}).text(function(d,i) {return d+' ('+globalFun.friendlyTime(jobTimeElapsed[i].time_elapsed * 1000)+')'; });
+			},
+
+			// Cluster display functions
+			clusters: function(job) {
+				var clustered_nodes;
+
+				if(job.layout.clustered_nodes) {
+					clustered_nodes = job.layout.clustered_nodes;
+
+					$.each(clustered_nodes, function(i,v) {
+						$('#sigma-cluster').append('<option value="'+(i+1)+'">Cluster #'+(i+1)+' ('+clustered_nodes[i].length+' nodes)</option>');
+					});
+
+					// Add rows
+					$.each(clustered_nodes, function(i0,v0) {
+						$.each(v0, function(i1,v1) {
+							$('#sigma-clusters__table tbody').append([
+								'<tr>',
+									'<td data-order="'+i0+'">Cluster #'+(i0+1)+'</td>',
+									'<td><div class="dropdown button"><span class="dropdown--title">'+v1+'</span><ul class="dropdown--list">',
+										(job.settings.id_type !== 'GeneID' ? '<li><a href="'+root+'/view/gene/'+v1.replace(/\.\d+$/gi, '')+'"><span class="icon-eye">View gene data</span></a></li>': ''),
+										'<li><a href="'+root+'/view/'+(job.settings.id_type === 'GeneID' ? 'gene' : 'transcript')+'/'+v1+'"><span class="icon-eye">View '+(job.settings.id_type === 'GeneID' ? 'gene' : 'transcript')+' data</span></a></li>',
+									'</ul></div></td>',
+								'</tr>'].join(''));
+						});
+					});
+
+					// Do jQuery data tables
+					var rows_selected = [],
+						nodeTable = $('#sigma-clusters__table').DataTable({
+							'dom': 'tipr',
+							'language': {
+								'emptyTable': 'No clusters selected yet. Please select a cluster from the dropdown above.'
+							},
+							'order': [0, 'asc'],
+							'rowCallback': function(raw, data, dataIndex) {
+								// Get row ID
+								var rowID = data[0];
+
+								// If row ID is in list of selected row IDs
+								if($.inArray(rowID, rows_selected) !== -1){
+									$(row).find('input[type="checkbox"]').prop('checked', true);
+									$(row).addClass('selected');
+								}
+							}
+						});
+					$(nodeTable.table().container()).addClass('full-width');
+
+					// Filter by cluster
+					$d.on('change', '#sigma-cluster', function() {
+
+						// Reset search field
+						$('sigma__highlight-id').val('');
+
+						var c = this.value;
+						console.log('Cluster #'+c.toString());
+						nodeTable.column(0).search('Cluster #'+c.toString(), false, false, true).draw();
+
+						// Highlight cluster on map
+						var rows = $.map(clustered_nodes[parseInt(c) - 1], function(v) {
+							return [[v]];
+						});
+						globalFun.sigma.highlightNodes(rows);
+					});
+
+					// Change counts per page
+					$d.on('change', '#sigma-cluster-count', function() {
+						nodeTable.page.len(parseInt(this.value)).draw();
+					});
+					
+				}
 			}
 		},
 		sigma: {
@@ -864,12 +935,10 @@ $(function() {
 						.append('<div id="sigma"></div>')
 						.append('<div id="sigma-loader" class="align-center"><div class="loader"><svg><circle class="path" cx="40" cy="40" r="30" /></svg><p>Retrieving data (<strong>'+jobData.filesize+'</strong>)&hellip;</p></div>')
 						)
-					.append(
-						$('<form action="#" method="get" id="sigma-searchform" class="cols flex-wrap__nowrap form--reset" />')
-						.append(
-							$('<div />', { 'class': 'sigma-searchform__inputs' })
-							.append('<div class="sigma-searchform__input active" id="sigma-searchform__search"><input type="text" name="search-id" id="sigma__search-id" placeholder="Enter a single candidate" /></div>')
-							.append([
+					.append([
+						'<form action="#" method="get" class="has-group"><div class="has-legend" role="group" id="sigma-searchform">',
+							'<p class="legend">Node highlight</p>',
+							'<div class="sigma-searchform__inputs">',
 								'<div class="sigma-searchform__input" id="sigma-searchform__highlight">',
 									'<textarea name="highlight-id" id="sigma__highlight-id" placeholder="Enter candidates on a new line"/>',
 									'<div class="dropzone hidden" data-dropzone-type="highlight">',
@@ -908,27 +977,14 @@ $(function() {
 										'<span data-mode="upload" class="icon-doc-text icon--no-spacing" title="Upload CSV file with candidate(s)"></span>',
 										'<span data-mode="manual" class="icon-keyboard icon--no-spacing" title="Manually enter candidate(s)"></span>',
 									'</a>',
-								'</div>'
-								].join('')
-								)
-							)
-						.append([
-							'<div class="sigma-searchform__controls">',
-								'<div class="input-group">',
-									'<button type="button" id="sigma-button" data-action="search">Search</button>',
-									'<div class="input-group-btn">',
-										'<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>',
-										'<ul class="dropdown-menu dropdown-menu-right">',
-											'<li data-action="search" data-input-target="search-id">Search</li>',
-											'<li data-action="highlight" data-input-target="highlight-id">Highlight</li>',
-										'</ul>',
-									'</div>',
 								'</div>',
-								'<div class="sigma-searchform__control" id="sigma-searchform__control-highlight">',
-									'<button id="sigma-searchform__control__remove-highlights" type="button" disabled><span class="icon-cancel">Unhighlight</span></button>',
-								'</div>',
-							'</div>'
-							].join(''))
+							'</div>',
+							'<div id="sigma-searchform__controls" class="cols justify-content__center">',
+								'<button id="sigma-searchform__control__highlight" type="button"><span class="icon-filter">Apply filter</span></button>',
+								'<button id="sigma-searchform__control__remove-highlights" type="button" disabled><span class="icon-cancel">Remove filter</span></button>',
+							'</div>',
+						'</div></form>'
+						].join('')
 						)
 //					.append(
 //						$('<div />', { 'class': 'toggle hide-first'})
@@ -946,6 +1002,32 @@ $(function() {
 //							)
 //						)
 					.append('<div id="sigma-search-message"></div>')
+					.append([
+						'<div id="sigma-clusters">',
+							'<form action="#" method="get" class="has-group">',
+								'<div class="cols has-legend" role="group">',
+									'<p class="legend full-width">Cluster data</p>',
+									'<label for="sigma-cluster" class="col-one">Select a cluster</label>',
+									'<select id="sigma-cluster" class="col-two"><option>Select a cluster</option></select>',
+									'<div class="separator full-width"></div>',
+									'<label for="sigma-cluster-count" class="col-one">Rows per page</label>',
+									'<select id="sigma-cluster-count" class="col-two">',
+										'<option value="10">10</option>',
+										'<option value="25">25</option>',
+									'</select>',
+									'<table class="table--dense full-width" id="sigma-clusters__table">',
+										'<thead>',
+											'<tr>',
+												'<th>Cluster</th>',
+												'<th>Identifier</th>',
+											'</tr>',
+										'</thead>',
+										'<tbody></tbody>',
+									'</table>',
+								'</div>',
+							'</form>',
+						'</div>'
+						].join(''))
 					.append($('<div id="sigma-node-card" />').hide())
 					.append('<div id="sigma-gene-neighbours"><form action="#" method="get" target="_blank" class="form--reset"><input type="hidden" name="dataset" value="'+jobData.dataset+'" /></form></div>')
 					);
@@ -1029,6 +1111,7 @@ $(function() {
 								});
 								updateStatus.done(function() {
 									globalFun.cornea.vis(jobMeta);
+									globalFun.cornea.clusters(jobMeta);
 									globalFun.sigma.controls.init(jobMeta);
 								});
 							}
@@ -1048,6 +1131,15 @@ $(function() {
 				} else {
 					globalFun.sigma.parseData(jobJSON);
 				}
+
+				// Nodes highlight/filtering feature
+				$d
+				.on('click', '#sigma-searchform__control__highlight', function() {
+
+					// Highlight nodes
+					globalFun.sigma.highlightNodesClicked();
+
+				});
 
 				// Click events on dropdown menu
 				$d
@@ -1336,10 +1428,20 @@ $(function() {
 					encoding: 'UTF-8',
 					skipEmptyLines: true,
 					complete: function(rows) {
-						var nodes = [],
-							hash = Math.random().toString(36).substring(2,10);
 
+						// Highlight nodes
 						globalFun.sigma.highlightNodes(rows.data);
+
+						// Filter cluster data
+						var filter = $.map(rows.data, function(v) {
+							return v[0];
+						});
+
+						// Reset filter
+						$('#sigma-cluster').find('option').first().prop('selected', true);
+
+						// Search
+						$('#sigma-clusters__table').DataTable().column(1).search(filter.join('|'), true, false, true).draw();
 					}
 				});
 			},
@@ -1461,7 +1563,7 @@ $(function() {
 
 				// Toggle highlight status
 				$('#sigma').data('highlight', true);
-				$('#sigma-searchform__control__remove-highlights').prop('disabled', false);
+				$('#sigma-searchform__control__i').prop('disabled', false);
 
 				// For nodes that are not found in the network graph
 				$('#sigma-searchform__highlight--not-found').empty().removeClass('active');
@@ -1569,7 +1671,7 @@ $(function() {
 						};
 
 						// Create table
-						var $table = $('<table id="rows" />');
+						var $table = $('<table id="rows" class="table--dense" />');
 						$table
 						.append('<thead><tr><th class="chk"><input type="checkbox" class="ca" /></th><th>Gene</th><th>Annotation</th></thead>')
 						.append(function() {
