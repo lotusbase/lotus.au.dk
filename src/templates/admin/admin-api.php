@@ -280,7 +280,7 @@
 						$mail->Send();
 
 						// Write to database
-						$update = $db->prepare("UPDATE orders_unique SET ShippingEmail = 1, ShippedTimestamp = NOW() WHERE Salt = :ordersalt");
+						$update = $db->prepare("UPDATE orders_unique SET ShippingEmail = 1, Shipped = 1, ShippedTimestamp = NOW() WHERE Salt = :ordersalt");
 						$update->bindParam(':ordersalt', $OrderSalt);
 						$update->execute();
 
