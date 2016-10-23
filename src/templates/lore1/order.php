@@ -39,11 +39,14 @@
 		}
 
 		// Get user address
-		$ua = $db->prepare('SELECT Address, City, State, PostalCode, Country FROM auth WHERE Salt = ?');
-		$ua->execute(array($user['Salt']));
-		$ua_data = $ua->fetch(PDO::FETCH_ASSOC);
-		foreach($ua_data as $ua_field => $ua_value) {
-			$user[$ua_field] = $ua_value;
+		if($user['Salt']) {
+			$ua = $db->prepare('SELECT Address, City, State, PostalCode, Country FROM auth WHERE Salt = ?');
+			$ua->execute(array($user['Salt']));
+			$ua_data = $ua->fetch(PDO::FETCH_ASSOC);
+			
+			foreach($ua_data as $ua_field => $ua_value) {
+				$user[$ua_field] = $ua_value;
+			}
 		}
 
 	} catch(PDOException $e) {
@@ -114,7 +117,7 @@
 
 			<div class="form-step form-step--disabled" id="form-step__facet-2" data-form-step="2" data-form-step-title="Order information" data-form-step-title-short="Order Info.">
 				<div class="cols" role="group">
-					<label for="lines-input" class="col-one required">LORE1 lines <a class="info" data-modal="search-help" title="How should I enter Plant ID?" data-modal-content="Please enter LORE1 lines separated by: a space &lt;kbd title='spacebar'&gt;_____&lt;/kbd&gt;, a comma &lt;kbd&gt;,&lt;/kbd&gt;, or a tab &lt;kbd&gt;&nbsp;&map;&nbsp;Tab&lt;/kbd&gt;.">?</a> <span class="asterisk" title="Required Field">*</span></label>
+					<label for="lines-input" class="col-one required"><em>LORE1</em> lines <a class="info" data-modal="search-help" title="How should I enter Plant ID?" data-modal-content="Please enter LORE1 lines separated by: a space &lt;kbd title='spacebar'&gt;_____&lt;/kbd&gt;, a comma &lt;kbd&gt;,&lt;/kbd&gt;, or a tab &lt;kbd&gt;&nbsp;&map;&nbsp;Tab&lt;/kbd&gt;.">?</a> <span class="asterisk" title="Required Field">*</span></label>
 					<div class="col-two">
 						<div class="multiple-text-input input-mimic">
 							<ul class="input-values">
@@ -128,9 +131,9 @@
 							?>
 								<li class="input-wrapper"><input type="text" class="validate--ignore" id="lines-input" placeholder="LORE1 Line ID" autocomplete="off" tabindex="4" /></li>
 							</ul>
-							<input class="input-hidden" type="hidden" name="lines" id="lines" value="<?php echo escapeHTML($_GET['lore1']); ?>" readonly required />
+							<input class="input-hidden validate--ignore" type="hidden" name="lines" id="lines" value="<?php echo escapeHTML($_GET['lore1']); ?>" readonly required />
 						</div>
-						<small><strong>Separate each LORE1 with a comma, space or tab.</strong></small>
+						<small><strong>Separate each <em>LORE1</em> line identifier with a comma, space or tab.</strong></small>
 						<div id="id-check"></div>
 					</div>
 
@@ -147,7 +150,7 @@
 
 					<span class="user-message legend">Shipping address</span>
 
-					<p class="full-width">The address where your LORE1 seeds will be shipped to.</p>
+					<p class="full-width">The address where your <em>LORE1</em> seeds will be shipped to.</p>
 
 					<label for="shipping-institution" class="col-one">Organisation <span class="asterisk" title="Required Field">*</span></label>
 					<div class="col-two">
@@ -213,9 +216,11 @@
 									<tbody>
 										<tr><th>Cost of lines<br /><small>Unit cost: DKK 100.00</small></th><td data-type="num"><span id="order-overview__lore1-lines-cost"></span></td></tr>
 										<tr><th>Handling fee</th><td data-type="num">DKK 100.00</td></tr>
+										<tr class="total"><th>Subtotal</th><td data-type="num"><span id="order-overview__lore1-lines-subtotal"></span></td></tr>
 										<tr class="total"><th>Total</th><td data-type="num"><span id="order-overview__lore1-lines-total"></span></td></tr>
 									</tbody>
 								</table>
+								<p class="user-message approved">Order is placed under the payment waiver scheme, and lines are shipped free-of-charge.</p>
 							</div>
 						</div>
 						<div id="order-overview__map"><div class="tooltip position--top">Your approximate location by address provided.</div></div>

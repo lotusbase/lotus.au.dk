@@ -15,6 +15,7 @@
 	border-radius: 4px;
 	margin-bottom: 1rem;
 	overflow: hidden;
+	position: relative;
 	h4 {
 		text-transform: uppercase;
 		letter-spacing: 1px;
@@ -22,6 +23,7 @@
 }
 	#order-overview__meta {
 		flex: 1 1 auto;
+		position: relative;
 		width: 50%;
 		& > div {
 			padding: 1.5rem 3rem;
@@ -172,6 +174,7 @@
 #order-overview__map {
 	background-color: rgba(#000,.1);
 	background-position: center center;
+	background-size: 1280px 1280px;
 	flex: 1 1 auto;
 	min-width: 50%;
 	position: relative;

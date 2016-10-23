@@ -98,6 +98,97 @@ $(function() {
 		init: function() {
 			// Initiate navigation
 			globalFun.stepForm.navigation.init();
+
+			// Validate lines
+			$d.on('change manualchange', '#lines', function() {
+				var $t = $(this),
+					$currentStep = $(this).closest('.form-step');
+
+				// Remove error class if any
+				$t.closest('.input-mimic').removeClass('error');
+
+				// Execute AJAX call
+				if($t.val()) {
+					var linesCheck = $.ajax({
+							url: root + '/api/v1/lore1/'+$t.val()+'/verify',
+							type: 'GET',
+							dataType: 'json'
+						});
+
+					linesCheck.done(function(d) {
+						var pidList; 
+						if(d.status === 200) {
+							// Everything is okay
+							$('#id-check')
+							.removeClass()
+							.addClass('approved')
+							.html('<p><span class="pictogram icon-check"></span>Your LORE1 '+globalFun.pl(d.data.pid_found, 'line is', 'lines are')+' available and valid.</p>')
+							.slideDown(125);
+
+							globalFun.stepForm.update.lore1lines();
+
+							// Write to storage
+							if(typeof window.localStorage !== typeof undefined && d.data.pid_found) {
+								window.localStorage.setItem('lines', d.data.pid_found.join(','));
+							}
+
+							// Mark step as valid
+							globalFun.stepForm.step.validate($currentStep);
+						
+						} else {
+
+							// Incorrect Plant ID is found
+							$('#id-check').removeClass().addClass('warning').slideDown(125);
+
+							var pids = [];
+							if(d.data.pid_invalid) {
+								pids = pids.concat(d.data.pid_invalid);
+							}
+							if(d.data.pid_notFound) {
+								pids = pids.concat(d.data.pid_notFound);
+							}
+
+							var line_s = (pids.length)==1 ? 'line' : 'lines';
+							pidlist = "<p>" + pids.length + " invalid LORE1 " + line_s + " found&mdash;lines are invalid or have depleted seed stock. See highlighted.</p>";
+
+							$.each(pids, function(idx,pid){
+								$('#lines').prev('ul.input-values').find('li').filter(function() {
+									return $(this).data('input-value') == pid;
+								}).addClass('user-message warning')
+								.closest('.input-mimic')
+								.addClass('error');
+							});	
+
+							$('#id-check').html(pidlist);
+
+							// Mark step as invalid
+							globalFun.stepForm.step.invalidate($currentStep);
+
+						}
+					})
+					.error(function(jqXHR, status, textStatus) {
+						var d = jqXHR.responseJSON;
+						$('#id-check')
+							.removeClass()
+							.addClass('warning')
+							.html('<p><span class="pictogram icon-cancel">'+(d.message?d.message:'We have encountered a '+status+' '+textStatus+' error.')+'</span></p>')
+							.slideDown(125);
+
+						// Mark step as invalid
+						globalFun.stepForm.step.invalidate($currentStep);
+					});
+				} else {
+					$('#id-check').slideUp(125);
+
+					// Write to storage
+					if(typeof window.localStorage !== typeof undefined) {
+						window.localStorage.removeItem('lines');
+					}
+
+					// Invalidate step
+					globalFun.stepForm.step.invalidate($currentStep);
+				}
+			});
 			
 			// Declare clearance count
 			$('form.has-steps .form-step').data('step-cleared-count', 0);
@@ -136,6 +227,9 @@ $(function() {
 
 						// Reset next button
 						$(this).addClass('disabled').data('button-status', 'disabled');
+
+						// Check if next step is also valid
+						globalFun.stepForm.step.validateFields.call($('.form-step').eq(currentIndex + 1).find(':input')[0]);
 					}
 				}
 
@@ -174,11 +268,6 @@ $(function() {
 
 			// Trigger validation onload
 			globalFun.stepForm.step.validateFields.call($('.form-step :input')[0]);
-
-			// Trigger validation on input mimic
-			$d.on('change manualValidation', '.input-mimic .input-hidden', function() {
-				globalFun.stepForm.step.validateFields.call(this);
-			});
 
 			// Select2 for organisation
 			$('#shipping-institution').select2({
@@ -295,6 +384,16 @@ $(function() {
 				// Perform validation
 				if($('form.has-steps .form-step').eq(i).data('step-cleared-count') > 0) {
 					$('form.has-steps .form-step').eq(i).find(':input').not('.validate--ignore').trigger('manualValidation');
+
+//					if($('form.has-steps .form-step').eq(i).find('.input-mimic').length) {
+//						if($('form.has-steps .form-step').eq(i).find('li[data-input-value]:not(.warning)').length) {
+//							globalFun.stepForm.step.validate($('form.has-steps .form-step').eq(i));
+//						}
+//					}
+
+					$('form.has-steps .form-step').eq(i).find('.input-hidden').each(function() {
+						$('#lines').trigger('manualchange');
+					});
 				}
 
 				// Store current index
@@ -462,8 +561,23 @@ $(function() {
 
 				// Compute costs
 				var linesCost = lines.length*100,
-					totalCost = linesCost + 100;
+					subtotalCost = linesCost + 100;
 				$('#order-overview__lore1-lines-cost').html(lines.length+ ' &times; 100 = DKK '+linesCost.toFixed(2));
+				$('#order-overview__lore1-lines-subtotal').html('DKK '+subtotalCost.toFixed(2));
+
+				// Discounts or waivers
+				var costModifiers = [{
+					'name': 'Payment waiver scheme',
+					'description': 'Currently in effect until further notice',
+					'difference': subtotalCost * -1
+				}];
+				$.each(costModifiers, function(i,v) {
+					$('#order-overview__lore1-lines-total').closest('tr').before('<tr><th>'+v.name+(v.description ? '<br /><small>'+v.description+'</small>' : '')+'</th><td data-type="num">DKK '+v.difference.toFixed(2)+'</td></tr>');
+				});
+
+				var totalDiscount = costModifiers.reduce(function (acc, obj) { return acc + obj.difference; }, 0),
+					totalCost = subtotalCost + totalDiscount;
+
 				$('#order-overview__lore1-lines-total').html('DKK '+totalCost.toFixed(2));
 			},
 			map: function() {
@@ -487,8 +601,7 @@ $(function() {
 
 							// Load map
 							$('#order-overview__map').css({
-								'background-image': 'url("https://api.mapbox.com/v4/lotusbase.o9e761mh/'+f.geometry.coordinates[0]+','+f.geometry.coordinates[1]+',6/1280x1280.png?access_token='+accessToken+'")'
-								//'background-image': 'url("https://api.mapbox.com/v4/lotusbase.o9e761mh/pin-l-circle+4a7298('+f.geometry.coordinates[0]+','+f.geometry.coordinates[1]+',6)/'+f.geometry.coordinates[0]+','+f.geometry.coordinates[1]+',6/1280x1280.png?access_token='+accessToken+'")'
+								'background-image': 'url("https://api.mapbox.com/v4/lotusbase.o9e761mh/'+f.geometry.coordinates[0]+','+f.geometry.coordinates[1]+',6/1280x1280'+(globalFun.isRetina() ? '@2x': '')+'.png?access_token='+accessToken+'")'
 							}).find('.tooltip').addClass('show');
 						}
 					});
@@ -500,7 +613,7 @@ $(function() {
 					countryAlpha2 = $('#shipping-country option:selected').attr('data-country-alpha2');
 
 				// Shipping and contact details
-				var shippingDetails = '<p class="fn"><span>' + $('#fname').val() + ' ' + $('#lname').val() + '</span></p><p class="adr"><span class="street-address">' + $('#shipping-address').val() + '</span><br /><span class="city">' + $('#shipping-city').val() + '</span>, ' + ($('#shipping-state').val() ? '<span class="region">' + $('#shipping-state').val() + '</span><br />' : '') + '<span class="postal-code">' + $('#shipping-postalcode').val() + '</span><br /><span class="country-name"><img src="'+root+'/admin/includes/images/flags/'+countryAlpha2+'.png" alt="'+country+'" title="'+country+'">' + country + '</span></p>';
+				var shippingDetails = '<p class="fn"><span>' + $('#fname').val() + ' ' + $('#lname').val() + '</span></p><p class="adr"><span class="street-address">' + $('#shipping-address').val() + '</span><br /><span class="city">' + $('#shipping-city').val() + '</span>, ' + ($('#shipping-state').val() ? '<span class="region">' + $('#shipping-state').val() + '</span><br />' : '') + '<span class="postal-code">' + $('#shipping-postalcode').val() + '</span><br /><span class="country-name">'+(country?'<img src="'+root+'/admin/includes/images/flags/'+countryAlpha2+'.png" alt="'+country+'" title="'+country+'">':'') + country + '</span></p>';
 				$('#order-overview__shipping .vcard').html(shippingDetails);
 
 				globalFun.stepForm.update.lore1lines();
@@ -516,95 +629,6 @@ $(function() {
 
 	// Order validation of entered Plant ID
 	$('#id-check').hide();
-	$('#lines').on('change manualchange', function() {
-		var $t = $(this),
-			$currentStep = $(this).closest('.form-step');
-
-		// Remove error class if any
-		$t.closest('.input-mimic').removeClass('error');
-
-		// Execute AJAX call
-		if($t.val()) {
-			var linesCheck = $.ajax({
-					url: root + '/api/v1/lore1/'+$t.val()+'/verify',
-					type: 'GET',
-					dataType: 'json'
-				});
-
-			linesCheck.done(function(d) {
-				var pidList; 
-				if(d.status === 200) {
-					// Everything is okay
-					$('#id-check')
-					.removeClass()
-					.addClass('approved')
-					.html('<p><span class="pictogram icon-check"></span>Your LORE1 '+globalFun.pl(d.data.pid_found, 'line is', 'lines are')+' available and valid.</p>')
-					.slideDown(125);
-
-					globalFun.stepForm.update.lore1lines();
-
-					// Write to storage
-					if(typeof window.localStorage !== typeof undefined && d.data.pid_found) {
-						window.localStorage.setItem('lines', d.data.pid_found.join(','));
-					}
-
-					// Mark step as valid
-					globalFun.stepForm.step.validate($currentStep);
-				
-				} else {
-
-					// Incorrect Plant ID is found
-					$('#id-check').removeClass().addClass('warning').slideDown(125);
-
-					var pids = [];
-					if(d.data.pid_invalid) {
-						pids = pids.concat(d.data.pid_invalid);
-					}
-					if(d.data.pid_notFound) {
-						pids = pids.concat(d.data.pid_notFound);
-					}
-					console.log(pids);
-
-					if(pids) {
-						var line_s = (pids.length)==1 ? 'line' : 'lines';
-						pidlist = "<p>" + pids.length + " invalid LORE1 " + line_s + " found&mdash;lines are invalid or have depleted seed stock. See highlighted.</p>";
-
-						$.each(pids, function(idx,pid){
-							$('#lines').prev('ul.input-values').find('li').filter(function() {
-								return $(this).data('input-value') == pid;
-							}).addClass('user-message warning')
-							.closest('.input-mimic')
-							.addClass('error');
-						});	
-					} else {
-						pidlist = '<p><span class="pictogram icon-cancel"></span>None of your lines are valid.</p>';
-					}
-					$('#id-check').html(pidlist);
-
-					// Mark step as invalid
-					globalFun.stepForm.step.invalidate($currentStep);
-
-				}
-			})
-			.error(function(jqXHR, status, textStatus) {
-				$('#id-check')
-					.removeClass()
-					.addClass('warning')
-					.html('<p><span class="pictogram icon-cancel"></span>We have a problem contacting the database.</p>')
-					.slideDown(125);
-			});
-		} else {
-			$('#id-check').slideUp(125);
-
-			// Write to storage
-			if(typeof window.localStorage !== typeof undefined) {
-				window.localStorage.removeItem('lines');
-			}
-
-			// Invalidate step
-			globalFun.stepForm.navigation.invalidate($t.closest('.form-step').index() - 1);
-		}
-	});
 
 
 	// Payment
