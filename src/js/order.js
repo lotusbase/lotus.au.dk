@@ -1,5 +1,94 @@
 $(function() {
 
+	// Form validation
+	var _validator = $('#order-form').validate({
+		rules: {
+			fname: 'required',
+			lname: 'required',
+			email: {
+				required: true,
+				email: true
+			},
+			lines: 'required',
+			billing_name: 'required',
+			billing_address: 'required',
+			billing_city: 'required',
+			billing_postalcode: 'required',
+			billing_country: 'required',
+			shipping_institution: 'required',
+			shipping_address: 'required',
+			shipping_city: 'required',
+			shipping_postalcode: 'required',
+			shipping_country: 'required',
+			consent_disclaimer: 'required',
+		},
+		ignore: '.validate--ignore',
+		errorElement: 'label',
+		errorPlacement: function(error, element) {
+			if(element.attr('type') === 'checkbox') {
+			} else {
+				error.insertAfter(element);
+			}
+		},
+		submitHandler: function(form) {
+			
+			var $t = $(form);
+
+			var order = $.ajax({
+				url: '/api',
+				data: $t.serialize(),
+				dataType: 'json',
+				type: 'POST'
+			});
+
+			order
+			.done(function(data) {
+				globalFun.modal.open({
+					'title': 'Placing your order&hellip;',
+					'content': '<div class="user-message loading-message"><div class="loader"><svg><circle class="path" cx="40" cy="40" r="30" /></svg></div><p class="loading-text">Submitting your order to the system. Hang on a second before we receive confirmation&hellip;</p></div></div>',
+					'allowClose': false
+				});
+	
+				var timer = window.setTimeout(function() {
+					window.clearTimeout(timer);
+					if(data.error) {
+						if(data.status === 555) {
+							globalFun.modal.update({
+								'title': 'Whoops!',
+								'content': '<p>'+data.message+'</p>',
+								'allowClose': true,
+								'class': 'warning'
+							});
+						} else {
+							globalFun.modal.update({
+								'title': 'Whoops!',
+								'content': '<p>Something is not too right with the submission. Please review the error '+(data.message.length > 1 ? 'messages' : 'message')+' returned:</p><ul><li>'+data.message.join('</li><li>')+'</li></ul>',
+								'allowClose': true,
+								'class': 'warning'
+							});
+						}
+					} else {
+						globalFun.modal.update({
+							'title': 'You\'ve got mail!',
+							'content': '<p>You have successfully placed an order. We have just sent an email to you&mdash;<strong>please verify your order using the verification link provided in the email you have received.</strong></p><p>Orders that remain unverified for more than one month will be deleted from our database.</p>',
+							'allowClose': true,
+							'class': 'note',
+							'actionText': 'Back to site',
+							'actionHref': '/'
+						});
+					}
+				}, 1000);
+			})
+			.error(function() {
+				globalFun.modal.open({
+					'title': 'Whoops!',
+					'content': '<p>Our API has experienced an error, and is unfortunately unable to process your order. '+globalVar.errorMessage+'</p>',
+					'class': 'warning'
+				});
+			});
+		}
+	});
+
 	// Global variables
 	globalVar.stepForm = {};
 	globalVar.map = {};
@@ -17,12 +106,15 @@ $(function() {
 			if(typeof window.localStorage !== typeof undefined && window.localStorage.length) {
 				globalFun.stepForm.loadData();
 				globalFun.stepForm.update.overview();
+			} else if(typeof window.localStorage === typeof undefined) {
+				$('#order-form').before('<p class="user-message warning"><span class="icon-attention">HTML5 local storage is not available or enabled, and we will not be able to store your progress. Please consider upgrading to a browser that supports the feature, or enable local storage in your browser settings.</span></p>');
+				globalFun.stepForm.step.activate(0);
 			} else {
 				globalFun.stepForm.step.activate(0);
 			}
 
 			// Prev/next navigation
-			$('#form-step__nav-bottom').on('click', 'a.button', function(e) {
+			$('#form-step__nav-bottom').on('click', 'a.button__nav', function(e) {
 				e.preventDefault();
 
 				// Storage current facet data in HTML5 webstorage
@@ -52,7 +144,8 @@ $(function() {
 			});
 
 			// User wants to delete local storage
-			$d.on('click', '#reset-local-storage', function() {
+			$d.on('click', '#reset-local-storage', function(e) {
+				e.preventDefault();
 				window.localStorage.clear();
 				document.location.reload(false);
 			});
@@ -79,9 +172,18 @@ $(function() {
 			}))
 			.on('blur manualOverviewUpdate', globalFun.stepForm.update.overview);
 
+			// Trigger validation onload
+			globalFun.stepForm.step.validateFields.call($('.form-step :input')[0]);
+
 			// Trigger validation on input mimic
 			$d.on('change manualValidation', '.input-mimic .input-hidden', function() {
 				globalFun.stepForm.step.validateFields.call(this);
+			});
+
+			// Select2 for organisation
+			$('#shipping-institution').select2({
+				placeholder: "Select a pre-existing organisation, or enter a new one",
+				tags: true
 			});
 
 			// Create map
@@ -104,17 +206,17 @@ $(function() {
 				}
 			}
 
-			// Trigger input mimic change
-			$('#lines').trigger('manualchange');
-
 			// Navigate to last active step
 			var currentStep = parseInt(window.localStorage.getItem('_si_currentStepIndex'));
 			globalVar.stepForm.currentIndex = currentStep;
 			globalFun.stepForm.step.navigate(currentStep);
 
 			// Validate known steps
-			var validStep = Math.max(parseInt(window.localStorage.getItem('_si_validStepIndex')),2);
+			var validStep = parseInt(window.localStorage.getItem('_si_validStepIndex'));
 			globalVar.stepForm.validStepIndex = validStep;
+
+			// Trigger input mimic change
+			$('#lines').trigger('manualchange');
 
 			$('form.has-steps .form-step')
 			.slice(0, validStep+1)
@@ -136,7 +238,7 @@ $(function() {
 			}
 
 			// Indicate to user that form is currently using stored data
-			$('#form-step__nav').before('<div class="user-message note">We have saved the progress of your incomplete LORE1 order. <button id="reset-local-storage" type="button" class="button"><span class="icon-cancel">Remove stored data and repeat</span></button></div>');
+			$('#form-step__nav').before('<div class="user-message note">We have saved the progress of your incomplete LORE1 order. <a class="button" id="reset-local-storage" href="#"><span class="icon-cancel">Remove stored data and repeat</span></a></div>');
 		},
 		step: {
 			activate: function(i) {
@@ -336,11 +438,14 @@ $(function() {
 				// Deactivate next button by default
 				$('#form-step__next').addClass('disabled').data('button-status', 'disabled').show();
 
-				// If is on last step, hide the next button
+				// Hide submit button by default
+				$('#form-step__submit').hide();
+
+				// If is on last step, hide the next button and show submit button
 				if(i === $('form.has-steps .form-step').length - 1) {
 					$('#form-step__next').hide();
+					$('#form-step__submit').show();
 				}
-
 				
 			}
 		},
@@ -390,8 +495,12 @@ $(function() {
 				}
 			},
 			overview: function() {
+				// Country
+				var country = $('#shipping-country option:selected').attr('data-country-name'),
+					countryAlpha2 = $('#shipping-country option:selected').attr('data-country-alpha2');
+
 				// Shipping and contact details
-				var shippingDetails = '<p class="fn"><span>' + $('#fname').val() + ' ' + $('#lname').val() + '</span></p><p class="adr"><span class="street-address">' + $('#shipping-address').val() + '</span><br /><span class="city">' + $('#shipping-city').val() + '</span>, ' + ($('#shipping-state').val() ? '<span class="region">' + $('#shipping-state').val() + '</span><br />' : '') + '<span class="postal-code">' + $('#shipping-postalcode').val() + '</span><br /><span class="country-name">' + $('#shipping-country option:selected').attr('data-country-name') + '</span></p>';
+				var shippingDetails = '<p class="fn"><span>' + $('#fname').val() + ' ' + $('#lname').val() + '</span></p><p class="adr"><span class="street-address">' + $('#shipping-address').val() + '</span><br /><span class="city">' + $('#shipping-city').val() + '</span>, ' + ($('#shipping-state').val() ? '<span class="region">' + $('#shipping-state').val() + '</span><br />' : '') + '<span class="postal-code">' + $('#shipping-postalcode').val() + '</span><br /><span class="country-name"><img src="'+root+'/admin/includes/images/flags/'+countryAlpha2+'.png" alt="'+country+'" title="'+country+'">' + country + '</span></p>';
 				$('#order-overview__shipping .vcard').html(shippingDetails);
 
 				globalFun.stepForm.update.lore1lines();
@@ -416,20 +525,46 @@ $(function() {
 
 		// Execute AJAX call
 		if($t.val()) {
-			var query = 'q=' + encodeURIComponent($t.val()) + '&t=1',
-				linesCheck = $.ajax({
-					url: root + '/api',
+			var linesCheck = $.ajax({
+					url: root + '/api/v1/lore1/'+$t.val()+'/verify',
 					type: 'GET',
-					data: query,
 					dataType: 'json'
 				});
 
-			linesCheck.done(function(data) {
+			linesCheck.done(function(d) {
 				var pidList; 
-				if(data.error && data.status === 404) {
+				if(d.status === 200) {
+					// Everything is okay
+					$('#id-check')
+					.removeClass()
+					.addClass('approved')
+					.html('<p><span class="pictogram icon-check"></span>Your LORE1 '+globalFun.pl(d.data.pid_found, 'line is', 'lines are')+' available and valid.</p>')
+					.slideDown(125);
+
+					globalFun.stepForm.update.lore1lines();
+
+					// Write to storage
+					if(typeof window.localStorage !== typeof undefined && d.data.pid_found) {
+						window.localStorage.setItem('lines', d.data.pid_found.join(','));
+					}
+
+					// Mark step as valid
+					globalFun.stepForm.step.validate($currentStep);
+				
+				} else {
+
 					// Incorrect Plant ID is found
 					$('#id-check').removeClass().addClass('warning').slideDown(125);
-					var pids = data.data.pid;
+
+					var pids = [];
+					if(d.data.pid_invalid) {
+						pids = pids.concat(d.data.pid_invalid);
+					}
+					if(d.data.pid_notFound) {
+						pids = pids.concat(d.data.pid_notFound);
+					}
+					console.log(pids);
+
 					if(pids) {
 						var line_s = (pids.length)==1 ? 'line' : 'lines';
 						pidlist = "<p>" + pids.length + " invalid LORE1 " + line_s + " found&mdash;lines are invalid or have depleted seed stock. See highlighted.</p>";
@@ -449,35 +584,22 @@ $(function() {
 					// Mark step as invalid
 					globalFun.stepForm.step.invalidate($currentStep);
 
-				} else if(data.status === 200) {
-					// Everything is okay
-					$('#id-check')
-					.removeClass()
-					.addClass('approved')
-					.html('<p><span class="pictogram icon-check"></span>Your LORE1 '+globalFun.pl(data.data.pid.length, 'line is', 'lines are')+' available and valid.</p>')
-					.slideDown(125);
-
-					globalFun.stepForm.update.lore1lines();
-
-					// Write to storage
-					if(typeof window.localStorage !== typeof undefined) {
-						window.localStorage.setItem('lines', data.data.pid.join(','));
-					}
-
-					// Mark step as valid
-					globalFun.stepForm.step.validate($currentStep);
-				
-				} else {
-					//
-					$('#id-check')
+				}
+			})
+			.error(function(jqXHR, status, textStatus) {
+				$('#id-check')
 					.removeClass()
 					.addClass('warning')
-					.html('<p><span class="pictogram icon-cancel"></span>We have a problem contacting the database. Please contact system administrator should this problem persists.</p>')
+					.html('<p><span class="pictogram icon-cancel"></span>We have a problem contacting the database.</p>')
 					.slideDown(125);
-				}
 			});
 		} else {
 			$('#id-check').slideUp(125);
+
+			// Write to storage
+			if(typeof window.localStorage !== typeof undefined) {
+				window.localStorage.removeItem('lines');
+			}
 
 			// Invalidate step
 			globalFun.stepForm.navigation.invalidate($t.closest('.form-step').index() - 1);
@@ -542,93 +664,4 @@ $(function() {
 //	$w.on('popstate', function() {
 //		handler.close();
 //	});
-
-	// Form validation
-	var _validator = $('#order-form').validate({
-		rules: {
-			fname: 'required',
-			lname: 'required',
-			email: {
-				required: true,
-				email: true
-			},
-			lines: 'required',
-			billing_name: 'required',
-			billing_address: 'required',
-			billing_city: 'required',
-			billing_postalcode: 'required',
-			billing_country: 'required',
-			shipping_institution: 'required',
-			shipping_address: 'required',
-			shipping_city: 'required',
-			shipping_postalcode: 'required',
-			shipping_country: 'required',
-			consent_disclaimer: 'required',
-		},
-		ignore: '.validate--ignore',
-		errorElement: 'label',
-		errorPlacement: function(error, element) {
-			if(element.attr('type') === 'checkbox') {
-			} else {
-				error.insertAfter(element);
-			}
-		},
-		submitHandler: function(form) {
-			
-			var $t = $(form);
-
-			var order = $.ajax({
-				url: '/api',
-				data: $t.serialize(),
-				dataType: 'json',
-				type: 'POST'
-			});
-
-			order
-			.done(function(data) {
-				globalFun.modal.open({
-					'title': 'Placing your order&hellip;',
-					'content': '<div class="user-message loading-message"><div class="loader"><svg><circle class="path" cx="40" cy="40" r="30" /></svg></div><p class="loading-text">Submitting your order to the system. Hang on a second before we receive confirmation&hellip;</p></div></div>',
-					'allowClose': false
-				});
-	
-				var timer = window.setTimeout(function() {
-					window.clearTimeout(timer);
-					if(data.error) {
-						if(data.status === 555) {
-							globalFun.modal.update({
-								'title': 'Whoops!',
-								'content': '<p>'+data.message+'</p>',
-								'allowClose': true,
-								'class': 'warning'
-							});
-						} else {
-							globalFun.modal.update({
-								'title': 'Whoops!',
-								'content': '<p>Something is not too right with the submission. Please review the error '+(data.message.length > 1 ? 'messages' : 'message')+' returned:</p><ul><li>'+data.message.join('</li><li>')+'</li></ul>',
-								'allowClose': true,
-								'class': 'warning'
-							});
-						}
-					} else {
-						globalFun.modal.update({
-							'title': 'You\'ve got mail!',
-							'content': '<p>You have successfully placed an order. We have just sent an email to you&mdash;<strong>please verify your order using the verification link provided in the email you have received.</strong></p><p>Orders that remain unverified for more than one month will be deleted from our database.</p>',
-							'allowClose': true,
-							'class': 'note',
-							'actionText': 'Back to site',
-							'actionHref': '/'
-						});
-					}
-				}, 1000);
-			})
-			.error(function() {
-				globalFun.modal.open({
-					'title': 'Whoops!',
-					'content': '<p>Our API has experienced an error, and is unfortunately unable to process your order. '+globalVar.errorMessage+'</p>',
-					'class': 'warning'
-				});
-			});
-		}
-	});
 });

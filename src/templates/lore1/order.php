@@ -1,19 +1,26 @@
 <?php
 
-	// Load site config
+	// Database
 	require_once('../config.php');
+
+	// Error flag
+	$error = false;
 
 	// Use country list
 	use SameerShelavale\PhpCountriesArray\CountriesArray;
 
-	// Database
+	// Declare global user object
+	if(isset($_COOKIE['auth_token']) && auth_verify($_COOKIE['auth_token'])) {
+		$user = auth_verify($_COOKIE['auth_token']);
+	}
+
 	try {
-		$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306", DB_USER, DB_PASS);
+		$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 		// Get average processing time
-		$q1 = $db->prepare("SELECT AVG(TIMESTAMPDIFF(SECOND, `Timestamp`, `ShippedTimestamp`)) AS AverageProcessingTime
+		$q = $db->prepare("SELECT AVG(TIMESTAMPDIFF(SECOND, `Timestamp`, `ShippedTimestamp`)) AS AverageProcessingTime
 		FROM `orders_unique`
 		WHERE
 			`Timestamp` IS NOT NULL AND
@@ -21,29 +28,34 @@
 		");
 
 		// Execute query
-		$q1->execute();
+		$q->execute();
 
-		// Get statistics
-		if($q1->rowCount() > 0) {
-			$row = $q1->fetch();
-			$processingTime = $row['AverageProcessingTime'];
+		// Get organisation
+		$orgs = array('Select a pre-existing organization, or enter a new one' => '');
+		$o = $db->prepare('SELECT Organization AS Organization FROM auth WHERE Organization != "" OR Organization IS NOT NULL GROUP BY Organization ORDER BY COUNT(*) DESC');
+		$o->execute();
+		while($rows = $o->fetch(PDO::FETCH_ASSOC)) {
+			$orgs[$rows['Organization']] = $rows['Organization'];
 		}
 
-		// Get user information if is logged in
-		$user = is_logged_in();
-		$userData = array();
-		if($user) {
-			$q2 = $db->prepare("SELECT * FROM auth WHERE Salt = ?");
-			$q2->execute(array($user['Salt']));
-			$userData = $q2->fetch(PDO::FETCH_ASSOC);
+		// Get user address
+		$ua = $db->prepare('SELECT Address, City, State, PostalCode, Country FROM auth WHERE Salt = ?');
+		$ua->execute(array($user['Salt']));
+		$ua_data = $ua->fetch(PDO::FETCH_ASSOC);
+		foreach($ua_data as $ua_field => $ua_value) {
+			$user[$ua_field] = $ua_value;
 		}
 
 	} catch(PDOException $e) {
-		$e = $db->errorInfo();
-		$_SESSION['ORD_ERROR'] = $e->getMessage();
-		session_write_close();
-		header('Location: '.$_SERVER['PHP_SELF']);
-		exit();
+		$error = 'We have experienced a problem with the database: <code>'.$e->getMessage().'</code>';
+	} catch(PDOException $err) {
+		$error = 'We have encountered an error: <code>'.$e->getMessage().'</code>';
+	}
+
+	// Get statistics
+	if($q->rowCount() > 0) {
+		$row = $q->fetch();
+		$processingTime = $row['AverageProcessingTime'];
 	}
 
 ?>
@@ -52,6 +64,7 @@
 <head>
 	<title>Order Form &mdash; Lotus Base</title>
 	<?php include(DOC_ROOT.'/head.php'); ?>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/order.min.css" type="text/css" media="screen">
 </head>
 <body class="order">
@@ -60,118 +73,121 @@
 		echo $header->get_header();
 	?>
 
-	<?php echo get_breadcrumbs(array('page_title' => 'Order Lines')); ?>
+	<?php echo get_breadcrumbs(array('page_title' => 'Order <em>LORE1</em> Lines')); ?>
 
 	<section class="wrapper">
 		<h2><em>LORE1</em> lines order form</h2>
-		<p>Fill up your personal details below in order to place an order for <em>LORE1</em> line(s). We promise your private information will be kept <em>strictly</em> confidential. Required fields are marked with an asterisk (<strong>*</strong>).</p>
-		<?php 
-			if(isset($_SESSION['ORD_ERROR']) && is_array($_SESSION['ORD_ERROR']) && count($_SESSION['ORD_ERROR'])>0) {
-				echo '<div class="reminder user-message"><h3>'.$_SESSION['ORD_ERROR_TITLE'].'</h3><ul class="err">';
-				foreach($_SESSION['ORD_ERROR'] as $msg) {
-					echo '<li>',$msg,'</li>'; 
-				}
-				echo '</ul></div>';
-				unset($_SESSION['ORD_ERROR']);
-				unset($_SESSION['ORD_ERROR_TITLE']);
-			}
-			if(isset($_SESSION['USER_INPUT']) && is_array($_SESSION['USER_INPUT']) && count($_SESSION['USER_INPUT'])>0) {
-				// Fetches the user's previous input from a failed submission, so they don't have to reenter everything (dugald@mb.au.dk)
-				$user_input = $_SESSION['USER_INPUT'];
-				unset($_SESSION['USER_INPUT']);
-			} else {
-				// Attempt to retrieve user information from database
-				if($userData) {
-					$user_input = array(
-						$userData['FirstName'],
-						$userData['LastName'],
-						$userData['Email'],
-						$userData['Organization'],
-						$userData['Address'],
-						$userData['City'],
-						$userData['State'],
-						$userData['PostalCode'],
-						$userData['Country'],
-						'',
-						''
-						);
-				} else {
-					// Declare empty array if nothing has been entered by the user
-					$user_input = array('','','','','','','','','','','');
-				}
-			}
-		?>
-		<form action="./order-exec" method="POST" id="order-form" accept-charset="utf-8" class="has-group">
-			<div class="has-legend cols" role="group">
-				<span class="legend">Personal and contact details</span>
-				<div class="cols full-width">
-					<label for="fname" class="col-one col-half-width">First Name <span class="asterisk" title="Required Field">*</span></label>
-					<div class="col-two col-half-width">
-						<input id="fname" name="fname" type="text" value="<?php echo $user_input[0]; ?>" placeholder="First Name" tabindex="1" />
+		<p>Please complete the following form to place an order on your <em>LORE1</em> lines for interest. You may only proceed to the next step when the current step is complete and valid, but you may navigate between previously cleared step.</p>
+		<p>Your private information will be kept <em>strictly</em> confidential. Required fields are marked with an asterisk (<strong>*</strong>).</p>
+		<?php if($error) { 
+			echo '<p class="user-message warning">'.$error.'.</p>';
+		} ?>
+		<form action="#" method="POST" id="order-form" accept-charset="utf-8" class="has-group has-steps">
+
+			<header id="form-step__header">
+				<nav id="form-step__nav"><ul class="cols flex-wrap__nowrap"></ul></nav>
+
+				<h3 class="align-center" id="form-step__title"></h3>
+			
+			</header>
+
+			<div class="form-step form-step--disabled" id="form-step__facet-1" data-form-step="1" data-form-step-title="Customer contact details" data-form-step-title-short="Customer Details">
+				<div class="cols" role="group">
+					<div class="cols full-width">
+						<label for="fname" class="col-one col-half-width">First Name <span class="asterisk" title="Required Field">*</span></label>
+						<div class="col-two col-half-width">
+							<input id="fname" name="fname" type="text" value="<?php echo is_logged_in() ? $user['FirstName'] : ''; ?>" placeholder="First Name" tabindex="1" required />
+						</div>
+
+						<label for="lname" class="col-one col-half-width align-right">Last Name <span class="asterisk" title="Required Field">*</span></label>
+						<div class="col-two col-half-width">
+							<input id="lname" name="lname" type="text" value="<?php echo is_logged_in() ? $user['LastName'] : ''; ?>" placeholder="Last Name" tabindex="2" required />
+						</div>
 					</div>
 
-					<label for="lname" class="col-one col-half-width align-right">Last Name <span class="asterisk" title="Required Field">*</span></label>
-					<div class="col-two col-half-width">
-						<input id="lname" name="lname" type="text" value="<?php echo $user_input[1]; ?>" placeholder="Last Name" tabindex="2" />
+					<label for="email" class="col-one">Email <span class="asterisk" title="Required Field">*</span></label>
+					<div class="col-two">
+						<input id="email" name="email" type="email" value="<?php echo is_logged_in() ? $user['Email'] : ''; ?>" placeholder="Email address" tabindex="3" required />
 					</div>
-				</div>
-
-				<label for="email" class="col-one">Email <span class="asterisk" title="Required Field">*</span></label>
-				<div class="col-two">
-					<input id="email" name="email" type="email" value="<?php echo $user_input[2]; ?>" placeholder="Email address" tabindex="3" />
 				</div>
 			</div>
 
-			<div class="has-legend cols" role="group">
-				<div class="legend">Postal information</div>
-				<?php
-					if(
-						is_logged_in() &&
-						(
-							empty($userData['Organization']) ||
-							empty($userData['Address']) ||
-							empty($userData['City']) ||
-							empty($userData['PostalCode']) ||
-							empty($userData['Country'])
-							)
-						) {
-						echo '<p class="user-message reminder full-width">We have detected incomplete address information on your <em>Lotus</em> Base user account. If you want your address to be saved for future uses, please <a href="'.WEB_ROOT.'/users/account#profile">update your profile</a>.</p>';
-					}
-				?>
-				<label for="institution" class="col-one">Institution <span class="asterisk" title="Required Field">*</span></label>
-				<div class="col-two">
-					<input id="institution" name="institution" type="text" value="<?php echo $user_input[3]; ?>" placeholder="Institution / Organization" tabindex="5" />
+			<div class="form-step form-step--disabled" id="form-step__facet-2" data-form-step="2" data-form-step-title="Order information" data-form-step-title-short="Order Info.">
+				<div class="cols" role="group">
+					<label for="lines-input" class="col-one required">LORE1 lines <a class="info" data-modal="search-help" title="How should I enter Plant ID?" data-modal-content="Please enter LORE1 lines separated by: a space &lt;kbd title='spacebar'&gt;_____&lt;/kbd&gt;, a comma &lt;kbd&gt;,&lt;/kbd&gt;, or a tab &lt;kbd&gt;&nbsp;&map;&nbsp;Tab&lt;/kbd&gt;.">?</a> <span class="asterisk" title="Required Field">*</span></label>
+					<div class="col-two">
+						<div class="multiple-text-input input-mimic">
+							<ul class="input-values">
+							<?php
+								if($_GET['lore1']) {
+									$lore1_array = explode(',', $_GET['lore1']);
+									foreach($lore1_array as $lore1_item) {
+										echo '<li data-input-value="'.escapeHTML($lore1_item).'">'.escapeHTML($lore1_item).'<span class="icon-cancel" data-action="delete"></span></li>';
+									}
+								}
+							?>
+								<li class="input-wrapper"><input type="text" class="validate--ignore" id="lines-input" placeholder="LORE1 Line ID" autocomplete="off" tabindex="4" /></li>
+							</ul>
+							<input class="input-hidden" type="hidden" name="lines" id="lines" value="<?php echo escapeHTML($_GET['lore1']); ?>" readonly required />
+						</div>
+						<small><strong>Separate each LORE1 with a comma, space or tab.</strong></small>
+						<div id="id-check"></div>
+					</div>
+
+					<label for="comments" class="col-one">Order Comments</label>
+					<div class="col-two">
+						<textarea id="comments" class="validate--ignore" name="comments" rows="3" placeholder="Order comments" tabindex="5"></textarea>
+					</div>
 				</div>
+			</div>
+			
 
-				<label for="address" class="col-one">Street Address <span class="asterisk" title="Required Field">*</span></label>
-				<div class="col-two">
-					<input id="address" name="address" placeholder="Street Address" tabindex="6" value="<?php echo $user_input[4]; ?>" />
-				</div>
+			<div class="form-step form-step--disabled" id="form-step__facet-3" data-form-step="3" data-form-step-title="Shipping addresses" data-form-step-title-short="Shipping Info">
+				<div class="cols has-legend" role="group">
 
-				<div class="cols full-width">
-					
-					<label for="city" class="col-one col-half-width">City <span class="asterisk" title="Required Field">*</span></label>
-					<div class="col-two col-half-width">
-						<input id="city" name="city" type="text" value="<?php echo $user_input[5]; ?>" placeholder="City" tabindex="7" />
+					<span class="user-message legend">Shipping address</span>
+
+					<p class="full-width">The address where your LORE1 seeds will be shipped to.</p>
+
+					<label for="shipping-institution" class="col-one">Organisation <span class="asterisk" title="Required Field">*</span></label>
+					<div class="col-two">
+						<select id="shipping-institution" name="shipping_institution" tabindex="12">
+						<?php
+							foreach($orgs as $title => $value) {
+								echo '<option value="'.$value.'" '.(is_logged_in() && $user['Organization'] === $value ? 'selected': '').'>'.$title.'</option>';
+							}
+						?>
+						</select>
 					</div>
 
-					<label for="state" class="col-one col-half-width align-right">State / Region</label>
-					<div class="col-two col-half-width">
-						<input id="state" name="state" type="text" value="<?php echo $user_input[6]; ?>" placeholder="State / Region" tabindex="8" />
+					<label for="shipping-address" class="col-one">Street Address <span class="asterisk" title="Required Field">*</span></label>
+					<div class="col-two">
+						<input id="shipping-address" name="shipping_address" placeholder="Street Address" value="<?php echo is_logged_in() ? $user['Address'] : ''; ?>" tabindex="13" value="" required />
 					</div>
 
-					<label for="postalcode" class="col-one col-half-width">Postal Code <span class="asterisk" title="Required Field">*</span></label>
+					<label for="shipping-city" class="col-one col-half-width">City <span class="asterisk" title="Required Field">*</span></label>
 					<div class="col-two col-half-width">
-						<input id="postalcode" name="postalcode" type="text" value="<?php echo $user_input[7]; ?>" placeholder="Postal Code"  tabindex="9" />
+						<input id="shipping-city" name="shipping_city" type="text" value="<?php echo is_logged_in() && !empty($user['City']) ? $user['City'] : ''; ?>" placeholder="City" tabindex="14" required />
 					</div>
 
-					<label for="country" class="col-one col-half-width align-right">Country <span class="asterisk" title="Required Field">*</span></label>
+					<label for="shipping-state" class="col-one col-half-width align-right">State / Region</label>
 					<div class="col-two col-half-width">
-						<select name="country" id="country" tabindex="10">
+						<input id="shipping-state" name="shipping_state" type="text" value="<?php echo is_logged_in() && !empty($user['State']) ? $user['State'] : ''; ?>" placeholder="State / Region" tabindex="15">
+					</div>
+
+					<label for="shipping-postalcode" class="col-one col-half-width">Postal Code <span class="asterisk" title="Required Field">*</span></label>
+					<div class="col-two col-half-width">
+						<input id="shipping-postalcode" name="shipping_postalcode" type="text" value="<?php echo is_logged_in() && !empty($user['PostalCode']) ? $user['PostalCode'] : ''; ?>" placeholder="Postal Code"  tabindex="16" required />
+					</div>
+
+					<label for="shipping-country" class="col-one col-half-width align-right">Country <span class="asterisk" title="Required Field">*</span></label>
+					<div class="col-two col-half-width">
+						<select name="shipping_country" id="shipping-country" tabindex="16" required>
+							<option value="">Select a country</option>
 						<?php
 							$countries = CountriesArray::get2d('name', array('alpha2', 'alpha3'));
 							foreach($countries as $name=>$meta) {
-								echo '<option value="'.$meta['alpha3'].'" data-country-name="'.$name.'" data-country-alpha2="'.$meta['alpha2'].'" '.($user_input[8] === $meta['alpha3'] ? 'selected' : '').'>'.$name.'</option>';
+								echo '<option value="'.$meta['alpha3'].'" data-country-name="'.$name.'" data-country-alpha2="'.$meta['alpha2'].'" '.(is_logged_in() && !empty($user['Country']) && $user['Country'] === $meta['alpha3'] ? 'selected' : '').'>'.$name.'</option>';
 							}
 						?>
 						</select>
@@ -179,214 +195,118 @@
 				</div>
 			</div>
 
-			<div class="has-legend cols" role="group">
-				<div class="legend">Order information</div>
-				<?php
-					if(isset($_SESSION['LINES_ERROR']) && is_array($_SESSION['LINES_ERROR']) && count($_SESSION['LINES_ERROR'])>0) {
-						echo '<div class="reminder user-message"><h3>'.$_SESSION['LINES_ERROR_TITLE'].'</h3><ul class="err">';
-						foreach($_SESSION['LINES_ERROR'] as $msg) {
-							echo '<li>',$msg,'</li>'; 
-						}
-						echo '</ul></div>';
-						unset($_SESSION['LINES_ERROR']);
-						unset($_SESSION['LINES_ERROR_TITLE']);
-					}						
-				?>
-				<label for="lines-input" class="col-one required"><em>LORE1</em> lines <a class="help" data-modal title="How should I enter Plant ID?" data-modal-content="A valid plant ID is an eight-digit number that starts with '3', e.g. &lt;code&gt;30000001&lt;/code&gt;. Alternative formats such as &lt;code&gt;DK01-030000001&lt;/code&gt; are not accepted. Please enter &lt;em&gt;LORE1&lt;/em&gt; lines separated by: a space &lt;kbd title='spacebar'&gt;_____&lt;/kbd&gt;, a comma &lt;kbd&gt;,&lt;/kbd&gt;, or a tab &lt;kbd&gt;&nbsp;&map;&nbsp;Tab&lt;/kbd&gt;.">?</a> <span class="asterisk" title="Required Field">*</span></label>
-				<div class="col-two">
-					<div class="multiple-text-input input-mimic">
-						<ul class="input-values">
-						<?php
-							if($user_input[9]) {
-								$lore1_array = explode(',', $user_input[9]);
-								foreach($lore1_array as $lore1_item) {
-									echo '<li data-input-value="'.html($lore1_item).'">'.html($lore1_item).'<span class="icon-cancel" data-action="delete"></span></li>';
-								}
-							}
-						?>
-							<li class="input-wrapper"><input type="text" name="lines-input" id="lines-input" placeholder="LORE1 Line ID" autocomplete="off" tabindex="10" /></li>
-						</ul>
-						<input class="input-hidden" type="hidden" name="lines" id="lines" value="<?php echo $user_input[9]; ?>" readonly />
-					</div>
-					<small><strong>Separate each <em>LORE1</em> with a comma, space or tab.</strong></small>
-					<div id="id-check"></div>
-				</div>
-
-				<label for="comments" class="col-one">Order Comments</label>
-				<div class="col-two">
-					<textarea id="comments" name="comments" rows="3" placeholder="Comments associated with your order (viewable by administration)" tabindex="11"><?php echo $user_input[10]; ?></textarea>
-				</div>
-
-			</div>
-
-			<div class="has-legend cols" role="group">
-				<div class="legend">Consent &amp; verification</div>
+			<div class="form-step form-step--disabled" id="form-step__facet-4" data-form-step="4" data-form-step-title="Order Overview" data-form-step-title-short="Overview">
 				<div class="full-width">
-					<p>By placing an order with our system, you consent that:</p>
-					<ul>
-						<li><strong>You are responsible for the mailing outcome.</strong> We send <em>LORE1</em> seeds out in regular, untracked mail. Shipment to certain regions/countries in the world will require a phytosanitary certificate: your <em>LORE1</em> seeds may require the aforementioned documents before being allowed through the recepient's customs&mdash;not applying for such documentation in advance may result in loss of your ordered seeds. Should such certificate be required, the customer will bear the cost of such application. Please contact us if you need to apply for a phytosanitary certificate.</li>
-						<li><strong>You will cite the following manuscripts should plant materials derived from said ordered <em>LORE1</em> mutant lines are used in any published materials.</strong> Two <em>LORE1</em> papers should be cited back-to-back: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014280" title="Genome-wide LORE1 retrotransposon mutagenesis and high-throughput insertion detection in Lotus japonicus.">Urbanski <em>et al.</em>, 2012</a> and <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014259" title="Establishment of a Lotus japonicus gene tagging population using the exon-targeting endogenous retrotransposon LORE1.">Fukai <em>et al.</em>, 2012</a>.</li>
-					</ul>
-					<label for="consent-disclaimer"><input type="checkbox" id="consent-disclaimer" name="consent_disclaimer" tabindex="12" required /><span>I have read and understood the disclaimer above.</span></label>
+					<p>Before you submit your order, please review your order:</p>
+					<div id="order-overview" class="cols">
+						<div id="order-overview__meta">
+							<div id="order-overview__shipping">
+								<h4>Contact &amp; Shipping details</h4>
+								<div id="order-overview__vcard" class="vcard"></div>
+							</div>
+
+							<div id="order-overview__lore1-lines">
+								<h4><em>LORE1</em> lines</h4>
+								<p>You have ordered <span id="order-overview__lore1-lines-count"></span>:</p>
+								<ul id="order-overview__lore1-lines-list" class="list--floated"></ul>
+								<table id="order-overview__lore1-lines-cost-table" class="table--no-stripes table--no-borders">
+									<tbody>
+										<tr><th>Cost of lines<br /><small>Unit cost: DKK 100.00</small></th><td data-type="num"><span id="order-overview__lore1-lines-cost"></span></td></tr>
+										<tr><th>Handling fee</th><td data-type="num">DKK 100.00</td></tr>
+										<tr class="total"><th>Total</th><td data-type="num"><span id="order-overview__lore1-lines-total"></span></td></tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div id="order-overview__map"><div class="tooltip position--top">Your approximate location by address provided.</div></div>
+					</div>
 				</div>
-				
-				<?php if(!is_logged_in()) { ?>
-					<label class="col-one">Human?</label>
-					<div class="col-two" id="google-recaptcha"></div>
-				<?php } else { ?>
-					<input type="hidden" name="user_auth_token" value="<?php echo $_COOKIE['auth_token']; ?>" />
-				<?php } ?>
+				<div class="full-width" id="disclaimer">
+					<h3>Disclaimer &amp; terms of use</h3>
+					<article>
+						<p>By placing an order with our system, you consent that:</p>
+						<ul>
+							<li><strong>You are responsible for the mailing outcome.</strong> We send <em>LORE1</em> seeds out in regular, untracked mail. Shipment to certain regions/countries in the world will require a phytosanitary certificate. Should such certificate be required, the customer will bear the cost of such application. Please contact us if you need to apply for a phytosanitary certificate.</li>
+							<li><strong>You will cite the following manuscripts should plant materials derived from said ordered <em>LORE1</em> mutant lines are used in any published materials</strong>:
+							<ul>
+								<li><strong>The <em>LORE1</em> resource</strong>: Małolepszy et al. (2016). The <em>LORE1</em> insertion mutant resource. <em>Plant J.</em> <a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352">doi:10.1111/tpj.13243</a>.</li>
+								<li><strong>Use of <em>Lotus</em> Base</strong>: Mun et al. (in review). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>.</li>
+								<li><strong><em>LORE1</em> mutagenesis methods</strong> (two papers to be cited together):
+									<ul>
+										<li>Urbanski et al. (2012). Genome-wide <em>LORE1</em> retrotransposon mutagenesis and high-throughput insertion detection in <em>Lotus japonicus</em>. <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014280" title="Genome-wide LORE1 retrotransposon mutagenesis and high-throughput insertion detection in Lotus japonicus.">doi:10.1111/j.1365-313X.2011.04827.x</a>); and</li>
+										<li>Fukai et al. (2012) Establishment of a <em>Lotus japonicus</em> gene tagging population using the exon-targeting endogenous retrotransposon <em>LORE1</em></strong> (2012). <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014259" title="Establishment of a Lotus japonicus gene tagging population using the exon-targeting endogenous retrotransposon LORE1.">doi:10.1111/j.1365-313X.2011.04826.x</a>.</li>
+									</ul>
+								</li>
+							</ul>
+						</ul>
+					</article>
+				</div>
+				<div class="full-width" role="group">
+					<label for="consent-disclaimer"><input class="prettify" type="checkbox" id="consent-disclaimer" name="consent_disclaimer" tabindex="17" required />I have read and understood the disclaimer above.</label>
+				</div>
 			</div>
 
-			<button type="submit">Place order</button>
+			<!--<div class="form-step form-step--disabled" id="form-step__facet-5" data-form-step="5" data-form-step-title="Payment" data-form-step-title-short="Payment">
+				<div class="full-width user-message note">
+					<p>Please proceed to the Aarhus University payment form to pay for your order. Once your payment is successful, you will be provided with a unique order ID. That order ID will have to be copied and pasted into the field below.</p>
+					<button id="au-payment">Proceed to payment</button>
+				</div>
+				<div role="group">
+					<label for="payment_id" class="col_one">Your payment ID<span class="asterisk" title="Required Field">*</span></label>
+					<input type="text" id="payment-id" name="payment_id" tabindex="19" required />
+				</div>
+			</div>-->
 
+			<div class="form-step form-step--disabled" id="form-step__facet-5" data-form-step="5" data-form-step-title="Submit Order" data-form-step-title-short="Submit">
+				<div role="group" class="cols">
+					<?php if(is_logged_in()) { ?>
+						<input type="hidden" name="user_auth_token" value="<?php echo $_COOKIE['auth_token']; ?>" />
+						<h4 class="full-width align-center">Thanks for completing the order, <?php echo $user['FirstName']; ?></h4>
+						<p class="full-width align-center">You're all set to go!</p>
+					<?php } else { ?>
+						<h4 class="full-width">Just one more thing:</h4>
+						<p class="full-width">To make sure you are human, please complete the following captcha:</p>
+						<label class="col-one">Human?</label>
+						<div class="col-two" id="google-recaptcha"></div>
+					<?php } ?>
+				</div>
+			</div>
+
+			<nav id="form-step__nav-bottom" class="cols justify-content__space-between">
+				<a id="form-step__prev" data-direction="prev" class="button button__nav" href="#"><span class="icon-left-open icon--no-spacing"></span> Back</a>
+				<a id="form-step__next" data-direction="next" class="button button__nav disabled" href="#">Next <span class="icon-right-open icon--no-spacing"></span></a>
+				<a id="form-step__submit" class="button button__submit <?php echo !is_logged_in() ? 'disabled' : ''; ?>" href="#">Place order</span></a>
+			</nav>
+			
 		</form>
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
-	<?php if(!is_logged_in()) { ?>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/order.min.js"></script>
 	<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&amp;render=explicit" async defer></script>
 	<script>
+		// Google ReCaptcha
 		var onloadCallback = function() {
 				grecaptcha.render('google-recaptcha', {
 					'sitekey' : '6Ld3VQ8TAAAAAO7VZkD4zFAvqUxUuox5VN7ztwM5',
 					'callback': verifyCallback,
 					'expired-callback': expiredCallback,
-					'tabindex': 13
+					'tabindex': 9
 				});
 			},
 			verifyCallback = function(response) {
-				$('#order-form :input[type="submit"]')
-					.removeClass('disabled')
-					.prop('disabled', false);
+				console.log(globalVar.stepForm.validStepIndex);
+
+				// Only enable submit button when form is complete
+				if(globalVar.stepForm.validStepIndex === $('form.has-steps .form-step').length - 1) {
+					$('#form-step__submit').removeClass('disabled');
+				}
 			},
 			expiredCallback = function() {
 				grecaptcha.reset();
 			};
-	</script>
-	<?php } ?>
-	<script>
-		$(function() {
-			var _validator = $('#order-form').validate({
-				rules: {
-					fname: 'required',
-					lname: 'required',
-					email: {
-						required: true,
-						email: true
-					},
-					lines: 'required',
-					institution: 'required',
-					address: 'required',
-					city: 'required',
-					postalcode: 'required',
-					country: 'required',
-					consent_disclaimer: 'required',
-				},
-				ignore: '.validate--ignore',
-				errorElement: 'label',
-				errorPlacement: function(error, element) {
-					if(element.attr('type') === 'checkbox') {
-						error.appendTo(element.closest('label'));
-					} else {
-						if(element.hasClass('input-hidden')) {
-							element.closest('.input-mimic').addClass('error');
-						}
-						error.insertAfter(element);
-					}
-				}
-			});
 
-			// Order validation of entered Plant ID
-			$('#id-check').hide();
-			$('#lines').on('change manualchange', function() {
-				var $t = $(this);
-
-				// Remove error class if any
-				$t.closest('.input-mimic').removeClass('error');
-
-				// Execute AJAX call
-				if($t.val()) {
-					var linesCheck = $.ajax({
-							url: root + '/api/v1/lore1/'+encodeURIComponent($t.val())+'/verify',
-							type: 'GET',
-							dataType: 'json'
-						}),
-						$msg = $('#id-check');
-
-					linesCheck
-					.done(function(d) {
-						var data = d.data;
-
-						if(d.status === 207) {
-							// Partial success
-							$msg
-							.addClass('warning')
-							.removeClass('approved')
-							.html([
-								'<p>We have found some errors in your input. Please see see highlighted.</p>',
-								'<ul>',
-								(data.pid_notFound && data.pid_notFound.length ? '<li>'+data.pid_notFound.length+' '+globalFun.pl(data.pid_notFound.length, 'line does', 'lines do')+' not exist, or '+globalFun.pl(data.pid_notFound.length, 'has', 'have')+' depleted seed stock, in our system</li>' : ''),
-								(data.pid_invalid && data.pid_invalid.length ? '<li>'+data.pid_invalid.length+' '+globalFun.pl(data.pid_invalid.length, 'line is', 'lines are')+' incorrectly formatted. Only use the 8-digit identifier starting with 3, i.e. <code>30000001</code>.</li>' : ''),
-								'</ul>'].join(''));
-
-							// Highlight problematic entries
-							if(data.pid_notFound) {
-								$.each(data.pid_notFound, function(i, pid) {
-									$('#lines').prev('ul.input-values').find('li').filter(function() {
-										return $(this).data('input-value') == pid;
-									}).addClass('user-message warning')
-									.closest('.input-mimic')
-									.addClass('error');
-								});
-							}
-							if(data.pid_invalid) {
-								$.each(data.pid_invalid, function(i, pid) {
-									$('#lines').prev('ul.input-values').find('li').filter(function() {
-										return $(this).data('input-value') == pid;
-									}).addClass('user-message warning')
-									.closest('.input-mimic')
-									.addClass('error');
-								});
-							}
-
-						} else {
-							// Everything is okay
-							$msg
-							.addClass('approved')
-							.removeClass('warning')
-							.html('<p><span class="pictogram icon-check"></span>Your <em>LORE1</em> '+globalFun.pl(data.pid_found.length, 'line is', 'lines are')+' available and valid.</p>');
-						}
-						$msg.slideDown(125);
-					})
-					.fail(function(jqXHR, textStatus, errorThrown) {
-						// Incorrect Plant ID is found
-						var d = jqXHR.responseJSON;
-
-						if(d.status === 404) {
-							$msg
-							.addClass('warning')
-							.removeClass('approved')
-							.html('<p><span class="pictogram icon-cancel"></span>None of your lines are valid.</p>')
-							.slideDown(125);
-
-							$('#lines')
-							.prev('ul.input-values').find('li[data-input-value]').addClass('user-message warning')
-							.closest('.input-mimic')
-							.addClass('error');
-						} else {
-							$msg
-							.addClass('warning')
-							.removeClass('approved')
-							.html('<p><span class="pictogram icon-cancel"></span>We have a problem contacting the database. Please contact system administrator should this problem persists.</p>')
-							.slideDown(125);
-						}
-					});
-				} else {
-					$('#id-check').slideUp(125);
-				}
-			});
-		});
 	</script>
 </body>
 </html>
