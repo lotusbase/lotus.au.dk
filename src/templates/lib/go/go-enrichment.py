@@ -12,9 +12,22 @@ with open(sys.argv[1]) as tempfile:
 output = {}
 
 # Perform Fisher's exact test, one way
-for go_term, go_data in feed.items():
-	oddsratio, pvalue = stats.fisher_exact(go_data['matrix'])
-	output[go_term] = {'pvalue': pvalue, 'oddsratio': oddsratio}
+for go_node in ['leaf','ancestor']:
+	for go_term, go_data in feed[go_node].items():
+		oddsratio, pvalue = stats.fisher_exact(go_data['matrix'])
+
+		# Parse infinity or NaN
+		def _nan(f):
+			if f == float('inf'):
+				return str('+inf')
+			elif f == float('-inf'):
+				return str('-inf')
+			elif math.isnan(f):
+				return str('NaN')
+			else:
+				return float(f)
+
+		output[go_node][go_term] = {'pvalue': _nan(pvalue), 'oddsratio': _nan(oddsratio)}
 
 # Print JSON response
 print('Content-Type: application/json\n')

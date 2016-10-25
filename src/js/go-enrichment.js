@@ -13,7 +13,7 @@ $(function() {
 	var $goTable = $('#go-enrichment').DataTable({
 		'pagingType': 'full_numbers',
 		'columnDefs': [
-			{ type: 'scientific', targets: 8 }
+			{ type: 'scientific', targets: [4,5,6,7,8,9] }
 		],
 		'order': [[8, 'scientific-asc']]
 	});

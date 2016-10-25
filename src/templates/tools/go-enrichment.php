@@ -33,7 +33,7 @@
 
 			$q1 = $db->prepare("SELECT
 				logo1.GO_ID AS GOTerm,
-				COUNT(DISTINCT logo1.Transcript) AS QueryCount,
+				GROUP_CONCAT(DISTINCT logo1.Transcript) AS QueryList,
 				COUNT(DISTINCT logo2.Transcript) AS MappedCount,
 				go.Namespace AS Namespace,
 				go.Name AS Name
@@ -56,32 +56,100 @@
 				$searched = true;
 			}
 
+			// Convert to scientific notation when a threshold is met
+			function sn($f, $threshold = 0.01) {
+				return $f > $threshold ? number_format($f, '2', '.', '') : sprintf('%.2e', $f);
+			}
+
+			// List of GO roots to exclude
+			$go_exclude = array('GO:0003674','GO:0008150','GO:0005575');
+
+			// Recursively get parents of a GO term
+			function go_ancestors($go) {
+				global $go_json;
+				$go_array = array($go);
+
+				// Check for parents
+				if(count($go_json[$go]['p'])) {
+					foreach ($go_json[$go]['p'] as $parent) {
+						if($parent[1] === 0) {
+							$go_array = array_merge($go_array, go_ancestors($parent[0]));
+						}
+					}
+				}
+				return $go_array;
+			}
+
+			// Load hierarchical relationship of GO annotations
+			$go_json = json_decode(file_get_contents(DOC_ROOT.'/data/go/go.json'), true);
+
+			// Ancestor data
+			$go_ancestors = array();
+			$go_leaves = array();
+			$go_ancestors_counts = array();
+			$go_ancestors_data = array();
+
 			// Process data
 			$data = array();
 			$scipy_data = array();
 			while($r = $q1->fetch(PDO::FETCH_ASSOC)) {
 
+				// Get ancestors
+				$go_ancestors = array_merge($go_ancestors, go_ancestors($r['GOTerm']));
+				$go_leaves[] = $r['GOTerm'];
+
+				// Query Count
+				$query_list = explode(',', $r['QueryList']);
+				$r['QueryCount'] = count($query_list);
+
+				// Store data for ancestors
+				foreach($go_ancestors as $go_ancestor) {
+					if(!array_key_exists($go_ancestor, $go_ancestors_counts)) {
+						$go_ancestors_counts[$go_ancestor] = array(
+							'QueryIDHasTerm' => $query_list
+						);
+					} else {
+						$query_list_filtered = array_diff($query_list, $go_ancestors_counts[$go_ancestor]['QueryIDHasTerm']);
+						if(count($query_list_filtered)) {
+							$go_ancestors_counts[$go_ancestor]['QueryIDHasTerm'] = array_merge($go_ancestors_counts[$go_ancestor]['QueryIDHasTerm'], $query_list_filtered);
+						}
+					}
+				}
+
 				// Compute data
 				$r['QueryIDHasTerm'] = $r['QueryCount'];
 				$r['DatasetIDHasTerm'] = $r['MappedCount'];
 				$r['QueryIDHasTermNot'] = count($ids) - $r['QueryCount'];
-				$r['DatastIDHasTermNot'] = $id_count - $r['MappedCount'];
+				$r['DatasetIDHasTermNot'] = $id_count - $r['MappedCount'];
 
 				// Pass data to SciPy
-				$scipy_data[$r['GOTerm']] = array(
+				$scipy_data['leaf'][$r['GOTerm']] = array(
 					'data' => array(
 						'queryCount' => $r['QueryCount'],
 						'mappedCount' => $r['MappedCount']
 						),
 					'matrix' => array(
 						array($r['QueryIDHasTerm'], $r['DatasetIDHasTerm']),
-						array($r['QueryIDHasTermNot'], $r['DatastIDHasTermNot'])
+						array($r['QueryIDHasTermNot'], $r['DatasetIDHasTermNot'])
 						)
 					);
 
 				// Push row to data array for display later
 				$data[] = $r;
 			}
+
+			// Get unique ancestors
+			$go_ancestors_filtered = array_values(array_diff(array_unique($go_ancestors),$go_leaves));
+
+			// Construct ancestor data
+			//$go_ancestors_data = array_intersect($go_ancestors_counts, array_flip($go_ancestors_filtered));
+			$go_ancestors_data = array_filter(
+				$go_ancestors_counts,
+				function ($key) use ($go_ancestors_filtered) {
+					return in_array($key, $go_ancestors_filtered);
+				},
+				ARRAY_FILTER_USE_KEY
+				);
 
 			// Compute Scipy
 			$temp_file = tempnam(sys_get_temp_dir(), "go-enrichment_");
@@ -91,6 +159,13 @@
 			fclose($writing);
 			$scipy_output = exec(PYTHON_PATH.' '.DOC_ROOT.'/lib/go/go-enrichment.py '.$temp_file);
 			unlink($temp_file);
+
+			// Define GO namespace
+			$go_namespace = array(
+				'p' => 'Biological process',
+				'f' => 'Molecular function',
+				'c' => 'Cellular component'
+				);
 
 		} catch(PDOException $e) {
 			$error = 'We have encountered an issue with the database query: '.$e->getMessage();
@@ -172,6 +247,7 @@
 		<table id="go-enrichment" class="table--dense">
 			<thead>
 				<tr>
+					<th scope="col" rowspan="2">Type</th>
 					<th colspan="3" class="align-center">Gene Ontology</th>
 					<th colspan="2" class="align-center">In query (observed)</th>
 					<th colspan="2" class="align-center">In dataset (expected)</th>
@@ -183,14 +259,15 @@
 					<th scope="col">Namespace</th>
 					<th scope="col">Name</th>
 					<th scope="col" data-type="numeric">Count</th>
-					<th scope="col" data-type="numeric">Freq. (%)</th>
+					<th scope="col" data-type="numeric">Freq.</th>
 					<th scope="col" data-type="numeric">Count</th>
-					<th scope="col" data-type="numeric">Freq. (%)</th>
+					<th scope="col" data-type="numeric">Freq.</th>
 				</tr>
 			</thead>
 			<tbody>
 			<?php foreach($data as $d) { ?>
 				<tr>
+					<td>Leaf</td>
 					<td><div class="dropdown button">
 						<?php $go_term = $d['GOTerm']; ?>
 						<span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/go/'.$go_term; ?>"><?php echo $go_term; ?></a></span>
@@ -203,21 +280,15 @@
 							?>
 						</ul>
 					</div></td>
-					<td><?php
-						$go_namespace = array(
-							'p' => 'Biological process',
-							'f' => 'Molecular function',
-							'c' => 'Cellular component'
-							);
-						echo $go_namespace[$d['Namespace']];
+					<td><?php echo $go_namespace[$d['Namespace']];
 					?></td>
 					<td><?php echo $d['Name']; ?></td>
 					<td data-type="numeric"><?php echo $d['QueryCount']; ?></td>
-					<td data-type="numeric"><?php echo number_format($d['QueryCount'] / count($ids), '2', '.', ''); ?></td>
+					<td data-type="numeric"><?php echo sn($d['QueryCount'] / count($ids)) ?></td>
 					<td data-type="numeric"><?php echo $d['MappedCount']; ?></td>
-					<td data-type="numeric"><?php echo number_format($d['MappedCount'] / $id_count, '2', '.', ''); ?></td>
-					<td data-type="numeric"><?php echo number_format($scipy[$d['GOTerm']]['oddsratio'], '2', '.', ''); ?></td>
-					<td data-type="numeric"><?php echo sprintf('%.2e', $scipy[$d['GOTerm']]['pvalue']); ?></td>
+					<td data-type="numeric"><?php echo sn($d['MappedCount'] / $id_count); ?></td>
+					<td data-type="numeric"><?php echo number_format(($d['QueryCount'] / count($ids))/($d['MappedCount'] / $id_count), '2', '.', ''); ?></td>
+					<td data-type="numeric"><?php echo !is_string($scipy['leaf'][$d['GOTerm']]['pvalue']) ? sprintf('%.2e', $scipy['leaf'][$d['GOTerm']]['pvalue']) : $scipy['leaf'][$d['GOTerm']]['pvalue']; ?></td>
 				</tr>
 			<?php } ?>
 			</tbody>
