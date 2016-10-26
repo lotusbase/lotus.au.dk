@@ -486,8 +486,8 @@ form {
 			}
 		}
 
-		.icon--has-child {
-			margin-left: .5em;
+		.icon--has-child::before {
+			margin: 0 0 0 .5rem;
 		}
 		.search-link {
 			display: none;
