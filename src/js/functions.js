@@ -621,10 +621,16 @@ $(function() {
 	//==============================================================//
 
 	// Mark header navigation items with children
-	$("header nav > ul li").each(function() {
+	$("header nav > ul > li").each(function() {
 		if($(this).children("ul").length > 0) {
 			$(this).addClass("has-child");
-			$("<span>").addClass("pictogram icon-down-open").appendTo($(this).children("a"));
+			$("<span>").addClass("icon--has-child icon-down-open").appendTo($(this).children("a"));
+		}
+	});
+	$("header nav > ul > li li").each(function() {
+		if($(this).children("ul").length > 0) {
+			$(this).addClass("has-child");
+			$("<span>").addClass("icon--has-child icon-right-open").appendTo($(this).children("a"));
 		}
 	});
 

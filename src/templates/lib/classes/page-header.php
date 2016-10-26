@@ -113,15 +113,35 @@ class PageHeader {
 					<li class="h-tools" data-group="tools"><a href="'.WEB_ROOT.'/tools" title="Tools">Tools</a>
 						<ul>
 							'.(is_intranet_client() ? '<li><a href="'.WEB_ROOT.'/blast-carb/" title="BLAST">BLAST</a></li>' : '<li><a href="'.WEB_ROOT.'/blast/" title="BLAST">BLAST</a></li>').'
-							<li><a href="'.WEB_ROOT.'/tools/corgi" title="Correlated Genes Identifier (CORGI)">Correlated Genes Identifier (<strong>CORGI</strong>)</a></li>
-							<li><a href="'.WEB_ROOT.'/tools/cornea" title="Coexpression Network Analysis (CORNEA)">Coexpression Network Analysis (<strong>CORNEA</strong>)</a></li>
-							<li><a href="'.WEB_ROOT.'/expat/" title="Expression Atlas (ExpAt)">Expression Atlas (<strong>ExpAt</strong>)</a></li>
-							<li><a href="'.WEB_ROOT.'/expat/mapping" title="Gene/Probe mapping for ExpAt">Gene/Probe Mapping for ExpAt</a></li>
-							<li><a href="'.WEB_ROOT.'/genome" title="Genome Browser"><em>Lotus</em> Genome Browser</a></li>
-							<li><a href="'.WEB_ROOT.'/tools/seqpro" title="Sequence Processor (SeqPro)">Sequence Processor (<strong>SeqPro</strong>)</a></li>
-							<li><a href="'.WEB_ROOT.'/tools/seqret" title="Sequence Retrieval (SeqRet)">Sequence Retrieval (<strong>SeqRet</strong>)</a></li>
-							<li><a href="'.WEB_ROOT.'/tools/tram" title="Transcript Mapper (TRAM)">Transcript Mapper (<strong>TRAM</strong>)</a></li>
-							<li><a href="'.WEB_ROOT.'/tools/trex" title="Transcript Explorer (TREX>)">Transcript Explorer (<strong>TREX</strong>)</a></li>
+							<li>
+								<a>Co-expression Toolkit  (<strong>CORx</strong>)</a>
+								<ul>
+									<li><a href="'.WEB_ROOT.'/tools/corgi" title="Correlated Genes Identifier (CORGI)">Correlated Genes Identifier (<strong>CORGI</strong>)</a></li>
+									<li><a href="'.WEB_ROOT.'/tools/cornea" title="Coexpression Network Analysis (CORNEA)">Coexpression Network Analysis (<strong>CORNEA</strong>)</a></li>
+								</ul>
+							</li>
+							<li>
+								<a>Expression Data</a>
+								<ul>
+									<li><a href="'.WEB_ROOT.'/expat/" title="Expression Atlas (ExpAt)">Expression Atlas (<strong>ExpAt</strong>)</a></li>
+									<li><a href="'.WEB_ROOT.'/expat/mapping" title="Gene/Probe mapping for ExpAt">Gene/Probe Mapping for ExpAt</a></li>
+								</ul>
+							</li>
+							<li><a href="'.WEB_ROOT.'/genome" title="Genome Browser">Genome Browser</a></li>
+							<li>
+								<a>Sequence Toolkit</a>
+								<ul>
+									<li><a href="'.WEB_ROOT.'/tools/seqpro" title="Sequence Processor (SeqPro)">Sequence Processor (<strong>SeqPro</strong>)</a></li>
+									<li><a href="'.WEB_ROOT.'/tools/seqret" title="Sequence Retrieval (SeqRet)">Sequence Retrieval (<strong>SeqRet</strong>)</a></li>
+								</ul>
+							</li>
+							<li>
+								<a>Transcript Toolkit (<strong>TRx</strong>)</a>
+								<ul>
+									<li><a href="'.WEB_ROOT.'/tools/tram" title="Transcript Mapper (TRAM)">Transcript Mapper (<strong>TRAM</strong>)</a></li>
+									<li><a href="'.WEB_ROOT.'/tools/trex" title="Transcript Explorer (TREX>)">Transcript Explorer (<strong>TREX</strong>)</a></li>
+								</ul>
+							</li>
 							'.(is_intranet_client() ? '<li><a href="'.WEB_ROOT.'/view/" title="View">View <span class="badge">BETA</span></a></li>' : '').'
 						</ul>
 					</li>
