@@ -868,17 +868,18 @@ $(function() {
 					// Filter by cluster
 					$d.on('change', '#sigma-cluster', function() {
 
-						// Reset search field
-						$('sigma__highlight-id').val('');
-
 						var c = this.value;
-						console.log('Cluster #'+c.toString());
 						nodeTable.column(0).search('Cluster #'+c.toString(), false, false, true).draw();
 
-						// Highlight cluster on map
+						// Get all nodes
 						var rows = $.map(clustered_nodes[parseInt(c) - 1], function(v) {
 							return [[v]];
 						});
+
+						// Update node highlight field
+						$('#sigma__highlight-id').val(clustered_nodes[parseInt(c) - 1].join('\n'));
+
+						// Highlight cluster on map
 						globalFun.sigma.highlightNodes(rows);
 					});
 
