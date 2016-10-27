@@ -70,8 +70,11 @@ output = {}
 pvalues = []
 go_terms = []
 
+# Get settings
+settings = feed['settings'];
+
 # Perform Fisher's exact test, one way
-for go_node in ['leaf']:
+for go_node in ['go_data']:
 
 	output[go_node] = {}
 
@@ -80,12 +83,16 @@ for go_node in ['leaf']:
 
 		# Perform Fisher's exact test
 		oddsratio, pvalue = stats.fisher_exact(go_data['matrix'])
-		output[go_node][go_term] = {'pvalue': {'uncorrected': _nan(pvalue)}, 'oddsratio': _nan(oddsratio)}
+		output[go_node][go_term] = {'pvalue': {'uncorrected': _nan(pvalue), 'corrected': {}}, 'oddsratio': _nan(oddsratio)}
 
 		# Store pvalues
 		if isinstance(_nan(pvalue), float):
 			pvalues.append(pvalue)
 			go_terms.append(go_term)
+
+			# Add Bonferroni corrected value right now
+			if go_data['data']['queryCount'] > 1:
+				output[go_node][go_term]['pvalue']['corrected']['bonferroni'] = max(min(1, pvalue), 0)
 
 	# Perform BH correction on all collected pvalues and zip with GO terms
 	p_rejected, p_uncorrected, p_corrected = fdrcorrection(pvalues)
@@ -96,9 +103,7 @@ for go_node in ['leaf']:
 	for go_term, go_data in feed[go_node].items():
 
 		if go_data['data']['queryCount'] > 1:
-			output[go_node][go_term]['pvalue']['corrected'] = _p_corrected[go_term]
-		else:
-			output[go_node][go_term]['pvalue']['corrected'] = output[go_node][go_term]['pvalue']['uncorrected']
+			output[go_node][go_term]['pvalue']['corrected']['bh'] = _p_corrected[go_term]
 
 # Print JSON response
 print('Content-Type: application/json\n')

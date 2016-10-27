@@ -14,7 +14,8 @@ $(function() {
 		'pagingType': 'full_numbers',
 		'columnDefs': [
 			{ type: 'scientific', targets: [3,4,5,6,7,8] }
-		]
+		],
+		'order': [[8, 'asc']]
 	});
 
 	$('#sample-data').on('click', function() {

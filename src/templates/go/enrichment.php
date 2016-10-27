@@ -10,9 +10,17 @@
 		'f' => 'Molecular function'
 		);
 
+	$corrections = array(
+		'none' => 'None (not recommended)',
+		'bonferroni' => 'Bonferroni',
+		'bh' => 'Benjamini-Hochberg (default)'
+		);
+
 	if(!empty($_POST) && !empty($_POST['ids'])) {
 		$ids = !is_array($_POST['ids']) ? explode(',', $_POST['ids']) : $_POST['ids'];
 		$ids = array_values(array_unique($ids));
+
+		$correction = !empty($_POST['correction']) &&  in_array($_POST['correction'], $corrections) ? $_POST['correction'] : 'bh';
 
 		$go_namespaces = array_intersect(array_keys($allowed_go_namespaces), $_POST['go_namespace_subset']);
 
@@ -100,7 +108,10 @@
 
 			// Process data
 			$data = array();
-			$scipy_data = array();
+			$scipy_data = array('settings' => array(
+				'correction' => $correction
+				));
+
 			while($r = $q1->fetch(PDO::FETCH_ASSOC)) {
 
 				// Get ancestors
@@ -132,7 +143,7 @@
 				$r['DatasetIDHasTermNot'] = $id_count - $r['MappedCount'];
 
 				// Pass data to SciPy
-				$scipy_data['leaf'][$r['GOTerm']] = array(
+				$scipy_data['go_data'][$r['GOTerm']] = array(
 					'data' => array(
 						'queryCount' => $r['QueryCount'],
 						'mappedCount' => $r['MappedCount']
@@ -167,6 +178,7 @@
 			}
 			fclose($writing);
 			$scipy_output = exec(PYTHON_PATH.' '.DOC_ROOT.'/lib/go/go-enrichment.py '.$temp_file);
+			print_r($scipy_output);
 			unlink($temp_file);
 
 			// Define GO namespace
@@ -190,7 +202,7 @@
 	<?php include(DOC_ROOT.'/head.php'); ?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/tools.min.css" type="text/css" media="screen" />
 </head>
-<body class="tools <?php echo (!$error) ? 'results' : ''; ?> init-scroll--disabled">
+<body class="tools <?php echo (!$error && $searched) ? 'results' : ''; ?> init-scroll--disabled">
 
 	<?php
 		$header = new \LotusBase\PageHeader();
@@ -232,6 +244,17 @@
 					<small><strong>Separate each keyword, or gene/transcript ID, with a comma, space, or tab.</strong></small>
 					<br />
 					<small><strong>Unsure what to do? <a href="#" id="sample-data" data-ids="Lj4g3v0281040 Lj4g3v2139970 Lj2g3v0205600 Lj1g3v0414750 Lj0g3v0249089 Lj4g3v2775550 Lj0g3v0245539 Lj3g3v2693010 Lj2g3v1105370 Lj4g3v1736080 Lj4g3v2573630 Lj1g3v2975920 Lj6g3v1052420">Try a sample data</a> from Mun et al., 2016.</strong></small>
+				</div>
+
+				<label class="col-one" for="correction">p-value correction</label>
+				<div class="col-two">
+					<select id="correction" name="correction">
+					<?php
+						foreach($corrections as $c_key => $c_name) {
+							echo '<option value="'.$c_key.'" '.(!empty($_POST['correction']) && $_POST['correction'] === $c_key ? 'selected': ($c_key === 'bh' ? 'selected': 'none')).'>'.$c_name.'</option>';
+						}
+					?>
+					</select>
 				</div>
 
 				<label class="col-one">Namespace subset</label>
@@ -306,12 +329,15 @@
 					<td data-type="numeric"><?php echo sn($d['MappedCount'] / $id_count); ?></td>
 					<td data-type="numeric"><?php echo number_format(($d['QueryCount'] / count($ids))/($d['MappedCount'] / $id_count), '2', '.', ''); ?></td>
 					<td data-type="numeric"><?php
-						$pvalue = $scipy['leaf'][$d['GOTerm']]['pvalue']['corrected'];
-						if(!is_string($pvalue)) {
-							//echo $pvalue < 0.01 ? sprintf('%.2e', $pvalue) : number_format($pvalue, '2', '.', '');
-							echo sprintf('%.2e', $pvalue);
+						$pvalue = $scipy['go_data'][$d['GOTerm']]['pvalue'];
+						if(!empty($pvalue['corrected'][$correction])) {
+							$pvalue_c = $pvalue['corrected'][$correction];
+							echo $pvalue_c < 0.01 ? sprintf('%.2e', $pvalue_c) : number_format($pvalue_c, '2', '.', '');
+							//echo sprintf('%.2e', $pvalue['corrected'][$correction]);
+						} else if(!is_string($pvalue['uncorrected'])) {
+							echo sprintf('%.2e', $pvalue['uncorrected']);
 						} else {
-							echo $pvalue;
+							echo $pvalue['uncorrected'];
 						}
 						?></td>
 				</tr>
