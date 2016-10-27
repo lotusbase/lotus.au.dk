@@ -205,7 +205,7 @@
 						<div class="multiple-text-input input-mimic">
 							<ul class="input-values">
 							<?php
-								if(!empty($_GET['ids'])) {
+								if(!empty($_GET['ids']) && $error) {
 									if(is_array($_GET['ids'])) {
 										$id_array = $_GET['ids'];
 									} else {
@@ -247,7 +247,6 @@
 		<table id="go-enrichment" class="table--dense">
 			<thead>
 				<tr>
-					<th scope="col" rowspan="2">Type</th>
 					<th colspan="3" class="align-center">Gene Ontology</th>
 					<th colspan="2" class="align-center">In query (observed)</th>
 					<th colspan="2" class="align-center">In dataset (expected)</th>
@@ -267,7 +266,6 @@
 			<tbody>
 			<?php foreach($data as $d) { ?>
 				<tr>
-					<td>Leaf</td>
 					<td><div class="dropdown button">
 						<?php $go_term = $d['GOTerm']; ?>
 						<span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/go/'.$go_term; ?>"><?php echo $go_term; ?></a></span>
@@ -288,7 +286,14 @@
 					<td data-type="numeric"><?php echo $d['MappedCount']; ?></td>
 					<td data-type="numeric"><?php echo sn($d['MappedCount'] / $id_count); ?></td>
 					<td data-type="numeric"><?php echo number_format(($d['QueryCount'] / count($ids))/($d['MappedCount'] / $id_count), '2', '.', ''); ?></td>
-					<td data-type="numeric"><?php echo !is_string($scipy['leaf'][$d['GOTerm']]['pvalue']) ? sprintf('%.2e', $scipy['leaf'][$d['GOTerm']]['pvalue']) : $scipy['leaf'][$d['GOTerm']]['pvalue']; ?></td>
+					<td data-type="numeric"><?php
+						$pvalue = $scipy['leaf'][$d['GOTerm']]['pvalue']['corrected'];
+						if(!is_string($pvalue)) {
+							echo $pvalue < 0.01 ? sprintf('%.2e', $pvalue) : number_format($pvalue, '2', '.', '');
+						} else {
+							echo $pvalue;
+						}
+						?></td>
 				</tr>
 			<?php } ?>
 			</tbody>
