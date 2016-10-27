@@ -92,7 +92,7 @@ class PageHeader {
 	public function get_header() {
 
 		// Get user data if logged in
-		$user = is_logged_in();		
+		$user = is_logged_in();
 
 		return '<div id="lotusbase__wrap">
 	<div id="lotusbase__container">
@@ -121,13 +121,22 @@ class PageHeader {
 								</ul>
 							</li>
 							<li>
-								<a>Expression Data</a>
+								<a>Expression Analysis &amp; Visualisation</a>
 								<ul>
 									<li><a href="'.WEB_ROOT.'/expat/" title="Expression Atlas (ExpAt)">Expression Atlas (<strong>ExpAt</strong>)</a></li>
 									<li><a href="'.WEB_ROOT.'/expat/mapping" title="Gene/Probe mapping for ExpAt">Gene/Probe Mapping for ExpAt</a></li>
 								</ul>
 							</li>
 							<li><a href="'.WEB_ROOT.'/genome" title="Genome Browser">Genome Browser</a></li>
+							'.(is_intranet_client() ? '
+							<li>
+								<a>Gene Ontology</a>
+								<ul>
+									<li><a href="'.WEB_ROOT.'/go/enrichment" title="GO Enrichment Analysis">GO Enrichment Analysis</a></li>
+									<li><a href="'.WEB_ROOT.'/go/explorer" title="GO Explorer">GO Explorer</a></li>
+								</ul>
+							</li>
+							' : '').'
 							<li>
 								<a>Sequence Toolkit</a>
 								<ul>
