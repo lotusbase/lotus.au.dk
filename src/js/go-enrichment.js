@@ -1,12 +1,12 @@
 jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-	"scientific-pre": function ( a ) {
+	'scientific-pre': function (a) {
 		return parseFloat(a);
 	},
-	"scientific-asc": function ( a, b ) {
-		return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	'scientific-asc': function (a, b) {
+		return ((a > b) ? -1 : ((a < b) ? 1 : 0));
 	},
-	"scientific-desc": function ( a, b ) {
-		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	'scientific-desc': function (a, b) {
+		return ((a > b) ? 1 : ((a < b) ? -1 : 0));
 	}
 });
 $(function() {
@@ -14,8 +14,7 @@ $(function() {
 		'pagingType': 'full_numbers',
 		'columnDefs': [
 			{ type: 'scientific', targets: [3,4,5,6,7,8] }
-		],
-		'order': [[8, 'scientific-asc']]
+		]
 	});
 
 	$('#sample-data').on('click', function() {

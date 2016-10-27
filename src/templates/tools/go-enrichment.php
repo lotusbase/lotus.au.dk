@@ -4,9 +4,17 @@
 	$error = false;
 	$searched = false;
 
-	if(!empty($_GET) && !empty($_GET['ids'])) {
-		$ids = !is_array($_GET['ids']) ? explode(',', $_GET['ids']) : $_GET['ids'];
+	$allowed_go_namespaces = array(
+		'c' => 'Cellular component',
+		'p' => 'Biological process',
+		'f' => 'Molecular function'
+		);
+
+	if(!empty($_POST) && !empty($_POST['ids'])) {
+		$ids = !is_array($_POST['ids']) ? explode(',', $_POST['ids']) : $_POST['ids'];
 		$ids = array_values(array_unique($ids));
+
+		$go_namespaces = array_intersect(array_keys($allowed_go_namespaces), $_POST['go_namespace_subset']);
 
 		try {
 
@@ -44,9 +52,10 @@
 					logo1.GO_ID = logo2.GO_ID
 				WHERE
 					logo1.GO_ID IS NOT NULL AND
+					go.Namespace IN (".str_repeat('?,', count($go_namespaces)-1)."?) AND
 					logo1.Transcript IN (".str_repeat('?,', count($ids)-1)."?)
 				GROUP BY logo1.GO_ID");
-			$q1->execute($ids);
+			$q1->execute(array_merge($go_namespaces, $ids));
 
 			$id_count = 98305;
 
@@ -198,32 +207,42 @@
 			}
 			echo $searched ? '<div class="toggle'.(empty($error) ? ' hide-first' : '').'"><h3><a href="#" title="Repeat Search">Repeat Search</a></h3>' : '';
 		?>
-		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get" class="has-group">
+		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="has-group">
 			<div class="cols" role="group">
 				<label for="ids-input" class="col-one">Query <a href="<?php echo WEB_ROOT; ?>/lib/docs/trex-query" class="info" title="How should I look for my gene of interest?" data-modal="wide">?</a></label>
-					<div class="col-two">
-						<div class="multiple-text-input input-mimic">
-							<ul class="input-values">
-							<?php
-								if(!empty($_GET['ids']) && $error) {
-									if(is_array($_GET['ids'])) {
-										$id_array = $_GET['ids'];
-									} else {
-										$id_array = explode(",", $_GET['ids']);
-									}
-									foreach($id_array as $id_item) {
-										echo '<li data-input-value="'.$id_item.'" class="'.(!preg_match('/^Lj(\d|chloro|mito)g\dv\d+(\.\d+)?$/', $id_item) ? 'warning' : '').'">'.$id_item.'<span class="icon-cancel" data-action="delete"></span></li>';
-									}
+				<div class="col-two">
+					<div class="multiple-text-input input-mimic">
+						<ul class="input-values">
+						<?php
+							if(!empty($_POST['ids']) && $error) {
+								if(is_array($_POST['ids'])) {
+									$id_array = $_POST['ids'];
+								} else {
+									$id_array = explode(",", $_POST['ids']);
 								}
-							?>
-								<li class="input-wrapper"><input type="text" id="ids-input" placeholder="Keyword, or gene/transcript ID" autocomplete="off" autocorrect="off"  autocapitalize="off" spellcheck="false" data-boolean-mode="true" /></li>
-							</ul>
-							<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_GET['ids'])) ? (is_array($_GET['ids']) ? implode(',', preg_replace('/\"/', '&quot;', $trx_array)) : preg_replace('/\"/', '&quot;', $_GET['ids'])) : ''; ?>" readonly />
-						</div>
-						<small><strong>Separate each keyword, or gene/transcript ID, with a comma, space, or tab.</strong></small>
-						<br />
-						<small><strong>Unsure what to do? <a href="#" id="sample-data" data-ids="Lj4g3v0281040 Lj4g3v2139970 Lj2g3v0205600 Lj1g3v0414750 Lj0g3v0249089 Lj4g3v2775550 Lj0g3v0245539 Lj3g3v2693010 Lj2g3v1105370 Lj4g3v1736080 Lj4g3v2573630 Lj1g3v2975920 Lj6g3v1052420">Try a sample data</a> from Mun et al., 2016.</strong></small>
+								foreach($id_array as $id_item) {
+									echo '<li data-input-value="'.$id_item.'" class="'.(!preg_match('/^Lj(\d|chloro|mito)g\dv\d+(\.\d+)?$/', $id_item) ? 'warning' : '').'">'.$id_item.'<span class="icon-cancel" data-action="delete"></span></li>';
+								}
+							}
+						?>
+							<li class="input-wrapper"><input type="text" id="ids-input" placeholder="Keyword, or gene/transcript ID" autocomplete="off" autocorrect="off"  autocapitalize="off" spellcheck="false" data-boolean-mode="true" /></li>
+						</ul>
+						<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_POST['ids'])) ? (is_array($_POST['ids']) ? implode(',', preg_replace('/\"/', '&quot;', $trx_array)) : preg_replace('/\"/', '&quot;', $_POST['ids'])) : ''; ?>" readonly />
 					</div>
+					<small><strong>Separate each keyword, or gene/transcript ID, with a comma, space, or tab.</strong></small>
+					<br />
+					<small><strong>Unsure what to do? <a href="#" id="sample-data" data-ids="Lj4g3v0281040 Lj4g3v2139970 Lj2g3v0205600 Lj1g3v0414750 Lj0g3v0249089 Lj4g3v2775550 Lj0g3v0245539 Lj3g3v2693010 Lj2g3v1105370 Lj4g3v1736080 Lj4g3v2573630 Lj1g3v2975920 Lj6g3v1052420">Try a sample data</a> from Mun et al., 2016.</strong></small>
+				</div>
+
+				<label class="col-one">Namespace subset</label>
+				<div class="col-two">
+				<?php
+					foreach($allowed_go_namespaces as $n_key => $n_name) {
+						$n_label = str_replace(' ', '-', strtolower($n_name));
+						echo '<label for="go-namespace__'.$n_label.'"><input id="go-namespace__'.$n_label.'" value="'.$n_key.'" name="go_namespace_subset[]" type="checkbox" class="prettify" '.(!empty($_POST['go_namespace_subset'] && !in_array($n_key, $_POST['go_namespace_subset'])) ? '' : 'checked').' /><span>'.$n_name.'</span></label>';
+					}
+				?>
+				</div>
 			</div>
 			<button type="submit"><span class="icon-search">Search</span></button>
 		</form>
@@ -289,7 +308,8 @@
 					<td data-type="numeric"><?php
 						$pvalue = $scipy['leaf'][$d['GOTerm']]['pvalue']['corrected'];
 						if(!is_string($pvalue)) {
-							echo $pvalue < 0.01 ? sprintf('%.2e', $pvalue) : number_format($pvalue, '2', '.', '');
+							//echo $pvalue < 0.01 ? sprintf('%.2e', $pvalue) : number_format($pvalue, '2', '.', '');
+							echo sprintf('%.2e', $pvalue);
 						} else {
 							echo $pvalue;
 						}
