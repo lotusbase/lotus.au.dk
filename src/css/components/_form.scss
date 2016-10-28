@@ -60,6 +60,7 @@
 		}
 	}
 }
+@import 'form/input-range';
 @include buttons;
 form {
 	background-color: #ddd;
@@ -169,6 +170,10 @@ form {
 			}
 		}
 		&[type='text'], &[type='email'], &[type='number'], &[type='search'] { vertical-align: top; appearance: none; }
+		&[type='range'] {
+			@include input_range;
+			cursor: ew-resize;
+		}
 		&[type='checkbox'] {
 			cursor: pointer;
 			display: inline-block;
@@ -237,6 +242,22 @@ form {
 			}
 			& ~ &[type='radio'] {
 				margin-left: 1rem;
+			}
+		}
+
+		/* Has output */
+		&.has-output {
+			flex-grow: 1;
+			width: auto;
+			& + output {
+				background-color: #eee;
+				border-radius: 4px;
+				display: block;
+				margin-left: 1rem;
+				padding: .35rem .5rem .1rem;
+				font-size: .85rem;
+				text-align: center;
+				min-width: 3rem;
 			}
 		}
 

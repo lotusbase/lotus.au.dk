@@ -66,14 +66,25 @@ $(function() {
 			$t
 			.attr('data-state', 'paused')
 			.find('span').removeClass().addClass('icon-play').text('Play');
-			$('#go-ancestor').goTree('start');
+			$('#go-ancestor').goTree('stop');
 		} else {
 			// Play
 			$t
 			.attr('data-state', 'playing')
 			.find('span').removeClass().addClass('icon-pause').text('Pause');
-			$('#go-ancestor').goTree('stop');
+			$('#go-ancestor').goTree('start');
 		}
+	});
+	$('#go-ancestor__controls .force').on('input', $.throttle(250, function() {
+		$('#go-ancestor').goTree($(this).data('tree-function'), $(this).val());
+		$(this).next('output').text($(this).val());
+	}));
+
+	// Get force layout configuration when tree is started
+	$('#go-ancestor').on('tree.start', function(event, d) {
+		$.each(d.force, function(k,f) {
+			$('#force-'+k).val(f).next('output').text(f);
+		});
 	});
 	
 });

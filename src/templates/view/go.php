@@ -210,7 +210,7 @@
 		<div id="view__tree" class="view__facet">
 			<h3>Ancestor tree</h3>
 			<p>A force layout showing the ancestor tree for <strong><?php echo $id; ?></strong>, and its immediate children. Mouseover each node to glean more information; click and drag nodes to reposition them; double click on nodes to unfix them.</p>
-			<div class="facet floating-controls__hide">
+			<div class="facet floating-controls__hide controls--visible">
 				<div class="facet__stage">
 					<svg id="go-ancestor" data-go="<?php echo $id; ?>"></svg>
 					<ul class="floating-controls position--right">
@@ -223,6 +223,15 @@
 						<div class="cols">
 							<button type="button" class="button button--small" id="go-ancestor__reset"><span class="icon-eye">Reset view</span></button>
 							<button type="button" class="button button--small" id="go-ancestor__play-pause" data-state="playing"><span class="icon-pause">Pause</span></button>
+						</div>
+					</div>
+
+					<div role="group" class="has-legend cols">
+						<p class="legend full-width">Force layout</p>
+						<label for="force-charge" class="col-one">Charge</label>
+						<div class="col-two cols flex-wrap__nowrap">
+							<input type="range" id="force-charge" name="force-charge" min="-10000" max="0" step="1" data-tree-function="charge" class="force has-output" />
+							<output></output>
 						</div>
 					</div>
 				</form>

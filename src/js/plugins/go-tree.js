@@ -29,7 +29,8 @@
 			colors,
 			drag,
 			goTip,
-			goMenu;
+			goMenu,
+			forceTimer;
 
 		// The actual plugin constructor
 		function Plugin (element, options) {
@@ -62,7 +63,6 @@
 				drag = force.drag()
 					.on('dragstart', function(d) {
 						d3.select(this).classed("fixed", d.fixed = true);
-						force.stop();
 					})
 					.on('dragend', function(d) {
 						force.stop();
@@ -130,7 +130,7 @@
 						'class': 'd3-menu',
 						'id': 'go-menu'
 					})
-					.offset([0,0])
+					.offset([-10,3])
 					.direction('se')
 					.html(function(d) {
 						return [
@@ -532,7 +532,13 @@
 
 					// Start layout
 					force.start();
-					window.setTimeout(function() {
+					$(tree.element).trigger('tree.start', {
+						force: {
+							charge: force.charge()
+						}
+					});
+					if(forceTimer) window.clearTimeout(forceTimer);
+					forceTimer = window.setTimeout(function() {
 						force.stop();
 					}, 3000);
 
@@ -694,6 +700,12 @@
 			// Alias for force.stop
 			stop: function() {
 				force.stop();
+			},
+
+			// Alias for force.charge
+			charge: function(charge) {
+				charge = charge || this.settings.charge;
+				force.charge(charge).start();
 			}
 		});
 
