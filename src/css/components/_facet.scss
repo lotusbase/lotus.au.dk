@@ -26,6 +26,7 @@
 		background-color: #eee;
 		background-size: 100% 3em, 100% 3em, 100% 1em, 100% 1em;
 		background-attachment: local, local, scroll, scroll;
+		display: none;
 		opacity: 0;
 		overflow-x: hidden;
 		overflow-y: auto;
@@ -60,6 +61,7 @@
 
 		// Controls
 		.facet__controls {
+			display: block;
 			opacity: 1;
 			pointer-events: auto;
 		}

@@ -1,0 +1,16 @@
+// Mixins
+@import 'variables';
+@import 'mixins';
+@import 'type';
+
+// D3
+@import 'components/d3';
+
+body.go.explorer {
+	.d3-chart {
+		@include transition;
+		&:hover {
+			box-shadow: 0 0 1rem .5rem rgba(#000,.15);
+		}
+	}
+}

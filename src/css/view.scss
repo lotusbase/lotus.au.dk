@@ -85,17 +85,6 @@ pre.sequence {
 	}
 }
 
-// D3 chart
-.d3-chart {
-	svg {
-		font-family: $fontface-sansSerif;
-		width: 100%;
-		path, line, rect {
-			shape-rendering: auto;
-		}
-	}
-}
-
 #view__expression {
 	.loader__wrapper {
 		background-color: #ddd;
@@ -142,8 +131,8 @@ pre.sequence {
 	}
 }
 
-// D3 tooltip
-@import 'components/d3/tip';
+// D3
+@import 'components/d3';
 
 // ExpAt linegraph
 @import 'components/expat/linegraph';

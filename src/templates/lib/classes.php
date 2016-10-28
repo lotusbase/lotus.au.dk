@@ -18,11 +18,11 @@ require_once('classes/data-return.php');
 
 /* class: SiteSearchForm */
 /* Generates site search form */
-//require_once('classes/site-search-form.php');
+require_once('classes/site-search-form.php');
 
 /* class: PageHeader */
 /* Generates page header content */
-//require_once('classes/page-header.php');
+require_once('classes/page-header.php');
 
 /* class: LjGenomeVersion */
 /* Checks if a given string matches currently used Lj genome version(s) */

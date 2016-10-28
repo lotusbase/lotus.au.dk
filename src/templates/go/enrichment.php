@@ -178,7 +178,6 @@
 			}
 			fclose($writing);
 			$scipy_output = exec(PYTHON_PATH.' '.DOC_ROOT.'/lib/go/go-enrichment.py '.$temp_file);
-			print_r($scipy_output);
 			unlink($temp_file);
 
 			// Define GO namespace
@@ -343,12 +342,12 @@
 				</tr>
 			<?php } ?>
 			</tbody>
-		</table>	
+		</table>
 		<?php } ?>
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
 	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-	<script src="<?php echo WEB_ROOT; ?>/dist/js/go-enrichment.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/go/enrichment.min.js"></script>
 </body>
 </html>
