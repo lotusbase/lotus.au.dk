@@ -206,7 +206,12 @@
 	<?php
 		$header = new \LotusBase\PageHeader();
 		echo $header->get_header();
-		echo get_breadcrumbs(array('page_title' => 'GO Enrichment'));
+
+		// Breadcrumb
+		echo get_breadcrumbs(array('custom_breadcrumb' => array(
+			'Gene Ontology' => WEB_ROOT.'/go',
+			'Enrichment' => WEB_ROOT.'/go/enrichment'
+		)));
 	?>
 
 	<section class="wrapper">

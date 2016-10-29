@@ -18,7 +18,12 @@
 	<?php
 		$header = new \LotusBase\PageHeader();
 		echo $header->get_header();
-		echo get_breadcrumbs(array('page_title' => 'GO Explorer'));
+
+		// Breadcrumb
+		echo get_breadcrumbs(array('custom_breadcrumb' => array(
+			'Gene Ontology' => WEB_ROOT.'/go',
+			'Explorer' => WEB_ROOT.'/go/explorer'
+		)));
 	?>
 
 	<section class="wrapper">

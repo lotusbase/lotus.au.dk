@@ -228,9 +228,40 @@
 
 					<div role="group" class="has-legend cols">
 						<p class="legend full-width">Force layout</p>
+						<p class="full-width">Every force layout is different&mdash;we have picked a set of parameters which suits most GO ancestor tree chart well. Feel free to play with the following parameters to change how nodes are positioned spatially. They are <a href="https://github.com/d3/d3-3.x-api-reference/blob/master/Force-Layout.md">fully described in the d3.js v3.x documentation</a>. If you mess something up&mdash;don't worry: hitting the "reset view" button above will reset the chart to its default layout.</p>
 						<label for="force-charge" class="col-one">Charge</label>
 						<div class="col-two cols flex-wrap__nowrap">
 							<input type="range" id="force-charge" name="force-charge" min="-10000" max="0" step="1" data-tree-function="charge" class="force has-output" />
+							<output></output>
+						</div>
+
+						<label for="force-linkDistance" class="col-one">Distance</label>
+						<div class="col-two cols flex-wrap__nowrap">
+							<input type="range" id="force-linkDistance" name="force-linkDistance" min="1" max="100" step="1" data-tree-function="linkDistance" class="force has-output" />
+							<output></output>
+						</div>
+
+						<label for="force-friction" class="col-one">Friction</label>
+						<div class="col-two cols flex-wrap__nowrap">
+							<input type="range" id="force-friction" name="force-friction" min="0" max="1" step="0.01" data-tree-function="friction" class="force has-output" />
+							<output></output>
+						</div>
+
+						<label for="force-gravity" class="col-one">Gravity</label>
+						<div class="col-two cols flex-wrap__nowrap">
+							<input type="range" id="force-gravity" name="force-gravity" min="0" max="1" step="0.01" data-tree-function="gravity" class="force has-output" />
+							<output></output>
+						</div>
+
+						<label for="force-alpha" class="col-one">Alpha</label>
+						<div class="col-two cols flex-wrap__nowrap">
+							<input type="range" id="force-alpha" name="force-alpha" min="0" max="1" step="0.01" data-tree-function="alpha" class="force has-output" />
+							<output></output>
+						</div>
+
+						<label for="force-theta" class="col-one">Theta</label>
+						<div class="col-two cols flex-wrap__nowrap">
+							<input type="range" id="force-theta" name="force-theta" min="0" max="1" step="0.01" data-tree-function="theta" class="force has-output" />
 							<output></output>
 						</div>
 					</div>

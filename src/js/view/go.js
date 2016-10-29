@@ -82,6 +82,14 @@ $(function() {
 
 	// Get force layout configuration when tree is started
 	$('#go-ancestor').on('tree.start', function(event, d) {
+
+		// Update play/pause state
+		$('#go-ancestor__play-pause')
+			.attr('data-state', 'playing')
+			.find('span').removeClass().addClass('icon-pause').text('Pause');
+			$('#go-ancestor').goTree('start');
+
+		// Update displayed force options
 		$.each(d.force, function(k,f) {
 			$('#force-'+k).val(f).next('output').text(f);
 		});

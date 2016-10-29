@@ -13,10 +13,12 @@
 				force: {
 					charge: -500,
 					linkDistance: 5,
-					theta: 0.5
+					theta: 0.5,
+					gravity: 0.1,
 				},
 				altClickNavigate: true,
 				shiftClickNavigate: false,
+				dblClickUpdate: false,
 				showLegend: true,
 				initNode: 'GO:0008150',
 				jsonLoaded: function() {}
@@ -461,7 +463,7 @@
 									d3.select(this).classed("fixed", d.fixed = false);
 								} else if(d3.event.altKey && tree.settings.altClickNavigate === true) {
 									window.location.href = root + '/view/go/' + d.id;
-								} else {
+								} else if(tree.settings.dblClickUpdate === true) {
 									tree.update(d.id);
 								}
 							})
@@ -534,7 +536,14 @@
 					force.start();
 					$(tree.element).trigger('tree.start', {
 						force: {
-							charge: force.charge()
+							charge: force.charge(),
+							chargeDistance: force.chargeDistance(),
+							friction: force.friction(),
+							gravity: force.gravity(),
+							linkDistance: force.linkDistance(),
+							linkStrength: force.linkStrength(),
+							alpha: force.alpha(),
+							theta: force.theta()
 						}
 					});
 					if(forceTimer) window.clearTimeout(forceTimer);
@@ -704,9 +713,41 @@
 
 			// Alias for force.charge
 			charge: function(charge) {
-				charge = charge || this.settings.charge;
+				charge = Math.max(0, Math.min(1, charge || this.settings.force.charge));
 				force.charge(charge).start();
-			}
+			},
+
+			// Alias for force.friction
+			friction: function(friction) {
+				friction = Math.max(0, Math.min(1, friction || this.settings.force.friction));
+				force.friction(friction).start();
+			},
+
+			// Alias for force.gravity
+			gravity: function(gravity) {
+				gravity= Math.max(0, Math.min(1, gravity || this.settings.force.gravity));
+				force.charge(gravity).start();
+			},
+
+			// Alias for force.linkDistance
+			linkDistance: function(linkDistance) {
+				linkDistance = Math.max(1, Math.min(100, linkDistance || this.settings.force.linkDistance));
+				force.linkDistance(linkDistance).start();
+			},
+
+			// Alias for force.alpha
+			alpha: function(alpha) {
+				alpha = Math.max(0, Math.min(1, alpha || this.settings.force.alpha));
+				force.alpha(alpha).start();
+			},
+
+			// Alias for force.theta
+			theta: function(theta) {
+				theta = Math.max(0, Math.min(1, theta || this.settings.force.theta));
+				force.theta(theta).start();
+			},
+
+
 		});
 
 		// A really lightweight plugin wrapper around the constructor,
