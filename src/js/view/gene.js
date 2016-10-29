@@ -53,43 +53,35 @@ $(function() {
 			globalFun.view.corgi();
 			globalFun.view.expat();
 
+			// Update badge
+			var updateBadge = function(subset, selector) {
+				var $badge = $('#view__lore1-inserts h3 span.badge');
+
+				$badge.text($l.find(selector).length);
+
+				if(subset) {
+					$badge.addClass('subset');
+				} else {
+					$badge.removeClass('subset');
+				}
+			};
+
 			// Bind change event to LORE1 filtering
 			$('#lore1-type').on('change', function() {
 				var $t = $(this),
 					$l = $('#lore1-list');
 
-				// Update badge
-				var updateBadge = function(subset, selector) {
-					var $badge = $('#view__lore1-inserts h3 span.badge');
-
-					$badge.text($l.find(selector).length);
-
-					if(subset) {
-						$badge.addClass('subset');
-					} else {
-						$badge.removeClass('subset');
-					}
-				};
-
 				// Show intronic lines
 				if($t.val() === 'intronic') {
-					$l
-					.find('li.lore1--intronic')
-					.show()
-					.siblings()
-						.not('.lore1--intronic')
-						.hide();
+					$l.find('li.lore1--intronic').show();
+					$l.find('li').not('.lore1--intronic').hide();
 
 					updateBadge(true, 'li.lore1--intronic');
 				}
 				// Show exonic lines
 				else if($t.val() === 'exonic') {
-					$l
-					.find('li.lore1--exonic') 
-					.show()
-						.siblings()
-						.not('.lore1--exonic')
-						.hide();
+					$l.find('li.lore1--exonic').show();
+					$l.find('li').not('.lore1--exonic').hide();
 
 					updateBadge(true, 'li.lore1--exonic');
 				}
