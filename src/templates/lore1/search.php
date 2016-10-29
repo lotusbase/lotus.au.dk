@@ -487,12 +487,12 @@
 									// If insertion occurs in a gene
 									$genes = explode(",", $results['Gene']);
 									foreach($genes as $gene) {
-										echo '<div class="dropdown button"><span class="dropdown--title"><a href="'.WEB_ROOT.'/gene/'.$gene.'" title="View gene details for '.$gene.'">'.$gene.'</a></span><ul class="dropdown--list">';
+										echo '<div class="dropdown button"><span class="dropdown--title"><a href="'.WEB_ROOT.'/view/gene/'.$gene.'" title="View gene details for '.$gene.'">'.$gene.'</a></span><ul class="dropdown--list">';
 
 										echo '<li><a href="'.$_SERVER['PHP_SELF'].'?v='.$version.'&gene='.$gene.'" title="Search database for this gene: '.$gene.'"><span class="pictogram icon-search"><em>LORE1</em> search</span></a></li>';
 
 										if(version_compare($version, '3.0') >= 0) {
-											echo '<li><a href="'.WEB_ROOT.'/gene/'.$gene.'" title="View gene details for '.$gene.'"><span class="icon-search">Detailed gene info</span></a></li>';
+											echo '<li><a href="'.WEB_ROOT.'/view/gene/'.$gene.'" title="View gene details for '.$gene.'"><span class="icon-eye">View gene info</span></a></li>';
 											echo '<li><a href="/tools/trex.php?ids='.$gene.'&v='.$version.'" title="Get advanced transcript information for this gene: '.$gene.'"><span class="pictogram icon-search">Send to Transcript Explorer</span></a></li>';
 											echo '<li><a href="/expat/?ids='.$gene.'&v='.$version.'&t=6&dataset=ljgea-geneid" title="Access expression data from the Lotus japonicus expression atlas tool"><span class="pictogram icon-map">Send to Expression Atlas</span></a></li>';
 											echo '<li><a href="/genome/?loc='.$gene.'" title="View in genome browser"><span class="pictogram icon-map">View in genome browser</span></a></li>';
@@ -513,12 +513,12 @@
 										$exons = explode(",", $results['Exon']);
 
 										foreach($exons as $exon) {
-											echo '<div class="dropdown button"><span class="dropdown--title"><a href="'.WEB_ROOT.'/gene/'.$exon.'" title="View gene details for '.$exon.'">'.$exon.'</a></span><ul class="dropdown--list">';
+											echo '<div class="dropdown button"><span class="dropdown--title"><a href="'.WEB_ROOT.'/view/transcript/'.$exon.'" title="View transcript details for '.$exon.'">'.$exon.'</a></span><ul class="dropdown--list">';
 
 											echo '<li><a data-gene="'.$exon.'" data-version="'.$version.'" class="api-gene-annotation" title="Fetching gene annotation&hellip;"><span class="pictogram icon-cog">Fetching gene annotation&hellip;</a></span></li>';
 
 											if(version_compare($version, '3.0') >= 0) {
-												echo '<li><a href="'.WEB_ROOT.'/gene/'.$exon.'" title="View gene details for '.$exon.'"><span class="icon-search">Detailed gene info</span></a></li>';
+												echo '<li><a href="'.WEB_ROOT.'/view/transcript/'.$exon.'" title="View transcript details for '.$exon.'"><span class="icon-eye">View transcript info</span></a></li>';
 											}
 
 											echo '</ul></div>';
