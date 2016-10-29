@@ -173,7 +173,7 @@ $(function() {
 			var updateBadge = function(subset, selector) {
 				var $badge = $('#view__lore1-inserts h3 span.badge');
 
-				$badge.text($l.find(selector).length);
+				$badge.text($('#lore1-list').find(selector).length);
 
 				if(subset) {
 					$badge.addClass('subset');
