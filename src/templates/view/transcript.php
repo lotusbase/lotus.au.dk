@@ -456,7 +456,7 @@
 			<p><abbr title="Gene Ontology">GO</abbr> predictions are based solely on the InterPro to GO mapping published by EMBL-EBI, which is in turn based on the <a href="#view__domain-prediction">predicted domains to InterPro domain mapping</a>. The <abbr title="Gene Ontology">GO</abbr> metadata was last updated on October 10, 2016.</p>
 			<?php
 				try {
-					if($q3->rowCount()) { ?>
+					if($q3 && $q3->rowCount()) { ?>
 					<table class="table--dense">
 						<thead>
 							<tr>
