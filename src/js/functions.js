@@ -434,6 +434,12 @@ var globalFun = {
 					return $(this).data('input-value');
 				}).get();
 
+			if(vals.length) {
+				$(this).closest('.input-mimic').next('button.input-mimic__clear').removeClass('hidden');
+			} else {
+				$(this).closest('.input-mimic').next('button.input-mimic__clear').addClass('hidden');
+			}
+
 			$m.find('input.input-hidden').val(vals).trigger('change');
 		}
 	},
@@ -806,9 +812,22 @@ $(function() {
 		}));
 
 
-	// Autocomplete PlantID search
-	$d
-	.on('keydown', 'form .input-mimic input', function(e) {
+	// Input mimic for tag-like inputs
+	$('.input-mimic').each(function() {
+		$(this).after('<button class="input-mimic__clear button--plain '+($(this).find('.input-hidden').val() ? '' : 'hidden')+'" type="button" title="Clear all inputs"><span class="icon-cancel icon--no-spacing"></span></button>');
+	});
+	$d.on('click', '.input-mimic__clear', function() {
+		var $input = $(this).prev('.input-mimic').find('ul.input-values li.input-wrapper input'),
+			$tags = $(this).prev('.input-mimic').find('ul.input-values li[data-input-value]');
+
+		console.log($input, $tags);
+
+		$input.focus();
+		$tags.remove();
+		globalFun.multipleTextInput.updateHidden.call($input[0]);
+	});
+	$('.input-mimic')
+	.on('keydown', 'input', function(e) {
 
 		var $t = $(this),
 			booleanMode = $(this).attr('data-boolean-mode') || false,
@@ -826,7 +845,6 @@ $(function() {
 			// Sometimes if the user types really fast, we missed capturing separator keys
 			// ... so parsing is still required
 			var strings = globalFun.multipleTextInput.parse.call($t[0], booleanMode);
-			console.log(strings);
 
 			// Update list
 			globalFun.multipleTextInput.updateInputList.call($t[0], booleanMode, strings);
@@ -839,10 +857,10 @@ $(function() {
 			globalFun.multipleTextInput.updateHidden.call($t[0]);
 		}
 	})
-	.on('focus', 'form .input-mimic input', function() {
+	.on('focus', 'input', function() {
 		$(this).closest('.input-mimic').addClass('focus');
 	})
-	.on('blur', 'form .input-mimic input', function() {
+	.on('blur', 'input', function() {
 		var $t = $(this),
 			booleanMode = $(this).attr('data-boolean-mode') || false,
 			strings = globalFun.multipleTextInput.parse.call($t[0], booleanMode);
@@ -853,12 +871,12 @@ $(function() {
 		// Update list
 		globalFun.multipleTextInput.updateInputList.call($t[0], booleanMode, strings);
 
-	}).on('paste', 'form .input-mimic input', function() {
+	}).on('paste', 'input', function() {
 		var $t = $(this);
 	});
 
-	$d
-	.on('click', 'form .input-mimic li span[data-action="delete"]', function(e) {
+	$('.input-mimic')
+	.on('click', 'li span[data-action="delete"]', function(e) {
 		e.stopPropagation();
 		var $p = $(this).parent('li'),
 			$input = $p.siblings('li.input-wrapper').find('input');
@@ -869,10 +887,10 @@ $(function() {
 			globalFun.multipleTextInput.updateHidden.call($input[0]);
 		});
 	})
-	.on('click', 'form .input-mimic .input-values', function(e) {
+	.on('click', '.input-values', function(e) {
 		e.stopPropagation();
 	})
-	.on('click', 'form .input-mimic', function() {
+	.on('click', function() {
 		$(this).find('ul li.input-wrapper input').focus();
 	})
 	.find('input.input-hidden')

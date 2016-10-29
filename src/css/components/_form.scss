@@ -44,7 +44,11 @@
 		}
 
 		// Colors
-		&.warning {
+		&.button--plain {
+			background-color: rgba(#000,.15);
+			color: #555;
+		}
+		&.button--warning {
 			background-color: $ui_warning;
 		}
 
@@ -118,7 +122,7 @@ form {
 	}
 
 	/* General input styles */
-	input, select, textarea, *.input-mimic, .select2 {
+	input, select, textarea, .input-mimic, .select2 {
 		background-color: rgba(#fff,.65);
 		border: 1px solid rgba(#000,.25);
 		box-sizing: border-box;
@@ -303,7 +307,7 @@ form {
 		&.resize__horizontal	{ resize: horizontal; }
 		&.resize				{ resize: both; }
 	}
-	*.input-mimic {
+	.input-mimic {
 		input {
 			background-color: transparent;
 			border: none;
@@ -474,7 +478,6 @@ form {
 			z-index: 2;
 		}
 	}
-	.search-again & .separator span { background-color: #ddd; }
 	span.asterisk {
 		color: $ui_warning;
 		display: block;
@@ -507,8 +510,12 @@ form {
 	}
 
 	/* Input mimic */
-	*.input-mimic {
+	.input-mimic {
 		padding: .25rem 1rem 0;
+		position: relative;
+		max-height: 15rem;
+		overflow-y: auto;
+
 		ul {
 			display: flex;
 			flex-wrap: wrap;
@@ -550,6 +557,13 @@ form {
 			li {
 				color: #555;
 			}
+		}
+
+		& + button {
+			padding: 0 .5rem;
+			position: absolute;
+			top: .25rem;
+			right: .25rem;
 		}
 	}
 

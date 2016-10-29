@@ -50,13 +50,13 @@
 			$q1 = $db->prepare("SELECT
 				logo1.GO_ID AS GOTerm,
 				GROUP_CONCAT(DISTINCT logo1.Transcript) AS QueryList,
-				COUNT(DISTINCT logo2.Transcript) AS MappedCount,
+				logo2.TranscriptCount AS MappedCount,
 				go.Namespace AS Namespace,
 				go.Name AS Name
 				FROM gene_ontology_lotus AS logo1
 				LEFT JOIN gene_ontology AS go ON
 					logo1.GO_ID = go.GO_ID
-				LEFT JOIN gene_ontology_lotus AS logo2 ON 
+				LEFT JOIN gene_ontology_lotus_by_goID AS logo2 ON 
 					logo1.GO_ID = logo2.GO_ID
 				WHERE
 					logo1.GO_ID IS NOT NULL AND
@@ -283,7 +283,7 @@
 			if($searched && !$error) {
 
 				$rows = $q1->rowCount();
-				echo '<p>We have found <strong>'.$rows.'</strong> unique GO '.pl($rows, 'term').' mapped to your list of '.pl(count($ids), 'identifier').'. This search has taken <strong>'.number_format((microtime(true) - $start_time), 3).'s</strong> to perform.</p>';
+				echo '<p>We have found <strong>'.$rows.'</strong> unique GO '.pl($rows, 'term').' mapped to your list of <strong>'.count($ids).'</strong> '.pl(count($ids), 'identifier').'. This search has taken <strong>'.number_format((microtime(true) - $start_time), 3).'s</strong> to perform.</p>';
 		?>
 		<table id="go-enrichment" class="table--dense">
 			<thead>
@@ -331,8 +331,7 @@
 						$pvalue = $scipy['go_data'][$d['GOTerm']]['pvalue'];
 						if(!empty($pvalue['corrected'][$correction])) {
 							$pvalue_c = $pvalue['corrected'][$correction];
-							echo $pvalue_c < 0.01 ? sprintf('%.2e', $pvalue_c) : number_format($pvalue_c, '2', '.', '');
-							//echo sprintf('%.2e', $pvalue['corrected'][$correction]);
+							echo sprintf('%.2e', $pvalue_c);
 						} else if(!is_string($pvalue['uncorrected'])) {
 							echo sprintf('%.2e', $pvalue['uncorrected']);
 						} else {

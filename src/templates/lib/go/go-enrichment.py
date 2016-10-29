@@ -91,13 +91,11 @@ for go_node in ['go_data']:
 			go_terms.append(go_term)
 
 			# Add Bonferroni corrected value right now
-			if go_data['data']['queryCount'] > 1:
-				output[go_node][go_term]['pvalue']['corrected']['bonferroni'] = max(min(1, pvalue), 0)
+			output[go_node][go_term]['pvalue']['corrected']['bonferroni'] = max(min(1, pvalue * len(feed[go_node])), 0)
 
 	# Perform BH correction on all collected pvalues and zip with GO terms
 	p_rejected, p_uncorrected, p_corrected = fdrcorrection(pvalues)
 	_p_corrected = dict(zip(go_terms, p_corrected))
-	print(_p_corrected)
 
 	# Iterate through the second time to correct pvalues using BH algorithm
 	for go_term, go_data in feed[go_node].items():
