@@ -11,14 +11,15 @@
 					height: 620,
 				},
 				force: {
-					charge: -500,
-					linkDistance: 5,
+					charge: -2000,
+					linkDistance: 25,
 					theta: 0.5,
 					gravity: 0.1,
 				},
 				altClickNavigate: true,
 				shiftClickNavigate: false,
 				dblClickUpdate: false,
+				allowUpdate: false,
 				showLegend: true,
 				initNode: 'GO:0008150',
 				jsonLoaded: function() {}
@@ -50,6 +51,8 @@
 				var tree = this,
 					$t = $(this.element),
 					s = this.settings;
+
+				console.log(s.force);
 
 				var width = s.chart.width,
 					marginLeft = s.chart.marginLeft,
@@ -138,7 +141,7 @@
 						return [
 							'<ul>',
 								'<li><a href="'+root+'/view/go/'+d.id+'"><span class="icon-eye">View GO annotation</span></a></li>',
-								'<li><a href="#" id="go-menu__node-update" data-node="'+d.id+'"><span class="icon-map">Expand this node</span></a>',
+								(tree.settings.allowUpdate ? '<li><a href="#" id="go-menu__node-update" data-node="'+d.id+'"><span class="icon-map">Expand this node</span></a>' : ''),
 							'</ul>'
 						].join('');
 					});
@@ -298,10 +301,6 @@
 						nodes[j].y = 50;
 						nodes[j].is = 'root';
 						nodes[j].r = 10;
-
-						force
-						.charge(tree.settings.force.charge*2)
-						.linkDistance(tree.settings.force.linkDistance*5)
 					}
 				}
 
@@ -459,7 +458,7 @@
 								// Clear d3 tip
 								goTip.hide(d);
 
-								if (d3.event.shiftKey && tree.settings.shiftClickNavigate === true) {
+								if ((d3.event.shiftKey && tree.settings.shiftClickNavigate === true) || tree.settings.dblClickUpdate === false) {
 									d3.select(this).classed("fixed", d.fixed = false);
 								} else if(d3.event.altKey && tree.settings.altClickNavigate === true) {
 									window.location.href = root + '/view/go/' + d.id;
@@ -713,7 +712,7 @@
 
 			// Alias for force.charge
 			charge: function(charge) {
-				charge = Math.max(0, Math.min(1, charge || this.settings.force.charge));
+				charge = Math.max(-10000, Math.min(0, charge || this.settings.force.charge));
 				force.charge(charge).start();
 			},
 
@@ -726,7 +725,7 @@
 			// Alias for force.gravity
 			gravity: function(gravity) {
 				gravity= Math.max(0, Math.min(1, gravity || this.settings.force.gravity));
-				force.charge(gravity).start();
+				force.gravity(gravity).start();
 			},
 
 			// Alias for force.linkDistance

@@ -2,6 +2,7 @@ $(function() {
 	var goTree = $('#go-explorer').goTree({
 		shiftClickNavigate: true,
 		dblClickUpdate: true,
+		allowUpdate: true,
 		initNode: $('#go-root').val(),
 		jsonLoaded: function() {
 			$('#go-root').prop('disabled', false);

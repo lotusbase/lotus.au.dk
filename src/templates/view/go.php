@@ -209,12 +209,16 @@
 
 		<div id="view__tree" class="view__facet">
 			<h3>Ancestor tree</h3>
-			<p>A force layout showing the ancestor tree for <strong><?php echo $id; ?></strong>, and its immediate children. Mouseover each node to glean more information; click and drag nodes to reposition them; double click on nodes to unfix them.</p>
+			<p>A force layout showing the ancestor tree for <strong><?php echo $id; ?></strong>, and its immediate children. Mouseover each node to glean more information; click and drag nodes to reposition them; double click on nodes to unfix them. Alt + double click to view the GO term on its page. Right click to access the context menu.</p>
 			<div class="facet floating-controls__hide controls--visible">
 				<div class="facet__stage">
 					<svg id="go-ancestor" data-go="<?php echo $id; ?>"></svg>
 					<ul class="floating-controls position--right">
 						<li><a href="#" class="icon-cog icon--no-spacing controls__toggle" title="Toggle controls"></a></li>
+						<li><a href="#" id="go-ancestor__export-image" class="icon-camera icon--no-spacing" title="Image export options"></a><ul>
+							<li><a href="#" data-image-type="png" title="Export current view as PNG file">PNG (bitmap)</a></li>
+							<li><a href="#" data-image-type="svg" title="Export current view as SVG file">SVG (vector)</a></li>
+						</ul></li>
 					</ul>
 				</div>
 				<form class="facet__controls has-group" id="go-ancestor__controls" action="#" method="get">
@@ -228,7 +232,7 @@
 
 					<div role="group" class="has-legend cols">
 						<p class="legend full-width">Force layout</p>
-						<p class="full-width">Every force layout is different&mdash;we have picked a set of parameters which suits most GO ancestor tree chart well. Feel free to play with the following parameters to change how nodes are positioned spatially. They are <a href="https://github.com/d3/d3-3.x-api-reference/blob/master/Force-Layout.md">fully described in the d3.js v3.x documentation</a>. If you mess something up&mdash;don't worry: hitting the "reset view" button above will reset the chart to its default layout.</p>
+						<p class="full-width">Every force layout is different&mdash;we have picked <a href="https://github.com/d3/d3-3.x-api-reference/blob/master/Force-Layout.md">a set of parameters</a> which suits most GO ancestor tree chart well. If you mess something up&mdash;don't worry: hitting the "reset view" button above will reset the chart to its default layout.</p>
 						<label for="force-charge" class="col-one">Charge</label>
 						<div class="col-two cols flex-wrap__nowrap">
 							<input type="range" id="force-charge" name="force-charge" min="-10000" max="0" step="1" data-tree-function="charge" class="force has-output" />

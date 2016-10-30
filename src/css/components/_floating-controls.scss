@@ -47,7 +47,7 @@
 			position: absolute;
 			top: calc(100% - 1px);
 			left: 0;
-			li {
+			& > li {
 				a, &:first-child a {
 					border: none;
 					border-radius: 0;
