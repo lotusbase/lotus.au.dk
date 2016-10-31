@@ -10,20 +10,6 @@
 // Tree and controls wrapper
 #phyalign-tree {
 	margin: 3rem 0 0 0;
-	overflow: visible;
-	position: relative;
-	left: 0;
-	transition: all .5s ease-in-out;
-
-	// State
-	&.controls--visible {
-		left: calc(-25% - .75rem);
-		#phyalign-tree__controls {
-			opacity: 1;
-			pointer-events: auto;
-			width: 50%;
-		}
-	}
 }
 
 // Tree SVG
@@ -71,19 +57,11 @@
 	}
 }
 
-// Tree controls
-#phyalign-tree__controls {
-	opacity: 0;
-	overflow-x: hidden;
-	overflow-y: auto;
-	pointer-events: none;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: calc(100% + 1rem);
-	width: 0;
-	transition: opacity .5s ease-in-out;
-}
+// Floating controls
+@import 'components/floating-controls';
+
+// Faceted view
+@import 'components/facet';
 
 // D3 tooltip
 @import 'components/d3/_tip.scss';

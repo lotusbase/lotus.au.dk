@@ -792,6 +792,9 @@ $(function() {
 							leaves		= d.leaves,
 							tips		= d.tips;
 
+						// Exit function if too many nodes or links are present
+						console.log(nodes.length);
+
 						// Position nicely
 						chart.attr({
 							'transform': 'translate(100,20)'
@@ -1190,9 +1193,8 @@ $(function() {
 
 						// Update/draw scale bar
 						var _scaleBarTop = stage.select('g.x.axis.top');
-						if(treeType === 'radial') {
-							_scaleBarTop.remove();
-						} else {
+						_scaleBarTop.remove();
+						if(treeType !== 'radial') {
 							stage.append('g')
 								.call(scaleAxis.orient('top'))
 								.attr({
