@@ -563,6 +563,10 @@ $(function() {
 			},
 			tree: {
 				init: function() {
+
+					// Show view
+					$('#phyalign-tree').removeClass('hidden');
+
 					// Zoom
 					var zoomListener = d3.behavior.zoom().scaleExtent([0.2,5]).on('zoom', function() {
 						d3.select('#stage').attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
@@ -585,10 +589,12 @@ $(function() {
 								'id': 'capture',
 								'width': Math.max($w.width(), $w.height()),
 								'height': Math.max($w.width(), $w.height()),
-								'transform': 'translate(0,0)'
+								'transform': 'translate(0,0)',
+								'fill': 'none'
 							})
-							.style('fill', 'red')
-							.style('pointer-events', 'all'),
+							.style({
+								'pointer-events': 'all'
+							}),
 
 						// Stage
 						stage = svg.append('g')
@@ -1581,6 +1587,34 @@ $(function() {
 				'transform': globalFun.phyalign.d3.label.radial.transform
 			});
 	}));
+
+	// Image export
+	$('a.image-export').on('click', function(e) {
+		e.preventDefault();
+
+		// Get SVG
+		var source = $(this).data('source');
+
+		// Update SVG dimensions
+		var $svg = $('#'+source+' svg');
+		$svg.attr({
+			'width': $svg.width(),
+			'height': $svg.height()
+		});
+
+		// Get data
+		var svg_xml = (new XMLSerializer()).serializeToString($('#'+source+' svg')[0]),
+			output_format = $(this).data('image-type'),
+			$form = $('#' + $(this).data('form'));
+
+		// Update form fields
+		$form
+			.find(':input.svg-data').val(svg_xml).end()
+			.find(':input.output-format').val(output_format).end();
+
+		// Submit form
+		$form[0].submit();
+	});
 
 	// General function to check popstate events
 	$w.on('popstate', function(e) {

@@ -32,6 +32,7 @@ module.exports = {
         files: [
             'src/templates/**/*.php',
             'src/templates/**/*.ini',
+            'src/templates/**/*.pl',
             'src/templates/**/*.py',
             'src/templates/**/*.sh',
             'src/templates/data/**/*.*'

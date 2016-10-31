@@ -23,7 +23,7 @@
 	& > li {
 		position: relative;
 		a {
-			background-color: #fff;
+			background: rgba(#fff, .85);
 			text-decoration: none;
 		}
 		&:first-child a {
@@ -40,6 +40,7 @@
 
 		ul {
 			border: 1px solid #777;
+			box-shadow: 0 0 .5rem .25rem rgba(#000,.15);
 			display: none;
 			list-style: none;
 			margin: 0;
@@ -60,6 +61,7 @@
 				}
 				&:last-child a {
 					border: none;
+					border-radius: 0;
 				}
 			}
 		}
@@ -71,4 +73,13 @@
 		}
 	}
 	&:hover { opacity: 1; }
+}
+
+@supports (backdrop-filter: none) {
+	.floating-controls {
+		& > li > ul > li a {
+			background-color: rgba(#fff,.5);
+			backdrop-filter: blur(10px);
+		}
+	}
 }
