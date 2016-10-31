@@ -871,7 +871,31 @@ $(function() {
 					// Do jQuery data tables
 					var rows_selected = [],
 						nodeTable = $('#sigma-clusters__table').DataTable({
-							'dom': 'tipr',
+							'dom': 'tiprB',
+							'buttons': [
+								{
+									extend: 'csv',
+									exportOptions: {
+										columns: [0,1],
+										format: {
+											body: function(data, row, column, node) {
+												return (column === 1) ? $(data).find('span.dropdown--title').text() : data;
+											}
+										}
+									}
+								},
+								{
+									extend: 'print',
+									exportOptions: {
+										columns: [0,1],
+										format: {
+											body: function(data, row, column, node) {
+												return (column === 1) ? $(data).find('span.dropdown--title').text() : data;
+											}
+										}
+									}
+								}
+							],
 							'language': {
 								'emptyTable': 'No clusters selected yet. Please select a cluster from the dropdown above.'
 							},
@@ -1456,11 +1480,21 @@ $(function() {
 
 						// Highlight nodes
 						globalFun.sigma.highlightNodes(rows.data);
+						var idType = $('#sigma-data').data('job-metadata').settings.id_type,
 
-						// Filter cluster data
-						var filter = $.map(rows.data, function(v) {
-							return v[0];
-						});
+							// Allow label coercing
+							coerceLabel = function(label) {
+								if(idType === 'GeneID') {
+									return label.replace(/\.\d+$/gi, '');
+								} else {
+									return label;
+								}
+							},
+
+							// Filter cluster data
+							filter = $.map(rows.data, function(v) {
+								return coerceLabel(v[0]);
+							});
 
 						// Reset filter
 						$('#sigma-cluster').find('option').first().prop('selected', true);
@@ -1588,7 +1622,7 @@ $(function() {
 
 				// Toggle highlight status
 				$('#sigma').data('highlight', true);
-				$('#sigma-searchform__control__i').prop('disabled', false);
+				$('#sigma-searchform__control__remove-highlights').prop('disabled', false);
 
 				// For nodes that are not found in the network graph
 				$('#sigma-searchform__highlight--not-found').empty().removeClass('active');
