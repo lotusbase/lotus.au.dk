@@ -249,44 +249,50 @@
 
 					<button type="submit"><span class="pictogram icon-fork">Draw tree</span></button>
 				</form>
-				<div id="phyalign-tree">
+			</div>
+
+			<div class="facet floating-controls__hide controls--visible" id="phyalign-tree">
+				<div class="facet__stage">
 					<div id="phyalign-tree__svg"></div>
-					<form id="phyalign-tree__controls" action="#" method="get" class="has-group">
-						<div class="has-legend" role="group">
-							<p class="legend">Display options</p>
-							<label for="tc__bootstrap-nodes"><input type="checkbox" name="tc__bootstrap-nodes" id="tc__bootstrap-nodes" class="prettify" /><span>Color nodes by bootstrap values</span></label>
-							<label for="tc__bootstrap-links"><input type="checkbox" name="tc__bootstrap-links" id="tc__bootstrap-links" class="prettify" /><span>Color links by bootstrap values</span></label>
-							<label for="tc__internodes"><input type="checkbox" name="tc__internodes" id="tc__internodes" class="prettify" /><span>Show internodes</span></label>
-							<label for="tc__leaves"><input type="checkbox" name="tc__leaves" id="tc__leaves" class="prettify" /><span>Show leaf nodes</span></label>
-						</div>
-
-						<div class="has-legend" role="group">
-							<p class="legend">Scale options</p>
-							<label for="tc__scale"><input type="checkbox" name="tc__scale" id="tc__scale" class="prettify" /><span>Draw to scale</span></label>
-							<label for="tc__scale-bar"><input type="checkbox" name="tc__scale" id="tc__scale-bar" class="prettify" /><span>Show scale bar</span></label>
-							<label for="tc__grid"><input type="checkbox" name="tc__grid" id="tc__grid" class="prettify" /><span>Show grid</span></label>
-						</div>
-
-						<div class="cols has-legend" role="group">
-							<p class="legend">Layout options</p>
-							<label for="tc__layout" class="col_one">Tree type</label>
-							<select name="tc__layout" id="tc__layout" class="col-two">
-								<option value="radial">Radial</option>
-								<option value="dendrogram">Dendrogram</option>
-							</select>
-
-							<button type="button" id="tc__fit">Zoom to fit</button>
-						</div>
-
-						<div class="cols has-legend tc__treeType" role="group" id="tc__radial">
-							<p class="legend">Radial tree options</p>
-							<label for="tc__radial__rotation" class="col-one">Rotation</label>
-							<div class="col-two">
-								<input type="range" name="tc__radial__rotation" id="tc__radial__rotation" min="0" max="360" value="0" disabled /><output id="tc__radial__rotation--out"-></output>
-							</div>
-						</div>
-					</form>
+					<ul class="floating-controls position--right">
+						<li><a href="#" class="icon-cog icon--no-spacing controls__toggle" title="Toggle controls"></a></li>
+					</ul>
 				</div>
+				<form class="facet__controls has-group" id="phyaling-tree__controls" action="#" method="get">
+					<div class="has-legend" role="group">
+						<p class="legend">Display options</p>
+						<label for="tc__bootstrap-nodes"><input type="checkbox" name="tc__bootstrap-nodes" id="tc__bootstrap-nodes" class="prettify" /><span>Color nodes by bootstrap values</span></label>
+						<label for="tc__bootstrap-links"><input type="checkbox" name="tc__bootstrap-links" id="tc__bootstrap-links" class="prettify" /><span>Color links by bootstrap values</span></label>
+						<label for="tc__internodes"><input type="checkbox" name="tc__internodes" id="tc__internodes" class="prettify" /><span>Show internodes</span></label>
+						<label for="tc__leaves"><input type="checkbox" name="tc__leaves" id="tc__leaves" class="prettify" /><span>Show leaf nodes</span></label>
+					</div>
+
+					<div class="has-legend" role="group">
+						<p class="legend">Scale options</p>
+						<label for="tc__scale"><input type="checkbox" name="tc__scale" id="tc__scale" class="prettify" /><span>Draw to scale</span></label>
+						<label for="tc__scale-bar"><input type="checkbox" name="tc__scale" id="tc__scale-bar" class="prettify" /><span>Show scale bar</span></label>
+						<label for="tc__grid"><input type="checkbox" name="tc__grid" id="tc__grid" class="prettify" /><span>Show grid</span></label>
+					</div>
+
+					<div class="cols has-legend" role="group">
+						<p class="legend">Layout options</p>
+						<label for="tc__layout" class="col_one">Tree type</label>
+						<select name="tc__layout" id="tc__layout" class="col-two">
+							<option value="radial">Radial</option>
+							<option value="dendrogram">Dendrogram</option>
+						</select>
+
+						<button type="button" id="tc__fit">Fit tree in view</button>
+					</div>
+
+					<div class="cols has-legend tc__treeType" role="group" id="tc__radial">
+						<p class="legend">Radial tree options</p>
+						<label for="tc__radial__rotation" class="col-one">Rotation</label>
+						<div class="col-two">
+							<input type="range" name="tc__radial__rotation" id="tc__radial__rotation" min="0" max="360" value="0" disabled /><output id="tc__radial__rotation--out"-></output>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 

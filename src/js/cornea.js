@@ -255,7 +255,6 @@ $(function() {
 											} else {
 												globalFun.cornea.jsonCheck.call(t, f, plainText);
 											}
-
 											// Finish progress
 											fileProgress.call(t, size);
 										}
@@ -465,115 +464,140 @@ $(function() {
 				var apiURL = (paramSource === 'request' ? '../api' : '../../../api') + '/v1/cornea/job/status/' + jobID.toLowerCase();
 				$.ajax({
 					url: apiURL,
-					type: 'GET'
+					type: 'GET',
+					dataType: 'text'
 				})
-				.done(function(job) {
-					// Store current status
-					currentStatus = parseInt(job.data.status);
-				
-					// Job complete and available
-					if (currentStatus === 3) {
+				.done(function(stringifiedJSON) {
 
-						// Update status
-						globalFun.cornea.updateStatus({
-							loader: false,
-							clearTimer: true,
-							status: {
-								title: '<span class="icon-ok-circled icon--big icon--no-spacing">'+(jobID.indexOf('standard_') === 0 ? 'Standard job loaded' : 'Job completed')+'</span>',
-								pageTitle: 'CORNEA (Job completed) — Tools — Lotus Base'
-							}
-						});
+					var job,
+						parser,
+						parseComplete = function(job) {
+							// Store current status
+							currentStatus = parseInt(job.data.status);
+						
+							// Job complete and available
+							if (currentStatus === 3) {
 
-						// Start sigma
-						globalFun.sigma.init(job, null, {
-							target: '#check-job',
-							fetchData: true
-						});
+								// Update status
+								globalFun.cornea.updateStatus({
+									loader: false,
+									clearTimer: true,
+									status: {
+										title: '<span class="icon-ok-circled icon--big icon--no-spacing">'+(jobID.indexOf('standard_') === 0 ? 'Standard job loaded' : 'Job completed')+'</span>',
+										pageTitle: 'CORNEA (Job completed) — Tools — Lotus Base'
+									}
+								});
 
-					// Job is in queue
-					} else if (currentStatus === 1) {
-						var jobs_ahead = function(q) {
-							var ahead = parseInt(q) - 1;
-							if(ahead < 1) {
-								return 'Your job is at the top of the queue and will be processed next.';
+								// Start sigma
+								globalFun.sigma.init(job, null, {
+									target: '#check-job',
+									fetchData: true
+								});
+
+							// Job is in queue
+							} else if (currentStatus === 1) {
+								var jobs_ahead = function(q) {
+									var ahead = parseInt(q) - 1;
+									if(ahead < 1) {
+										return 'Your job is at the top of the queue and will be processed next.';
+									} else {
+										return 'There are '+q+' '+globalFun.pl(q, 'job', 'jobs')+' ahead of you.';
+									}
+								};
+
+								globalFun.cornea.updateStatus({
+									loader: true,
+									status: {
+										title: 'Job currently in queue',
+										byline: '<strong>Your job is &numero;'+job.data.queuesize+' in the queue.</strong><br />Last updated: '+moment(new Date()).format('MMM Do YYYY, HH:mm:ss').replace(/(st|nd|rd|th)/gi,'<sup>$1</sup>')+' &middot; updating in <span id="sigma-status__countdown">' + (pollInterval) + 's</span>',
+										desc: [
+											'<div class="simple-card">',
+											'<p>Your job has been submitted to the processing queue. '+jobs_ahead(job.data.queuesize)+' We will automatically poll the status of your job and update this page every '+globalFun.friendlyTime(pollInterval*1000, 0)+'.'+(job.data.owner ? ' As you have provided your email address, you will be notified at <strong>'+job.data.owner+'</strong> when your job is completed.' : '')+'</p>',
+											'<p>Your job has been submitted to the server with the following identifier. Make sure that you keep this page open, bookmark this page URL (<a href="'+window.location.href +'">'+window.location.href +'</a>), or save the following identifier for later access:</p>',
+											'<span class="job-id__wrapper" data-job-id="'+jobID+'"><span class="job-id">'+jobID+'</span><span class="tooltip">Press <kbd>Ctrl &#8963;</kbd>/<kbd>Cmd &#8984;</kbd> + <kbd>C</kbd> to copy</span></span>',
+											'</div>'
+											].join(''),
+										pageTitle: 'CORNEA (Job in queue) — Tools — Lotus Base'
+									}
+								});
+
+								globalFun.cornea.updateCountdown();
+
+							// Job is being processed
+							} else if (currentStatus === 2) {
+								globalFun.cornea.updateStatus({
+									loader: true,
+									status: {
+										title: 'Processing job',
+										byline: 'Last updated: '+moment(new Date()).format('MMM Do YYYY, HH:mm:ss').replace(/(st|nd|rd|th)/gi,'<sup>$1</sup>')+' &middot; updating in <span id="sigma-status__countdown">' + (pollInterval) + 's</span>',
+										desc: [
+											'<div class="simple-card">',
+											'<p>Your job is currently being processed. We will automatically poll the status of your job and update every '+globalFun.friendlyTime(pollInterval*1000, 0)+'.'+(job.data.owner ? ' As you have provided your email address, you will be notified at <strong>'+job.data.owner+'</strong> when your job is completed.' : '')+'</p>',
+											'<p>Your job has been submitted to the server with the following identifier. Make sure that you keep this page open, bookmark this page URL (<a href="'+window.location.href +'">'+window.location.href +'</a>), or save the following identifier for later access:</p>',
+											'<span class="job-id__wrapper" data-job-id="'+jobID+'"><span class="job-id">'+jobID+'</span><span class="tooltip">Press <kbd>Ctrl &#8963;</kbd>/<kbd>Cmd &#8984;</kbd> + <kbd>C</kbd> to copy</span></span>',
+											'</div>'
+											].join(''),
+										pageTitle: 'CORNEA (Processing job) — Tools — Lotus Base'
+									}
+								});
+
+								globalFun.cornea.updateCountdown();
+
+							// Job has expired
+							} else if (currentStatus === 5) {
+								globalFun.cornea.updateStatus({
+									loader: false,
+									status: {
+										title: '<span class="icon-attention icon--big icon--no-spacing">Job expired</span>',
+										desc: [
+											'<p>Your job has been created on the server more than 30 days ago on <strong>'+moment(job.data.end_time).format('LLLL')+' ('+moment(job.data.end_time).fromNow(true)+' ago)</strong>. However, we have loaded your settings and you may use them to create a new network again:</p>',
+											'<form action="'+(paramSource === 'request' ? '..' : '../../..')+'/tools/cornea" method="get" class="form--reset"><ul>',
+												'<li><strong>Dataset</strong>: '+job.data.dataset+'<input type="hidden" name="dataset" value="'+job.data.dataset+'" /></li>',
+												'<li><strong>Threshold</strong>: '+job.data.threshold+'<input type="hidden" name="threshold" value="'+job.data.threshold+'" /></li>',
+												'<li><strong>Minimum cluster size</strong>: '+job.data.minimum_cluster_size+'<input type="hidden" name="min_cluster_size" value="'+job.data.minimum_cluster_size+'" /></li>',
+												'<li><strong>Columns</strong>: '+(job.data.columns ? job.data.columns.length + '<ul class="dataset-columns"><li>'+job.data.columns.join('</li><li>')+'</li></ul>': 'All')+'<input type="hidden" name="columns" value="'+(job.data.columns ? job.data.columns.join(',') : '')+'" /></li>',
+											'</ul>',
+											'<button type="submit"><span class="icon-network">Reload settings into new CORNEA job form</span></button>',
+											'</form>'
+										].join('')
+									}
+								});
 							} else {
-								return 'There are '+q+' '+globalFun.pl(q, 'job', 'jobs')+' ahead of you.';
+								globalFun.cornea.updateStatus({
+									loader: false,
+									clearTimer: true,
+									status: {
+										title: '<span class="icon-attention icon--big icon--no-spacing">Job has failed to run</span>',
+										desc: [
+											'<div class="simple-card">',
+											'<p>We have encountered an error: <code>'+job.data.status_reason+'</code> If you wish to contact us about an issue, please attach the following job ID whenver relevant:</p>',
+											'<span class="job-id__wrapper" data-job-id="'+jobID+'"><span class="job-id">'+jobID+'</span><span class="tooltip">Press <kbd>Ctrl &#8963;</kbd>/<kbd>Cmd &#8984;</kbd> + <kbd>C</kbd> to copy</span></span>',
+											'</div>'
+											].join(''), 
+										pageTitle: 'CORNEA (Job failure) — Tools — Lotus Base'
+									}
+								});
 							}
 						};
 
-						globalFun.cornea.updateStatus({
-							loader: true,
-							status: {
-								title: 'Job currently in queue',
-								byline: '<strong>Your job is &numero;'+job.data.queuesize+' in the queue.</strong><br />Last updated: '+moment(new Date()).format('MMM Do YYYY, HH:mm:ss').replace(/(st|nd|rd|th)/gi,'<sup>$1</sup>')+' &middot; updating in <span id="sigma-status__countdown">' + (pollInterval) + 's</span>',
-								desc: [
-									'<div class="simple-card">',
-									'<p>Your job has been submitted to the processing queue. '+jobs_ahead(job.data.queuesize)+' We will automatically poll the status of your job and update this page every '+globalFun.friendlyTime(pollInterval*1000, 0)+'.'+(job.data.owner ? ' As you have provided your email address, you will be notified at <strong>'+job.data.owner+'</strong> when your job is completed.' : '')+'</p>',
-									'<p>Your job has been submitted to the server with the following identifier. Make sure that you keep this page open, bookmark this page URL (<a href="'+window.location.href +'">'+window.location.href +'</a>), or save the following identifier for later access:</p>',
-									'<span class="job-id__wrapper" data-job-id="'+jobID+'"><span class="job-id">'+jobID+'</span><span class="tooltip">Press <kbd>Ctrl &#8963;</kbd>/<kbd>Cmd &#8984;</kbd> + <kbd>C</kbd> to copy</span></span>',
-									'</div>'
-									].join(''),
-								pageTitle: 'CORNEA (Job in queue) — Tools — Lotus Base'
-							}
+					// Pass stringified JSON to web worker for parsing
+					if(window.Worker) {
+
+						// Define parser
+						parser = new Worker('/dist/js//workers/json-parser.min.js');
+						parser.addEventListener('message', function(e) {
+							parseComplete(e.data);
 						});
 
-						globalFun.cornea.updateCountdown();
+						// Send stringified JSON for parsing
+						parser.postMessage(stringifiedJSON);
 
-					// Job is being processed
-					} else if (currentStatus === 2) {
-						globalFun.cornea.updateStatus({
-							loader: true,
-							status: {
-								title: 'Processing job',
-								byline: 'Last updated: '+moment(new Date()).format('MMM Do YYYY, HH:mm:ss').replace(/(st|nd|rd|th)/gi,'<sup>$1</sup>')+' &middot; updating in <span id="sigma-status__countdown">' + (pollInterval) + 's</span>',
-								desc: [
-									'<div class="simple-card">',
-									'<p>Your job is currently being processed. We will automatically poll the status of your job and update every '+globalFun.friendlyTime(pollInterval*1000, 0)+'.'+(job.data.owner ? ' As you have provided your email address, you will be notified at <strong>'+job.data.owner+'</strong> when your job is completed.' : '')+'</p>',
-									'<p>Your job has been submitted to the server with the following identifier. Make sure that you keep this page open, bookmark this page URL (<a href="'+window.location.href +'">'+window.location.href +'</a>), or save the following identifier for later access:</p>',
-									'<span class="job-id__wrapper" data-job-id="'+jobID+'"><span class="job-id">'+jobID+'</span><span class="tooltip">Press <kbd>Ctrl &#8963;</kbd>/<kbd>Cmd &#8984;</kbd> + <kbd>C</kbd> to copy</span></span>',
-									'</div>'
-									].join(''),
-								pageTitle: 'CORNEA (Processing job) — Tools — Lotus Base'
-							}
-						});
-
-						globalFun.cornea.updateCountdown();
-
-					// Job has expired
-					} else if (currentStatus === 5) {
-						globalFun.cornea.updateStatus({
-							loader: false,
-							status: {
-								title: '<span class="icon-attention icon--big icon--no-spacing">Job expired</span>',
-								desc: [
-									'<p>Your job has been created on the server more than 30 days ago on <strong>'+moment(job.data.end_time).format('LLLL')+' ('+moment(job.data.end_time).fromNow(true)+' ago)</strong>. However, we have loaded your settings and you may use them to create a new network again:</p>',
-									'<form action="'+(paramSource === 'request' ? '..' : '../../..')+'/tools/cornea" method="get" class="form--reset"><ul>',
-										'<li><strong>Dataset</strong>: '+job.data.dataset+'<input type="hidden" name="dataset" value="'+job.data.dataset+'" /></li>',
-										'<li><strong>Threshold</strong>: '+job.data.threshold+'<input type="hidden" name="threshold" value="'+job.data.threshold+'" /></li>',
-										'<li><strong>Minimum cluster size</strong>: '+job.data.minimum_cluster_size+'<input type="hidden" name="min_cluster_size" value="'+job.data.minimum_cluster_size+'" /></li>',
-										'<li><strong>Columns</strong>: '+(job.data.columns ? job.data.columns.length + '<ul class="dataset-columns"><li>'+job.data.columns.join('</li><li>')+'</li></ul>': 'All')+'<input type="hidden" name="columns" value="'+(job.data.columns ? job.data.columns.join(',') : '')+'" /></li>',
-									'</ul>',
-									'<button type="submit"><span class="icon-network">Reload settings into new CORNEA job form</span></button>',
-									'</form>'
-								].join('')
-							}
-						});
 					} else {
-						globalFun.cornea.updateStatus({
-							loader: false,
-							clearTimer: true,
-							status: {
-								title: '<span class="icon-attention icon--big icon--no-spacing">Job has failed to run</span>',
-								desc: [
-									'<div class="simple-card">',
-									'<p>We have encountered an error: <code>'+job.data.status_reason+'</code> If you wish to contact us about an issue, please attach the following job ID whenver relevant:</p>',
-									'<span class="job-id__wrapper" data-job-id="'+jobID+'"><span class="job-id">'+jobID+'</span><span class="tooltip">Press <kbd>Ctrl &#8963;</kbd>/<kbd>Cmd &#8984;</kbd> + <kbd>C</kbd> to copy</span></span>',
-									'</div>'
-									].join(''), 
-								pageTitle: 'CORNEA (Job failure) — Tools — Lotus Base'
-							}
-						});
+						console.warn('Browser does not support Web Worker, using UI thread of JSON parsing.');
+						job = JSON.parse(stringifiedJSON);
+						parseComplete(job);
 					}
+
 				});
 			},
 			updateCountdown: function() {
@@ -716,7 +740,7 @@ $(function() {
 									'<span class="dropdown--title"><span class="icon-download">Export</span></span><ul class="dropdown--list">',
 										(jobMeta.layout.edge_count <= 100000 && jobMeta.layout.node_count <= 3500 ? '<li class="align-left"><a id="cornea-download__canvas-svg" class="disabled" data-resource-type="svg"><span class="icon-file-image">Drawing canvas&hellip;</span></a></li>' : ''),
 										'<li class="align-left"><a id="cornea-download__canvas-png" class="disabled" data-resource-type="png"><span class="icon-file-image">Drawing canvas&hellip;</span></a></li>',
-										(!f && jobMeta.layout.edge_count <= 100000 && jobMeta.layout.node_count <= 3500 ? '<li><a id="cornea-download__json" class="disabled" data-resource-type="file" data-file-path="data/cornea/jobs/'+(staticJob ? 'standard_' : '')+jobMeta.job.id+'.json.gz"><span class="icon-file-archive">Loading data file&hellip;</span></a></li>' : ''),
+										(!f ? '<li><a id="cornea-download__json" class="disabled" data-resource-type="file" data-file-path="data/cornea/jobs/'+(staticJob ? 'standard_' : '')+jobMeta.job.id+'.json.gz"><span class="icon-file-archive">Loading data file&hellip;</span></a></li>' : ''),
 									'</ul>',
 								'</div>',
 							'</form>',

@@ -55,6 +55,7 @@
 		var access_token = '<?php echo LOTUSBASE_API_KEY; ?>';
 	</script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/functions.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/modernizr-custom.min.js"></script>
 
 	<!-- Google Analyrics -->
 	<script>
