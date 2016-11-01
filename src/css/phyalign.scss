@@ -50,6 +50,11 @@
 
 // Tree SVG
 #phyalign-tree__svg {
+	@include transition;
+	&:hover {
+		box-shadow: 0 0 1rem .5rem rgba(#000,.15);
+	}
+
 	svg {
 		cursor: grab;
 		display: block;
@@ -62,10 +67,6 @@
 					cursor: pointer;
 				}
 			}
-		}
-
-		#capture {
-			fill: rgba(#fff,.25) !important;
 		}
 
 		.link-extensions {
