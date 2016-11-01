@@ -205,6 +205,11 @@
 
 	<?php
 		$header = new \LotusBase\PageHeader();
+		$header->set_header_content('<div class="align-center">
+			<h1>GO Enrichment</h1>
+			<span class="byline"><abbr title="Gene Ontology">GO</abbr> term enrichment analysis for <em>L. japonicus</em>.</span>
+		</div>');
+		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/go/go01.jpg');
 		echo $header->get_header();
 
 		// Breadcrumb
@@ -215,8 +220,6 @@
 	?>
 
 	<section class="wrapper">
-		<h2>GO Enrichment</h2>
-		<span class="byline"><abbr title="Gene Ontology">GO</abbr> term enrichment analysis for <em>L. japonicus</em>.</span>
 		<?php
 			if($error) {
 				echo '<p class="user-message warning"><span class="icon-attention"></span>'.$error.'</p>';

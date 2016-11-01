@@ -17,6 +17,11 @@
 
 	<?php
 		$header = new \LotusBase\PageHeader();
+		$header->set_header_content('<div class="align-center">
+			<h1>GO Explorer</h1>
+			<span class="byline">Spatial exploration of <abbr title="Gene Ontology">GO</abbr> terms</span>
+		</div>');
+		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/go/go01.jpg');
 		echo $header->get_header();
 
 		// Breadcrumb
@@ -27,9 +32,6 @@
 	?>
 
 	<section class="wrapper">
-		<h2>GO Explorer</h2>
-		<span class="byline">Spatial exploration of <abbr title="Gene Ontology">GO</abbr> terms</span>
-
 		<form action="#" method="get" class="has-group">
 			<div role="group" class="cols">
 				<label for="go-root" class="col-one">Select a namespace</label>
@@ -70,7 +72,7 @@
 		</div>
 
 		<div class="view__facet">
-			<div class="facet floating-controls__hide">
+			<div class="facet">
 				<div class="facet__stage">
 					<svg id="go-explorer"></svg>
 					<ul class="floating-controls position--right">
