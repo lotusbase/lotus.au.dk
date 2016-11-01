@@ -2,7 +2,7 @@
 	require_once('../config.php');
 
 	$error = false;
-	$error_message = 'Please provide a valid &ge;v3.0 gene/transcript/protein identifier. It should be in the format of <code>Lj{chr}g{version}v{id}[.{isoform}].</code>';
+	$error_message = 'Please provide a valid &ge;v3.0 gene/transcript/protein or <abbr title="Gene Ontology">GO</abbr> term identifier. It should be in the format of <code>Lj{chr}g{version}v{id}[.{isoform}]</code>, or <code>GO:{7-digit-number}</code>.';
 
 	if(!empty($_GET) && !empty($_GET['id'])) {
 		$id = $_GET['id'];
@@ -12,6 +12,8 @@
 			$id = 'gene';
 		} else if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/', $id)) {
 			$id = 'transcript';
+		} else if(preg_match('/^GO:\d{7}$/', $id)){
+			$id = 'go';
 		} else {
 			$error = true;
 		}
@@ -45,8 +47,8 @@
 
 	<section class="wrapper">
 		<h2>Viewer</h2>
-		<span class="byline">A gene, transcript, and protein viewer for <em>L. japonicus</em>.</span>
-		<p class="align-center">For a more full-fledged gene search, please use the <a href="<?php echo WEB_ROOT.'/tools/trex'; ?>">TREX tool</a>.</p>
+		<span class="byline">Data viewer for <em>L. japonicus</em>.</span>
+		<p class="align-center">For a more full-fledged search, please use the <a href="<?php echo WEB_ROOT.'/tools/trex'; ?>">TREX tool</a>.</p>
 		<?php
 			if($error) {
 				echo '<p class="user-message warning"><span class="icon-attention"></span>'.$error_message.'</p>';
@@ -55,7 +57,7 @@
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get" class="has-group">
 			<div class="cols" role="group">
 				<label class="col-one" for="id">Identifier</label>
-				<input class="col-two" type="text" name="id" id="id" placeholder="<?php echo 'Enter gene or transcript identifier (e.g. Lj4g3v0281040 or Lj4g3v0281040.1)'; ?>" />
+				<input class="col-two" type="text" name="id" id="id" placeholder="Enter gene/transcript/protein identifier (e.g. Lj4g3v0281040 or Lj4g3v0281040.1), or GO term (e.g. GO:0000018)" />
 			</div>
 			<button type="submit"><span class="icon-search">Search</span></button>
 		</form>
