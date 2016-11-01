@@ -244,12 +244,12 @@
 		echo $header->get_header();
 	?>
 
-	<?php echo get_breadcrumbs(array('page_title' => 'LORE1 Genotyping Primers')); ?>
+	<?php echo get_breadcrumbs(array('page_title' => '<em>LORE1</em> Genotyping Primers')); ?>
 
 	<section class="wrapper">
 		<?php if(!$searched) { ?>
-			<h2>LORE1 Genotyping Primers</h2>
-			<p>This tool allows you to fetch primer pairs for a given LORE1 insert by providing BLAST headers. BLAST headers are provided when you carry out a <a href="/blast/" title="BLAST">BLAST search</a> within our databases. The script will automatically generate a new CSV file containing the proper format in which you can import into our local Filemaker database to order your genotyping primers.</p>
+			<h2><em>LORE1</em> Genotyping Primers</h2>
+			<p>This tool allows you to fetch primer pairs for a given <em>LORE1</em> insert by providing BLAST headers. BLAST headers are provided when you carry out a <a href="/blast/" title="BLAST">BLAST search</a> within our databases. The script will automatically generate a new CSV file containing the proper format in which you can import into our local Filemaker database to order your genotyping primers.</p>
 			<p class="user-message reminder"><strong>Reminder:</strong> This tool does not check for primer duplicates. After your primer pairs have been retrieved, please verify with the local Filemaker database to ensure that the primers you are ordering have not been ordered before.</p>
 
 			<?php
@@ -301,7 +301,7 @@
 				<button type="submit">Generate primer order sheet</button>
 			</form>
 		<?php } else { ?>
-			<h2>LORE1 Genotyping Primers</h2>
+			<h2><em>LORE1</em> Genotyping Primers</h2>
 			<p>We have searched the database with the BLAST headers that you have provided, and have returned with <?php echo $results_count.' '.pl($results_count, 'pair', 'pairs'); ?> of PCR primers. The <strong>oligo type</strong> and <strong>oligo name</strong> are automatically generated, and we do not recommend modifying it (although you can, after you have downloaded the .csv file, which can be edited in any spreadsheet editor). <strong>Purpose &amp; comments</strong> are automatically generated and can be modified. A quick use guide:</p>
 			<ol>
 				<li>Enter the <strong>target</strong> information for the primers.</li>
@@ -331,7 +331,7 @@
 					<colgroup></colgroup>
 					<thead>
 						<tr>
-							<th><a href="#" data-modal data-modal-content="&lt;ul&gt;&lt;li&gt;&lt;span class=&quot;icon-ok&quot;&gt;&lt;/span&gt; &mdash; All clear. Primer has been designed.&lt;/li&gt;&lt;li&gt;&lt;span class=&quot;icon-attention&quot;&gt;&lt;/span&gt; &mdash; &ge;1 LORE1 line has this insertion. Check the row and column coordinate details by downloading the search results, and determine which plant line to use (usually the one with the highest count).&lt;/li&gt;&lt;li&gt;&lt;span class=&quot;icon-cancel-circled&quot;&gt;&lt;/span&gt; &mdash; Primer has not been designed. You may use the &lt;a href=&quot;http://frodo.wi.mit.edu/&quot; title=&quot;Primer3&quot;&gt;Primer3 tool&lt;/a&gt; to do so.&lt;/li&gt;&lt;/ul&gt;" title="Status of primers">Status</a></td>
+							<th><a href="#" data-modal data-modal-content="&lt;ul&gt;&lt;li&gt;&lt;span class=&quot;icon-ok&quot;&gt;&lt;/span&gt; &mdash; All clear. Primer has been designed.&lt;/li&gt;&lt;li&gt;&lt;span class=&quot;icon-attention&quot;&gt;&lt;/span&gt; &mdash; &ge;1 &lt;em&gt;LORE1&lt;/em&gt; line has this insertion. Check the row and column coordinate details by downloading the search results, and determine which plant line to use (usually the one with the highest count).&lt;/li&gt;&lt;li&gt;&lt;span class=&quot;icon-cancel-circled&quot;&gt;&lt;/span&gt; &mdash; Primer has not been designed. You may use the &lt;a href=&quot;http://frodo.wi.mit.edu/&quot; title=&quot;Primer3&quot;&gt;Primer3 tool&lt;/a&gt; to do so.&lt;/li&gt;&lt;/ul&gt;" title="Status of primers">Status</a></td>
 							<th><a href="#" data-modal data-modal-content="&lt;p&gt;The oligo type depends on the length of your PCR primer. This has been automatically determined:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;code&gt;Desalt&lt;/code&gt; &mdash; up to 35 bases&lt;/li&gt;&lt;li&gt;&lt;code&gt;HPLC&lt;/code&gt; &mdash; up to 50 bases&lt;/li&gt;&lt;li&gt;&lt;code&gt;PAGE&lt;/code&gt; &mdash; over 50 bases&lt;/li&gt;&lt;/ul&gt; " title="What is the oligo type?">Oligo type</a></td>
 							<th>Ref</td>
 							<th>Oligo name</td>
