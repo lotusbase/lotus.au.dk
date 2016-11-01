@@ -8,7 +8,7 @@
 			<h2>About us</h2>
 			<p>Developed with the end-user in mind, <em>Lotus</em> Base is an user-friendly web interface that brings together various resources, tools and datasets available for the model legume <em>Lotus japonicus</em>. We aim to make access to these data easy for researchers, scientists and members of the public across the world.</p>
 			<ul class="cols">
-				<li class="col bg-fill"><a href="/meta/about/"><img src="/dist/images/hero/hero01.jpg" alt="" title="" /><span>About Us</span></a></li>
+				<li class="col bg-fill"><a href="/meta/about/"><img src="/dist/images/header/lore1/lore1_01.jpg" alt="" title="" /><span>About Us</span></a></li>
 				<li class="col bg-fill"><a href="/meta/team/"><img src="/dist/images/team/carb.jpg" alt="" title="" /><span>Meet the Team</span></a></li>
 			</ul>
 		</div>
