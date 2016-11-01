@@ -21,8 +21,8 @@
 
 		// Breadcrumb
 		echo get_breadcrumbs(array('custom_breadcrumb' => array(
-			'Gene Ontology' => WEB_ROOT.'/go',
-			'Explorer' => WEB_ROOT.'/go/explorer'
+			'Gene Ontology' => 'go',
+			'Explorer' => 'explorer'
 		)));
 	?>
 

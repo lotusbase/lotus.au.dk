@@ -209,8 +209,8 @@
 
 		// Breadcrumb
 		echo get_breadcrumbs(array('custom_breadcrumb' => array(
-			'Gene Ontology' => WEB_ROOT.'/go',
-			'Enrichment' => WEB_ROOT.'/go/enrichment'
+			'Gene Ontology' => 'go',
+			'Enrichment' => 'enrichment'
 		)));
 	?>
 
