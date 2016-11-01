@@ -42,9 +42,9 @@
 
 		// Breadcrumb
 		echo get_breadcrumbs(array('custom_breadcrumb' => array(
-			'View' => WEB_ROOT.'/view',
-			'Gene Ontology' => WEB_ROOT.'/view/go',
-			$id => WEB_ROOT.'/view/go/'.$id
+			'View' => 'view',
+			'Gene Ontology' => 'go',
+			$id => $id
 		)));
 
 		// Check if GO term exists
