@@ -22,16 +22,16 @@
 	}
 	& > li {
 		position: relative;
-		a {
+		& > a {
 			background: rgba(#fff, .85);
 			text-decoration: none;
 		}
-		&:first-child a {
+		&:first-child > a {
 			border-top-left-radius: .75rem;
 			border-bottom-left-radius: .75rem;
 			padding-left: .75rem;
 		}
-		&:last-child a {
+		&:last-child > a {
 			border-right: 1px solid #777;
 			border-top-right-radius: .75rem;
 			border-bottom-right-radius: .75rem;
@@ -49,9 +49,8 @@
 			top: calc(100% - 1px);
 			left: 0;
 			& > li {
-				a, &:first-child a {
+				& > a, &:first-child > a {
 					border: none;
-					border-radius: 0;
 					border-bottom: 1px solid #777;
 					font-size: .85rem;
 					padding: .125rem .5rem;
@@ -59,9 +58,8 @@
 					width: auto;
 					white-space: nowrap;
 				}
-				&:last-child a {
+				&:last-child > a {
 					border: none;
-					border-radius: 0;
 				}
 			}
 		}

@@ -275,7 +275,8 @@
 						<ul class="floating-controls position--right">
 							<!--<li><a href="#" class="icon-cog icon--no-spacing controls__toggle" title="Toggle controls"></a></li>-->
 							<li><a id="phyalign-tree__export-image" class="icon-camera icon--no-spacing" title="Image export options"></a><ul>
-								<!--<li><a href="#" data-image-type="png" data-source="phyalign-tree__svg" data-form="phyalign-export" title="Export current view as PNG file" class="image-export png-export">PNG (bitmap)</a></li>-->
+								<li><a href="#" data-image-type="jpg" data-source="phyalign-tree__svg" data-form="phyalign-export" title="Export current view as JPG file" class="image-export jpg-export">JPG (bitmap)</a></li>
+								<li><a href="#" data-image-type="png" data-source="phyalign-tree__svg" data-form="phyalign-export" title="Export current view as PNG file" class="image-export png-export">PNG (bitmap)</a></li>
 								<li><a href="#" data-image-type="svg" data-source="phyalign-tree__svg" data-form="phyalign-export" title="Export current view as SVG file" class="image-export svg-export">SVG (vector)</a></li>
 							</ul></li>
 						</ul>
