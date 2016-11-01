@@ -216,7 +216,7 @@
 				<li>Press <kbd>Alt</kbd> and double click to visit the page containing further details of a GO term</li>
 				<li>Right clicking on a node will reveal a context menu</li>
 			</ul>
-			<div class="facet floating-controls__hide controls--visible">
+			<div class="facet controls--visible">
 				<div class="facet__stage">
 					<svg id="go-ancestor" data-go="<?php echo $id; ?>"></svg>
 					<ul class="floating-controls position--right">
