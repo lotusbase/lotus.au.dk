@@ -2,7 +2,21 @@
 @import 'variables';
 @import 'mixins';
 @import 'type';
-@import 'components/_simple-card';
+
+// Simple card
+@import 'components/simple-card';
+
+// Dropzone
+@import 'components/dropzone';
+
+// Floating controls
+@import 'components/floating-controls';
+
+// Faceted view
+@import 'components/facet';
+
+// D3 tooltip
+@import 'components/d3/_tip.scss';
 
 /*-------------------------------------------- 
 ------------------ PHYALIGN ------------------
@@ -10,6 +24,28 @@
 // Tree and controls wrapper
 #phyalign-tree {
 	margin: 3rem 0 0 0;
+}
+
+// Form
+.dropzone {
+	position: relative;
+	.legend {
+		z-index: 52;
+	}
+	.dropzone__input, .dropzone__message {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		z-index: 50;
+	}
+	.dropzone__message {
+		z-index: 51;
+	}
+}
+#phyalign-form__tree {
+	margin-bottom: 1.5rem;
 }
 
 // Tree SVG
@@ -57,11 +93,3 @@
 	}
 }
 
-// Floating controls
-@import 'components/floating-controls';
-
-// Faceted view
-@import 'components/facet';
-
-// D3 tooltip
-@import 'components/d3/_tip.scss';

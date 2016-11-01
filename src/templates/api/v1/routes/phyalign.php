@@ -60,6 +60,8 @@ $api->get('/phyalign/data[/{jobID}]', function($request, $response, $args) {
 
 		if(empty($clustalo_response)) {
 			throw new Exception('No response returned from EMBL-EBI server', 500);
+		} else if(!is_array($clustalo_response)) {
+			$clustalo_response = array('responseText' => $clustalo_response);
 		}
 
 		// Inject job ID as part of the response

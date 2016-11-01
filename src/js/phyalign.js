@@ -290,6 +290,10 @@ $(function() {
 			.html('<div class="loader"><svg><circle class="path" cx="40" cy="40" r="30" /></svg></div><h2 id="phyalign-status--short">Please wait&hellip;</h2><span class="byline align-center">Contacting the EMBL-EBI Clustal Omega server</span>')
 			.slideDown(250);
 
+			// Reset all timers
+			if (countdownTimer) window.clearInterval(countdownTimer);
+			if (pollTimer) window.clearInterval(pollTimer);
+
 			// Start polling job
 			polled = false;
 			pollJobStatus();
@@ -405,31 +409,37 @@ $(function() {
 		$('#tree-input').val(globalVar.phyalign.data.data.filter(function(o) {
 			return o.type.identifier === 'phylotree';
 		})[0].content);
-		$('#phyalign-form__tree').trigger('submit');
 
 		// Handoff to third tab
 		$('#phyalign-tabs').tabs('option', 'active', 2);
+
+		// Initiate tree drawing
+		window.setTimeout(function() {
+			$('#phyalign-form__tree').trigger('submit');
+		}, 500);
 	});
 
 	// Load premade trees
 	$d.on('change', '#tree-load', function(e) {
 		var $inputs = $('#phyalign-form__tree :input[type="submit"], #tree-input');
 
-		// Disable textarea and submit button until submission
-		$inputs.prop('disabled', true);
+		if($(this).val()) {
+			// Disable textarea and submit button until submission
+			$inputs.prop('disabled', true);
 
-		// Perform AJAX
-		$.ajax({
-			url: $(this).val(),
-			dataType: 'text'
-		})
-		.done(function(tree) {
-			$('#tree-input').val(tree);
-			$('#phyalign-form__tree').trigger('submit');
-		})
-		.always(function() {
-			$inputs.prop('disabled', false);
-		});
+			// Perform AJAX
+			$.ajax({
+				url: $(this).val(),
+				dataType: 'text'
+			})
+			.done(function(tree) {
+				$('#tree-input').val(tree);
+				$('#phyalign-form__tree').trigger('submit');
+			})
+			.always(function() {
+				$inputs.prop('disabled', false);
+			});
+		}
 	});
 
 	// Expose global d3 variables
@@ -564,9 +574,6 @@ $(function() {
 			tree: {
 				init: function() {
 
-					// Show view
-					$('#phyalign-tree').removeClass('hidden');
-
 					// Zoom
 					var zoomListener = d3.behavior.zoom().scaleExtent([0.2,5]).on('zoom', function() {
 						d3.select('#stage').attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
@@ -624,6 +631,23 @@ $(function() {
 						nodes = cluster.nodes(newick),
 						links = cluster.links(nodes),
 						leaves = nodes.filter(function(d) { return !d.children; }).length;
+
+					// Stop now if too many leaves are present
+					if(leaves > 500) {
+						// Show error message
+						$('#phyalign-tree__message')
+							.empty()
+							.removeClass()
+							.addClass('user-message warning')
+							.html('The phylogenetic tree contains too many nodes (>500). We recommend using other tools for visualising your tree: for web-based tools, try <a href="http://itol.embl.de">iTOL</a>; for computer programs, try <a href="http://www.megasoftware.net">MEGA</a> or <a href="http://tree.bio.ed.ac.uk/software/figtree/">FigTree</a>.');
+
+						// Exit function
+						return false;
+
+					} else {
+						// Show view
+						$('#phyalign-tree').removeClass('hidden');
+					}
 
 					// Color scale for bootstrap values
 					var fills = ["#a6bddb","#74a9cf","#3690c0","#0570b0","#045a8d","#023858"],
@@ -797,9 +821,6 @@ $(function() {
 							nodes		= d.nodes,
 							leaves		= d.leaves,
 							tips		= d.tips;
-
-						// Exit function if too many nodes or links are present
-						console.log(nodes.length);
 
 						// Position nicely
 						chart.attr({
@@ -1200,11 +1221,13 @@ $(function() {
 						// Update/draw scale bar
 						var _scaleBarTop = stage.select('g.x.axis.top');
 						_scaleBarTop.remove();
+						console.log(treeType);
 						if(treeType !== 'radial') {
 							stage.append('g')
 								.call(scaleAxis.orient('top'))
 								.attr({
 									'class': 'x axis top',
+									'opacity': 0,
 									'transform': function() {
 										var t = d3.transform(d3.select('#tree').attr('transform'));
 										return 'translate('+(t.translate[0])+','+(t.translate[1])+')';
@@ -1226,9 +1249,11 @@ $(function() {
 								'stroke-linecap': 'square',
 								'fill': 'none'
 							});
-//							.attr({
-//								'd': 'M0,0V0H'+lengthScale(scaleAxis.scale().ticks(scaleAxis.ticks()[0]).slice(-1)[0])+'V0'
-//							});
+							stage.select('g.x.axis.top').selectAll('g.tick')
+							.selectAll('line').style({
+								'stroke': '#333',
+								'stroke-linecap': 'square'
+							});
 						}
 
 						_scaleBarTop.selectAll('g.tick')
@@ -1266,9 +1291,6 @@ $(function() {
 							'stroke-linecap': 'square',
 							'fill': 'none'
 						});
-//						.attr({
-//							'd': 'M0,0V0H'+lengthScale(scaleAxis.scale().ticks(scaleAxis.ticks()[0]).slice(-1)[0])+'V0'
-//						});
 						_scaleBarBottom.selectAll('g.tick')
 							.selectAll('line').style({
 								'stroke': '#333',
@@ -1614,6 +1636,35 @@ $(function() {
 
 		// Submit form
 		$form[0].submit();
+	});
+
+	// Dropzone for FASTA sequence
+	$('#phyalign-form__submit')
+	.dropzone()
+	.on('progress.dropzone', function(event, d) {
+		$(this).find('.dropzone__input span.progress').css({
+			'width': (d.progress*100)+'%'
+		});
+	})
+	.on('done.dropzone', function(event, d) {
+		$('#seqs-input').val(d.data).trigger('change');
+	});
+
+	// Dropzone for phylogenetic tree
+	$('#phyalign-form__tree')
+	.dropzone()
+	.on('progress.dropzone', function(event, d) {
+		$(this).find('.dropzone__input span.progress').css({
+			'width': (d.progress*100)+'%'
+		});
+	})
+	.on('done.dropzone', function(event, d) {
+		$('#tree-input').val(d.data);
+		$(this).trigger('submit');
+	})
+	.on('fail.dropzone', function(event, d) {
+		$(this).find('.dropzone__input').addClass('hidden');
+		$(this).find('.dropzone__message').removeClass('hidden').addClass('warning').html(d.message);
 	});
 
 	// General function to check popstate events

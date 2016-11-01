@@ -113,11 +113,17 @@ form {
 			}
 		}
 	}
-	.search-again & {
+	.search-again &, .toggle {
 		div[role='group'], fieldset {
 			background-color: rgba(#000,.1);
 			padding-left: 0;
 			padding-right: 0;
+		}
+	}
+	.toggle {
+		div[role='group'], fieldset {
+			padding-left: 1.5rem;
+			padding-right: 1.5rem;
 		}
 	}
 
