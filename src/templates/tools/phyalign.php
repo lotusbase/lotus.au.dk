@@ -38,14 +38,17 @@
 <body class="tools phyalign init-scroll--disabled">
 	<?php
 		$header = new \LotusBase\PageHeader();
+		$header->set_header_content('<div class="align-center">
+			<h1>PhyAlign</h1>
+			<span class="byline">Phylogeny + Alignment using Clustal Omega</span>
+		</div>');
+		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/phyalign/phyalign01.jpg');
 		echo $header->get_header();
 	?>
 
 	<?php echo get_breadcrumbs(array('page_title' => 'PhyAlign')); ?>
 
 	<section class="wrapper">
-		<h2>PhyAlign</h2>
-		<span class="byline">Phylogeny + Alignment using Clustal Omega</span>
 		<p>The <strong>PhyAlign</strong> tool interfaces with the <a href="http://www.ebi.ac.uk/Tools/msa/clustalo/" title="EMBL-EBI Clustal Omega"><abbr title="European Molecular Biology Lab">EMBL</abbr>-<abbr title="European Bioinformatics Institute">EBI</abbr> Clustal Omega</a><sup><a href="#ref1">1</a>, <a href="#ref2">2</a></sup> tool to enable multiple sequence alignment and phylogenetic tree construction. Should there be any discrepancies between the information provided on this page and the official EMBL-EBI provisioned one, please refer to the <a href="http://www.ebi.ac.uk/Tools/msa/clustalo/help/index.html">official EMBL-EBI Clustal Omega documentation</a>. Required fields are marked with an asterisk (*).</p>
 		<?php 
 			// Display error if any
