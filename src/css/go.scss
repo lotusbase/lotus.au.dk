@@ -13,7 +13,7 @@
 @import 'components/facet';
 
 body.go.explorer {
-	.d3-chart {
+	.facet__stage {
 		@include transition;
 		&:hover {
 			box-shadow: 0 0 1rem .5rem rgba(#000,.15);
