@@ -234,7 +234,7 @@
 
 			<div id="submit-job">
 
-				<form action="<?php echo WEB_ROOT; ?>/tools/cornea" method="post" id="cornea-form__submit" class="has-group">
+				<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="cornea-form__submit" class="has-group">
 					<input class="input-hidden" type="hidden" name="action" value="submit" readonly />
 
 					<div class="cols has-legend" role="group">

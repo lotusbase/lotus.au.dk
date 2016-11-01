@@ -24,7 +24,7 @@
 	<?php echo get_breadcrumbs(array('page_title' => 'CORGI')); ?>
 
 	<section class="wrapper">
-		<form action="<?php echo WEB_ROOT; ?>/api" method="post" id="expat-form">
+		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="expat-form">
 
 			<div class="cols has-legend" role="group">
 				<p class="user-message full-width minimal legend">Query</p>
