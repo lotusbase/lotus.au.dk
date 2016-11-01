@@ -94,5 +94,33 @@ $(function() {
 			$('#force-'+k).val(f).next('output').text(f);
 		});
 	});
+
+	// Image export
+	$('a.image-export').on('click', function(e) {
+		e.preventDefault();
+
+		// Get SVG
+		var source = $(this).data('source');
+
+		// Update SVG dimensions
+		var $svg = $('#'+source);
+		$svg.attr({
+			'width': $svg.width(),
+			'height': $svg.height()
+		});
+
+		// Get data
+		var svg_xml = (new XMLSerializer()).serializeToString($svg[0]),
+			output_format = $(this).data('image-type'),
+			$form = $('#' + $(this).data('form'));
+
+		// Update form fields
+		$form
+			.find(':input.svg-data').val(svg_xml).end()
+			.find(':input.output-format').val(output_format).end();
+
+		// Submit form
+		$form[0].submit();
+	});
 	
 });

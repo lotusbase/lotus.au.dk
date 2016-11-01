@@ -74,6 +74,9 @@
 					});
 
 				svg = d3.select(tree.element)
+				.style({
+					'font-family': 'Arial'
+				})
 				.attr({
 					'viewBox': '0 0 '+width+' '+height,
 					'preserveAspectRatio': 'xMidYMid'

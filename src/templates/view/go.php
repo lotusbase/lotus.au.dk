@@ -209,17 +209,28 @@
 
 		<div id="view__tree" class="view__facet">
 			<h3>Ancestor tree</h3>
-			<p>A force layout showing the ancestor tree for <strong><?php echo $id; ?></strong>, and its immediate children. Mouseover each node to glean more information; click and drag nodes to reposition them; double click on nodes to unfix them. Alt + double click to view the GO term on its page. Right click to access the context menu.</p>
+			<p>A force layout showing the ancestor tree for <strong><?php echo $id; ?></strong>, and its immediate children. If you wish to explore the tree dynamically, please use the <a href="<?php echo WEB_ROOT; ?>/go/explorer" title="GO Explorer">GO Explorer</a>.</p>
+			<ul>
+				<li>Drag and drop nodes to manually position (i.e. fix) them</li>
+				<li>Double click on a node to update the tree</li>
+				<li>Press <kbd>Shift</kbd> and double click to unfix the node</li>
+				<li>Press <kbd>Alt</kbd> and double click to visit the page containing further details of a GO term</li>
+				<li>Right clicking on a node will reveal a context menu</li>
+			</ul>
 			<div class="facet floating-controls__hide controls--visible">
 				<div class="facet__stage">
 					<svg id="go-ancestor" data-go="<?php echo $id; ?>"></svg>
 					<ul class="floating-controls position--right">
 						<li><a href="#" class="icon-cog icon--no-spacing controls__toggle" title="Toggle controls"></a></li>
 						<li><a href="#" id="go-ancestor__export-image" class="icon-camera icon--no-spacing" title="Image export options"></a><ul>
-							<li><a href="#" data-image-type="png" title="Export current view as PNG file">PNG (bitmap)</a></li>
-							<li><a href="#" data-image-type="svg" title="Export current view as SVG file">SVG (vector)</a></li>
+							<li><a href="#" data-image-type="svg" data-source="go-ancestor" data-form="go-tree-export" title="Export current view as SVG file" class="image-export svg-export">SVG (vector)</a></li>
 						</ul></li>
 					</ul>
+					<form action="<?php echo WEB_ROOT; ?>/lib/export/svg.pl" method="post" class="hidden image-export__form" id="go-tree-export">
+						<input type="hidden" class="svg-data" name="svg_data" />
+						<input type="hidden" class="output-format" name="output_format" />
+						<input type="hidden" class="filename-prefix" name="filename_prefix" value="go-tree" />
+					</form>
 				</div>
 				<form class="facet__controls has-group" id="go-ancestor__controls" action="#" method="get">
 					<div role="group" class="has-legend">

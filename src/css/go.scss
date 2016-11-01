@@ -6,6 +6,12 @@
 // D3
 @import 'components/d3';
 
+// Floating controls
+@import 'components/floating-controls';
+
+// Faceted view
+@import 'components/facet';
+
 body.go.explorer {
 	.d3-chart {
 		@include transition;
