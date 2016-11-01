@@ -19,6 +19,7 @@
 			<p>Access array data from the <em>Lotus japonicus</em> Expression Atlas. As the expression data is anchored based on gene predictions and annotations on version 3.0 of the genome, only accessions from this version are accepted. Due to the use of modern HTML5 APIs in the graphing functions, you are strongly encouraged to use a standards-compliant browser to use this tool. The graphing process is CPU intensive, and may slow down the performance of your browser/tab momentarily&mdash;especially when large number of genes are queried at one go.</p>
 			<p>If you wish to map your probe IDs against the version 3.0 accessions, please use the <a href="mapping.php">gene &amp; probe mapping tool</a> to retrieve the corresponding IDs before searching.</p>
 		</div>');
+		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/expat/expat01.jpg');
 		echo $header->get_header();
 	?>
 
