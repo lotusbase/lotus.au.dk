@@ -320,7 +320,7 @@
 		$header->set_header_content('<div class="align-center">
 			'.($searched ? '<h1><em>LORE1</em> line search results</h1><span class="byline">Using <em>L. japonicus</em> reference genome <strong>v'.$version.'</strong></span>' : '<h1><em>LORE1</em> line search</h1><span class="byline">Search for <em>LORE1</em> lines of interest and their accompanying metadata,<br />from a collection of 108,133 orderable lines.</span>').'
 		</div>');
-		$header->set_header_background_image(WEB_ROOT.'/dist/images/hero/hero01.jpg');
+		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/lore1/lore1_01.jpg');
 		echo $header->get_header();
 	?>
 
