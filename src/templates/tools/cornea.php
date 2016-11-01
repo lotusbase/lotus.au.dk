@@ -149,6 +149,7 @@
 			<span class="byline"><strong>Coexpression Network Analysis</strong><br />for <em>L.</em> japonicus reference genome <strong>v3</strong></span>
 			<p>The <strong>Coexpression Network Analysis</strong> tool allows you to visualize gene co-expression networks.</p>
 		</div>');
+		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/cornea/cornea01.jpg');
 		echo $header->get_header();
 	?>
 

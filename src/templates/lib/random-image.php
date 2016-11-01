@@ -1,6 +1,6 @@
 <?php
 	// Whitelist of folders
-	$dir_list = array('header', 'hero');
+	$dir_list = array('header/hero', 'hero');
 
 	// Check if type is declared
 	if(isset($_GET) && isset($_GET['type']) && in_array($_GET['type'], $dir_list)) {
