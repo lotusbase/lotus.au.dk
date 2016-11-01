@@ -463,9 +463,11 @@
 
 								if ((d3.event.shiftKey && tree.settings.shiftClickNavigate === true) || tree.settings.dblClickUpdate === false) {
 									d3.select(this).classed("fixed", d.fixed = false);
-								} else if(d3.event.altKey && tree.settings.altClickNavigate === true) {
+								}
+								if(d3.event.altKey && tree.settings.altClickNavigate === true) {
 									window.location.href = root + '/view/go/' + d.id;
-								} else if(tree.settings.dblClickUpdate === true) {
+								}
+								if(tree.settings.dblClickUpdate === true) {
 									tree.update(d.id);
 								}
 							})

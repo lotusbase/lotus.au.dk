@@ -212,8 +212,7 @@
 			<p>A force layout showing the ancestor tree for <strong><?php echo $id; ?></strong>, and its immediate children. If you wish to explore the tree dynamically, please use the <a href="<?php echo WEB_ROOT; ?>/go/explorer" title="GO Explorer">GO Explorer</a>.</p>
 			<ul>
 				<li>Drag and drop nodes to manually position (i.e. fix) them</li>
-				<li>Double click on a node to update the tree</li>
-				<li>Press <kbd>Shift</kbd> and double click to unfix the node</li>
+				<li>Double click on a node to unfix the node</li>
 				<li>Press <kbd>Alt</kbd> and double click to visit the page containing further details of a GO term</li>
 				<li>Right clicking on a node will reveal a context menu</li>
 			</ul>
