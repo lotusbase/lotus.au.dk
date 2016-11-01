@@ -32,7 +32,7 @@
 		unset($_SESSION['expat']);
 		?>
 
-		<form action="../api" method="post" id="expat-form" class="form--reset">
+		<form action="#" method="post" id="expat-form" class="form--reset">
 
 			<div class="cols" role="group">
 
