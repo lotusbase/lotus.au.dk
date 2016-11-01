@@ -87,13 +87,13 @@
 					'y': 0,
 					'width': width,
 					'height': height,
-					'fill': 'transparent'
+					'fill': '#fff',
+					'fill-opacity': 0
 				});
 				stage = svg.append('g').attr({
 					'id': 'stage',
 					'transform': 'translate('+marginLeft+',0)'
 				});
-
 				// Link color
 				// ['is_a', 'regulates', 'part_of', 'negatively_regulates', 'positively_regulates']
 				colors = {
