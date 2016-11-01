@@ -18,6 +18,7 @@
 			<span class="byline"><strong>Correlated Genes Identifier</strong><br />for <em>L.</em> japonicus reference genome <strong>v3</strong></span>
 			<p>The <strong>Correlated Genes Identifier</strong> tool allows you pull out genes that have expression patterns that are strongly statistically correlated.</p>
 		</div>');
+		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/cornea/cornea01.jpg');
 		echo $header->get_header();
 	?>
 
