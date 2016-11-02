@@ -281,6 +281,13 @@
 							<input type="range" id="force-theta" name="force-theta" min="0" max="1" step="0.01" data-tree-function="theta" class="force has-output" />
 							<output></output>
 						</div>
+
+						<div class="separator"></div>
+
+						<label for="force-bound" class="full-width">
+							<input type="checkbox" class="prettify" id="force-bound" />
+							<span>Confine entire chart within bounds</span>
+						</label>
 					</div>
 				</form>
 			</div>

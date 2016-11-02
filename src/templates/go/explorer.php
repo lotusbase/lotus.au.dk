@@ -138,6 +138,8 @@
 							<output></output>
 						</div>
 
+						<div class="separator"></div>
+
 						<label for="force-bound" class="full-width">
 							<input type="checkbox" class="prettify" id="force-bound" />
 							<span>Confine entire chart within bounds</span>

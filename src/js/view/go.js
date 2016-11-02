@@ -48,7 +48,7 @@ $(function() {
 		initNode: $('#go-ancestor').attr('data-go')
 	});
 
-	$('#go-ancestor').on('tree.stop', function() {
+	$('#go-ancestor').on('stop.goTree', function() {
 		$('#go-ancestor__play-pause')
 			.attr('data-state', 'ended')
 			.find('span').removeClass().addClass('icon-play').text('Play');
@@ -81,7 +81,7 @@ $(function() {
 	}));
 
 	// Get force layout configuration when tree is started
-	$('#go-ancestor').on('tree.start', function(event, d) {
+	$('#go-ancestor').on('start.goTree', function(event, d) {
 
 		// Update play/pause state
 		$('#go-ancestor__play-pause')
@@ -93,6 +93,9 @@ $(function() {
 		$.each(d.force, function(k,f) {
 			$('#force-'+k).val(f).next('output').text(f);
 		});
+	});
+	$('#force-bound').on('change', function() {
+		$('#go-ancestor').goTree('bound', this.checked);
 	});
 
 	// Image export
