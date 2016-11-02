@@ -1,0 +1,44 @@
+// Mixins
+@import 'variables';
+@import 'mixins';
+@import 'type';
+
+#searchform-tabs {
+	#searchform-tabs__nav {
+		ul {
+			li {
+				flex: 1 1 auto;
+				width: auto;
+			}
+		}
+	}
+
+	.full-width {
+		width: 100%;
+	}
+
+	.searchform__suggestions {
+		margin-top: .75rem;
+		font-size: .875rem;
+		font-weight: bold;
+		ul {
+			li:first-child {
+				background: none;
+				border: none;
+				padding: 0;
+				margin: 0 .5rem 0 0;
+			}
+		}
+	}
+}
+
+#twitter-timeline {
+	position: relative;
+	iframe.twitter-timeline-rendered {
+		position: absolute !important;
+		top: 0 !important;
+		left: 0 !important;
+		width: 100% !important;
+		height: 100% !important;
+	}
+}

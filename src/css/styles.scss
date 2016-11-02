@@ -315,7 +315,13 @@ form {
 	margin: 0;
 	padding-top: 3rem;
 
-	body.http-error & { background: none; }
+	body.error & {
+		background:
+			radial-gradient(rgba(#eee,.2) 15%, transparent 15%) 0 0,
+			radial-gradient(rgba(#eee,.2) 15%, transparent 15%) 8px 8px,
+			linear-gradient(90deg, rgba($lotusPrimary4,.85) 0%, rgba(adjust-hue($lotusPrimary4,-30deg),.85) 100%);
+		background-size: 16px 16px, 16px 16px, cover;
+	}
 
 	/* Components */
 	.header-content {

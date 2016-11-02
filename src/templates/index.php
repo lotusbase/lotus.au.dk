@@ -6,6 +6,7 @@
 <head itemscope itemtype="http://schema.org/WebSite">
 	<title itemprop="name">Lotus Base</title>
 	<?php include('head.php'); ?>
+	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/home.min.css" type="text/css" media="screen" />
 	<script type="application/ld+json">
 	{
 		"@context": "http://schema.org",
@@ -29,13 +30,15 @@
 		echo $header->get_header();
 	?>
 
-	<section id="lotus-base-status" class="wrapper cols">
+	<section class="wrapper cols">
 		<div class="col">
 			<h2>Search</h2>
+			<p>Looking for something? Use the search form below to start mining through currently available <em>Lotus</em> data.</p>
 			<div id="searchform-tabs">
 				<div id="searchform-tabs__nav" class="cols align-items__flex-end ui-tabs-nav__wrapper">
 					<ul class="tabbed">
 						<li><a href="#searchform__gene" data-custom-smooth-scroll>Gene/Transcript</a></li>
+						<li><a href="#searchform__prediction" data-custom-smooth-scroll>Prediction</a></li>
 						<li><a href="#searchform__lore1" data-custom-smooth-scroll><em>LORE1</em></a></li>
 					</ul>
 				</div>
@@ -43,21 +46,49 @@
 				<div id="searchform__gene">
 					<form action="<?php echo WEB_ROOT; ?>/tools/trex" class="search-form flex-wrap__wrap" method="get">
 					<p class="full-width">Search for a candidate gene or transcript using an internal identifier. Alternatively, use keywords for a full-text search.</p>
-						<input type="search" name="ids" placeholder="Gene ID / name (e.g. Lj4g3v0281040.1 / LjFls2)" />
-						<button type="submit"><span class="icon-search"></span></button>
+					<input type="search" name="ids" placeholder="Gene ID / name (e.g. Lj4g3v0281040.1 / LjFls2)" />
+					<button type="submit"><span class="icon-search icon--no-spacing"></span></button>
+					<div class="full-width searchform__suggestions">
+						<ul class="list--floated">
+							<li>Example:</li>
+							<li><a href="#" data-value="LjFls2"><em>LjFls2</em></a></li>
+							<li><a href="#" data-value="Lj4g3v0281040">Lj4g3v0281040</a></li>
+							<li><a href="#" data-value="Lj4g3v0281040.1">Lj4g3v0281040.1</a></li>
+						</ul>
+					</div>
+					</form>
+				</div>
+
+				<div id="searchform__prediction">
+					<form action="<?php echo WEB_ROOT; ?>/tools/trex" class="search-form flex-wrap__wrap" method="get">
+					<p class="full-width">Search for predictions based on <abbr>GO</abbr> terms and prediction domains (InterPro, PFam, Superfamily, etc.).</p>
+					<input type="search" name="ids" placeholder="GO term (GO:0004672)" />
+					<button type="submit"><span class="icon-search icon--no-spacing"></span></button>
+					<div class="full-width searchform__suggestions">
+						<ul class="list--floated">
+							<li>Example:</li>
+							<li><a href="#" data-value="GO:0004672">GO:0004672</a></li>
+						</ul>
+					</div>
 					</form>
 				</div>
 
 				<div id="searchform__lore1">
 					<form action="<?php echo WEB_ROOT; ?>/lore1/search" class="search-form flex-wrap__wrap" method="get">
 					<p class="full-width">Search for <em>LORE1</em> lines of interest using an internal ID.</p>
-						<input type="search" name="pid" placeholder="Line ID (e.g. 30010101)" />
-						<button type="submit"><span class="icon-search"></span></button>
+					<input type="search" name="pid" placeholder="Line ID (e.g. 30010101)" />
+					<button type="submit"><span class="icon-search icon--no-spacing"></span></button>
+					<div class="full-width searchform__suggestions">
+						<ul class="list--floated">
+							<li>Example:</li>
+							<li><a href="#" data-value="30010101">30010101</a></li>
+						</ul>
+					</div>
 					</form>
 				</div>
 			</div>
 		</div>
-		<div class="col align-center">
+		<div id="twitter-timeline" class="col align-center">
 			<a class="twitter-timeline" data-lang="en" data-theme="light" data-link-color="#5ca4a9" href="https://twitter.com/lotusbase" data-dnt="true" data-height="300"><span class="icon-twitter">Find us on Twitter at @LotusBase</span></a>
 		</div>
 	</section>
@@ -70,7 +101,7 @@
 			<li><strong>Genome-wide <em>LORE1</em> retrotransposon mutagenesis and high-throughput insertion detection in <em>Lotus japonicus</em></strong> (<a href="http://www.ncbi.nlm.nih.gov/pubmed/22014280" title="Genome-wide LORE1 retrotransposon mutagenesis and high-throughput insertion detection in Lotus japonicus.">Urbanski et al., 2012</a>),</li>
 			<li><strong>Establishment of a <em>Lotus japonicus</em> gene tagging population using the exon-targeting endogenous retrotransposon <em>LORE1</em></strong> (<a href="http://www.ncbi.nlm.nih.gov/pubmed/22014259" title="Establishment of a Lotus japonicus gene tagging population using the exon-targeting endogenous retrotransposon LORE1.">Fukai et al., 2012</a>),</li>
 			<li><strong>The <em>LORE1</em> insertion mutant resource</strong> (<a href="http://www.ncbi.nlm.nih.gov/pubmed/27322352" title="The LORE1 insertion mutant resource">Małolepszy et al., 2016</a>), and</li>
-			<li><strong><em>Lotus</em> Base: An integrated information portal for the model legume Lotus japonicus</strong> (Mun et al., submitted)</li>
+			<li><strong><em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em></strong> (Mun et al., submitted)</li>
 		</ul>
 
 		<p>The majority of the <em>LORE1</em> lines are released pre-publication, and the Centre for Carbohydrate Recognition and Signalling reserves the right to undertake and publish large-scale analysis of the insertion site data. Large-scale in this context refers to any sequence intervals or combinations thereof that exceed one megabase in length.</p>
@@ -148,20 +179,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/worldmap.min.js"></script>
 	<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-	<script>
-	$(function() {
-		var searchTabs = $('#searchform-tabs').tabs();
-
-		// General function to check popstate events
-		$w.on('popstate', function(e) {
-			if (e.originalEvent.state && e.originalEvent.state.lotusbase) {
-				var $tab = $('.ui-tabs ul.ui-tabs-nav li a[href="'+window.location.hash+'"]'),
-					index = $tab.parent().index(),
-					$parentTab = $tab.closest('.ui-tabs');
-				$parentTab.tabs("option", "active", index);
-			}
-		});
-	});
-	</script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/home.min.js"></script>
 </body>
 </html>
