@@ -16,6 +16,7 @@
 					theta: 0.5,
 					gravity: 0.1,
 				},
+				bounded: false,
 				altClickNavigate: true,
 				shiftClickNavigate: false,
 				dblClickUpdate: false,
@@ -51,8 +52,6 @@
 				var tree = this,
 					$t = $(this.element),
 					s = this.settings;
-
-				console.log(s.force);
 
 				var width = s.chart.width,
 					marginLeft = s.chart.marginLeft,
@@ -371,18 +370,27 @@
 						});
 
 						link.attr('d', function(d) {
-							var dx = d.target.x - d.source.x,
-							dy = d.target.y - d.source.y,
-							dr = Math.sqrt(dx * dx + dy * dy);
+
+							// Bounds
+							var r = 0,
+								tx = tree.settings.bounded ? Math.max(r, Math.min(width - r - marginLeft, d.target.x)) : d.target.x,
+								ty = tree.settings.bounded ? Math.max(r + 16, Math.min(height - r, d.target.y)) : d.target.y,
+								sx = tree.settings.bounded ? Math.max(r, Math.min(width - r - marginLeft, d.source.x)) : d.source.x,
+								sy = tree.settings.bounded ? Math.max(r + 16, Math.min(height - r, d.source.y)) : d.source.y;
+
 							return 'M' + 
-							d.source.x + ',' + 
-							d.source.y + 'L' + 
-							d.target.x + ',' + 
-							d.target.y;
+							sx + ',' + 
+							sy + 'L' + 
+							tx + ',' + 
+							ty;
 						});
 
 						node.attr('transform', function (d) {
-							return 'translate(' + d.x + ',' + d.y + ')';
+							var r = d.r,
+								x = tree.settings.bounded ? Math.max(r, Math.min(width - r - marginLeft, d.x)) : d.x,
+								y = tree.settings.bounded ? Math.max(r + 16, Math.min(height - r, d.y)) : d.y;
+
+							return 'translate(' + x + ',' + y + ')';
 						});
 					};
 
@@ -407,7 +415,7 @@
 						.links(s.links)
 						.on('tick', tick)
 						.on('end', function() {
-							$(tree.element).trigger('tree.stop');
+							$(tree.element).trigger('stop.goTree');
 						});
 
 					// Build arrows for chart
@@ -469,6 +477,9 @@
 								}
 								if(tree.settings.dblClickUpdate === true) {
 									tree.update(d.id);
+									$(tree.element).trigger('updated.goTree', [{
+										go: d.id
+									}]);
 								}
 							})
 							.on('contextmenu', function(d) {
@@ -538,7 +549,7 @@
 
 					// Start layout
 					force.start();
-					$(tree.element).trigger('tree.start', {
+					$(tree.element).trigger('start.goTree', {
 						force: {
 							charge: force.charge(),
 							chargeDistance: force.chargeDistance(),
@@ -751,7 +762,11 @@
 				force.theta(theta).start();
 			},
 
-
+			// Toggle bounding box
+			bound: function(bounded) {
+				this.settings.bounded = !!bounded;
+				force.start();
+			}
 		});
 
 		// A really lightweight plugin wrapper around the constructor,

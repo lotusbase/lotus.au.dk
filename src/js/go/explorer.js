@@ -3,7 +3,7 @@ $(function() {
 		shiftClickNavigate: true,
 		dblClickUpdate: true,
 		allowUpdate: true,
-		initNode: $('#go-root').val(),
+		initNode: $('#go-node').val(),
 		jsonLoaded: function() {
 			$('#go-root, #go-node').prop('disabled', false);
 		}
@@ -29,16 +29,10 @@ $(function() {
 		$(this).closest('.facet').toggleClass('controls--visible');
 	});
 
-	$('#go-explorer').on('tree.stop', function() {
-		$('#go-explorer__play-pause')
-			.attr('data-state', 'ended')
-			.find('span').removeClass().addClass('icon-play').text('Play');
-	});
-
 	// Facet controls
 	$('#go-explorer__reset').on('click', function(e) {
 		e.preventDefault();
-		$('#go-explorer').goTree('update', $('#go-explorer').attr('data-go'));
+		$('#go-explorer').goTree('update', $('#go-node').val());
 	});
 	$('#go-explorer__play-pause').on('click', function() {
 		var $t = $(this);
@@ -60,21 +54,42 @@ $(function() {
 		$('#go-explorer').goTree($(this).data('tree-function'), $(this).val());
 		$(this).next('output').text($(this).val());
 	}));
-
-	// Get force layout configuration when tree is started
-	$('#go-explorer').on('tree.start', function(event, d) {
-
-		// Update play/pause state
-		$('#go-explorer__play-pause')
-			.attr('data-state', 'playing')
-			.find('span').removeClass().addClass('icon-pause').text('Pause');
-			$('#go-explorer').goTree('start');
-
-		// Update displayed force options
-		$.each(d.force, function(k,f) {
-			$('#force-'+k).val(f).next('output').text(f);
-		});
+	$('#force-bound').on('change', function() {
+		$('#go-explorer').goTree('bound', this.checked);
 	});
+
+	// Listen to events bubbling up
+	$('#go-explorer')
+		// Get force layout configuration when tree is started
+		.on('start.goTree', function(event, d) {
+
+			// Update play/pause state
+			$('#go-explorer__play-pause')
+				.attr('data-state', 'playing')
+				.find('span').removeClass().addClass('icon-pause').text('Pause');
+				$('#go-explorer').goTree('start');
+
+			// Update displayed force options
+			$.each(d.force, function(k,f) {
+				$('#force-'+k).val(f).next('output').text(f);
+			});
+		})
+
+		// When force layout is stopped
+		.on('stop.goTree', function() {
+			$('#go-explorer__play-pause')
+				.attr('data-state', 'ended')
+				.find('span').removeClass().addClass('icon-play').text('Play');
+		})
+
+		// When tree is updated
+		.on('updated.goTree', function(event, d) {
+			$('#go-node').val(d.go);
+			if($('#go-root option[value="'+d.go+'"]').length) {
+				$('#go-root').val(d.go);
+			}
+		});
+
 
 	// Image export
 	$('a.image-export').on('click', function(e) {

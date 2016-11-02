@@ -55,7 +55,7 @@
 
 				<label for="go-node" class="col-one">Enter a <abbr title="Gene Ontology">GO</abbr> term</label>
 				<div class="col-two">
-					<input id="go-node" name="go_node" type="text" value="GO:0008150" disabled />
+					<input id="go-node" name="go_node" type="text" value="<?php echo empty($_GET['go_node']) ? 'GO:0008150' : $_GET['go_node']; ?>" disabled />
 				</div>
 			</div>
 		</form>
@@ -101,41 +101,47 @@
 					<div role="group" class="has-legend cols">
 						<p class="legend full-width">Force layout</p>
 						<p class="full-width">Every force layout is different&mdash;we have picked <a href="https://github.com/d3/d3-3.x-api-reference/blob/master/Force-Layout.md">a set of parameters</a> which suits most GO ancestor tree chart well. If you mess something up&mdash;don't worry: hitting the "reset view" button above will reset the chart to its default layout.</p>
+
 						<label for="force-charge" class="col-one">Charge</label>
 						<div class="col-two cols flex-wrap__nowrap">
-							<input type="range" id="force-charge" name="force-charge" min="-10000" max="0" step="1" data-tree-function="charge" class="force has-output" />
+							<input type="range" id="force-charge" min="-10000" max="0" step="1" data-tree-function="charge" class="force has-output" />
 							<output></output>
 						</div>
 
 						<label for="force-linkDistance" class="col-one">Distance</label>
 						<div class="col-two cols flex-wrap__nowrap">
-							<input type="range" id="force-linkDistance" name="force-linkDistance" min="1" max="100" step="1" data-tree-function="linkDistance" class="force has-output" />
+							<input type="range" id="force-linkDistance" min="1" max="100" step="1" data-tree-function="linkDistance" class="force has-output" />
 							<output></output>
 						</div>
 
 						<label for="force-friction" class="col-one">Friction</label>
 						<div class="col-two cols flex-wrap__nowrap">
-							<input type="range" id="force-friction" name="force-friction" min="0" max="1" step="0.01" data-tree-function="friction" class="force has-output" />
+							<input type="range" id="force-friction" min="0" max="1" step="0.01" data-tree-function="friction" class="force has-output" />
 							<output></output>
 						</div>
 
 						<label for="force-gravity" class="col-one">Gravity</label>
 						<div class="col-two cols flex-wrap__nowrap">
-							<input type="range" id="force-gravity" name="force-gravity" min="0" max="1" step="0.01" data-tree-function="gravity" class="force has-output" />
+							<input type="range" id="force-gravity" min="0" max="1" step="0.01" data-tree-function="gravity" class="force has-output" />
 							<output></output>
 						</div>
 
 						<label for="force-alpha" class="col-one">Alpha</label>
 						<div class="col-two cols flex-wrap__nowrap">
-							<input type="range" id="force-alpha" name="force-alpha" min="0" max="1" step="0.01" data-tree-function="alpha" class="force has-output" />
+							<input type="range" id="force-alpha" min="0" max="1" step="0.01" data-tree-function="alpha" class="force has-output" />
 							<output></output>
 						</div>
 
 						<label for="force-theta" class="col-one">Theta</label>
 						<div class="col-two cols flex-wrap__nowrap">
-							<input type="range" id="force-theta" name="force-theta" min="0" max="1" step="0.01" data-tree-function="theta" class="force has-output" />
+							<input type="range" id="force-theta" min="0" max="1" step="0.01" data-tree-function="theta" class="force has-output" />
 							<output></output>
 						</div>
+
+						<label for="force-bound" class="full-width">
+							<input type="checkbox" class="prettify" id="force-bound" />
+							<span>Confine entire chart within bounds</span>
+						</label>
 					</div>
 				</form>
 			</div>
