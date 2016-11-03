@@ -68,7 +68,7 @@ $(function() {
 							$('#id-check')
 							.removeClass()
 							.addClass('approved')
-							.html('<p><span class="pictogram icon-check"></span>Your LORE1 '+globalFun.pl(d.data.pid_found, 'line is', 'lines are')+' available and valid.</p>')
+							.html('<p><span class="pictogram icon-check"></span>Your <em>LORE1</em> '+globalFun.pl(d.data.pid_found, 'line is', 'lines are')+' available and valid.</p>')
 							.slideDown(125);
 
 							globalFun.stepForm.update.lore1lines();
@@ -95,7 +95,7 @@ $(function() {
 							}
 
 							var line_s = (pids.length)==1 ? 'line' : 'lines';
-							pidlist = "<p>" + pids.length + " invalid LORE1 " + line_s + " found&mdash;lines are invalid or have depleted seed stock. See highlighted.</p>";
+							pidlist = "<p>" + pids.length + " invalid <em>LORE1</em> " + line_s + " found&mdash;lines are invalid or have depleted seed stock. See highlighted.</p>";
 
 							$.each(pids, function(idx,pid){
 								$('#lines').prev('ul.input-values').find('li').filter(function() {
@@ -509,7 +509,7 @@ $(function() {
 				// LORE1 lines
 				// Show lines
 				var lines = $('#lines').val().split(',');
-				$('#order-overview__lore1-lines-count').html('<strong>' + lines.length + '</strong> LORE1 ' + globalFun.pl(lines.length, 'line', 'lines'));
+				$('#order-overview__lore1-lines-count').html('<strong>' + lines.length + '</strong> <em>LORE1</em> ' + globalFun.pl(lines.length, 'line', 'lines'));
 				$('#order-overview__lore1-lines-list').empty();
 				$.each(lines, function(i,v) {
 					$('#order-overview__lore1-lines-list').append($('<li />').text(v));
@@ -571,7 +571,7 @@ $(function() {
 					countryAlpha2 = $('#shipping-country option:selected').attr('data-country-alpha2');
 
 				// Shipping and contact details
-				var shippingDetails = '<p class="fn"><span>' + $('#fname').val() + ' ' + $('#lname').val() + '</span></p><p class="adr"><span class="street-address">' + $('#shipping-address').val() + '</span><br /><span class="city">' + $('#shipping-city').val() + '</span>, ' + ($('#shipping-state').val() ? '<span class="region">' + $('#shipping-state').val() + '</span><br />' : '') + '<span class="postal-code">' + $('#shipping-postalcode').val() + '</span><br /><span class="country-name">'+(country?'<img src="'+root+'/admin/includes/images/flags/'+countryAlpha2+'.png" alt="'+country+'" title="'+country+'"> ':'') + country + '</span></p>';
+				var shippingDetails = '<p class="fn"><span>' + $('#fname').val() + ' ' + $('#lname').val() + '</span></p><p class="adr"><span class="street-address">' + $('#shipping-address').val() + '</span><br /><span class="city">' + $('#shipping-city').val() + '</span>, ' + ($('#shipping-state').val() ? '<span class="region">' + $('#shipping-state').val() + '</span><br />' : '') + '<span class="postal-code">' + $('#shipping-postalcode').val() + '</span><br /><span class="country-name">'+(country?'<img src="'+root+'/admin/includes/images/flags/'+countryAlpha2.toLowerCase()+'.png" alt="'+country+'" title="'+country+'"> ':'') + country + '</span></p>';
 				$('#order-overview__shipping .vcard').html(shippingDetails);
 
 				globalFun.stepForm.update.lore1lines();
