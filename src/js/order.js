@@ -31,61 +31,7 @@ $(function() {
 			}
 		},
 		submitHandler: function(form) {
-			
-			var $t = $(form);
-
-			var order = $.ajax({
-				url: '/api',
-				data: $t.serialize(),
-				dataType: 'json',
-				type: 'POST'
-			});
-
-			order
-			.done(function(data) {
-				globalFun.modal.open({
-					'title': 'Placing your order&hellip;',
-					'content': '<div class="user-message loading-message"><div class="loader"><svg><circle class="path" cx="40" cy="40" r="30" /></svg></div><p class="loading-text">Submitting your order to the system. Hang on a second before we receive confirmation&hellip;</p></div></div>',
-					'allowClose': false
-				});
-	
-				var timer = window.setTimeout(function() {
-					window.clearTimeout(timer);
-					if(data.error) {
-						if(data.status === 555) {
-							globalFun.modal.update({
-								'title': 'Whoops!',
-								'content': '<p>'+data.message+'</p>',
-								'allowClose': true,
-								'class': 'warning'
-							});
-						} else {
-							globalFun.modal.update({
-								'title': 'Whoops!',
-								'content': '<p>Something is not too right with the submission. Please review the error '+(data.message.length > 1 ? 'messages' : 'message')+' returned:</p><ul><li>'+data.message.join('</li><li>')+'</li></ul>',
-								'allowClose': true,
-								'class': 'warning'
-							});
-						}
-					} else {
-						globalFun.modal.update({
-							'title': 'You\'ve got mail!',
-							'content': '<p>You have successfully placed an order. We have just sent an email to you&mdash;<strong>please verify your order using the verification link provided in the email you have received.</strong></p><p>Orders that remain unverified for more than one month will be deleted from our database.</p>',
-							'allowClose': true,
-							'class': 'note',
-							'actionText': 'Back to site',
-							'actionHref': '/'
-						});
-					}
-				}, 1000);
-			})
-			.error(function() {
-				globalFun.modal.open({
-					'title': 'Whoops!',
-					'content': '<p>Our API has experienced an error, and is unfortunately unable to process your order. '+globalVar.errorMessage+'</p>',
-					'class': 'warning'
-				});
-			});
+			form.submit();
 		}
 	});
 
@@ -275,6 +221,12 @@ $(function() {
 				tags: true
 			});
 
+			// Form submission
+			$('#form-step__submit').on('click', function(e) {
+				e.preventDefault();
+				$('#order-form').trigger('submit');
+			});
+
 			// Create map
 			globalFun.stepForm.update.map();
 		},
@@ -286,7 +238,11 @@ $(function() {
 				
 				if(value) {
 					if(/^[^_]/g.test(id)) {
-						$('#' + id).val(value);
+						if(/_checkbox/g.test(id)) {
+							$('#' + id).prop('checked', true);
+						} else {
+							$('#' + id).val(value);
+						}
 					} else if(/^_si_/g.test(id)) {
 
 					} else if(/^_scc_/g.test(id)) {
@@ -327,7 +283,7 @@ $(function() {
 			}
 
 			// Indicate to user that form is currently using stored data
-			$('#form-step__nav').before('<div class="user-message note">We have saved the progress of your incomplete LORE1 order. <a class="button" id="reset-local-storage" href="#"><span class="icon-cancel">Remove stored data and repeat</span></a></div>');
+			$('#incomplete-order').removeClass('hidden');
 		},
 		step: {
 			activate: function(i) {
@@ -562,8 +518,8 @@ $(function() {
 				// Compute costs
 				var linesCost = lines.length*100,
 					subtotalCost = linesCost + 100;
-				$('#order-overview__lore1-lines-cost').html(lines.length+ ' &times; 100 = DKK '+linesCost.toFixed(2));
-				$('#order-overview__lore1-lines-subtotal').html('DKK '+subtotalCost.toFixed(2));
+				$('#order-overview__lore1-lines-cost').html(lines.length+ '&nbsp;&times;&nbsp;100 =&nbsp;DKK&nbsp;'+linesCost.toFixed(2));
+				$('#order-overview__lore1-lines-subtotal').html('DKK&nbsp;'+subtotalCost.toFixed(2));
 
 				// Discounts or waivers
 				var costModifiers = [{
@@ -571,14 +527,16 @@ $(function() {
 					'description': 'Currently in effect until further notice',
 					'difference': subtotalCost * -1
 				}];
+				// Clean all cost modifiers
+				$('tr.cost-modifier').remove();
 				$.each(costModifiers, function(i,v) {
-					$('#order-overview__lore1-lines-total').closest('tr').before('<tr><th>'+v.name+(v.description ? '<br /><small>'+v.description+'</small>' : '')+'</th><td data-type="num">DKK '+v.difference.toFixed(2)+'</td></tr>');
+					$('#order-overview__lore1-lines-total').closest('tr').before('<tr class="cost-modifier"><th>'+v.name+(v.description ? '<br /><small>'+v.description+'</small>' : '')+'</th><td data-type="num">DKK&nbsp;'+v.difference.toFixed(2)+'</td></tr>');
 				});
 
 				var totalDiscount = costModifiers.reduce(function (acc, obj) { return acc + obj.difference; }, 0),
 					totalCost = subtotalCost + totalDiscount;
 
-				$('#order-overview__lore1-lines-total').html('DKK '+totalCost.toFixed(2));
+				$('#order-overview__lore1-lines-total').html('DKK&nbsp;'+totalCost.toFixed(2));
 			},
 			map: function() {
 				// Map
@@ -613,7 +571,7 @@ $(function() {
 					countryAlpha2 = $('#shipping-country option:selected').attr('data-country-alpha2');
 
 				// Shipping and contact details
-				var shippingDetails = '<p class="fn"><span>' + $('#fname').val() + ' ' + $('#lname').val() + '</span></p><p class="adr"><span class="street-address">' + $('#shipping-address').val() + '</span><br /><span class="city">' + $('#shipping-city').val() + '</span>, ' + ($('#shipping-state').val() ? '<span class="region">' + $('#shipping-state').val() + '</span><br />' : '') + '<span class="postal-code">' + $('#shipping-postalcode').val() + '</span><br /><span class="country-name">'+(country?'<img src="'+root+'/admin/includes/images/flags/'+countryAlpha2+'.png" alt="'+country+'" title="'+country+'">':'') + country + '</span></p>';
+				var shippingDetails = '<p class="fn"><span>' + $('#fname').val() + ' ' + $('#lname').val() + '</span></p><p class="adr"><span class="street-address">' + $('#shipping-address').val() + '</span><br /><span class="city">' + $('#shipping-city').val() + '</span>, ' + ($('#shipping-state').val() ? '<span class="region">' + $('#shipping-state').val() + '</span><br />' : '') + '<span class="postal-code">' + $('#shipping-postalcode').val() + '</span><br /><span class="country-name">'+(country?'<img src="'+root+'/admin/includes/images/flags/'+countryAlpha2+'.png" alt="'+country+'" title="'+country+'"> ':'') + country + '</span></p>';
 				$('#order-overview__shipping .vcard').html(shippingDetails);
 
 				globalFun.stepForm.update.lore1lines();

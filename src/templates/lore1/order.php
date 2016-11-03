@@ -5,6 +5,7 @@
 
 	// Error flag
 	$error = false;
+	$error_items = array();
 
 	// Use country list
 	use SameerShelavale\PhpCountriesArray\CountriesArray;
@@ -12,6 +13,14 @@
 	// Declare global user object
 	if(isset($_COOKIE['auth_token']) && auth_verify($_COOKIE['auth_token'])) {
 		$user = auth_verify($_COOKIE['auth_token']);
+	}
+
+	// Check if any error messages are present
+	if(isset($_SESSION['order_error'])) {
+		$error = $_SESSION['order_error']['message'];
+		$error_items = $_SESSION['order_error']['errors'];
+		print_r($_SESSION['order_error']);
+		unset($_SESSION['order_error']);
 	}
 
 	try {
@@ -73,19 +82,26 @@
 <body class="order">
 	<?php
 		$header = new \LotusBase\PageHeader();
+		$header->set_header_content('<div class="align-center">
+			<h1><em>LORE1</em> Order</h1>
+			<span class="byline">Place an order for your <em>LORE1</em> mutants of interest</span>
+		</div>');
+		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/lore1/lore1_01.jpg');
 		echo $header->get_header();
 	?>
 
-	<?php echo get_breadcrumbs(array('page_title' => 'Order <em>LORE1</em> Lines')); ?>
+	<?php echo get_breadcrumbs(array('custom_titles' => array('<em>LORE1</em>', 'Order mutants'))); ?>
 
 	<section class="wrapper">
-		<h2><em>LORE1</em> lines order form</h2>
 		<p>Please complete the following form to place an order on your <em>LORE1</em> lines for interest. You may only proceed to the next step when the current step is complete and valid, but you may navigate between previously cleared step.</p>
 		<p>Your private information will be kept <em>strictly</em> confidential. Required fields are marked with an asterisk (<strong>*</strong>).</p>
 		<?php if($error) { 
 			echo '<p class="user-message warning">'.$error.'.</p>';
 		} ?>
-		<form action="#" method="POST" id="order-form" accept-charset="utf-8" class="has-group has-steps">
+		<div id="incomplete-order" class="user-message note hidden">
+			<p>An incomplete <em>LORE1</em> order has been found. You may proceed with completing it, or <a href="#" id="reset-local-storage">choose to remove this locally-stored order and start over again</a>.</p>
+		</div>
+		<form action="order-exec.php" method="POST" id="order-form" accept-charset="utf-8" class="has-group has-steps">
 
 			<header id="form-step__header">
 				<nav id="form-step__nav"><ul class="cols flex-wrap__nowrap"></ul></nav>
@@ -247,7 +263,7 @@
 					</article>
 				</div>
 				<div class="full-width" role="group">
-					<label for="consent-disclaimer"><input class="prettify" type="checkbox" id="consent-disclaimer" name="consent_disclaimer" tabindex="17" required />I have read and understood the disclaimer above.</label>
+					<label for="consent-disclaimer_checkbox"><input class="prettify" type="checkbox" id="consent-disclaimer_checkbox" name="consent_disclaimer" tabindex="17" required />I have read and understood the disclaimer above.</label>
 				</div>
 			</div>
 
@@ -301,10 +317,10 @@
 				});
 			},
 			verifyCallback = function(response) {
-				console.log(globalVar.stepForm.validStepIndex);
+				console.log(globalVar.stepForm.validStepIndex, $('form.has-steps .form-step').length);
 
 				// Only enable submit button when form is complete
-				if(globalVar.stepForm.validStepIndex === $('form.has-steps .form-step').length - 1) {
+				if(globalVar.stepForm.validStepIndex >= $('form.has-steps .form-step').length - 2) {
 					$('#form-step__submit').removeClass('disabled');
 				}
 			},

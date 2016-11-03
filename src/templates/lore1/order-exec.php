@@ -22,12 +22,12 @@
 		$fname 			= escapeHTML($_POST['fname']);
 		$lname 			= escapeHTML($_POST['lname']);
 		$email			= escapeHTML($_POST['email']);
-		$institution 	= escapeHTML($_POST['institution']);
-		$address 		= escapeHTML($_POST['address']);
-		$city 			= escapeHTML($_POST['city']);
-		$state 			= escapeHTML($_POST['state']);
-		$postalcode 	= escapeHTML($_POST['postalcode']);
-		$country 		= escapeHTML($_POST['country']);
+		$institution 	= escapeHTML($_POST['shipping_institution']);
+		$address 		= escapeHTML($_POST['shipping_address']);
+		$city 			= escapeHTML($_POST['shipping_city']);
+		$state 			= escapeHTML($_POST['shipping_state']);
+		$postalcode 	= escapeHTML($_POST['shipping_postalcode']);
+		$country 		= escapeHTML($_POST['shipping_country']);
 		$lines 			= $_POST['lines']; 					// Don't sanitize lines YET (doing it later)
 		$comments 		= escapeHTML($_POST['comments']);
 
@@ -76,8 +76,19 @@
 		}
 
 		// Preserve user input
-		//					[0]     [1]     [2]     [3]           [4]       [5]    [6]     [7]         [8]        [9]     [10]
-		$user_input = array($fname, $lname, $email, $institution, $address, $city, $state, $postalcode, $country, $lines, $comments);
+		$user_input = array(
+			'FirstName' => $fname,
+			'LastName' => $lname,
+			'Email' => $email,
+			'ShippingInstitution' => $institution,
+			'ShippingAddress' => $address,
+			'ShippingCity' => $city,
+			'ShippingState' => $state,
+			'ShippingPostalcode' => $postalcode,
+			'ShippingCountry' => $country,
+			'Lines' => $lines,
+			'Comments' => $comments
+			);
 
 		// Throw exception if error flag is raised
 		if($flag) {
@@ -193,9 +204,9 @@
 		$q4->execute();
 
 		// Write session
-		$user_input = array($fname, $email);
-		$_SESSION['ORD_SUCCESS'] = true;
-		$_SESSION['ORD_USER_INPUT'] = $user_input;
+		$_SESSION['order_success'] = array(
+			'user_input' => $user_input
+			);
 		session_write_close();
 		header('location: ./order-success.php');
 		exit();
@@ -203,10 +214,11 @@
 	} catch(PDOException $e) {
 
 		$order_error[] = 'We have encountered a MySQL error: '.$e->getMessage();
-		$flag = true;
-		$_SESSION['ORD_ERROR_TITLE'] = "Whoops! We have experienced problems processing your order. Please review the following:";
-		$_SESSION['ORD_ERROR'] = $order_error;
-		$_SESSION['USER_INPUT'] = $user_input;
+		$_SESSION['order_error'] = array(
+			'message' => 'Whoops! We have experienced problems processing your order. Please review the following:',
+			'errors' => $order_error,
+			'user_input' => $user_input
+			);
 		session_write_close();
 		header('location: ./order.php');
 		exit();
@@ -214,24 +226,23 @@
 	} catch(phpmailerException $e) {
 
 		$order_error[] = 'We have encountered an error with sending you an email: '.$e->getMessage();
-		$flag = true;
-		$_SESSION['ORD_ERROR_TITLE'] = "Whoops! We have experienced problems processing your order. Please review the following:";
-		$_SESSION['ORD_ERROR'] = $order_error;
-		$_SESSION['USER_INPUT'] = $user_input;
+		$$_SESSION['order_error'] = array(
+			'message' => 'Whoops! We have experienced problems processing your order. Please review the following:',
+			'errors' => $order_error,
+			'user_input' => $user_input
+			);
 		session_write_close();
 		header('location: ./order.php');
 		exit();
 
 	} catch(Exception $e) {
 
-		// If there are input validation errors, redirect back to the order form
-		if($flag_lines) {
-			$_SESSION['LINES_ERROR_TITLE'] = $lines_error_title;
-			$_SESSION['LINES_ERROR'] = $lines_error;			
-		}
-		$_SESSION['ORD_ERROR_TITLE'] = "Whoops! We have experienced problems processing your order. Please review the following:";
-		$_SESSION['ORD_ERROR'] = $order_error;
-		$_SESSION['USER_INPUT'] = $user_input;
+		$order_error[] = 'We have encountered an error with sending you an email: '.$e->getMessage();
+		$_SESSION['order_error'] = array(
+			'message' => $flag_lines ? $lines_error_title : 'Whoops! We have experienced problems processing your order. Please review the following:',
+			'errors' => $flag_lines ? $lines_error : $order_error,
+			'user_input' => $user_input
+			);
 		session_write_close();
 		header('location: ./order.php');
 		exit();
