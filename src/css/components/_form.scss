@@ -180,6 +180,22 @@ form {
 			}
 		}
 		&[type='text'], &[type='email'], &[type='number'], &[type='search'] { vertical-align: top; appearance: none; }
+		&[type='search'] {
+			&::-webkit-search-cancel-button {
+				opacity: 0;
+				position: relative;
+				right: 0;
+				-webkit-appearance: none;
+				@include transition;
+				&::after {
+					content: '\e809';
+					font-family: 'fontello';
+				}
+			}
+			&:focus {
+				&::-webkit-search-cancel-button { opacity: 1; }
+			}
+		}
 		&[type='range'] {
 			@include input_range;
 			cursor: ew-resize;
