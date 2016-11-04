@@ -38,7 +38,7 @@
 				<div id="searchform-tabs__nav" class="cols align-items__flex-end ui-tabs-nav__wrapper">
 					<ul class="tabbed">
 						<li><a href="#searchform__gene" data-custom-smooth-scroll>Gene/Transcript</a></li>
-						<li><a href="#searchform__prediction" data-custom-smooth-scroll>Prediction</a></li>
+						<?php if(is_intranet_client()) { ?><li><a href="#searchform__prediction" data-custom-smooth-scroll>Prediction</a></li><?php } ?>
 						<li><a href="#searchform__lore1" data-custom-smooth-scroll><em>LORE1</em></a></li>
 					</ul>
 				</div>
@@ -51,14 +51,15 @@
 					<div class="full-width searchform__suggestions">
 						<ul class="list--floated">
 							<li>Example:</li>
-							<li><a href="#" data-value="LjFls2"><em>LjFls2</em></a></li>
-							<li><a href="#" data-value="Lj4g3v0281040">Lj4g3v0281040</a></li>
-							<li><a href="#" data-value="Lj4g3v0281040.1">Lj4g3v0281040.1</a></li>
+							<li><a href="#" data-value="LjFls2"><em>LjFls2</em></a><span class="term-type">Name</span></li>
+							<li><a href="#" data-value="Lj4g3v0281040">Lj4g3v0281040</a><span class="term-type">Gene</span></li>
+							<li><a href="#" data-value="Lj4g3v0281040.1">Lj4g3v0281040.1</a><span class="term-type">Transcript/Protein</span></li>
 						</ul>
 					</div>
 					</form>
 				</div>
 
+				<?php if(is_intranet_client()) { ?>
 				<div id="searchform__prediction">
 					<form action="<?php echo WEB_ROOT; ?>/tools/trex" class="search-form flex-wrap__wrap" method="get">
 					<p class="full-width">Search for predictions based on <abbr>GO</abbr> terms and prediction domains (InterPro, PFam, Superfamily, etc.).</p>
@@ -67,11 +68,19 @@
 					<div class="full-width searchform__suggestions">
 						<ul class="list--floated">
 							<li>Example:</li>
-							<li><a href="#" data-value="GO:0004672">GO:0004672</a></li>
+							<li><a href="#" data-value="GO:0004672">GO:0004672</a><span class="term-type">GO term</span></li>
+							<li><a href="#" data-value="G3DSA:1.10.510.1">G3DSA:1.10.510.1</a><span class="term-type">Gene3D</span></li>
+							<li><a href="#" data-value="IPR000719">IPR000719</a><span class="term-type">InterPro</span></li>
+							<li><a href="#" data-value="PF00069">PF00069</a><span class="term-type">PFam</span></li>
+							<li><a href="#" data-value="PS50011">PS50011</a><span class="term-type">PatternScan</span></li>
+							<li><a href="#" data-value="PTHR24420">PTHR24420</a><span class="term-type">PANTHER</span></li>
+							<li><a href="#" data-value="SSF52047">SSF52047</a><span class="term-type">SuperFamily</span></li>
+							<li><a href="#" data-value="TIGR01151">TIGR01151</a><span class="term-type">TIGRFAM</span></li>
 						</ul>
 					</div>
 					</form>
 				</div>
+				<?php } ?>
 
 				<div id="searchform__lore1">
 					<form action="<?php echo WEB_ROOT; ?>/lore1/search" class="search-form flex-wrap__wrap" method="get">
@@ -81,7 +90,7 @@
 					<div class="full-width searchform__suggestions">
 						<ul class="list--floated">
 							<li>Example:</li>
-							<li><a href="#" data-value="30010101">30010101</a></li>
+							<li><a href="#" data-value="30010101">30010101</a><span class="term-type"><em>LORE1</em></span></li>
 						</ul>
 					</div>
 					</form>

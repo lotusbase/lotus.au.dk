@@ -22,11 +22,21 @@
 		font-size: .875rem;
 		font-weight: bold;
 		ul {
-			li:first-child {
-				background: none;
-				border: none;
-				padding: 0;
-				margin: 0 .5rem 0 0;
+			li {
+				&:first-child {
+					background: none;
+					border: none;
+					padding: 0;
+					margin: 0 .5rem 0 0;
+				}
+				span.term-type {
+					border-left: 1px solid rgba(#000,.1);
+					color: #777;
+					display: inline-block;
+					font-size: .75rem;
+					margin-left: .5rem;
+					padding-left: .5rem;
+				}
 			}
 		}
 	}
