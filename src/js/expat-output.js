@@ -1839,7 +1839,7 @@ $(function() {
 					tweenLinegraph.selectAll('circle.point')
 					.attr('cy', function(d) { return linegraphY(d.value); });
 
-					tweenLinegraph.selectAll('.y')
+					tweenLinegraph.select('g.y.axis')
 					.call(linegraphYAxis)
 					.selectAll('text')
 						.attr({
@@ -2198,7 +2198,7 @@ $(function() {
 						linegraphYAxis.innerTickSize(-(expat.chart.innerWidth - expat.dendrogram.row.currentWidth));
 
 						// Redraw axis ticks
-						tweenLinegraph.selectAll('.y')
+						tweenLinegraph.select('g.y.axis')
 						.call(linegraphYAxis)
 						.selectAll('text')
 							.attr({

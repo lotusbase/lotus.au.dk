@@ -56,6 +56,14 @@ class Dataset {
 			'value' => 'rnaseq-marcogiovanetti-2015-am',
 			'text' => 'C. trifolii germinating spore exudates by probe ID',
 			'label' => 'Marco Giovanetti, RNAseq data (2015)'
+			),
+		'rnaseq-eiichimurakami-2016-01' => array(
+			'idType' => 'transcriptid',
+			'experiment' => 'rnaseq-eiichimurakami-2016-01',
+			'value' => 'rnaseq-eiichimurakami-2016-01',
+			'text' => 'Nod factor treatment of L. japonicus',
+			'intranet_only' => true,
+			'label' => 'Eiichi Murakami, RNAseq data (2016)'
 			)
 		);
 

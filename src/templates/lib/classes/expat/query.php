@@ -158,6 +158,15 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-marcogiovanetti-2015';
 			$this->expat['rowType'] = 'Probe ID';
 			$this->expat['rowText'] = 'Probe(s)';
+		} else if ($dataset == 'rnaseq-eiichimurakami-2016-01') {
+			$this->_expat['query'] = array(
+				'table' => 'expat_RNAseq_EiichiMurakami',
+				'id' => $_POST['idtype']
+			);
+			$this->expat['mapped'] = false;
+			$this->expat['experiment'] = 'rnaseq-eiichimurakami-2016-01';
+			$this->expat['rowType'] = 'Transcript ID';
+			$this->expat['rowText'] = 'Transcript(s)';
 		} else {
 			$this->error->set_status(404);
 			$this->error->set_message('The dataset you have selected is not available. Please try again.');
@@ -379,7 +388,17 @@ class Query {
 					'Control_H2O',
 					'Treatment_AMGSE_24h',
 					'Treatment_AMGSE_48h'
-				)
+				),
+				'rnaseq-eiichimurakami-2016-01' => array(
+					'G_H2O',
+					'G_NF',
+					'38534_H2O',
+					'38534_NF',
+					'4820_H2O',
+					'4820_NF',
+					'nfr1_H2O',
+					'nfr1_NF'
+					)
 			);
 
 			$datasets = array_merge($datasets, $private_datasets);
@@ -460,7 +479,7 @@ class Query {
 				$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 				// Formulate query
-				if($this->expat['experiment'] == 'ljgea') {
+				if($this->expat['experiment'] === 'ljgea') {
 					// LjGEA dataset requires joining of two different tables, one by gene ID and the other by probe ID
 					$sqlQuery = "SELECT
 						t1.".$query['id']." AS RowID, GROUP_CONCAT(t2.".$query['mappedid'].") AS MappedToID, t3.".$query['mappedid']." AS MappedID, ".implode($columns,',')."
@@ -482,7 +501,7 @@ class Query {
 					// Set query array of $ids
 					$ids_query = $ids;
 
-				} else if ($this->expat['experiment'] == 'rnaseq-simonkelly-2015') {
+				} else if ($this->expat['experiment'] === 'rnaseq-simonkelly-2015') {
 					// Simon RNAseq dataset does not require joining
 					// Construct LIKE query
 					$likeQuery = '';
@@ -510,7 +529,7 @@ class Query {
 					// Define output header (only for download)
 					$outHeader = "\"".$query['id']."\",\"".implode($columns,'","')."\"\n";
 
-				} else if($this->expat['experiment'] == 'rnaseq-marcogiovanetti-2015') {
+				} else if($this->expat['experiment'] === 'rnaseq-marcogiovanetti-2015' || $this->expat['experiment'] === 'rnaseq-eiichimurakami-2016-01') {
 					// Marco Giovanetti's dataset does not require joining
 					// Construct LIKE query
 					$likeQuery = '';
@@ -578,11 +597,15 @@ class Query {
 							if($this->_expat['dataTransform'] === 'normalize') {
 
 								// Transform raw values using log
-								$row_values = array_map(function($v) { return log10($v); }, $row_raw_values);
+								$row_values = array_map(function($v) { return $v; }, $row_raw_values);
 
 								// Compute min and max values
 								$row_max = max($row_values);
 								$row_min = min($row_values);
+
+								if($row_max === $row_min) {
+									$this->_expat['dataTransform'] = false;
+								}
 							}
 							// Standardize row data
 							// For calculation, we need the mean and standard deviation for each row
@@ -627,7 +650,7 @@ class Query {
 									'condition' => $colName,
 									'value' => (
 										$this->_expat['dataTransform'] === 'normalize' ?
-											round((log10($value) - $row_min)/($row_max - $row_min), 3) :
+											round(($value - $row_min)/($row_max - $row_min), 3) :
 											(
 												$this->_expat['dataTransform'] === 'standardize' ?
 													round(($value - $row_mean) / $row_sd, 3) :

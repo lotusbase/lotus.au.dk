@@ -14,7 +14,7 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 		// Trim experiment from dataset variable
 		$dataset_wildcard = '%'.str_replace($experiment.'-', '', $dataset).'%';
 
-		if($experiment == 'ljgea') {
+		if($experiment === 'ljgea') {
 			$sqlQuery = "SELECT
 				ConditionName,
 				PlantSpecies,
@@ -36,7 +36,7 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 			FROM expat_ljgea_columns
 			WHERE Dataset LIKE ?
 			ORDER BY ID";
-		} else if ($experiment == 'rnaseq-simonkelly-2015') {
+		} else if ($experiment === 'rnaseq-simonkelly-2015') {
 			$sqlQuery = "SELECT
 				ConditionName,
 				ExperimentalFactor,
@@ -50,7 +50,7 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 			FROM expat_RNAseq_SimonKelly_columns
 			WHERE Dataset LIKE ?
 			ORDER BY ID";
-		} else if ($experiment == 'rnaseq-marcogiovanetti-2015') {
+		} else if ($experiment === 'rnaseq-marcogiovanetti-2015') {
 			$sqlQuery = "SELECT
 				ConditionName,
 				ExperimentalFactor,
@@ -63,6 +63,20 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 				ReferenceTitle,
 				ReferenceURL
 			FROM expat_RNAseq_MarcoGiovanetti_AMGSE_columns
+			WHERE Dataset LIKE ?
+			ORDER BY ID";
+		} else if($experiment === 'rnaseq-eiichimurakami-2016-01') {
+			$sqlQuery = "SELECT
+				ConditionName,
+				ExperimentalFactor,
+				Treatment,
+				PlantSpecies,
+				PlantEcotype,
+				PlantGenotype,
+				Age,
+				Inoculation,
+				Inocula
+			FROM expat_RNAseq_EiichiMurakami_columns
 			WHERE Dataset LIKE ?
 			ORDER BY ID";
 		}

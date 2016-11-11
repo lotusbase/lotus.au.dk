@@ -110,7 +110,6 @@
 			</div>
 
 			<input type="hidden" id="expat-idtype" name="idtype" value="" />
-			<input type="hidden" name="t" value="6" />
 
 			<div class="cols justify-content__center">
 				<button type="submit" role="primary"><span class="pictogram icon-search">Search</span></button>
@@ -126,7 +125,7 @@
 	<!-- Load plugins -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/0.6.0/lunr.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/colorbrewer.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/d3-tip.min.js"></script>

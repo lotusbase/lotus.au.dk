@@ -24,16 +24,22 @@
 
 		<?php if(is_intranet_client()) { ?>
 		<tr>
-			<td>Simon Kelly RNAseq data with bacteria treatment</td>
+			<td>Simon Kelly's RNAseq data with bacteria treatment</td>
 			<td>Transcript ID</td>
 			<td>RNAseq data from <em>Lotus japonicus</em> roots from various mutants, after inoculation with various rhizobial strains.</td>
 			<td>Kelly, S., unpublished data.</td>
 		</tr>
 		<tr>
-			<td>Simon Kelly RNAseq data with purified compounds treatment</td>
+			<td>Simon Kelly's RNAseq data with purified compounds treatment</td>
 			<td>Transcript ID</td>
 			<td>RNAseq data from <em>Lotus japonicus</em> roots from various mutants, after treatment with purified compounds from rhizobia.</td>
 			<td>Kelly, S., unpublished data.</td>
+		</tr>
+		<tr>
+			<td>Eiichi Murakami's RNAseq data with purified compounds treatment</td>
+			<td>Transcript ID</td>
+			<td>RNAseq data from <em>Lotus japonicus</em> samples from Gifu wildtype, <em>nfr1</em>, and <em>lys1</em> mutants, after treatment with <em>M. loti</em> R7A Nod factor (1e-10M).</td>
+			<td>Murakami, E., unpublished data.</td>
 		</tr>
 		<?php } ?>
 
