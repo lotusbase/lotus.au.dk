@@ -227,6 +227,7 @@ var globalFun = {
 				'content': '<p>We have encountered an error '+(d.status ? '(error code: <code>'+d.status+'</code>) ' : '')+'while processing your request.</p>'+(d.message ? '<p>'+d.message+'</p>' : ''),
 				'class': 'warning'
 			});
+			globalFun.modal.allowClose();
 		}
 	},
 	loadingIndicator: function(opts) {

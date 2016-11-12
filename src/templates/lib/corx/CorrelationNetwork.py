@@ -218,7 +218,7 @@ def create_correlation_network(dataset, candidates, columns, verbose, out_file, 
         print("\tAverage number of edges per node:", (len(edges[0]) / len(nodes) if len(nodes) > 0 else 0))
 
     # Forced termination if there are too many nodes
-    if(len(nodes) > 20000 or len(edges[0]) > 1000000):
+    if(len(nodes) > 25000 or len(edges[0]) > 5000000):
         if verbose:
             print("Too many nodes and edges in network, job is terminated to prevent memory exhaustion.")
 
@@ -367,7 +367,7 @@ def create_correlation_network(dataset, candidates, columns, verbose, out_file, 
                     print("Job entry not found in database, not writing anything.")
 
         clustered_nodes = [[node_labels[i] for i in j] for j in clusters]
-        print(json.dumps(clustered_nodes))
+        #print(json.dumps(clustered_nodes))
 
         # Generate output
         out.write("{\"metadata\":{\"settings\":{".encode('utf-8'))

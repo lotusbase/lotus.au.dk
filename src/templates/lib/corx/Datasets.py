@@ -101,5 +101,5 @@ all_by_name = {
     u"rnaseq-simonkelly-2015-bacteria": simon_kelly_bacteria,
     u"rnaseq-simonkelly-2015-purifiedcompounds": simon_kelly_purified_compounds,
     u"rnaseq-marcogiovanetti-2015-am": giovanetti_probe,
-    u"rnaseq-eiichimurakami-2016": eiichi_murakami_2016
+    u"rnaseq-eiichimurakami-2016-01": eiichi_murakami_2016
 }

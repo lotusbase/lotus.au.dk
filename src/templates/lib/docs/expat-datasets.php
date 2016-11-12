@@ -38,7 +38,10 @@
 		<tr>
 			<td>Eiichi Murakami's RNAseq data with purified compounds treatment</td>
 			<td>Transcript ID</td>
-			<td>RNAseq data from <em>Lotus japonicus</em> samples from Gifu wildtype, <em>nfr1</em>, and <em>lys1</em> mutants, after treatment with <em>M. loti</em> R7A Nod factor (1e-10M).</td>
+			<td>
+				<p>RNAseq data from <em>Lotus japonicus</em> samples from Gifu wildtype, <em>nfr1</em>, and <em>lys1</em> mutants, after treatment with <em>M. loti</em> R7A Nod factor (1e-10M).</p>
+				<p class="user-message warning">Due to insufficient number of conditions, this dataset is not available for CORNEA.</p>
+			</td>
 			<td>Murakami, E., unpublished data.</td>
 		</tr>
 		<?php } ?>
@@ -48,7 +51,7 @@
 			<td>Probe ID</td>
 			<td>
 				<p>RNAseq data from <em>Lotus japonicus</em> roots after exposure to <em>C. trifolii</em> germinating spore exudates.</p>
-				<p class="user-message warning">Due to insufficient number of conditions, this dataset is not available for the CORX toolkit.</p>
+				<p class="user-message warning">Due to insufficient number of conditions, this dataset is not available for CORNEA.</p>
 			</td>
 			<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/26175746" title="Early Lotus japonicus root transcriptomic responses to symbiotic and pathogenic fungal exudates.">Giovanetti <em>et al.</em>, 2015</a></td>
 		</tr>

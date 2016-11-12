@@ -272,7 +272,7 @@
 						<div class="col-two">
 							<?php
 								$expat_dataset = new \Lotusbase\ExpAt\Dataset();
-								$expat_dataset->set_blacklist(array('rnaseq-marcogiovanetti-2015-am'));
+								$expat_dataset->set_blacklist(array('rnaseq-marcogiovanetti-2015-am', 'rnaseq-eiichimurakami-2016-01'));
 								if(!empty($_GET['dataset'])) {
 									$expat_dataset->set_dataset($_GET['dataset']);
 								}

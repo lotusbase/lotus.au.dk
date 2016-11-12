@@ -51,13 +51,20 @@ def get_data(print_debug, database, columns, gene_limit=None, genes=None, clean=
     data = full_data[:, 1:].astype(np.float32)
     if clean:
         # Clean the data. Do not include a gene with log(var(log(data)) less than the mean unless max / mean > 2.
-        log_data = np.log(data)
-        var_log_data = np.var(log_data, axis=1)
-        log_var_log_data = np.log(var_log_data)
-        log_var_log_data_mean = np.mean(log_var_log_data)
-        max_mean_ratio = np.max(data, axis=1) / np.mean(data, axis=1)
-        full_data = full_data[(log_var_log_data > log_var_log_data_mean) | (max_mean_ratio > 2)]
-        data = full_data[:, 1:].astype(np.float32)
+        if 0 not in data:
+            log_data = np.log(data)
+            var_log_data = np.var(log_data, axis=1)
+            log_var_log_data = np.log(var_log_data)
+            log_var_log_data_mean = np.mean(log_var_log_data)
+            max_mean_ratio = np.max(data, axis=1) / np.mean(data, axis=1)
+            full_data = full_data[(log_var_log_data > log_var_log_data_mean) | (max_mean_ratio > 2)]
+            data = full_data[:, 1:].astype(np.float32)
+        else:
+            var_data = np.var(data, axis=1)
+            var_data_mean = np.mean(var_data)
+            max_mean_ratio = np.max(data, axis=1) / np.mean(data, axis=1)
+            full_data = full_data[(var_data > var_data_mean) | (max_mean_ratio > 2)]
+            data = full_data[:, 1:].astype(np.float32)
 
     time_cleaning_data = time.perf_counter() - time_start
     time_elapsed.append({ 'step': 'cleaning_data', 'label': 'Cleaning data', 'time_elapsed': time_cleaning_data })
@@ -198,7 +205,7 @@ def get_correlation_matrix_row(print_debug, database, columns, query, gene_limit
     # Here we calculate a single row in the matrix, though.
     query_row_idx = np.where(labels == query)[0]
     if len(query_row_idx) == 0:
-        return None, None
+        return None, None, None
 
     P_row = diff_from_mean[query_row_idx, :].dot(diff_from_mean[:, :].T)
     P_row /= (sqrt_sum_diff_from_mean_sq[query_row_idx, np.newaxis] * sqrt_sum_diff_from_mean_sq[np.newaxis, ...])
