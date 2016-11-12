@@ -5,7 +5,7 @@
 <html lang="en">
 <head itemscope itemtype="http://schema.org/WebSite">
 	<title itemprop="name">Lotus Base</title>
-	<?php include('head.php'); ?>
+	<?php include ('head.php'); ?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/home.min.css" type="text/css" media="screen" />
 	<script type="application/ld+json">
 	{
@@ -24,7 +24,7 @@
 <body class="home">
 	<?php
 
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->add_header_class('alt');
 		$header->set_header_content('<div class="align-center"><h1>'.file_get_contents(DOC_ROOT."/dist/images/branding/logo.svg").'<em>Lotus</em> Base</h1><span class="byline">Genomic, proteomic &amp; expression resources for <em>Lotus japonicus</em>.</span></div>');
 		echo $header->get_header();

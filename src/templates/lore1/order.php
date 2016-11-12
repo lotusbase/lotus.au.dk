@@ -81,16 +81,18 @@
 </head>
 <body class="order">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<div class="align-center">
 			<h1><em>LORE1</em> Order</h1>
 			<span class="byline">Place an order for your <em>LORE1</em> mutants of interest</span>
 		</div>');
 		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/lore1/lore1_01.jpg');
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('custom_titles' => array('<em>LORE1</em>', 'Order mutants'))); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title(array('<em>LORE1</em>', 'Order mutants'));
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<p>Please complete the following form to place an order on your <em>LORE1</em> lines for interest. You may only proceed to the next step when the current step is complete and valid, but you may navigate between previously cleared step.</p>

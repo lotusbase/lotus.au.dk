@@ -1,8 +1,8 @@
 <?php
 
-namespace LotusBase;
+namespace LotusBase\Component;
 
-/* PageHeader */
+/* Component\PageHeader */
 class PageHeader {
 
 	private $page_header = array();
@@ -32,7 +32,7 @@ class PageHeader {
 			);
 
 		// Construct new form
-		$this->search_form = new \LotusBase\SiteSearchForm();
+		$this->search_form = new \LotusBase\Component\SiteSearchForm();
 		$this->search_form->set_id('nav-search-form');
 		$this->search_form->set_content_before('<button class="pictogram icon-search icon--no-spacing"></button>');
 		$this->search_form->update_options(array(

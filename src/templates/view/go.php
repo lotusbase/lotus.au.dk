@@ -37,15 +37,17 @@
 	<?php
 
 		// Page header
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		echo $header->get_header();
 
 		// Breadcrumb
-		echo get_breadcrumbs(array('custom_breadcrumb' => array(
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_crumbs(array(
 			'View' => 'view',
 			'Gene Ontology' => 'go',
 			$id => $id
-		)));
+		));
+		echo $breadcrumbs->get_breadcrumbs();
 
 		// Check if GO term exists
 		try {

@@ -130,13 +130,15 @@
 
 	<div id="wrap">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<h1><em>LORE1</em> Raw Data</h1>
 		<p>The raw data for <em>LORE1</em> insertions mapped against v3.0 of the <em>L. japonicus</em> genome assembly can be downloaded here. Data is provieded on an as-is basis.</p>');
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('page_title' => '<em>LORE1</em> raw data')); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title('<em>LORE1</em> raw data');
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<?php 

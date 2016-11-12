@@ -18,7 +18,7 @@
 </head>
 <body class="mail">
 
-<?php $header = new \LotusBase\PageHeader(); echo $header->get_header(); ?>
+<?php $header = new \LotusBase\Component\PageHeader(); echo $header->get_header(); ?>
 
 <section class="wrapper">
 	<h2>HTML Email Viewer</h2>

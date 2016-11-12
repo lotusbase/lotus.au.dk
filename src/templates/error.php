@@ -61,13 +61,12 @@
 </head>
 <body class="error">
 	<?php
-		$header = new \LotusBase\PageHeader();
-		$search_form2 = new \LotusBase\SiteSearchForm();
+		$header = new \LotusBase\Component\PageHeader();
+		$search_form2 = new \LotusBase\Component\SiteSearchForm();
 
 		$header->set_header_content('<h1 class="align-center"><span class="pictogram icon--big icon-attention icon--no-spacing">'.$error_meta[$status]['headerTitle'].'</span></h1>'.(isset($_GET['message']) ? '<p class="user-message warning align-center">'.$_GET['message'].'</p>': '').$error_meta[$status]['message'].$search_form2->get_form());
 		echo $header->get_header();
 	?>
-
 
 	<?php include('footer.php'); ?>
 </body>

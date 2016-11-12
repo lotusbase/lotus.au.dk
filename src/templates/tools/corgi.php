@@ -12,7 +12,7 @@
 </head>
 <body class="tools corgi">
 	<?php
-		$header = new \Lotusbase\PageHeader();
+		$header = new \Lotusbase\Component\PageHeader();
 		$header->set_header_content('<div class="align-center">
 			<h1>CORGI</h1>
 			<span class="byline"><strong>Correlated Genes Identifier</strong><br />for <em>L.</em> japonicus reference genome <strong>v3</strong></span>
@@ -20,9 +20,11 @@
 		</div>');
 		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/cornea/cornea01.jpg');
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('page_title' => 'CORGI')); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title('CORGI');
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="expat-form">

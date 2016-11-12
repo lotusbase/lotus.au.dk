@@ -128,47 +128,6 @@ function translit($str) {
 	return $str;
 }
 
-// Breadcrumbs
-function get_breadcrumbs($opts = null) {
-	$crumbs = array_values(array_filter(explode("/",strtok($_SERVER['REQUEST_URI'],'?'))));
-	$crumbs_path = $crumbs;
-	$crumbs_titles = $crumbs;
-
-	if($opts !== null && is_array($opts)) {
-		// Replace last element if $title is defined
-		if(isset($opts['page_title']) && is_string($opts['page_title'])) {
-			array_pop($crumbs);
-			array_push($crumbs, $opts['page_title']);
-			$crumbs_titles = $crumbs;
-		}
-
-		// Replace titles if custom titles are defined
-		if(isset($opts['custom_titles']) && !empty($opts['custom_titles']) && is_array($opts['custom_titles'])) {
-			$crumbs_titles = $opts['custom_titles'];
-		}
-
-		// Replace entire path if custom breadcrumb is defined
-		if(isset($opts['custom_breadcrumb'])) {
-			foreach($opts['custom_breadcrumb'] as $title => $path) {
-				$custom_breadcrumb_titles[] = $title;
-				$custom_breadcrumb_paths[] = $path;
-			}
-			$crumbs = $custom_breadcrumb_paths;
-			$crumbs_path = $crumbs;
-			$crumbs_titles = $custom_breadcrumb_titles;
-		}
-	}
-
-	// Construct breadcrumbs
-	$breadcrumbs = '<section class="wrapper" id="breadcrumb"><nav><ul itemscope itemtype="http://schema.org/BreadcrumbList"><li><a href="'.WEB_ROOT.'/" title="Home"><em>Lotus</em> Base</a></li>';
-	foreach($crumbs as $key => $crumb){
-		// Append
-		$crumb_title = ucwords(str_replace(array(".php","_","-"),array(""," ", " "),$crumbs_titles[$key]));
-		$breadcrumbs .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.WEB_ROOT.'/'.implode('/', array_slice($crumbs_path, 0, $key+1)).'" title="'.$crumb_title.'" itemprop="item"><span itemprop="name">'.$crumb_title.'</span></a><meta itemprop="position" content="'.($key).'" /></li>';
-	}
-	return $breadcrumbs .= '</ul></nav></section>';
-}
-
 // Human-readable file sizes
 function human_filesize($bytes, $decimals = 2) {
 	$sz = 'BKMGTP';

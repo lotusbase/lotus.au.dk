@@ -16,7 +16,7 @@
 <body class="tools go explorer <?php echo (!$error && $searched) ? 'results' : ''; ?> init-scroll--disabled">
 
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<div class="align-center">
 			<h1>GO Explorer</h1>
 			<span class="byline">Spatial exploration of <abbr title="Gene Ontology">GO</abbr> terms</span>
@@ -25,10 +25,12 @@
 		echo $header->get_header();
 
 		// Breadcrumb
-		echo get_breadcrumbs(array('custom_breadcrumb' => array(
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_crumbs(array(
 			'Gene Ontology' => 'go',
 			'Explorer' => 'explorer'
-		)));
+		));
+		echo $breadcrumbs->get_breadcrumbs();
 	?>
 
 	<section class="wrapper">

@@ -11,7 +11,7 @@
 </head>
 <body class="tools expat wide">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<div class="align-center">
 			<h1>ExpAt</h1>
 			<span class="byline"><em>Lotus japonicus</em> Expression Atlas</span>
@@ -21,9 +21,11 @@
 		</div>');
 		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/expat/expat01.jpg');
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('page_title' => 'ExpAt')); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title('ExpAt');
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<?php if(isset($_SESSION['expat']) && !empty($_SESSION['expat']) && $_SESSION['expat']['error'] === true) {

@@ -49,11 +49,12 @@
 <body class="users account theme--white init-scroll--disabled">
 	<?php
 		// Generate header
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<div id="account-tabs">

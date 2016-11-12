@@ -240,11 +240,13 @@
 </head>
 <body class="tools primers <?php echo ($searched ? 'results' : '');?>">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('page_title' => '<em>LORE1</em> Genotyping Primers')); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title('<em>LORE1</em> Genotyping Primers');
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<?php if(!$searched) { ?>

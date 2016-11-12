@@ -90,12 +90,6 @@ $team = array(
 				)
 			)
 	),
-	'Lena Lieder' => array(
-		'avatar' => 'lena_lieder.jpg',
-		'name' => 'Lena Lieder',
-		'role' => 'LORE1 dispatcher',
-		'description' => '<p>Master student in biology (biggest interest in Wildlife Biology and Management), cake creator (primarily to feed others) and hunter (primarily to feed myself).</p>'
-	),
 	'Karina Andsbjerg Kristensen' => array(
 		'avatar' => 'karina_andsbjerg_kristensen.jpg',
 		'name' => 'Karina Andsbjerg Kristensen',

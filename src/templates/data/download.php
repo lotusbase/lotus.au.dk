@@ -11,13 +11,15 @@
 
 	<div id="wrap">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Components\PageHeader();
 		$header->set_header_content('<h1>Downloadable Resources</h1>
 		<p>You will find a list of downloadable resources we have made available to the public. Click on the file names to initiate download.</p>');
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('page_title' => 'Downloads')); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title('Downloads');
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<?php

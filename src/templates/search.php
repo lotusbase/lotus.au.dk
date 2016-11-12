@@ -1,7 +1,7 @@
 <?php
 	require_once('config.php');
 
-	$search_form = new \LotusBase\SiteSearchForm();
+	$search_form = new \LotusBase\Component\SiteSearchForm();
 ?>
 <!doctype html>
 <html lang="en">
@@ -10,7 +10,14 @@
 	<?php include(DOC_ROOT.'/head.php'); ?>
 </head>
 <body class="site-search">
-	<?php $header = new \LotusBase\PageHeader(); echo $header->get_header(); ?>
+	<?php
+		$header = new \LotusBase\Component\PageHeader();
+		echo $header->get_header();
+
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title('Site Search');
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<?php if(isset($_GET['q']) && !empty($_GET['q'])) { ?>

@@ -44,12 +44,14 @@
 		$header_content = '<div class="align-center"><h1>'.$hello[$random_hello].', '.$user['FirstName'].'.</h1><span class="byline">That’s “<em>hello</em>” in '.$random_hello.'</span></div>';
 
 		// Generate header
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content($header_content);
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('page_title' => 'Dashboard')); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title('Dashboard');
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<?php

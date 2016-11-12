@@ -10,11 +10,13 @@
 </head>
 <body class="tools seqpro">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('page_title' => 'SeqPro')); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title('SeqPro');
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<h2>Sequence Processor (SeqPro)</h2>

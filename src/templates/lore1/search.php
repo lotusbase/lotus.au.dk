@@ -316,15 +316,17 @@
 </head>
 <body class="lore1-search <?php echo ($searched ? 'results' : '');?>" data-line-search="<?php echo ($searched && !empty($pid) ? 'true' : 'false');?>">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<div class="align-center">
 			'.($searched ? '<h1><em>LORE1</em> line search results</h1><span class="byline">Using <em>L. japonicus</em> reference genome <strong>v'.$version.'</strong></span>' : '<h1><em>LORE1</em> line search</h1><span class="byline">Search for <em>LORE1</em> lines of interest and their accompanying metadata,<br />from a collection of 108,133 orderable lines.</span>').'
 		</div>');
 		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/lore1/lore1_01.jpg');
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('custom_titles' => array('<em>LORE1</em>', 'Search'))); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_titles(array('<em>LORE1</em>', 'Search'));
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper search">
 		<?php
@@ -412,7 +414,7 @@
 					$query_string[$key] = $value;
 				}
 
-				$paginate = new \LotusBase\Paginate();
+				$paginate = new \LotusBase\Component\Paginate();
 				$paginate->set_current_page($page);
 				$paginate->set_last_page($last);
 				$paginate->set_rows_per_page($num);

@@ -204,7 +204,7 @@
 <body class="tools <?php echo (!$error && $searched) ? 'results' : ''; ?> init-scroll--disabled">
 
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<div class="align-center">
 			<h1>GO Enrichment</h1>
 			<span class="byline"><abbr title="Gene Ontology">GO</abbr> term enrichment analysis for <em>L. japonicus</em>.</span>
@@ -213,10 +213,12 @@
 		echo $header->get_header();
 
 		// Breadcrumb
-		echo get_breadcrumbs(array('custom_breadcrumb' => array(
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_crumbs(array(
 			'Gene Ontology' => 'go',
 			'Enrichment' => 'enrichment'
-		)));
+		));
+		echo $breadcrumbs->get_breadcrumbs();
 	?>
 
 	<section class="wrapper">

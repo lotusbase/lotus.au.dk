@@ -178,7 +178,7 @@
 		}
 
 		// Generate header
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content($header_content);
 		echo $header->get_header();
 	?>

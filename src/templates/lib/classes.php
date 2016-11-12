@@ -1,9 +1,5 @@
 <?php
 
-/* class: Paginate */
-/* Generates pagination links */
-require_once('classes/paginate.php');
-
 /* class: MailGenerator */
 /* Generates the standard Lotus Base email template */
 require_once('classes/mail-generator.php');
@@ -16,21 +12,9 @@ require_once('classes/error-catcher.php');
 /* Returns data from the API */
 require_once('classes/data-return.php');
 
-/* class: SiteSearchForm */
-/* Generates site search form */
-require_once('classes/site-search-form.php');
-
-/* class: PageHeader */
-/* Generates page header content */
-require_once('classes/page-header.php');
-
 /* class: LjGenomeVersion */
 /* Checks if a given string matches currently used Lj genome version(s) */
 require_once('classes/lj-genome-version.php');
-
-/* class: Components */
-/* Load site components */
-require_once('classes/component.php');
 
 /* class: ExpAt\Query */
 /* Performs query and data manipulation for ExpAt */
@@ -79,5 +63,14 @@ require_once('classes/view/source-link.php');
 /* class: View\GO */
 /* Classes for Gene Ontology */
 require_once('classes/view/go.php');
+
+/* class: Component */
+/* Load site components */
+require_once('classes/component/document-header.php');
+require_once('classes/component/page-header.php');
+require_once('classes/component/breadcrumbs.php');
+require_once('classes/component/site-search-form.php');
+require_once('classes/component/paginate.php');
+require_once('classes/component/dropdown.php');
 
 ?>

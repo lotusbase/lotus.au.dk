@@ -292,7 +292,7 @@
 <body class="users integrate theme--white">
 	<?php
 		// Generate header
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_theme('white');
 		echo $header->get_header();
 	?>

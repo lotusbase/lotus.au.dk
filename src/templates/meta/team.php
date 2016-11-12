@@ -20,13 +20,15 @@
 </head>
 <body class="meta team wide">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<h1>Meet the Team</h1><p><strong><em>Lotus</em> Base</strong> is a project funded by the Centre for Carbohydrate Recognition and Signalling, Aarhus University, to make genomics, proteomics and other <em>Lotus</em>-related processes easily accessible to the research community.</p>');
 		$header->set_header_background_image(WEB_ROOT.'/dist/images/team/carb.jpg');
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('custom_titles' => array('Info', '<em>Lotus</em> Base Team'))); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title(array('Info', '<em>Lotus</em> Base Team'));
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 	<?php

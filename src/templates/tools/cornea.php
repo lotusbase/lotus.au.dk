@@ -143,7 +143,7 @@
 </head>
 <body class="tools expat cornea">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<div class="align-center">
 			<h1>CORNEA</h1>
 			<span class="byline"><strong>Coexpression Network Analysis</strong><br />for <em>L.</em> japonicus reference genome <strong>v3</strong></span>
@@ -151,12 +151,14 @@
 		</div>');
 		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/cornea/cornea01.jpg');
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('custom_breadcrumb' => array(
-		'Tools' => 'tools',
-		'CORNEA' => 'cornea'
-	))); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_crumbs(array(
+			'Tools' => 'tools',
+			'CORNEA' => 'cornea'
+		));
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<?php

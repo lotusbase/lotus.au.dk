@@ -159,7 +159,7 @@
 		</form>';
 
 		// Generate header
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_theme('white');
 		$header->set_header_content($login_form);
 		echo $header->get_header();

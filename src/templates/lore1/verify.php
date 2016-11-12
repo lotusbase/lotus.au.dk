@@ -147,7 +147,7 @@ try {
 
 	
 
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content($header_content);
 		$header->set_header_background_image(WEB_ROOT.'/dist/images/hero/hero01.jpg');
 		echo $header->get_header();

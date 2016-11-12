@@ -28,9 +28,11 @@
 </head>
 <body class="viewer gene init-scroll--disabled">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		echo $header->get_header();
-		echo get_breadcrumbs();
+
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		echo $breadcrumbs->get_breadcrumbs();
 	?>
 
 	<section class="wrapper">

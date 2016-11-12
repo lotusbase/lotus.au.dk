@@ -32,9 +32,14 @@
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/order.min.css" type="text/css" media="screen">
 </head>
 <body class="contact">
-	<?php $header = new \LotusBase\PageHeader(); echo $header->get_header(); ?>
+	<?php
+		$header = new \LotusBase\Component\PageHeader();
+		echo $header->get_header();
 
-	<?php echo get_breadcrumbs(array('custom_titles' => array('Info', 'Contact'))); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title(array('Info', 'Contact'));
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<h2>Contact Us</h2>

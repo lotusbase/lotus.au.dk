@@ -15,11 +15,13 @@
 </head>
 <body class="tools expat expat-mapping">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('custom_titles' => array('ExpAt', 'Gene &amp; Probe ID Mapping'))); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title(array('ExpAt', 'Gene &amp; Probe ID Mapping'));
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<h2>Gene &amp; Probe ID Mapping</h2>

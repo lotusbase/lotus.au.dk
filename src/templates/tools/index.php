@@ -10,7 +10,7 @@
 </head>
 <body class="tools">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('
 		<h1><em>Lotus</em> Base tool suite</h1>
 		<p>We have developed some tools that may be useful for you. Should you encounter any difficulties with the tools, check out the end-user documentation for more information.</p>

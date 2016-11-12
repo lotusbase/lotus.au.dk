@@ -39,11 +39,12 @@
 <body class="viewer init-scroll--disabled">
 
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<h2>Viewer</h2>

@@ -349,7 +349,7 @@
 		</div>';
 
 		// Generate header
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content($registration_form);
 		$header->set_header_theme('white');
 		$header->set_header_background_image(array(

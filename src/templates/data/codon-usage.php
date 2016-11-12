@@ -11,7 +11,7 @@
 </head>
 <body class="data codon-usage wide init-scroll--disabled">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<h1>Codon Usage</h1>
 		<p>Codon usage is computed based on v3.0 CDS of <em>L. japonicus</em> ecotype MG20. Codon usage is generated from 47,722 coding sequences containing 14,670,605 codons.</p>
 		<ul class="tabs">
@@ -27,9 +27,10 @@
 			<li data-aa-prop="basic">Basic</li>
 			<li data-aa-prop="acidic">Acidic</li>
 		</ul>';
-	?>
 
-	<?php echo get_breadcrumbs(); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<div class="tabs__target" id="codon-usage--standard">

@@ -9,7 +9,7 @@
 </head>
 <body class="faq">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('
 			<h1>Documentation</h1>
 			<p>We have compiled a list of questions, categorized under different topics, that we hope will help clear any doubts you have. If you are unable to find the answer to your question, feel free to <a href="'.WEB_ROOT.'/meta/contact">contact us</a>.</p>
@@ -27,9 +27,11 @@
 			</form>
 		');
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('custom_titles' => array('Info', 'Frequently Asked Questions'))); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title(array('Info', 'Frequently Asked Questions'));
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section id="faq-wrapper" class="wrapper">
 		<p id="faq__user-message" class="user-message"></p>

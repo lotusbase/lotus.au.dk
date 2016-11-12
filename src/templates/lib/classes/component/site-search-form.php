@@ -1,8 +1,8 @@
 <?php
 
-namespace LotusBase;
+namespace LotusBase\Component;
 
-/* SiteSearchForm */
+/* Component\SiteSearchForm */
 class SiteSearchForm {
 
 	// Counter

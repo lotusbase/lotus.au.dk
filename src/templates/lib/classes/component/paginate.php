@@ -1,8 +1,8 @@
 <?php
 
-namespace LotusBase;
+namespace LotusBase\Component;
 
-/* Pagination */
+/* Component\Pagination */
 class Paginate {
 
 	private $pagination_content = array();

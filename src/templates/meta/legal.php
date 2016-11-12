@@ -8,9 +8,14 @@
 	<?php include(DOC_ROOT.'/head.php'); ?>
 </head>
 <body>
-	<?php $header = new \LotusBase\PageHeader(); echo $header->get_header(); ?>
+	<?php
+		$header = new \LotusBase\Component\PageHeader();
+		echo $header->get_header();
 
-	<?php echo get_breadcrumbs(array('custom_titles' => array('Info', 'Privacy Policy &amp; Terms of Use'))); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title(array('Info', 'Privacy Policy &amp; Terms of Use'));
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<article>

@@ -199,11 +199,13 @@
 </head>
 <body class="tools tram <?php echo ($searched) ? 'results' : ''; ?>">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		echo $header->get_header();
-	?>
 
-	<?php echo get_breadcrumbs(array('page_title' => 'TRAM')); ?>
+		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
+		$breadcrumbs->set_page_title('TRAM');
+		echo $breadcrumbs->get_breadcrumbs();
+	?>
 
 	<section class="wrapper">
 		<h2>TRAM</h2>
@@ -313,7 +315,7 @@
 
 			<?php
 				if($last > 1) {
-					$paginate = new \LotusBase\Paginate();
+					$paginate = new \LotusBase\Component\Paginate();
 					$paginate->set_current_page($page);
 					$paginate->set_last_page($last);
 					$paginate->set_rows_per_page($num);

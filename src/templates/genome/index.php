@@ -13,7 +13,7 @@
 
     <?php
         if(!isset($_GET['embed'])) {
-            $header = new \LotusBase\PageHeader();
+            $header = new \LotusBase\Component\PageHeader();
             echo $header->get_header();
         }
     ?>
