@@ -1345,6 +1345,11 @@ $(function() {
 						defaultEdgeColor: globalVar.sigma.edge.color.default,
 						edgeColor: globalVar.sigma.edge.color.default,
 
+						// Performance enhancement
+						batchEdgesDrawing: true,
+						canvasEdgesBatchSize: 12500,
+						webglEdgesBatchSize: 25000,
+
 						// Hovered nodes
 						borderSize: 1,
 						defaultNodeBorderColor: 'rgba(51,51,51,1)',
