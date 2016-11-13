@@ -9,7 +9,7 @@ layout: default
 	echo '<div itemscope itemtype="http://schema.org/BlogPosting">';
 
 	// Generate header
-	$header = new \LotusBase\PageHeader();
+	$header = new \LotusBase\Component\PageHeader();
 	$header->add_header_class('blog post');
 	{% if page.coverImage %}
 	$header->set_header_background_image('{{ page.coverImage }}');

@@ -2,7 +2,8 @@ module.exports = {
 
     options: {
         spawn: false,
-        livereload: true
+        livereload: true,
+        interrupt: true
     },
 
     scripts: {

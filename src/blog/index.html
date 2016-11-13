@@ -2,7 +2,7 @@
 layout: default
 ---
 <?php
-	$header = new \LotusBase\PageHeader();
+	$header = new \LotusBase\Component\PageHeader();
 	$header->add_header_class('alt');
 	$header->set_header_content('<div class="align-center"><h1>'.file_get_contents(DOC_ROOT."/dist/images/branding/logo.svg").'<em>Lotus</em> Base Blog</h1><span class="byline">Annoucements, blog posts, user guides, and more.</span></div>');
 	echo $header->get_header();

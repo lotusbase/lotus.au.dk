@@ -4,7 +4,7 @@ layout: default
 <?php
 
 	// Generate header
-	$header = new \LotusBase\PageHeader();
+	$header = new \LotusBase\Component\PageHeader();
 	$header->add_header_class('blog tag');
 	$header->set_header_content('<h1>{{ page.title }}</h1>');
 	echo $header->get_header();
