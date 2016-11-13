@@ -345,14 +345,14 @@
 
 		</div>
 
-		<div id="view__domain-prediction" class="view__facet d3-chart">
+		<div id="view__domain-prediction" class="view__facet">
 			<h3>Domain prediction</h3>
 			<p>Data for domain prediction are provided by the <a href="http://www.kazusa.or.jp/lotus/">Kazusa DNA Research Institute</a>, and merged with InterPro data obtained from the <a href="http://www.ebi.ac.uk/Tools/webservices/services/eb-eye_rest">EB-eye REST service</a>.</p>
 			<?php
 				try {
 					if($q2->rowCount()) {
 						?>
-						<div class="facet floating-controls__hide">
+						<div class="facet floating-controls__hide d3-chart">
 							<div class="facet__stage" id="domain-prediction" data-protein="<?php echo $gene; ?>">
 								<ul class="floating-controls position--right">
 									<li><a href="#" class="icon-cog icon--no-spacing controls__toggle" title="Toggle controls"></a></li>

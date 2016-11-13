@@ -90,6 +90,7 @@ $(function() {
 				// AJAX promise
 				domainAJAX
 				.done(function(d) {
+
 					var p = d.data,
 						linklist = function(a, s) {
 							var o = '',
@@ -261,7 +262,22 @@ $(function() {
 				'prediction_algorithm': {
 					label: 'Prediction algorithm',
 					dataType: 'discrete',
-					domain: ['HMMTigr','Superfamily','HMMSmart','Gene3D','PatternScan','BlastProDom','ProfileScan','HAMAP','HMMPIR','HMMPanther','Coil','HMMPfam','FPrintScan'],
+					domain: [
+						'CDD',
+						'Gene3D',
+						'PANTHER',
+						'PRINTS',
+						'Pfam',
+						'Phobius',
+						'ProSitePatterns',
+						'ProSiteProfiles',
+						'SMART',
+						'SUPERFAMILY',
+						'SignalP_EUK',
+						'SignalP_GRAM_NEG',
+						'SignalP_GRAM_POS',
+						'TMHMM'
+					],
 					range: function(d) {
 						var c = [];
 						for (var i = 0; i < d.length; i++) {
@@ -429,9 +445,8 @@ $(function() {
 						'fill': function(d) {
 							return computeColors(colorType, d[colors[colorType].key]);
 						},
-						'stroke': function(d) {
-							return globalFun.color.darken(computeColors(colorType, d[colors[colorType].key]),20);
-						}
+						'stroke': '#333',
+						'stroke-opacity': 0.15
 					})
 					.call(domTip)
 					.on('mouseover', domTip.show)
@@ -495,6 +510,7 @@ $(function() {
 			var checked = this.checked,
 				pred = this.value,
 				stage = d3.select('#stage'),
+				colorType = $('#dc__fill').val(),
 				scaleX = globalVar.view.d3.domains.scaleX,
 				scaleY = globalVar.view.d3.domains.scaleY,
 				domTip = globalVar.view.d3.domains.tip;
