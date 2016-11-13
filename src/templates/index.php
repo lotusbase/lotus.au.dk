@@ -107,7 +107,7 @@
 			</div>
 		</div>
 		<div id="twitter-timeline" class="col align-center">
-			<a class="twitter-timeline" data-lang="en" data-theme="light" data-link-color="#5ca4a9" href="https://twitter.com/lotusbase" data-dnt="true" data-height="300"><span class="icon-twitter">Find us on Twitter at @LotusBase</span></a>
+			<a class="twitter-timeline" data-lang="en" data-theme="light" data-link-color="#5ca4a9" href="https://twitter.com/lotusbase" data-dnt="true" data-height="300" data-chrome="noheader noborders transparent"><span class="icon-twitter">Find us on Twitter at @LotusBase</span></a>
 		</div>
 	</section>
 

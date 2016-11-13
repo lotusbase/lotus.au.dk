@@ -459,6 +459,7 @@ form {
 				position: absolute;	
 				transform: translateY(.5rem);
 				@include transition;
+				max-width: 100vw;
 				z-index: 100;
 				body.no-csspointerevents & { display: none; }
 				li {
@@ -2882,7 +2883,6 @@ kbd, .key {
 							position: static;
 							box-shadow: none;
 							opacity: 1;
-							pointer-events: auto;
 							transform: none;
 						}
 					}

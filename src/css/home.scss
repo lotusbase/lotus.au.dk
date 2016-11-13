@@ -24,9 +24,18 @@
 	position: relative;
 	iframe.twitter-timeline-rendered {
 		position: absolute !important;
-		top: 0 !important;
-		left: 0 !important;
+		top: 0;
+		left: 0;
 		width: 100% !important;
 		height: 100% !important;
+	}
+}
+
+@media (max-width: 767px) {
+	#twitter-timeline {
+		iframe.twitter-timeline-rendered {
+			position: static !important;
+			height: 25rem !important;
+		}
 	}
 }

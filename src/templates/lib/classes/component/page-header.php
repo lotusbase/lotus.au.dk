@@ -194,7 +194,7 @@ class PageHeader {
 			<div id="top-notifications">
 				<div id="cookie-consent" class="site-notification">
 					<span class="pictogram icon-attention"></span>
-					<p><em>Lotus</em> Base uses cookies to allow user preferences to be stored. By continuing to browse the site you are agreeing to our use of cookies.<br /><a href="./terms.php" class="icon button button--small" data-action="read">Read more</a> <a href="#" class="icon button" data-action="accept">Accept cookie use and dismiss message</a></p>
+					<p><em>Lotus</em> Base uses cookies to allow user preferences to be stored. By continuing to browse the site you are agreeing to our use of cookies.<br /><a href="'.WEB_ROOT.'/meta/legal" class="icon button button--small" data-action="read">Read more</a> <a href="#" class="icon button" data-action="accept">Accept cookie use and dismiss message</a></p>
 				</div>
 
 				<div id="browser-features-warning" class="site-notification">
