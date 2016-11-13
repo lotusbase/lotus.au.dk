@@ -40,5 +40,14 @@ module.exports = {
         tasks: [
             'newer:copy'
         ]
+    },
+
+    blog: {
+        files: [
+            'src/blog/**/*.*'
+        ],
+        tasks: [
+            'jekyll'
+        ]
     }
 };

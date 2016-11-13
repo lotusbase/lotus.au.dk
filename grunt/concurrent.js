@@ -8,7 +8,8 @@ module.exports = {
     // Dev tasks
     devFirst: [
         'copy',
-        'jshint'
+        'jshint',
+        'jekyll'
     ],
     devSecond: [
         'sass:dev',
@@ -21,7 +22,8 @@ module.exports = {
     // Production tasks
     prodFirst: [
         'copy',
-        'jshint'
+        'jshint',
+        'jekyll'
     ],
     prodSecond: [
         'sass:prod',
