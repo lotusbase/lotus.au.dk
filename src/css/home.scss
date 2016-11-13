@@ -3,6 +3,8 @@
 @import 'mixins';
 @import 'type';
 
+@import 'components/form/input-suggestions';
+
 #searchform-tabs {
 	#searchform-tabs__nav {
 		ul {
@@ -15,30 +17,6 @@
 
 	.full-width {
 		width: 100%;
-	}
-
-	.searchform__suggestions {
-		margin-top: .75rem;
-		font-size: .875rem;
-		font-weight: bold;
-		ul {
-			li {
-				&:first-child {
-					background: none;
-					border: none;
-					padding: 0;
-					margin: 0 .5rem 0 0;
-				}
-				span.term-type {
-					border-left: 1px solid rgba(#000,.1);
-					color: #777;
-					display: inline-block;
-					font-size: .75rem;
-					margin-left: .5rem;
-					padding-left: .5rem;
-				}
-			}
-		}
 	}
 }
 

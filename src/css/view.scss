@@ -3,6 +3,27 @@
 @import 'mixins';
 @import 'type';
 
+@import 'components/form/input-suggestions';
+
+/*---------------------------------------- 
+------------------ MAIN ------------------
+----------------------------------------*/
+#view-tabs {
+	margin-bottom: 1.5rem;
+
+	.ui-tabs-nav__wrapper {
+		margin-bottom: 0;
+	}
+
+	.view-tabs__content {
+		background-color: #ddd;
+		padding: .75rem 1.5rem;
+	}
+}
+#view-tabs__nav li.ui-state-active a {
+	background-color: #ddd;
+}
+
 /*---------------------------------------- 
 ------------------ VIEW ------------------
 ----------------------------------------*/

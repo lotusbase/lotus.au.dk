@@ -1,5 +1,5 @@
 $(function() {
-	var searchTabs = $('#searchform-tabs').tabs();
+	var searchTabs = $('#view-tabs').tabs();
 
 	// General function to check popstate events
 	$w.on('popstate', function(e) {
@@ -11,10 +11,10 @@ $(function() {
 		}
 	});
 
-	// Searchform suggestions
+	// Input suggestions
 	$('.input-suggestions a').on('click', function(e) {
 		e.preventDefault();
 
-		$(this).closest('div').siblings(':input[type="search"]').val($(this).data('value'));
+		$('#id').val($(this).data('value'));
 	});
 });
