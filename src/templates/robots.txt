@@ -5,3 +5,9 @@ Disallow: /data/mail/
 Disallow: /admin/
 Disallow: /genome/data/
 Disallow: /genome/rawdata/
+Disallow: /tomcat/
+Disallow: /manager/
+Disallow: /host-manager/
+Disallow: /examples/
+Disallow: /sample/
+Disallow: /api/
