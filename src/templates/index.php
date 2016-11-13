@@ -80,9 +80,7 @@
 							<li><a href="#" data-value="PR00019">PR00019</a><span class="term-type">PRINTS</span></li>
 							<li><a href="#" data-value="PS00108">PS00108</a><span class="term-type">ProSite Patterns</span></li>
 							<li><a href="#" data-value="PS50011">PS50011</a><span class="term-type">ProSite Profiles</span></li>
-							<li><a href="#" data-value="SignalP-TM">SignalP-TM</a><span class="term-type">SignalP_EUK</span></li>
-							<li><a href="#" data-value="SignalP-TM">SignalP-TM</a><span class="term-type">SignalP_GRAM_NEG</span></li>
-							<li><a href="#" data-value="SignalP-TM">SignalP-TM</a><span class="term-type">SignalP_GRAM_POS</span></li>
+							<li><a href="#" data-value="SignalP-TM_EUK">SignalP-TM_EUK</a><span class="term-type">SignalP</span></li>
 							<li><a href="#" data-value="SM00369">SM00369</a><span class="term-type">SMART</span></li>
 							<li><a href="#" data-value="SSF52047">SSF52047</a><span class="term-type">SUPERFAMILY</span></li>
 							<li><a href="#" data-value="TIGR01151">TIGR01151</a><span class="term-type">TIGRFAM</span></li>

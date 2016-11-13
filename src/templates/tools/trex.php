@@ -82,7 +82,7 @@
 			$dbq = substr($dbq, 0 ,-4);
 			$dbq .= ") GROUP BY tc.Transcript";
 			$searched = true;
-
+			
 		}
 
 		// If chromosome and at least one position is provided
