@@ -46,7 +46,7 @@
 			if(is_array($trx)) {
 				$vars = array_filter($trx);
 			} else {
-				$trx_rep = preg_match_all('/([\.\w\+\:<>]+|[\"\'][\.\w\s\+\:<>]*[\"\'])+/' , $trx , $trx_matched);
+				$trx_rep = preg_match_all('/([\.\w\+\-\:<>]+|[\"\'][\.\w\s\+\-\:<>]*[\"\'])+/' , $trx , $trx_matched);
 				$vars = $trx_matched[0];
 			}
 

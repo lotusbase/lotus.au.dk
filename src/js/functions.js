@@ -398,7 +398,7 @@ var globalFun = {
 					return string.replace(/([\s\,;\|#]+)/gi, ' ').split(' ').filter(function(n) { return typeof n !== typeof undefined; });
 				} else {
 					// If we are using boolean mode:
-					return string.match(/([\.\w\+\:<>]+|[\"\'][\.\w\s\+\:<>]*[\"\'])+/gi);
+					return string.match(/([\.\w\+\-\:<>]+|[\"\'][\.\w\s\+\-\:<>]*[\"\'])+/gi);
 				}
 			} else {
 				return false;
