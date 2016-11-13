@@ -1,7 +1,6 @@
 $(function() {
-	console.log('abc');
 	$('.masonry').on('layoutComplete', function() {
-		console.log('def');
+
 		var v = [];
 
 		$(this).find('.masonry-item').each(function() {
