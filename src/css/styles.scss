@@ -846,6 +846,7 @@ ul.post-list {
 				.post-author {
 					text-align: center;
 					img.avatar {
+						box-shadow: 0 0 2rem .5rem rgba(#000,.15);
 						display: block;
 						margin: 0 auto;
 						width: 3rem;

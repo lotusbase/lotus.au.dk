@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Redesigned LORE1 search form, and pan-version TREX searches
+title: Redesigned <em>LORE1</em> search form, and pan-version TREX searches
 categories: announcement
 tags:
 - lore1

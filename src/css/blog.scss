@@ -201,12 +201,13 @@ body.blog {
 					float: left;
 					margin-right: 1rem;
 					a {
-						background-color: rgba(#000,.15);
+						background-color: rgba(#555,.15);
+						border: 1px solid rgba(#000,.15);
 						border-radius: 4px;
 						color: #333;
 						display: block;
 						font-size: 1rem;
-						padding: .5rem 1rem;
+						padding: .125rem .75rem;
 						text-decoration: none;
 						&:hover {
 							background-color: $lotusPrimary3;
