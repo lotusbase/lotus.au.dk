@@ -23,3 +23,8 @@ webroot: ""
 
 # Allow related post indexing
 lsi: true
+
+# Use SASS
+sass:
+  sass_dir: src/css
+  style: compressed

@@ -15,6 +15,7 @@ module.exports = {
             ext: '.css'
         }]
     },
+
     // Production settings
     prod: {
         options: {
@@ -29,6 +30,24 @@ module.exports = {
             cwd: 'build/dist/css',
             src: ['*.css'],
             dest: 'build/dist/css',
+            ext: '.min.css'
+        }]
+    },
+
+    // Jekyll AMP styles
+    jekyll_amp: {
+        options: {
+            map: false,
+            processors: [
+                require('autoprefixer')({browsers: 'last 2 versions'}),
+                require('cssnano')({zindex: false})
+            ]
+        },
+        files: [{
+            expand: true,
+            cwd: 'src/blog/_includes/amp',
+            src: ['*.css'],
+            dest: 'src/blog/_includes/amp',
             ext: '.min.css'
         }]
     }

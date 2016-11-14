@@ -29,6 +29,16 @@ module.exports = {
         ]
     },
 
+    jekyll_amp_styles: {
+        files: [
+            'src/blog/_includes/**/*.scss'
+        ],
+        tasks: [
+            'sass:jekyll_amp',
+            'postcss:jekyll_amp'
+        ]
+    },
+
     templates: {
         files: [
             'src/templates/**/*.php',
@@ -45,7 +55,8 @@ module.exports = {
 
     blog: {
         files: [
-            'src/blog/**/*.*'
+            'src/blog/**/*.*',
+            '!src/blog/_includes/**/*.scss'
         ],
         tasks: [
             'jekyll'
