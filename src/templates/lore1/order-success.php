@@ -28,7 +28,7 @@ if (isset($_SESSION['order_success']) && $_SESSION['order_success']) {
 
 	<section class="wrapper">
 		<h2>Order verification</h2>
-		<p>Dear <?php echo $user_input['FirstName']; ?>, thank you for ordering with us. We have successfully received your order and therefore have sent a verification mail to your email address at <strong><?php echo $user_input['Email']; ?></strong>. <strong>Please verify your order as soon as possible</strong> by clicking on the link in the aforementioned email. Your early response will help us to expedite the processing of your order.</p>
+		<p>Dear <?php echo escapeHTML($user_input['FirstName']); ?>, thank you for ordering with us. We have successfully received your order and therefore have sent a verification mail to your email address at <strong><?php echo escapeHTML($user_input['Email']); ?></strong>. <strong>Please verify your order as soon as possible</strong> by clicking on the link in the aforementioned email. Your early response will help us to expedite the processing of your order.</p>
 		<p>We will process your order as soon as possible after you have verified your order. Should we experience any problems or delays with your order, we will contact you through the email you provided.</p>
 		<p class="user-message warning"><strong>Warning:</strong> Orders that are <span style="text-decoration: underline;">not verified in 4 weeks after submission</span> will be cleared from our database by an automated process.</p>
 	</section>

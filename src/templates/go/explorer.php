@@ -57,7 +57,7 @@
 
 				<label for="go-node" class="col-one">Enter a <abbr title="Gene Ontology">GO</abbr> term</label>
 				<div class="col-two">
-					<input id="go-node" name="go_node" type="text" value="<?php echo empty($_GET['go_node']) ? 'GO:0008150' : $_GET['go_node']; ?>" disabled />
+					<input id="go-node" name="go_node" type="text" value="<?php echo empty($_GET['go_node']) ? 'GO:0008150' : escapeHTML($_GET['go_node']); ?>" disabled />
 				</div>
 			</div>
 		</form>

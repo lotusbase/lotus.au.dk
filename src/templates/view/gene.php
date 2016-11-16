@@ -26,7 +26,7 @@
 	<?php
 		$document_header = new \LotusBase\Component\DocumentHeader();
 		$document_header->set_meta_tags(array(
-			'description' => 'Consolidated gene view: '.$_GET['id']
+			'description' => 'Consolidated gene view: '.escapeHTML($_GET['id'])
 			));
 		echo $document_header->get_document_header();
 	?>
@@ -42,7 +42,7 @@
 	?>
 
 	<section class="wrapper">
-		<h2><?php echo $id; ?></h2>
+		<h2><?php echo escapeHTML($id); ?></h2>
 
 		<div id="view__card" class="view__facet">
 			<h3>Isoforms</h3>

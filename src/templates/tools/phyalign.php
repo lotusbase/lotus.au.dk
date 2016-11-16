@@ -112,9 +112,9 @@
 								<?php
 									if(!empty($_GET['ids'])) {
 										if(is_array($_GET['ids'])) {
-											$phyalign_array = $_GET['ids'];
+											$phyalign_array = escapeHTML($_GET['ids']);
 										} else {
-											$phyalign_array = explode(",", $_GET['ids']);
+											$phyalign_array = explode(",", escapeHTML($_GET['ids']));
 										}
 										foreach($phyalign_array as $phyalign_item) {
 											echo '<li data-input-value="'.$phyalign_item.'">'.$phyalign_item.'<span class="icon-cancel" data-action="delete"></span></li>';
@@ -123,7 +123,7 @@
 								?>
 									<li class="input-wrapper"><input type="text" id="ids-input" placeholder="Transcript ID, e.g. Lj4g3v0281040.1" autocomplete="off" autocorrect="off"  autocapitalize="off" spellcheck="false" /></li>
 								</ul>
-								<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_GET['ids'])) ? (is_array($_GET['ids']) ? implode(',', preg_replace('/\"/', '&quot;', $phyalign_array)) : preg_replace('/\"/', '&quot;', $_GET['ids'])) : ''; ?>" readonly />
+								<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_GET['ids'])) ? (is_array($_GET['ids']) ? implode(',', preg_replace('/\"/', '&quot;', $phyalign_array)) : preg_replace('/\"/', '&quot;', escapeHTML($_GET['ids']))) : ''; ?>" readonly />
 							</div>
 							<small><strong>Separate each transcript ID with a comma, space, or tab. This list will automatically propagate the sequences field below.</strong></small>
 						</div>

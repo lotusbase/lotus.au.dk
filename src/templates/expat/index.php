@@ -59,7 +59,7 @@
 							?>
 							<li class="input-wrapper"><input type="text" name="ids-input" id="expat-row-input" placeholder="Enter accession number or GI here" autocomplete="off" /></li>
 						</ul>
-						<input class="input-hidden" type="hidden" name="ids" id="expat-row" value="<?php echo (isset($_GET['ids']) && !empty($_GET['ids'])) ? $_GET['ids'] : ''; ?>" readonly />
+						<input class="input-hidden" type="hidden" name="ids" id="expat-row" value="<?php echo (isset($_GET['ids']) && !empty($_GET['ids'])) ? escapeHTML($_GET['ids']) : ''; ?>" readonly />
 					</div>
 					<small><strong>Separate each accession number of GI with a comma, space or tab.</strong></small>
 				</div>
@@ -94,7 +94,7 @@
 				<label for="expat-condition" class="col-one">Custom sort (optional)</label>
 				<div class="col-two">
 					<ul class="sort-list expat-sort-list ui-state-empty" id="expat-sort-conditions"></ul>
-					<input id="expat-condition" name="conditions" value="<?php echo (isset($_GET['conditions']) && !empty($_GET['conditions'])) ? $_GET['conditions'] : ''; ?>" placeholder="If left blank, all columns will be queried." />
+					<input id="expat-condition" name="conditions" value="<?php echo (isset($_GET['conditions']) && !empty($_GET['conditions'])) ? escapeHTML($_GET['conditions']) : ''; ?>" placeholder="If left blank, all columns will be queried." />
 				</div>
 
 				<label lass="col-one">Data transform</label>

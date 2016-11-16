@@ -61,7 +61,7 @@
 							?>
 							<li class="input-wrapper"><input type="text" id="expat-id-input" placeholder="Enter accession number or GI here" autocomplete="off" /></li>
 						</ul>
-						<input class="input-hidden" type="hidden" name="id" id="expat-id" value="<?php echo (isset($_GET['id']) && !empty($_GET['ids'])) ? $_GET['id'] : ''; ?>" readonly />
+						<input class="input-hidden" type="hidden" name="id" id="expat-id" value="<?php echo (isset($_GET['id']) && !empty($_GET['ids'])) ? escapeHTML($_GET['id']) : ''; ?>" readonly />
 					</div>
 					<small><strong>Separate each ID with a comma, space or tab.</strong></small>
 				</div>

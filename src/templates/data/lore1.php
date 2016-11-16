@@ -35,7 +35,7 @@
 				header('Location: lore1.php');
 				exit();
 			} else {
-				$lore1_selected_cols = explode(',', $_POST['lore1cols']);
+				$lore1_selected_cols = explode(',', escapeHTML($_POST['lore1cols']));
 			}
 
 			// Verify captcha, if user is not logged in

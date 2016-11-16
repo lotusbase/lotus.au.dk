@@ -304,7 +304,7 @@
 						<?php if(!is_logged_in()) { ?>
 							<p class="full-width">By providing us an email, you will be promptly notified when your job has been completed. This field is optional.</p>
 							<label for="cornea-new-job-owner" class="col-one">Email</label>
-							<input class="col-two" type="email" name="owner" id="cornea-new-job-owner" value="<?php echo (isset($_GET['owner']) && !empty($_GET['owner'])) ? $_GET['owner'] : ''; ?>" placeholder="Enter your email here" />
+							<input class="col-two" type="email" name="owner" id="cornea-new-job-owner" value="<?php echo (isset($_GET['owner']) && !empty($_GET['owner'])) ? escapeHTML($_GET['owner']) : ''; ?>" placeholder="Enter your email here" />
 						<?php } else {
 							$user = is_logged_in();
 							?>

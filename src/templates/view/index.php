@@ -5,7 +5,7 @@
 	$error_message = 'Please provide a valid &ge;v3.0 gene/transcript/protein or <abbr title="Gene Ontology">GO</abbr> term identifier. It should be in the format of <code>Lj{chr}g{version}v{id}[.{isoform}]</code>, or <code>GO:{7-digit-number}</code>.';
 
 	if(!empty($_GET) && !empty($_GET['id'])) {
-		$id = $_GET['id'];
+		$id = escapeHTML($_GET['id']);
 
 		// Determine ID type
 		if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)$/', $id)) {

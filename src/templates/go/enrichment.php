@@ -242,13 +242,13 @@
 									$id_array = explode(",", $_POST['ids']);
 								}
 								foreach($id_array as $id_item) {
-									echo '<li data-input-value="'.$id_item.'" class="'.(!preg_match('/^Lj(\d|chloro|mito)g\dv\d+(\.\d+)?$/', $id_item) ? 'warning' : '').'">'.$id_item.'<span class="icon-cancel" data-action="delete"></span></li>';
+									echo '<li data-input-value="'.escapeHTML($id_item).'" class="'.(!preg_match('/^Lj(\d|chloro|mito)g\dv\d+(\.\d+)?$/', $id_item) ? 'warning' : '').'">'.escapeHTML($id_item).'<span class="icon-cancel" data-action="delete"></span></li>';
 								}
 							}
 						?>
 							<li class="input-wrapper"><input type="text" id="ids-input" placeholder="Keyword, or gene/transcript ID" autocomplete="off" autocorrect="off"  autocapitalize="off" spellcheck="false" data-boolean-mode="true" /></li>
 						</ul>
-						<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_POST['ids'])) ? (is_array($_POST['ids']) ? implode(',', preg_replace('/\"/', '&quot;', $trx_array)) : preg_replace('/\"/', '&quot;', $_POST['ids'])) : ''; ?>" readonly />
+						<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_POST['ids'])) ? (is_array($_POST['ids']) ? implode(',', preg_replace('/\"/', '&quot;', escapeHTML($trx_array))) : preg_replace('/\"/', '&quot;', escapeHTML($_POST['ids']))) : ''; ?>" readonly />
 					</div>
 					<small><strong>Separate each keyword, or gene/transcript ID, with a comma, space, or tab.</strong></small>
 					<br />

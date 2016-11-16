@@ -16,9 +16,9 @@
 				// Coerce gene ID to transcript ID
 				$coerced = false;
 				if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/', $_GET['id'])) {
-					$gene = $_GET['id'];
+					$gene = escapeHTML($_GET['id']);
 				} else {
-					$gene = $_GET['id'].'.1';
+					$gene = escapeHTML($_GET['id'].'.1');
 					$coerced = true;
 				}
 
@@ -109,7 +109,7 @@
 		<h2><?php echo $gene; ?></h2>
 		<?php
 			if($coerced) {
-				echo '<p class="user-message"><span class="icon-attention"></span>We have converted your gene (<strong>'.$_GET['id'].'</strong>) to a specific isoform (<strong>'.$gene.'</strong>).</p>';
+				echo '<p class="user-message"><span class="icon-attention"></span>We have converted your gene (<strong>'.escapehtml($_GET['id']).'</strong>) to a specific isoform (<strong>'.$gene.'</strong>).</p>';
 			}
 		?>
 		<div id="view__card" class="view__facet">

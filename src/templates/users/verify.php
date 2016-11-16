@@ -15,8 +15,8 @@
 
 	// Get variables
 	if(isset($_GET['email']) && isset($_GET['key']) && !empty($_GET['email']) && !empty($_GET['key'])) {
-		$email				= $_GET['email'];
-		$verificationkey	= $_GET['key'];
+		$email				= escapeHTML($_GET['email']);
+		$verificationkey	= escapeHTML($_GET['key']);
 
 		try {
 			$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_ADMIN_USER, DB_ADMIN_PASS);

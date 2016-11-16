@@ -34,7 +34,7 @@
 
 				<label for="expat-row-input" class="col-one">Gene/Transcript/Probe ID <a data-modal="wide" class="info" title="How should I enter the IDs?" href="<?php echo WEB_ROOT; ?>/lib/docs/gene-transcript-probe-id">?</a></label>
 				<div class="col-two">
-					<input type="text" id="expat-row" name="ids" value="<?php echo (isset($_GET['ids']) ? $_GET['ids'] : ''); ?>" placeholder="Enter query here" />
+					<input type="text" id="expat-row" name="ids" value="<?php echo (isset($_GET['ids']) ? escapeHTML($_GET['ids']) : ''); ?>" placeholder="Enter query here" />
 				</div>
 
 			</div>
@@ -43,7 +43,7 @@
 				<p class="user-message full-width minimal legend">Filter</p>
 
 				<label for="corgi-count" class="col-one">Rows returned</label>
-				<input type="number" id="corgi-count" class="col-two" name="n" placeholder="Number of genes/probes to return" value="<?php echo (isset($_GET['n']) && !empty($_GET['n'])) ? $_GET['n'] : '10'; ?>" />
+				<input type="number" id="corgi-count" class="col-two" name="n" placeholder="Number of genes/probes to return" value="<?php echo (isset($_GET['n']) && !empty($_GET['n'])) ? intval($_GET['n']) : '10'; ?>" />
 				
 			</div>
 
@@ -81,7 +81,7 @@
 				<label for="expat-condition" class="col-one">Custom sort (optional)</label>
 				<div class="col-two">
 					<ul class="sort-list expat-sort-list ui-state-empty" id="expat-sort-conditions"></ul>
-					<input id="expat-condition" name="conditions" value="<?php echo (isset($_GET['conditions']) && !empty($_GET['conditions'])) ? $_GET['conditions'] : ''; ?>" placeholder="If left blank, all columns will be queried." />
+					<input id="expat-condition" name="conditions" value="<?php echo (isset($_GET['conditions']) && !empty($_GET['conditions'])) ? escapeHTML($_GET['conditions']) : ''; ?>" placeholder="If left blank, all columns will be queried." />
 				</div>
 			</div>
 

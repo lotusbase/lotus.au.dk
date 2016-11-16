@@ -218,7 +218,7 @@
 
 						<label data-field="users" for="userkey" class="col-one">User key (optional)</label>
 						<div class="col-two" data-field="users">
-							<input id="userkey" name="userkey" type="text" value="<?php echo isset($_GET['key']) ? $_GET['key'] : ''; ?>" placeholder="32-character user verification key" tabindex="6" />
+							<input id="userkey" name="userkey" type="text" value="<?php echo isset($_GET['key']) ? escapeHTML($_GET['key']) : ''; ?>" placeholder="32-character user verification key" tabindex="6" />
 						</div>
 
 						<label for="subject" class="col-one">Subject (optional)</label>

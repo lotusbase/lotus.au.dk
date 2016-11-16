@@ -288,14 +288,14 @@
 							?>
 								<li class="input-wrapper"><input type="text" id="blast-input" placeholder="BLAST Header (e.g. chr5_3085263_R or LjSGA_055002_657_R)" autocomplete="off" /></li>
 							</ul>
-							<input class="input-hidden search-param" type="hidden" name="blast" id="blastheader" value="<?php echo (!empty($_GET['pid'])) ? $_GET['pid'] : ''; ?>" readonly />
+							<input class="input-hidden search-param" type="hidden" name="blast" id="blastheader" value="<?php echo (!empty($_GET['pid'])) ? escapeHTML($_GET['pid']) : ''; ?>" readonly />
 						</div>
 						<small><strong>Separate each BLAST header with a comma, space or tab.</strong></small>
 					</div>
 
 					<label for="reference" class="col-one">Reference <a class="info" data-modal="search-help" data-modal-content="Reference should be in the format of your known short name, e.g. KAMA, SRR, TM." title="What is reference?">?</a></label>
 					<div class="col-two">
-						<input type="text" name="ref" id="reference" value="<?php echo (isset($_GET['ref']) && !empty($_GET['ref']) ? $_GET['ref'] : ''); ?>" placeholder="Reference (your short name, e.g. 'TM')" autocomplete="off" maxlength="5" />
+						<input type="text" name="ref" id="reference" value="<?php echo (isset($_GET['ref']) && !empty($_GET['ref']) ? escapeHTML($_GET['ref']) : ''); ?>" placeholder="Reference (your short name, e.g. 'TM')" autocomplete="off" maxlength="5" />
 					</div>
 				</div>
 

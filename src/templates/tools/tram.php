@@ -27,8 +27,8 @@
 			if(empty($_GET['source_version']) || empty($_GET['target_version'])) {
 				throw new Exception('Source and/or target version(s) is/are not specified.');
 			} else {
-				$source_version = $_GET['source_version'];
-				$target_version = $_GET['target_version'];
+				$source_version = escapeHTML($_GET['source_version']);
+				$target_version = escapeHTML($_GET['target_version']);
 				$versions = array($source_version, $target_version);
 			}
 
@@ -243,13 +243,13 @@
 									$tram_array = explode(",", $_GET['ids']);
 								}
 								foreach($tram_array as $tram_item) {
-									echo '<li data-input-value="'.$tram_item.'" class="'.(!empty($ids_error) && in_array($tram_item, $ids_error) ? 'warning' : '').'">'.$tram_item.'<span class="icon-cancel" data-action="delete"></span></li>';
+									echo '<li data-input-value="'.escapeHTML($tram_item).'" class="'.(!empty($ids_error) && in_array($tram_item, $ids_error) ? 'warning' : '').'">'.escapeHTML($tram_item).'<span class="icon-cancel" data-action="delete"></span></li>';
 								}
 							}
 						?>
 							<li class="input-wrapper"><input type="text" id="ids-input" placeholder="Keyword, or gene/transcript ID" autocomplete="off" autocorrect="off"  autocapitalize="off" spellcheck="false" data-boolean-mode="true" /></li>
 						</ul>
-						<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_GET['ids'])) ? (is_array($_GET['ids']) ? implode(',', preg_replace('/\"/', '&quot;', $trx_array)) : preg_replace('/\"/', '&quot;', $_GET['ids'])) : ''; ?>" readonly />
+						<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_GET['ids'])) ? (is_array($_GET['ids']) ? implode(',', preg_replace('/\"/', '&quot;', escapeHTML($trx_array))) : preg_replace('/\"/', '&quot;', escapeHTML($_GET['ids']))) : ''; ?>" readonly />
 					</div>
 					<small><strong>Separate each keyword, or gene/transcript ID, with a comma, space, or tab.</strong></small>
 					<?php if(count($ids_error)) { ?>
@@ -300,8 +300,8 @@
 					<form action="'.$_SERVER['PHP_SELF'].'" method="post" class="form--no-spacing">
 						<button type="submit">Download tabular results</button>
 						<input type="hidden" name="ids" value="'.implode(',', $q1_rows['ID']).'" />
-						<input type="hidden" name="source_version" value="'.$_GET['source_version'].'" />
-						<input type="hidden" name="target_version" value="'.$_GET['target_version'].'" />
+						<input type="hidden" name="source_version" value="'.escapeHTML($_GET['source_version']).'" />
+						<input type="hidden" name="target_version" value="'.escapeHTML($_GET['target_version']).'" />
 						<input type="hidden" name="redir" value="'.$_SERVER['REQUEST_URI'].'" />
 					</form>
 				</div>
@@ -346,8 +346,8 @@
 				<colgroup></colgroup>
 				<thead>
 					<tr>
-						<th scope="col">Query (v<?php echo $_GET['source_version']; ?>)</th>
-						<th scope="col">Mapped transcript (v<?php echo $_GET['target_version']; ?>)</th>
+						<th scope="col">Query (v<?php echo escapeHTML($_GET['source_version']); ?>)</th>
+						<th scope="col">Mapped transcript (v<?php echo escapeHTML($_GET['target_version']); ?>)</th>
 						<th scope="col" data-type="numeric">Identity score (%)</th>
 						<th scope="col" data-type="numeric">E-value</th>
 					</tr>

@@ -25,9 +25,9 @@
 		!empty($_GET['key'])
 		) {
 
-		$email	= $_GET['email'];
-		$key	= $_GET['key'];
-		$salt	= $_GET['id'];
+		$email	= escapeHTM($_GET['email']);
+		$key	= escapeHTM($_GET['key']);
+		$salt	= escapeHTM($_GET['id']);
 
 		try {
 			$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_ADMIN_USER, DB_ADMIN_PASS);

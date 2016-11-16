@@ -32,7 +32,7 @@
 		if(!isset($_GET['v']) || empty($_GET['v'])) {
 			$version = $lj_genome_versions;
 		} else {
-			$version = (is_array($_GET['v']) ? $_GET['v'] : explode(',', $_GET['v']));
+			$version = (is_array($_GET['v']) ? $_GET['v'] : explode(',', escapeHTML($_GET['v'])));
 		}
 		foreach($version as $v) {
 			$version_str[] = strval($v);
@@ -42,7 +42,7 @@
 		// If an ID is used in a search
 		if(isset($_GET['ids']) && !empty($_GET['ids'])) {
 			// Construct query
-			$trx = $_GET['ids'];
+			$trx = escapeHTML($_GET['ids']);
 			if(is_array($trx)) {
 				$vars = array_filter($trx);
 			} else {
@@ -323,13 +323,13 @@
 										$trx_array = explode(",", $_GET['ids']);
 									}
 									foreach($trx_array as $trx_item) {
-										echo '<li data-input-value="'.$trx_item.'">'.$trx_item.'<span class="icon-cancel" data-action="delete"></span></li>';
+										echo '<li data-input-value="'.escapeHTML($trx_item).'">'.escapeHTML($trx_item).'<span class="icon-cancel" data-action="delete"></span></li>';
 									}
 								}
 							?>
 								<li class="input-wrapper"><input type="text" id="ids-input" placeholder="Keyword, or gene/transcript ID" autocomplete="off" autocorrect="off"  autocapitalize="off" spellcheck="false" data-boolean-mode="true" /></li>
 							</ul>
-							<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_GET['ids'])) ? (is_array($_GET['ids']) ? implode(',', preg_replace('/\"/', '&quot;', $trx_array)) : preg_replace('/\"/', '&quot;', $_GET['ids'])) : ''; ?>" readonly />
+							<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_GET['ids'])) ? (is_array($_GET['ids']) ? implode(',', preg_replace('/\"/', '&quot;', escapeHTML($trx_array))) : preg_replace('/\"/', '&quot;', escapeHTML($_GET['ids']))) : ''; ?>" readonly />
 						</div>
 						<small><strong>Separate each keyword, or gene/transcript ID, with a comma or tab. Spaces are not accepted as delimiters due to their potential use in <a href="<?php echo WEB_ROOT; ?>/lib/docs/trex-query" title="How should I look for my gene of interest?" data-modal="wide">boolean searches</a>.</strong></small>
 					</div>
@@ -355,7 +355,7 @@
 
 					<label class="col-one">Position <a class="info" data-modal="search-help" data-modal-content="Genes can be searched between two positions (inclusive). However: &lt;ul&gt;&lt;li&gt;if only one position is filled in, the search will only look for an exact position, or&hellip;&lt;/li&gt;&lt;li&gt;if nothing is filled in, search will not look for genes based on positions.&lt;/li&gt;&lt;/ul&gt;" title="How to search for the position of gene insert?">?</a></label>
 					<div class="col-two cols flex-wrap__nowrap field__positions">
-						<label for="pos1">Between</label> <input type="number" name="pos1" id="pos1" class="search-param" placeholder="Start " value="<?php echo (!empty($_GET['pos1'])) ? $_GET['pos1'] : ''; ?>" min="0" /> <label for="pos2">and</label> <input type="number" name="pos2" id="pos2" class="search-param" placeholder="End" value="<?php echo (!empty($_GET['pos2'])) ? $_GET['pos2'] : ''; ?>" min="0" />
+						<label for="pos1">Between</label> <input type="number" name="pos1" id="pos1" class="search-param" placeholder="Start " value="<?php echo (!empty($_GET['pos1'])) ? intval($_GET['pos1']) : ''; ?>" min="0" /> <label for="pos2">and</label> <input type="number" name="pos2" id="pos2" class="search-param" placeholder="End" value="<?php echo (!empty($_GET['pos2'])) ? intval($_GET['pos2']) : ''; ?>" min="0" />
 					</div>
 				</div>
 

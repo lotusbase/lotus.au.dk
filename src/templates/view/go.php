@@ -3,7 +3,7 @@
 
 	try {
 		if(!empty($_GET) && !empty($_GET['id'])) {
-			$id = $_GET['id'];
+			$id = escapeHTML($_GET['id']);
 			if(!preg_match('/^(GO:)?\d+$/', $id)) {
 				// If ID fails pattern check
 				$_SESSION['view_error'] = 'Invalid gene ontology identifier detected. Please ensure that your gene ontology identifier follows the format <code>[GO:]\d+</code>, where the "GO:" suffix is optional, followed by one or more digits.';
