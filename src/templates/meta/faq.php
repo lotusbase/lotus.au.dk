@@ -22,7 +22,7 @@
 			</ul>
 			<p>&hellip;alternatively, you can filter based on a keyword:</p>
 			<form id="faq-form" class="search-form">
-				<input type="search" id="filter" name="q" value="'.((isset($_GET) && !empty($_GET['q'])) ? $_GET['q'] : '').'" placeholder="Start typing to initiate keyword search" autocomplete="off" />
+				<input type="search" id="filter" name="q" value="'.((isset($_GET) && !empty($_GET['q'])) ? escapeHTML($_GET['q']) : '').'" placeholder="Start typing to initiate keyword search" autocomplete="off" />
 				<button type="submit"><span class="pictogram icon-search">Filter</span></button>
 			</form>
 		');
@@ -42,7 +42,7 @@
 			<ul>
 				<li data-tag="help information db tips blast">
 					<h4>Availability of databases through BLAST</h4>
-					<p>If you click on the question mark beside the database option, a database overview will be available through a modal window. Should you like to request additional databases to be added to BLAST, please <a href="<?php echo WEB_ROOT; ?>issues/new">open an enhancement request or a proposal</a> at the <em>Lotus</em> Base repository.</p>
+					<p>If you click on the question mark beside the database option, a database overview will be available through a modal window. Should you like to request additional databases to be added to BLAST, feel free to <a href="<?php echo WEB_ROOT.'/meta/contact'; ?>">contact us</a>, or <a href="<?php echo WEB_ROOT.'/issues'; ?>">open an issue/feature request</a> at our GitHub repository.</p>
 				</li>
 
 				<li data-tag="adjustment ncbiblast">
