@@ -15,6 +15,37 @@
 				exit();
 			}
 
+			// Check if GO term exists
+			$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
+			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+			$q1 = $db->prepare("SELECT
+					go.GO_ID AS Term,
+					go.Namespace AS Namespace,
+					go.Definition AS Definition,
+					go.ExtraData AS ExtraData,
+					go.SubtermOf AS SubtermOf,
+					go.Relationships AS Relationships,
+					go.URL AS URL,
+					go.Name AS Name
+				FROM gene_ontology AS go
+				WHERE go.GO_ID = ?
+				GROUP BY go.GO_ID");
+			$q1->execute(array($id));
+
+			if(!$q1->rowCount()) {
+				$_SESSION['view_error'] = 'GO term does not exist. You might want to consider searching for it on alternative online databases.';
+				throw new Exception;
+			}
+
+			$go_data = $q1->fetch(PDO::FETCH_ASSOC);
+			$go_namespace = array(
+				'p' => 'Biological process',
+				'f' => 'Molecular function',
+				'c' => 'Cellular component'
+				);
+
 		} else {
 			// If ID is not available
 			throw new Exception;
@@ -29,7 +60,13 @@
 <html lang="en">
 <head>
 	<title>Gene Ontology &mdash; View &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Consolidated GO view: '.$id.' ('.$go_namespace[$go_data['Namespace']].'): '.$go_data['Name']
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/view.min.css" type="text/css" media="screen" />
 </head>
 <body class="view go init-scroll--disabled">
@@ -48,35 +85,10 @@
 			$id => $id
 		));
 		echo $breadcrumbs->get_breadcrumbs();
-
-		// Check if GO term exists
-		try {
-			$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
-			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-			$q1 = $db->prepare("SELECT
-					go.GO_ID AS Term,
-					go.Namespace AS Namespace,
-					go.Definition AS Definition,
-					go.ExtraData AS ExtraData,
-					go.SubtermOf AS SubtermOf,
-					go.Relationships AS Relationships,
-					go.URL AS URL,
-					go.Name AS Name
-				FROM gene_ontology AS go
-				WHERE go.GO_ID = ?
-				GROUP BY go.GO_ID");
-			$q1->execute(array($id));
 	?>
 
 	<section class="wrapper">
-		<?php
-			if(!$q1->rowCount()) {
-				throw new Exception('GO term does not exist. You might want to consider searching for it on alternative online databases');
-			}
-		?>
-
+		<?php try { ?>
 		<h2><?php echo $id; ?></h2>
 		<div class="align-center">
 			<div class="dropdown button button--small" role="secondary">
@@ -93,14 +105,6 @@
 
 		<div id="view__card" class="view__facet">
 			<h3>Overview</h3>
-			<?php
-				$go_data = $q1->fetch(PDO::FETCH_ASSOC);
-				$go_namespace = array(
-					'p' => 'Biological process',
-					'f' => 'Molecular function',
-					'c' => 'Cellular component'
-					);
-				?>
 				<table class="table--dense">
 					<thead>
 						<tr>

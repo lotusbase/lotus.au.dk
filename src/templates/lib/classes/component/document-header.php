@@ -13,6 +13,12 @@ class DocumentHeader {
 		// Default canonical URL
 		$this->header['canonical_url'] = 'https://lotus.au.dk'.$_SERVER['REQUEST_URI'];
 
+		// Default header meta tags
+		$this->header['meta'] = array(
+			'author' => 'Lotus Base',
+			'description' => 'Lotus Base: a collection of genomics and proteomics resources for the model legume Lotus japonicus, from Aarhus University, Denmark'
+			);
+
 	}
 
 	// Set canonical URL
@@ -22,6 +28,19 @@ class DocumentHeader {
 		} else {
 			$this->header['canonical_url'] = 'https://lotus.au.dk'.$canonical_url;
 		}
+	}
+
+	// Set meta tags
+	public function set_meta_tags($meta_array) {
+		$this->header['meta'] = array_replace_recursive($this->header['meta'], $meta_array);
+	}
+
+	// Return meta tags
+	private function get_meta_tags() {
+		foreach ($this->header['meta'] as $meta_name => $meta_content) {
+			$meta[] = '<meta name="'.$meta_name.'" content="'.$meta_content.'" />';
+		}
+		return implode("\n", $meta);
 	}
 
 	// Return document header
@@ -44,8 +63,7 @@ class DocumentHeader {
 			<script src='.WEB_ROOT.'"/dist/js/plugins/modernizr.min.js"></script>
 
 			<!-- Metadata -->
-			<meta name="author" content="Terry Mun">
-			<meta name="description" content="Lotus Base: a collection of genomics and proteomics resources for the model legume Lotus japonicus, from Aarhus University, Denmark" />
+			'.$this->get_meta_tags().'
 
 			<!-- Canonical URL -->
 			<link rel="canonical" href="'.$this->header['canonical_url'].'" itemprop="url" />

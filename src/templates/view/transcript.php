@@ -12,6 +12,66 @@
 				// If ID fails pattern check
 				$_SESSION['view_error'] = 'Invalid transcript ID format detected. Please ensure that your transcript follows the format <code>Lj{chr}g{version}v{id}</code>';
 				throw new Exception;
+			} else {
+				// Coerce gene ID to transcript ID
+				$coerced = false;
+				if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/', $_GET['id'])) {
+					$gene = $_GET['id'];
+				} else {
+					$gene = $_GET['id'].'.1';
+					$coerced = true;
+				}
+
+				// Perform first query
+				$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
+				$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+				$q1 = $db->prepare("SELECT
+						anno.Gene AS Transcript,
+						anno.Version AS Version,
+						GROUP_CONCAT(DISTINCT isoforms.Transcript) AS Isoforms,
+						tc.Gene AS Gene,
+						tc.StartPos AS Start,
+						tc.EndPos AS End,
+						tc.Strand AS Strand,
+						tc.Chromosome AS Chromosome,
+						anno.Annotation AS Annotation,
+						anno.LjAnnotation AS LjAnnotation,
+						GROUP_CONCAT(DISTINCT geniclore1.PlantID ORDER BY geniclore1.PlantID ASC) AS GenicPlantID,
+						GROUP_CONCAT(DISTINCT exoniclore1.PlantID ORDER BY exoniclore1.PlantID ASC) AS ExonicPlantID
+					FROM annotations AS anno
+					LEFT JOIN transcriptcoord AS tc ON (
+						anno.Gene = tc.Transcript AND
+						anno.Version = tc.Version
+					)
+					LEFT JOIN transcriptcoord AS isoforms ON (
+						tc.Gene = isoforms.Gene
+					)
+					LEFT JOIN exonins AS exon ON (
+						tc.Transcript = exon.Gene AND
+						tc.Version = exon.Version
+					)
+					LEFT JOIN geneins AS genic ON (
+						tc.Gene = genic.Gene AND
+						tc.Version = genic.Version
+					)
+					LEFT JOIN lore1ins AS geniclore1 ON (
+						genic.Chromosome = geniclore1.Chromosome AND
+						genic.Position = geniclore1.Position AND
+						genic.Orientation = geniclore1.Orientation AND
+						genic.Version = geniclore1.Version
+					)
+					LEFT JOIN lore1ins AS exoniclore1 ON (
+						exon.Chromosome = exoniclore1.Chromosome AND
+						exon.Position = exoniclore1.Position AND
+						exon.Orientation = exoniclore1.Orientation AND
+						exon.Version = exoniclore1.Version
+					)
+					WHERE anno.Gene = ?
+					LIMIT 1");
+				$q1->execute(array($gene));
+				$g = $q1->fetch(PDO::FETCH_ASSOC);
 			}
 		} else {
 			// If ID is not available
@@ -27,7 +87,13 @@
 <html lang="en">
 <head>
 	<title>Transcript &mdash; View &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Consolidated transcript/protein view: '.$g['Transcript'].(!empty($g['LjAnnotation']) ? ' ('.$g['LjAnnotation'].')' : '').(!empty($g['Annotation']) ? ' is a '.$g['Annotation'] : '')
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/view.min.css" type="text/css" media="screen" />
 </head>
 <body class="view transcript init-scroll--disabled">
@@ -40,17 +106,6 @@
 	?>
 
 	<section class="wrapper">
-	<?php
-		// Coerce gene ID to transcript ID
-		$coerced = false;
-		if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/', $_GET['id'])) {
-			$gene = $_GET['id'];
-		} else {
-			$gene = $_GET['id'].'.1';
-			$coerced = true;
-		}
-		
-		?>
 		<h2><?php echo $gene; ?></h2>
 		<?php
 			if($coerced) {
@@ -61,58 +116,7 @@
 			<h3>Overview</h3>
 			<?php
 				try {
-					$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
-					$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-					$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-					$q1 = $db->prepare("SELECT
-							anno.Gene AS Transcript,
-							anno.Version AS Version,
-							GROUP_CONCAT(DISTINCT isoforms.Transcript) AS Isoforms,
-							tc.Gene AS Gene,
-							tc.StartPos AS Start,
-							tc.EndPos AS End,
-							tc.Strand AS Strand,
-							tc.Chromosome AS Chromosome,
-							anno.Annotation AS Annotation,
-							anno.LjAnnotation AS LjAnnotation,
-							GROUP_CONCAT(DISTINCT geniclore1.PlantID ORDER BY geniclore1.PlantID ASC) AS GenicPlantID,
-							GROUP_CONCAT(DISTINCT exoniclore1.PlantID ORDER BY exoniclore1.PlantID ASC) AS ExonicPlantID
-						FROM annotations AS anno
-						LEFT JOIN transcriptcoord AS tc ON (
-							anno.Gene = tc.Transcript AND
-							anno.Version = tc.Version
-						)
-						LEFT JOIN transcriptcoord AS isoforms ON (
-							tc.Gene = isoforms.Gene
-						)
-						LEFT JOIN exonins AS exon ON (
-							tc.Transcript = exon.Gene AND
-							tc.Version = exon.Version
-						)
-						LEFT JOIN geneins AS genic ON (
-							tc.Gene = genic.Gene AND
-							tc.Version = genic.Version
-						)
-						LEFT JOIN lore1ins AS geniclore1 ON (
-							genic.Chromosome = geniclore1.Chromosome AND
-							genic.Position = geniclore1.Position AND
-							genic.Orientation = geniclore1.Orientation AND
-							genic.Version = geniclore1.Version
-						)
-						LEFT JOIN lore1ins AS exoniclore1 ON (
-							exon.Chromosome = exoniclore1.Chromosome AND
-							exon.Position = exoniclore1.Position AND
-							exon.Orientation = exoniclore1.Orientation AND
-							exon.Version = exoniclore1.Version
-						)
-						WHERE anno.Gene = ?
-						LIMIT 1");
-					$q1->execute(array($gene));
-
 					if($q1->rowCount()) {
-						$g = $q1->fetch(PDO::FETCH_ASSOC);
-
 						?>
 						<table class="table--dense">
 							<thead>
@@ -124,7 +128,7 @@
 							<tbody>
 								<tr>
 									<th scope="row">Gene ID</th>
-									<td><?php echo $g['Gene']; ?></td>
+									<td><a href="<?php echo WEB_ROOT.'/view/gene/'.$g['Gene']; ?>" title="View gene <?php echo $g['Gene']; ?>"><?php echo $g['Gene']; ?></a></td>
 								</tr>
 								<tr>
 									<th scope="row">Transcript ID</th>
