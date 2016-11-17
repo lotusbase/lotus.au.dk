@@ -5,7 +5,13 @@
 <html lang="en">
 <head>
 	<title>CORGI &mdash; Tools &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'The Correlated Genes Identifier (CORGI) tool is part of the CORx toolkit. CORGI allows you to pull out genes/transcripts that have expression patterns that are strongly statistically correlated.'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="/dist/css/tools.min.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="/dist/css/expat.min.css" type="text/css" media="screen" />
@@ -16,7 +22,7 @@
 		$header->set_header_content('<div class="align-center">
 			<h1>CORGI</h1>
 			<span class="byline"><strong>Correlated Genes Identifier</strong><br />for <em>L.</em> japonicus reference genome <strong>v3</strong></span>
-			<p>The <strong>Correlated Genes Identifier</strong> tool allows you pull out genes that have expression patterns that are strongly statistically correlated.</p>
+			<p>The <strong>Correlated Genes Identifier</strong> tool allows you pull out genes/transcripts that have expression patterns that are strongly statistically correlated.</p>
 		</div>');
 		$header->set_header_background_image(WEB_ROOT.'/dist/images/header/cornea/cornea01.jpg');
 		echo $header->get_header();

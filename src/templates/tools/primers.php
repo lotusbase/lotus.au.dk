@@ -234,7 +234,13 @@
 <html lang="en">
 <head>
 	<title>LORE1 Genotyping Primers &mdash; Tools &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Ordering of LORE1 genotyping primers.'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/tools.min.css" type="text/css" media="screen" />
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
 </head>

@@ -198,7 +198,13 @@
 <html lang="en">
 <head>
 	<title>GO Enrichment &mdash; Tools &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Compute gene ontology (GO) term enrichment using a list of genes/transcripts.'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/tools.min.css" type="text/css" media="screen" />
 </head>
 <body class="tools <?php echo (!$error && $searched) ? 'results' : ''; ?> init-scroll--disabled">

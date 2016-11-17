@@ -275,7 +275,13 @@
 <html lang="en">
 <head>
 	<title>TrEx &mdash; Tools &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'The Transcript Explorer (TREX) tool searches for candidate Lotus genes using user-defined keywords, or combs for a specific genomic interval, for genes/transcripts of interest.'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/tools.min.css" type="text/css" media="screen" />
 </head>
 <body class="tools trex <?php echo ($searched) ? 'results' : ''; ?>">
@@ -291,7 +297,7 @@
 	<section class="wrapper">
 		<h2>TREX</h2>
 		<span class="byline"><strong>Transcript Explorer</strong><br />for <em>L. japonicus</em> reference genomes</span>
-		<p>The <strong>Transcript Explorer</strong> tool can be used to search for candidate <em>Lotus</em> genes using user-defined keywords, or to comb a specific genomic interval&mdash;a combination of chromosome and position range&mdash;for genes of interest.</p>
+		<p>The <strong>Transcript Explorer</strong> tool can be used to search for candidate <em>Lotus</em> genes using user-defined keywords, or to comb a specific genomic interval&mdash;a combination of chromosome and position range&mdash;for genes/transcripts of interest.</p>
 
 		<?php 
 			// Display error if any

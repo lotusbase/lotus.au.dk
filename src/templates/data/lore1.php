@@ -124,7 +124,13 @@
 <html lang="en">
 <head>
 	<title>LORE1 Raw Data &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Raw data for LORE1 insertions mapped against Lotus japonicus v3.0 genome assembly. This is the dataset used in the paper "The LORE1 Resource" (Malolepszy et al., 2016)'
+			));
+		echo $document_header->get_document_header();
+	?>
 </head>
 <body class="data lore1-raw-data">
 

@@ -5,7 +5,13 @@
 <html lang="en">
 <head>
 	<title>SeqPro &mdash; Tools &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Sequence Processor (SeqPro) processes data into a more compact/readable format using regular expressions.'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/css/tools.css" type="text/css" media="screen" />
 </head>
 <body class="tools seqpro">

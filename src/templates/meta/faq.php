@@ -5,7 +5,13 @@
 <html lang="en">
 <head>
 	<title>FAQ &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Frequently asked questions to help the end users of Lotus Base'
+			));
+		echo $document_header->get_document_header();
+	?>
 </head>
 <body class="faq">
 	<?php

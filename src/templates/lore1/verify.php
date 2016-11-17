@@ -54,7 +54,13 @@ try {
 <html lang="en">
 <head>
 	<title>Order Verification &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Verify your LORE1 order before we process your order.'
+			));
+		echo $document_header->get_document_header();
+	?>
 </head>
 <body class="verify">
 	<?php

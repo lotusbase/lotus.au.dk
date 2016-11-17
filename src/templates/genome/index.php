@@ -5,7 +5,13 @@
 <html>
 <head>
     <title>Lotus Genome Browser&mdash;Lotus Base</title>
-    <?php include(DOC_ROOT.'/head.php'); ?>
+    <?php
+        $document_header = new \LotusBase\Component\DocumentHeader();
+        $document_header->set_meta_tags(array(
+            'description' => 'Explore the Lotus japonicus genome using JBrowse.'
+            ));
+        echo $document_header->get_document_header();
+    ?>
     <link rel="stylesheet" type="text/css" href="css/genome.css">
     <link rel="stylesheet" href="<?php echo DOMAIN_NAME; ?>/dist/css/genome.min.css" type="text/css" />
 </head>

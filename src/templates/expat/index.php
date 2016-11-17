@@ -5,7 +5,13 @@
 <html lang="en">
 <head>
 	<title>Lotus Expression Atlas (ExpAt)&mdash;Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'The Expression Atlas (ExpAt) tool is used to visualize and cluster expression data from various datasets.'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/expat.min.css" type="text/css" media="screen" />
 </head>

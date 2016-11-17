@@ -5,7 +5,13 @@
 <html lang="en">
 <head>
 	<title>Downloads &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Downloadable resources from Lotus Base.'
+			));
+		echo $document_header->get_document_header();
+	?>
 </head>
 <body class="data downloads">
 

@@ -6,7 +6,13 @@
 <html lang="en">
 <head>
 	<title>Team&mdash;Meta&mdash;Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Meet the team behind Lotus Base'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link href="<?php echo WEB_ROOT; ?>/dist/css/meta.min.css" rel="stylesheet" />
 
 	<!-- Load Mapbox.js -->

@@ -194,7 +194,13 @@
 <html lang="en">
 <head>
 	<title>TRAM &mdash; Tools &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'The Transcript Mapper (TRAM) tool maps transcript identifiers of one version of the Lotus genome assembly to another.'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/tools.min.css" type="text/css" media="screen" />
 </head>
 <body class="tools tram <?php echo ($searched) ? 'results' : ''; ?>">
@@ -210,7 +216,7 @@
 	<section class="wrapper">
 		<h2>TRAM</h2>
 		<span class="byline"><strong>Transcript Mapper</strong><br />for <em>L.</em> japonicus</span>
-		<p>The <strong>Transcript Mapper</strong> tool can be used to map transcript identifiers for one version of the <em>Lotus</em> genome to another. Mapping is performed internally by identifying high confidence matching candidates across genome assembly versions using NCBI BLAST.</p>
+		<p>The <strong>Transcript Mapper</strong> tool can be used to map transcript identifiers for one version of the <em>Lotus</em> genome assembly to another. Mapping is performed internally by identifying high confidence matching candidates across genome assembly versions using NCBI BLAST.</p>
 
 		<?php 
 			// Display error if any

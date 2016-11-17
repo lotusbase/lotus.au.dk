@@ -310,8 +310,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>Search &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<title>LORE1 Search &mdash; Lotus Base</title>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Search for LORE1 mutants of interest.'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
 </head>
 <body class="lore1-search <?php echo ($searched ? 'results' : '');?>" data-line-search="<?php echo ($searched && !empty($pid) ? 'true' : 'false');?>">

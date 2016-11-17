@@ -5,7 +5,13 @@
 <html lang="en">
 <head>
 	<title>About&mdash;Meta&mdash;Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Project description and information, and the efforts behind Lotus Base'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/meta.min.css" type="text/css" media="screen" />
 </head>
 <body class="meta about">

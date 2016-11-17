@@ -5,7 +5,13 @@
 <html lang="en">
 <head itemscope itemtype="http://schema.org/WebSite">
 	<title itemprop="name">Tools &amp; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Lotus Base offers an extensive collection of various toolkits to supplement and empower the worflow of a legume researcher'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/tools.min.css?bc32f641571e176b" type="text/css" media="screen" />
 </head>
 <body class="tools">

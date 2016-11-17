@@ -10,7 +10,13 @@
 <html lang="en">
 <head>
 	<title>Probe Search&mdash;Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Map gene/transcript identifiers in Lotus japonicus v3.0 against probe identifiers from the Samuel Roberts Noble Foundation'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/css/tools.css?v=1" type="text/css" media="screen" />
 </head>
 <body class="tools expat expat-mapping">
@@ -25,7 +31,7 @@
 
 	<section class="wrapper">
 		<h2>Gene &amp; Probe ID Mapping</h2>
-		<span class="byline">Linking gene IDs in <em>Lotus japonicus</em> v3.0 accessions<br />with probe IDs from the Samuel Roberts Nobel Foundation.</span>
+		<span class="byline">Linking gene IDs in <em>Lotus japonicus</em> v3.0 accessions<br />with probe IDs from the Samuel Roberts Noble Foundation.</span>
 		<p>As the ExpAt data are based on <em>Lotus japonicus</em> v3.0 accessions, there is no direct way to query for expression patterns based on a list of probe IDs. However, you can map your probe IDs against the accessions database, therefore providing an indirect link:</p>
 
 

@@ -9,7 +9,13 @@
 <html lang="en">
 <head>
 	<title>GO Enrichment &mdash; Tools &mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Explore gene ontology (GO) terms based on their curated relationships, published by the Gene Ontology Consortium (GOC).'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/tools.min.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/go.min.css" type="text/css" media="screen" />
 </head>

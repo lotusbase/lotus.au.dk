@@ -5,7 +5,13 @@
 <html lang="en">
 <head>
 	<title>Codon Usage&mdash;Data&mdash; Lotus Base</title>
-	<?php include(DOC_ROOT.'/head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		$document_header->set_meta_tags(array(
+			'description' => 'Codon usage table based on Lotus japonicus v3.0 genome assembly coding sequences.'
+			));
+		echo $document_header->get_document_header();
+	?>
 	<link rel="stylesheet" href="/dist/css/tools.min.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="/dist/css/expat.min.css" type="text/css" media="screen" />
 </head>
