@@ -313,7 +313,7 @@
 						$sequence->set_id($sequence_id);
 						$sequence->set_database($db['database']['file']);
 						$sequence->set_position($g['Start'], $g['End']);
-						$sequence->set_strand('plus');
+						$sequence->set_strand($strand);
 
 						// Display info
 						echo $g['Chromosome'].':'.$g['Start'].'..'.$g['End'];
@@ -323,7 +323,7 @@
 
 						$sequence->set_id($sequence_id);
 						$sequence->set_database($db['database']['file']);
-						$sequence->set_strand($strand);
+						$sequence->set_strand('plus');
 
 						// Display info
 						echo $gene;
