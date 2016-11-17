@@ -141,40 +141,46 @@
 			</ul>
 		</div>
 
-		<?php if($q2->rowCount()) { $g = $q2->fetch(PDO::FETCH_ASSOC); ?>
+		<?php if($q2->rowCount()) {
+			$g = $q2->fetch(PDO::FETCH_ASSOC);
+
+			// Generate LORE1 list
+			$genic_lore1 = array_filter(explode(',', $g['GenicPlantID']));
+			$exonic_lore1 = array_filter(explode(',', $g['ExonicPlantID']));
+			$intronic_lore1 = array_diff($genic_lore1, $exonic_lore1);
+
+		?>
 		<div id="view__lore1-inserts">
 			<h3>LORE1 insertions <?php
-				// Generate lore1 list
-				$genic_lore1 = explode(',', $g['GenicPlantID']);
-				$exonic_lore1 = explode(',', $g['ExonicPlantID']);
-				$intronic_lore1 = array_diff($genic_lore1, $exonic_lore1);
 
 				// Display count
 				if(count($genic_lore1)) {
 					echo '<span class="badge">'.count($genic_lore1).'</span>';
 				}
 			?></h3>
-			<form id="lore1-filter__form" action="#" method="get" class="has-group">
-				<div class="cols" role="group">
-					<label class="col-one" for="lore1-type">Insertion filter</label>
-					<div class="col-two">
-						<select id="lore1-type" name="lore1_type">
-							<option value="genic" selected>Genic (all)</option>
-							<option value="intronic">Intronic (only in introns)</option>
-							<option value="exonic">Exonic (only in exons)</option>
-						</select>
+			<?php if(count($genic_lore1)) {?>
+				<form id="lore1-filter__form" action="#" method="get" class="has-group">
+					<div class="cols" role="group">
+						<label class="col-one" for="lore1-type">Insertion filter</label>
+						<div class="col-two">
+							<select id="lore1-type" name="lore1_type">
+								<option value="genic" selected>Genic (all)</option>
+								<option value="intronic">Intronic (only in introns)</option>
+								<option value="exonic">Exonic (only in exons)</option>
+							</select>
+						</div>
 					</div>
-				</div>
-			</form>
-			<?php	
-				if(count($genic_lore1)) {
-					echo '<ul class="list--floated" id="lore1-list">';
+				</form>
+				<ul class="list--floated" id="lore1-list">
+				<?php
 					foreach($genic_lore1 as $pid) {
 						echo '<li class="'.(in_array($pid, $exonic_lore1) ? 'lore1--exonic' : 'lore1--intronic').'"><a class="link--reset" href="'.WEB_ROOT.'/lore1/search?v=3.0&pid='.$pid.'" title="View details for this line">'.$pid.'</a></li>';
 					}
-					echo '</ul>';
-				}
-			?>
+				?>
+				</ul>
+			<?php } else { ?>
+			<p class="user-message">No <em>LORE1</em> insertions have been found in the genomic region that overlaps with this gene.</p>
+			<?php } ?>
 		</div>
 		<?php } ?>
 
