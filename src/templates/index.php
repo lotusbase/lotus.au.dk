@@ -169,19 +169,19 @@
 		echo '
 		<div id="world-map"><ul id="world-map__legend"></ul></div>
 		<div class="col-content">
-			<span class="count">'.sp($row['CountryCount']).'</span>
+			<div class="odometer" data-target-value="'.$row['CountryCount'].'">0</div>
 			countries served
 		</div>
 		<div class="col-content">
-			<span class="count">'.sp($row['OrderCount']).'</span>
+			<div class="odometer" data-target-value="'.$row['OrderCount'].'">0</div>
 			orders processed
 		</div>
 		<div class="col-content">
-			<span class="count">'.sp($row['LineCount']).'</span>
+			<div class="odometer" data-target-value="'.$row['LineCount'].'">0</div>
 			<em>LORE1</em> lines shipped
 		</div>
 		<div class="col-content">
-			<span class="count">'.sp($row['SeedCount']).'</span>
+			<div class="odometer" data-target-value="'.$row['SeedCount'].'">0</div>
 			seeds sorted
 		</div>
 		';
@@ -199,6 +199,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/odometer.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/worldmap.min.js"></script>
 	<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/home.min.js"></script>

@@ -1,0 +1,88 @@
+.odometer.odometer-auto-theme {
+	color: #555;
+	display: block;
+	font-family: 'Open Sans Condensed', $fontface-sansSerifCondensed;
+	font-weight: 300;
+	font-size: 4em;
+	line-height: 1.2em;
+	position: relative;
+	vertical-align: middle;
+
+	// Digit
+	.odometer-digit {
+		border-radius: 4px;
+		border: 1px solid rgba(#000,.125);
+		display: inline-block;
+		margin: 0 1px;
+		position: relative;
+		vertical-align: middle;
+		&::before {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 0;
+			border-top: 1px solid rgba(#000,.125);
+			width: 100%;
+			z-index: 1;
+		}
+
+		// Spacer
+		.odometer-digit-spacer {
+			display: inline-block;
+			padding: .08em .1em 0;
+			visibility: hidden;
+			vertical-align: middle;
+		}
+
+		// Inner digit
+		.odometer-digit-inner {
+			text-align: left;
+			display: block;
+			position: absolute;
+			padding: .08em .1em 0;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			overflow: hidden;
+		}
+
+		// Ribbon
+		.odometer-ribbon {
+			display: block;
+		}
+
+		// Inner ribbon
+		.odometer-ribbon-inner {
+			display: block;
+			backface-visibility: hidden;
+		}
+
+		// Value
+		.odometer-value {
+			display: block;
+			transform: translateZ(0);
+			text-align: center;
+
+			&.odometer-last-value { position: absolute; }
+		}
+	}
+
+	// Animation
+	&.odometer-animating-up {
+		.odometer-ribbon-inner {
+			transition: transform 2s;
+		}
+		&.odometer-animating .odometer-ribbon-inner {
+			transform: translateY(-100%);
+		}
+	}
+	&.odometer-animating-down {
+		.odometer-ribbon-inner {
+			transform: translateY(-100%);
+		}
+		&.odometer-animating .odometer-ribbon-inner {
+			transform: translateY(0);
+		}
+	}
+}
