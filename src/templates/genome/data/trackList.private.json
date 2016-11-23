@@ -1,4 +1,5 @@
 {
+   "dataset_id" : "lj_v30",
    "tracks" : [
       {
          "showTranslation" : false,
@@ -18,10 +19,10 @@
          "key" : "LORE1 insertions",
          "storeClass" : "JBrowse/Store/SeqFeature/NCList",
          "trackType" : "JBrowse/View/Track/HTMLFeatures",
-         "urlTemplate" : "tracks/20150909_LORE1/{refseq}/trackData.json",
+         "urlTemplate" : "tracks/20161123_LORE1/{refseq}/trackData.json",
          "compress" : 0,
          "type" : "JBrowse/View/Track/HTMLFeatures",
-         "label" : "20150909_LORE1"
+         "label" : "20161123_LORE1"
       },
       {
          "style" : {
@@ -135,34 +136,34 @@
          "label" : "20121122_MG20_denovo"
       },
       {
+         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
+         "urlTemplate" : "./raw/Gifu_accepted_hits.refined.bw",
+         "scale" : "log",
          "style" : {
             "clip_marker_color" : "#f6ae2d",
-            "variance_band_color" : "rgba(55,55,55,0.15)",
-            "neg_color" : "#b13131",
             "pos_color" : "#33658a",
+            "neg_color" : "#b13131",
+            "variance_band_color" : "rgba(55,55,55,0.15)",
             "height" : 100
          },
-         "key" : "<em>L.japonicus</em> Gifu RNA-seq coverage",
-         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
-         "urlTemplate" : "../rawdata/Gifu_accepted_hits.refined.bw",
-         "scale" : "log",
+         "type" : "JBrowse/View/Track/Wiggle/XYPlot",
          "label" : "20140822_Gifu_mRNAseq",
-         "type" : "JBrowse/View/Track/Wiggle/XYPlot"
+         "key" : "<em>L.japonicus</em> Gifu RNA-seq coverage"
       },
       {
+         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
+         "urlTemplate" : "./raw/MG20_accepted_hits.refined.bw",
+         "scale" : "log",
          "style" : {
             "clip_marker_color" : "#f6ae2d",
-            "variance_band_color" : "rgba(55,55,55,0.15)",
-            "neg_color" : "#b13131",
             "pos_color" : "#33658a",
+            "neg_color" : "#b13131",
+            "variance_band_color" : "rgba(55,55,55,0.15)",
             "height" : 100
          },
-         "key" : "<em>L.japonicus</em> MG20 RNA-seq coverage",
-         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
-         "urlTemplate" : "../rawdata/MG20_accepted_hits.refined.bw",
-         "scale" : "log",
+         "type" : "JBrowse/View/Track/Wiggle/XYPlot",
          "label" : "20140822_MG20_mRNAseq",
-         "type" : "JBrowse/View/Track/Wiggle/XYPlot"
+         "key" : "<em>L.japonicus</em> MG20 RNA-seq coverage"
       },
       {
          "style" : {
@@ -183,125 +184,125 @@
       },
       {
          "storeClass" : "JBrowse/Store/SeqFeature/BAM",
-         "urlTemplate" : "../rawdata/degradome/KM09.fastq_tophat_sorted.bam",
+         "urlTemplate" : "./raw/degradome/KM09.fastq_tophat_sorted.bam",
          "style" : {
             "className" : "alignment",
             "arrowheadClass" : "arrowhead",
             "labelScale" : 100
          },
-         "label" : "20130405_KM09_degradome_spliced",
          "type" : "JBrowse/View/Track/Alignments2",
+         "label" : "20130405_KM09_degradome_spliced",
          "key" : "KM09 degradome (spliced reads)"
       },
       {
          "storeClass" : "JBrowse/Store/SeqFeature/BAM",
-         "urlTemplate" : "../rawdata/degradome/KM10.fastq_tophat_sorted.bam",
+         "urlTemplate" : "./raw/degradome/KM10.fastq_tophat_sorted.bam",
          "style" : {
             "className" : "alignment",
             "arrowheadClass" : "arrowhead",
             "labelScale" : 100
          },
-         "label" : "20130405_KM10_degradome_spliced",
          "type" : "JBrowse/View/Track/Alignments2",
+         "label" : "20130405_KM10_degradome_spliced",
          "key" : "KM10 degradome (spliced reads)"
       },
       {
          "storeClass" : "JBrowse/Store/SeqFeature/BAM",
-         "urlTemplate" : "../rawdata/degradome/KM11.fastq_tophat_sorted.bam",
+         "urlTemplate" : "./raw/degradome/KM11.fastq_tophat_sorted.bam",
          "style" : {
             "className" : "alignment",
             "arrowheadClass" : "arrowhead",
             "labelScale" : 100
          },
-         "label" : "20130405_KM11_degradome_spliced",
          "type" : "JBrowse/View/Track/Alignments2",
+         "label" : "20130405_KM11_degradome_spliced",
          "key" : "KM11 degradome (spliced reads)"
       },
       {
+         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
+         "urlTemplate" : "./raw/degradome/KM09.bw",
+         "scale" : "log",
          "style" : {
             "clip_marker_color" : "#f6ae2d",
-            "variance_band_color" : "rgba(55,55,55,0.15)",
-            "neg_color" : "#b13131",
             "pos_color" : "#33658a",
+            "neg_color" : "#b13131",
+            "variance_band_color" : "rgba(55,55,55,0.15)",
             "height" : 100
          },
-         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
-         "urlTemplate" : "../rawdata/degradome/KM09.bw",
-         "scale" : "log",
-         "label" : "20130322_KM09_coverage",
          "type" : "JBrowse/View/Track/Wiggle/XYPlot",
+         "label" : "20130322_KM09_coverage",
          "key" : "KM09 degradome (coverage)"
       },
       {
+         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
+         "urlTemplate" : "./raw/degradome/KM10.bw",
+         "scale" : "log",
          "style" : {
             "clip_marker_color" : "#f6ae2d",
-            "variance_band_color" : "rgba(55,55,55,0.15)",
-            "neg_color" : "#b13131",
             "pos_color" : "#33658a",
+            "neg_color" : "#b13131",
+            "variance_band_color" : "rgba(55,55,55,0.15)",
             "height" : 100
          },
-         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
-         "urlTemplate" : "../rawdata/degradome/KM10.bw",
-         "scale" : "log",
-         "label" : "20130322_KM10_coverage",
          "type" : "JBrowse/View/Track/Wiggle/XYPlot",
+         "label" : "20130322_KM10_coverage",
          "key" : "KM10 degradome (coverage)"
       },
       {
+         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
+         "urlTemplate" : "./raw/degradome/KM11.bw",
+         "scale" : "log",
          "style" : {
             "clip_marker_color" : "#f6ae2d",
-            "variance_band_color" : "rgba(55,55,55,0.15)",
-            "neg_color" : "#b13131",
             "pos_color" : "#33658a",
+            "neg_color" : "#b13131",
+            "variance_band_color" : "rgba(55,55,55,0.15)",
             "height" : 100
          },
-         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
-         "urlTemplate" : "../rawdata/degradome/KM11.bw",
-         "scale" : "log",
-         "label" : "20130322_KM11_coverage",
          "type" : "JBrowse/View/Track/Wiggle/XYPlot",
+         "label" : "20130322_KM11_coverage",
          "key" : "KM11 degradome (coverage)"
       },
       {
+         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
+         "urlTemplate" : "./raw/degradome/20130826_merged.bam.annot.bedgraph.bw",
+         "scale" : "log",
          "style" : {
             "clip_marker_color" : "#f6ae2d",
-            "variance_band_color" : "rgba(55,55,55,0.15)",
-            "neg_color" : "#b13131",
             "pos_color" : "#33658a",
+            "neg_color" : "#b13131",
+            "variance_band_color" : "rgba(55,55,55,0.15)",
             "height" : 100
          },
-         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
-         "scale" : "log",
-         "urlTemplate" : "../rawdata/degradome/20130826_merged.bam.annot.bedgraph.bw",
-         "label" : "20130826_degradome_5prime_coverage",
          "type" : "Wiggle",
+         "label" : "20130826_degradome_5prime_coverage",
          "key" : "Degradome (density)"
       },
       {
+         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
+         "urlTemplate" : "./raw/degradome/20131111_profile_19_24_sorted.cut-20_normalized_score_cutoff_0.bam.sorted.bam.bedgraph.bw",
+         "scale" : "log",
          "style" : {
             "clip_marker_color" : "#f6ae2d",
-            "variance_band_color" : "rgba(55,55,55,0.15)",
-            "neg_color" : "#b13131",
             "pos_color" : "#33658a",
+            "neg_color" : "#b13131",
+            "variance_band_color" : "rgba(55,55,55,0.15)",
             "height" : 100
          },
-         "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
-         "scale" : "log",
-         "urlTemplate" : "../rawdata/degradome/20131111_profile_19_24_sorted.cut-20_normalized_score_cutoff_0.bam.sorted.bam.bedgraph.bw",
-         "label" : "20131111_nodSmallRNA_coverage",
          "type" : "Wiggle",
+         "label" : "20131111_nodSmallRNA_coverage",
          "key" : "Nod small RNAs (density)"
       },
       {
          "storeClass" : "JBrowse/Store/SeqFeature/BAM",
-         "urlTemplate" : "../rawdata/degradome/20131111_profile_19_24_sorted.cut-20_normalized_score_cutoff_0.bam.sorted.bam",
+         "urlTemplate" : "./raw/degradome/20131111_profile_19_24_sorted.cut-20_normalized_score_cutoff_0.bam.sorted.bam",
          "style" : {
             "className" : "alignment",
             "arrowheadClass" : "arrowhead",
             "labelScale" : 100
          },
-         "label" : "20131111_nodSmallRNA",
          "type" : "JBrowse/View/Track/Alignments2",
+         "label" : "20131111_nodSmallRNA",
          "key" : "Nod small RNAs"
       },
       {
@@ -322,10 +323,11 @@
       "url" : "names/",
       "type" : "Hash"
    },
-   "formatVersion" : 1,
+   "dataset_id" : "lj_v30",
+   "alwaysOnTracks" : "DNA,20140314_Lj30,20161123_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
+   "defaultTracks" : "DNA,20140314_Lj30,20161123_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
    "defaultLocation" : "chr1:1..62285374",
-   "defaultTracks" : "DNA,20140314_Lj30,20150909_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
-   "alwaysOnTracks" : "DNA,20140314_Lj30,20150909_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
+   "formatVersion" : 1,
    "highResolutionMode" : "auto",
    "trackSelector" : {
       "selectableFacets" : [
@@ -333,7 +335,6 @@
          "category",
          "organism"
       ],
-      "type" : "Faceted",
       "displayColumns" : [
          "key",
          "description",
@@ -345,7 +346,12 @@
          "file_creator",
          "file_curator",
          "public"
-      ]
+      ],
+      "type" : "Faceted"
+   },
+   "aboutThisBrowser" : {
+      "title" : "Lotus japonicus Genome Browser",
+      "description" : "Genome browser for the model legume <em>Lotus japonicus</em>, with data such as protein predictions, RNA-seq data, LORE1 insertions and more, developed by the Centre for Carbohygrade Recognition and Signalling, Aarhus University, Denmark."
    },
    "trackMetadata" : {
       "sources" : [
@@ -354,9 +360,5 @@
             "type" : "csv"
          }
       ]
-   },
-   "aboutThisBrowser" : {
-      "title" : "Lotus japonicus Genome Browser",
-      "description" : "Genome browser for the model legume <em>Lotus japonicus</em>, with data such as protein predictions, RNA-seq data, LORE1 insertions and more, developed by the Centre for Carbohygrade Recognition and Signalling, Aarhus University, Denmark."
    }
 }

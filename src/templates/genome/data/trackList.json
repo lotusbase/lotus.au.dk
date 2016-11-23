@@ -18,10 +18,10 @@
          "key" : "LORE1 insertions",
          "storeClass" : "JBrowse/Store/SeqFeature/NCList",
          "trackType" : "JBrowse/View/Track/HTMLFeatures",
-         "urlTemplate" : "tracks/20150909_LORE1/{refseq}/trackData.json",
+         "urlTemplate" : "tracks/20161123_LORE1/{refseq}/trackData.json",
          "compress" : 0,
          "type" : "JBrowse/View/Track/HTMLFeatures",
-         "label" : "20150909_LORE1"
+         "label" : "20161123_LORE1"
       },
       {
          "style" : {
@@ -137,15 +137,15 @@
       {
          "style" : {
             "clip_marker_color" : "#f6ae2d",
-            "variance_band_color" : "rgba(55,55,55,0.15)",
-            "neg_color" : "#b13131",
             "pos_color" : "#33658a",
+            "neg_color" : "#b13131",
+            "variance_band_color" : "rgba(55,55,55,0.15)",
             "height" : 100
          },
          "variance_band" : true,
          "key" : "<em>L.japonicus</em> Gifu RNA-seq coverage",
          "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
-         "urlTemplate" : "../rawdata/Gifu_accepted_hits.refined.bw",
+         "urlTemplate" : "./raw/Gifu_accepted_hits.refined.bw",
          "scale" : "log",
          "label" : "20140822_Gifu_mRNAseq",
          "type" : "JBrowse/View/Track/Wiggle/XYPlot"
@@ -153,15 +153,15 @@
       {
          "style" : {
             "clip_marker_color" : "#f6ae2d",
-            "variance_band_color" : "rgba(55,55,55,0.15)",
-            "neg_color" : "#b13131",
             "pos_color" : "#33658a",
+            "neg_color" : "#b13131",
+            "variance_band_color" : "rgba(55,55,55,0.15)",
             "height" : 100
          },
          "variance_band" : true,
          "key" : "<em>L.japonicus</em> MG20 RNA-seq coverage",
          "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
-         "urlTemplate" : "../rawdata/MG20_accepted_hits.refined.bw",
+         "urlTemplate" : "./raw/MG20_accepted_hits.refined.bw",
          "scale" : "log",
          "label" : "20140822_MG20_mRNAseq",
          "type" : "JBrowse/View/Track/Wiggle/XYPlot"
@@ -201,10 +201,11 @@
       "url" : "names/",
       "type" : "Hash"
    },
-   "formatVersion" : 1,
+   "dataset_id" : "lj_v30",
+   "alwaysOnTracks" : "DNA,20140314_Lj30,20161123_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
+   "defaultTracks" : "DNA,20140314_Lj30,20161123_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
    "defaultLocation" : "chr1:1..62285374",
-   "defaultTracks" : "DNA,20140314_Lj30,20150909_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
-   "alwaysOnTracks" : "DNA,20140314_Lj30,20150909_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
+   "formatVersion" : 1,
    "highResolutionMode" : "auto",
    "trackSelector" : {
       "selectableFacets" : [
@@ -212,7 +213,6 @@
          "category",
          "organism"
       ],
-      "type" : "Faceted",
       "displayColumns" : [
          "key",
          "description",
@@ -223,7 +223,12 @@
          "principal_investigator",
          "file_creator",
          "file_curator"
-      ]
+      ],
+      "type" : "Faceted"
+   },
+   "aboutThisBrowser" : {
+      "title" : "Lotus japonicus Genome Browser",
+      "description" : "Genome browser for the model legume <em>Lotus japonicus</em>, with data such as protein predictions, RNA-seq data, LORE1 insertions and more, developed by the Centre for Carbohygrade Recognition and Signalling, Aarhus University, Denmark."
    },
    "trackMetadata" : {
       "sources" : [
@@ -232,9 +237,5 @@
             "type" : "csv"
          }
       ]
-   },
-   "aboutThisBrowser" : {
-      "title" : "Lotus japonicus Genome Browser",
-      "description" : "Genome browser for the model legume <em>Lotus japonicus</em>, with data such as protein predictions, RNA-seq data, LORE1 insertions and more, developed by the Centre for Carbohygrade Recognition and Signalling, Aarhus University, Denmark."
    }
 }
