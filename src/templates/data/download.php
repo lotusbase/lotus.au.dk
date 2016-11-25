@@ -17,7 +17,7 @@
 
 	<div id="wrap">
 	<?php
-		$header = new \LotusBase\Components\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<h1>Downloadable Resources</h1>
 		<p>You will find a list of downloadable resources we have made available to the public. Click on the file names to initiate download.</p>');
 		echo $header->get_header();
