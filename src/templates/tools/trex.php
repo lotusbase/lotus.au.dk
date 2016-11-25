@@ -560,7 +560,7 @@
 						<td class="pos" data-type="numeric"><?php echo $row['Start']; ?></td>
 						<td class="pos" data-type="numeric"><?php echo $row['End']; ?></td>
 						<td class="str"><?php echo $row['Strand']; ?></td>
-						<td class="dompred">
+						<td>
 							<?php
 								$interpro_ids = explode(',', $row['Interpro_ID']);
 								$dompred_ids = explode(',', $row['DomPred_ID']);
@@ -612,20 +612,32 @@
 								}
 
 								// Print domain predictions
-								echo '<ul class="list--floated">';
 								$domains = array_unique(array_merge($interpro_ids, $dompred_ids));
 								asort($domains);
-								foreach($domains as $d) {
-									echo '<li><a href="'.WEB_ROOT.'/view/domain/'.$d.'" class="link--reset">'.$d.'</a></li>';
+								if(count($domains)) {
+									$out = '<div class="dropdown button"><span class="dropdown--title">'.count($domains).' domain '.pl(count($domains), 'prediction').'</span><ul class="dropdown--list">';
+									foreach($domains as $d) {
+										$out .= '<li><a href="'.WEB_ROOT.'/view/domain/'.$d.'">'.$d.'</a></li>';
+									}
+									$out .= '</ul></div>';
+								} else {
+									$out = '&ndash;';
 								}
-								echo '</ul>';
+								echo $out;
 
 							?>
 						</td>
-						<td><ul class="list--floated"><?php
-							foreach($go_ids as $go) {
-								echo '<li><a href="'.WEB_ROOT.'/view/go/'.$go.'" class="link--reset">'.$go.'</a></li>';
+						<td><?php
+							if(count($go_ids)) {
+								$out = '<div class="dropdown button"><span class="dropdown--title">'.count($go_ids).' GO '.pl(count($go_ids), 'term').'</span><ul class="dropdown--list">';
+									foreach($go_ids as $go_id) {
+										$out .= '<li><a href="'.WEB_ROOT.'/view/go/'.$go_id.'">'.$go_id.'</a></li>';
+									}
+									$out .= '</ul></div>';
+							} else {
+								$out = '&ndash;';
 							}
+							echo $out;
 						?></ul></td>
 					</tr>
 		<?php } ?>
