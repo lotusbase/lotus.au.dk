@@ -1,5 +1,9 @@
 $(function() {
 
+	// Stupid table
+	$('#view__go table').stupidtable();
+
+	// jQuery DataTable
 	var $transcriptTable = $('#view__transcript table').DataTable({
 		'pagingType': 'full_numbers'
 	});

@@ -8,13 +8,15 @@
 		$id = escapeHTML($_GET['id']);
 
 		// Determine ID type
-		if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)$/', $id)) {
+		if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)$/i', $id)) {
 			$id_type = 'gene';
-		} else if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/', $id)) {
+		} else if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/i', $id)) {
 			$id_type = 'transcript';
+		} else if(preg_match('/^((DK\d+\-0)?3\d{7}|[apl]\d{4,})$/i', $id)) {
+			$id_type = 'lore1';
 		} else if(preg_match('/^(ipr|cd|g3dsa|mf|pthr|pf|pirsf|pr|pd|ps|sfldf|sm|ssf|tigr).*$/i', $id)) {
 			$id_type = 'domain';
-		} else if(preg_match('/^GO:\d{7}$/', $id)){
+		} else if(preg_match('/^GO:\d{7}$/i', $id)){
 			$id_type = 'go';
 		} else {
 			$error = true;
@@ -92,6 +94,7 @@
 				<div id="view-tabs__nav" class="cols align-items__flex-end ui-tabs-nav__wrapper">
 					<ul class="tabbed">
 						<li><a href="#view-example__gene-transcript" data-custom-smooth-scroll>Gene/Transcript/Protein</a></li>
+						<li><a href="#view-example__lore1" data-custom-smooth-scroll><em>LORE1</em> mutants</a></li>
 						<li><a href="#view-example__domain-prediction" data-custom-smooth-scroll>Predicted domain</a></li>
 						<li><a href="#view-example__go-annotation" data-custom-smooth-scroll>GO Annotation</a></li>
 					</ul>
@@ -104,6 +107,15 @@
 						<li><a href="#" data-value="Lj4g3v0281040.1">Lj4g3v0281040.1</a><span class="term-type">LjFls2 (Transcript/Protein)</span></li>
 						<li><a href="#" data-value="Lj2g3v3373110">Lj2g3v3373110</a><span class="term-type"><em>LjNin</em> (Gene)</span></li>
 						<li><a href="#" data-value="Lj2g3v3373110.1">Lj2g3v3373110.1</a><span class="term-type">LjNin (Transcript/Protein)</span></li>
+					</ul>
+				</div>
+
+				<div class="view-tabs__content" id="view-example__lore1">
+					<ul class="list--floated input-suggestions">
+						<li>Examples:</li>
+						<li><a href="#" data-value="30010101">30010101</a><span class="term-type">Danish line</span></li>
+						<li><a href="#" data-value="DK02-030010101">DK02-030010101</a><span class="term-type">Danish line (alternative format)</span></li>
+						<li><a href="#" data-value="A00005">A00005</a><span class="term-type">Japanese line</span></li>
 					</ul>
 				</div>
 

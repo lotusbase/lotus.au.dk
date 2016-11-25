@@ -101,7 +101,8 @@
 					<div class="full-width">
 						<ul class="list--floated input-suggestions">
 							<li>Examples:</li>
-							<li><a href="#" data-value="30010101">30010101</a><span class="term-type"><em>LORE1</em></span></li>
+							<li><a href="#" data-value="30010101">30010101</a><span class="term-type">Danish line</span></li>
+							<li><a href="#" data-value="A00005">A00005</a><span class="term-type">Japanese line</span></li>
 						</ul>
 					</div>
 					</form>

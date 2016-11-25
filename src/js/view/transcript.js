@@ -223,8 +223,12 @@ $(function() {
 					);
 			});
 
+			// jQuery data tables
+			var $domPredTable = $('#view__domain-prediction table').DataTable({
+				'pagingType': 'full_numbers'
+			});
+
 			// Stupid tables
-			$('#view__domain-prediction table').stupidtable();
 			$('#view__function table').stupidtable();
 		}
 	};
@@ -315,6 +319,9 @@ $(function() {
 		});
 		domainsAJAX
 		.done(function(d) {
+
+			// Hide loader
+			$('#domain-prediction__loader').slideUp(500);
 
 			// Data
 			p = d.data;

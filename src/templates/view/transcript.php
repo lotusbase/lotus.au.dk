@@ -351,16 +351,20 @@
 
 		<div id="view__domain-prediction" class="view__facet">
 			<h3>Domain prediction</h3>
-			<p>Data for domain prediction are provided by the <a href="http://www.kazusa.or.jp/lotus/">Kazusa DNA Research Institute</a>, and merged with InterPro data obtained from the <a href="http://www.ebi.ac.uk/Tools/webservices/services/eb-eye_rest">EB-eye REST service</a>.</p>
+			<p>Data for domain prediction are obtained with <a href="https://github.com/ebi-pf-team/interproscan">InterProScan</a>, and merged with InterPro data obtained from the <a href="http://www.ebi.ac.uk/Tools/webservices/services/eb-eye_rest">EB-eye REST service</a>.</p>
 			<?php
 				try {
 					if($q2->rowCount()) {
 						?>
 						<div class="facet floating-controls__hide d3-chart">
 							<div class="facet__stage" id="domain-prediction" data-protein="<?php echo $gene; ?>">
+								<div id="domain-prediction__loader" class="align-center loader__wrapper">
+									<div class="loader"><svg class="loader"><circle class="path" cx="40" cy="40" r="30" /></svg></div>
+									<p>Merging data from EBeye. Please wait&hellip;</p>
+								</div>
 								<ul class="floating-controls position--right">
 									<li><a href="#" class="icon-cog icon--no-spacing controls__toggle" title="Toggle controls"></a></li>
-								</ul>
+								</ul> 
 							</div>
 							<form class="facet__controls has-group" id="domain__controls" action="#" method="get">
 								<div class="has-legend cols" role="group">
@@ -405,7 +409,7 @@
 						<table class="table--dense">
 							<thead>
 								<tr>
-									<th data-sort="string" scope="col">Prediction</th>
+									<th data-sort="string" scope="col">Prediction algorithm</th>
 									<th data-sort="string" scope="col">Identifier</th>
 									<th data-sort="int" scope="col" data-type="numeric">Start</th>
 									<th data-sort="int" scope="col" data-type="numeric">End</th>
@@ -462,7 +466,7 @@
 			<p><abbr title="Gene Ontology">GO</abbr> predictions are based solely on the InterPro to GO mapping published by EMBL-EBI, which is in turn based on the <a href="#view__domain-prediction">predicted domains to InterPro domain mapping</a>. The <abbr title="Gene Ontology">GO</abbr> metadata was last updated on October 10, 2016.</p>
 			<?php
 				try {
-					if($q3 && $q3->rowCount()) { ?>
+					if(!empty($q3) && $q3->rowCount()) { ?>
 					<table class="table--dense">
 						<thead>
 							<tr>
@@ -518,7 +522,7 @@
 						</tbody>
 					</table>
 					<?php } else {
-						throw new Exception('Unable to find any records for the transcript with the identifier');
+						throw new Exception('Unable to find any <abbr title="Gene Ontology">GO</abbr> terms for the transcript with the identifier');
 					}
 				} catch(Exception $e) {
 					echo '<p class="user-message warning">'.$e->getMessage().'.</p>';
@@ -626,6 +630,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/colorbrewer.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/d3-tip.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/view/transcript.min.js"></script>
 </body>

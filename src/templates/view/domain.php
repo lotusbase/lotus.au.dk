@@ -96,6 +96,38 @@
 			}
 			$q2->execute(array($id));
 
+			// Perform third query to obtain GO term data
+			$go_terms = explode(',', $domain_data['GOTerms']);
+			if(count($go_terms)) {
+				$q3 = $db->prepare("SELECT
+					go.GO_ID AS GOTerm,
+					go.NameSpace AS Namespace,
+					go.Name AS Name,
+					go.Definition AS Definition,
+					go.SubtermOf AS SubtermOf,
+					go.Relationships AS Relationships,
+					go.URL AS URL
+				FROM gene_ontology AS go
+				WHERE go.GO_ID IN (".str_repeat("?,", count($go_terms)-1)."?)
+					");
+				$q3->execute($go_terms);
+			}
+
+			// Get description
+			if($is_interpro) {
+				// Retrieve description from EB-eye service
+				$ebeye_handler = new \LotusBase\EBI\EBeye();
+				$ebeye_handler->set_domain('interpro');
+				$ebeye_handler->set_ids($id);
+				$data = $ebeye_handler->get_data();
+				$short_desc = $data[$id]['fields']['name'][0];
+				$desc = '<p><strong>'.$id.'</strong> is a '.$data[$id]['fields']['name'][0].'.</p><p>'.$data[$id]['fields']['description'][0].'</p><p>This description is obtained from <a href="http://www.ebi.ac.uk/Tools/webservices/services/eb-eye_rest" target="_blank">EB-eye REST</a>.</p>';
+
+			} else {
+				$desc = $domain_data['Description'];
+				$short_desc = $desc;
+			}
+
 		} else {
 			// If ID is not available
 			throw new Exception;
@@ -116,7 +148,7 @@
 	<?php
 		$document_header = new \LotusBase\Component\DocumentHeader();
 		$document_header->set_meta_tags(array(
-			'description' => 'Consolidated domain prediction view: '.$id.' ('.$domain_data['Source'].')'
+			'description' => 'Consolidated domain prediction view: '.$id.' ('.$domain_data['Source'].'), a '.$short_desc
 			));
 		echo $document_header->get_document_header();
 	?>
@@ -147,28 +179,75 @@
 		<div id="view__description" class="view__facet">
 			<h3>Description</h3>
 			<?php
-				try {
-					if($is_interpro) {
-						// Retrieve description from EB-eye service
-						$ebeye_handler = new \LotusBase\EBI\EBeye();
-						$ebeye_handler->set_domain('interpro');
-						$ebeye_handler->set_ids($id);
-						$data = $ebeye_handler->get_data();
-						$desc = '<p><strong>'.$id.'</strong> is a '.$data[$id]['fields']['name'][0].'.</p><p>'.$data[$id]['fields']['description'][0].'</p><p>This description is obtained from <a href="http://www.ebi.ac.uk/Tools/webservices/services/eb-eye_rest" target="_blank">EB-eye REST</a>.</p>';
-
-					} else {
-						$desc = $domain_data['Description'];
-					}
-
-					if(!empty($desc)) {
-						echo '<p>'.$desc.'</p>';
-					} else {
-						echo '<p>No description is available for this domain.</p>';
-					}
-				} catch(Exception $e) {
-					echo '<p class="user-message warning">'.$e->getMessage().'</p>';
+				if(!empty($desc)) {
+					echo '<p>'.$desc.'</p>';
+				} else {
+					echo '<p>No description is available for this domain.</p>';
 				}
 			?>
+		</div>
+
+		<div id="view__go" class="view__facet">
+			<h3>Associated <abbr title="Gene Ontology">GO</abbr> terms</h3>
+			<?php if(!empty($q3) && $q3->rowCount()) { ?>
+			<p><abbr title="Gene Ontology">GO</abbr> predictions are based solely on the InterPro to <abbr title="Gene Ontology">GO</abbr> mapping published by EMBL-EBI, which is in turn based on the mapping of predicted domains to the InterPro dataset. The <abbr title="Gene Ontology">GO</abbr> metadata was last updated on October 10, 2016.</p>
+			<table class="table--dense">
+				<thead>
+					<tr>
+						<th data-sort="string" scope="col"><abbr title="Gene Ontology">GO</abbr>&nbsp;term</th>
+						<th data-sort="string" scope="col">Namespace</th>
+						<th scope="col">Name</th>
+						<th scope="col">Definition</th>
+						<th scope="col">Relationships</th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php
+					$go_namespace = array(
+						'p' => 'Biological process',
+						'f' => 'Molecular function',
+						'c' => 'Cellular component'
+						);
+					while($go = $q3->fetch(PDO::FETCH_ASSOC)) {
+				?>
+					<tr>
+						<td><div class="dropdown button">
+							<span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/go/'.$go['GOTerm']; ?>"><?php echo $go['GOTerm']; ?></a></span>
+							<ul class="dropdown--list">
+								<?php
+									$go_links_handler = new \LotusBase\View\GO\Link();
+									$go_links_handler->set_id($go_term);
+									$go_links_handler->add_internal_link();
+									echo $go_links_handler->get_html();
+								?>
+							</ul>
+						</div></td>
+						<td><?php echo $go_namespace[$go['Namespace']]; ?></td>
+						<td><?php echo $go['Name']; ?>
+						<td><?php echo $go['Definition']; ?></td>
+						<td><?php
+							$go_rels = json_decode($go['Relationships'], true);
+							foreach($go_rels as $type => $r) {
+								if(is_array($r) && count($r)) {
+									if($type === 'is_a') {
+										$type = 'Subterm of';
+									}
+									echo '<div class="dropdown button"><span class="dropdown--title">'.ucfirst(str_replace('_', ' ', $type)).'</span><ul class="dropdown--list">';
+									asort($r);
+									foreach($r as $_r) {
+										echo '<li><a href="'.WEB_ROOT.'/view/go/'.$_r.'">'.$_r.'</a></li>';
+									}
+									echo '</ul></div>';
+								}
+							}
+						?></td>
+					</tr>
+				<?php } ?>
+				</tbody>
+			</table>
+			<?php } else { ?>
+			<p class="user-message reminder">Unable to find any <abbr title="Gene Ontology">GO</abbr> terms for the transcript with the identifier.</p>
+			<?php } ?>
 		</div>
 
 		<div id="view__transcript" class="view__facet">
@@ -177,7 +256,6 @@
 					echo ' <span class="badge">'.$q2->rowCount().'</span>';
 				}
 			?></h3>
-			<p><abbr title="Gene Ontology">GO</abbr> predictions are based solely on the InterPro to <abbr title="Gene Ontology">GO</abbr> mapping published by EMBL-EBI, which is in turn based on the mapping of predicted domains to the InterPro dataset. The <abbr title="Gene Ontology">GO</abbr> metadata was last updated on October 10, 2016.</p>
 			<?php if($q2->rowCount()) { ?>
 			<table class="table--dense">
 				<thead>
@@ -293,6 +371,7 @@
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
 	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/view/domain.min.js"></script>
 </body>
 </html>
