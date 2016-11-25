@@ -9,17 +9,19 @@
 
 		// Determine ID type
 		if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)$/', $id)) {
-			$id = 'gene';
+			$id_type = 'gene';
 		} else if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/', $id)) {
-			$id = 'transcript';
+			$id_type = 'transcript';
+		} else if(preg_match('/^(ipr|cd|g3dsa|mf|pthr|pf|pirsf|pr|pd|ps|sfldf|sm|ssf|tigr).*$/i', $id)) {
+			$id_type = 'domain';
 		} else if(preg_match('/^GO:\d{7}$/', $id)){
-			$id = 'go';
+			$id_type = 'go';
 		} else {
 			$error = true;
 		}
 
 		if(!$error) {
-			header('Location: '.WEB_ROOT.'/view/'.$id.'/'.$_GET['id']);
+			header('Location: '.WEB_ROOT.'/view/'.$id_type.'/'.$_GET['id']);
 		}
 	}
 
@@ -110,13 +112,17 @@
 						<li>Examples:</li>
 						<li><a href="#" data-value="IPR000719">IPR000719</a><span class="term-type">InterPro</span></li>
 						<li><a href="#" data-value="cd14066">cd14066</a><span class="term-type">CDD</span></li>
-						<li><a href="#" data-value="G3DSA:1.10.510.1">G3DSA:1.10.510.1</a><span class="term-type">Gene3D</span></li>
+						<li><a href="#" data-value="G3DSA:3.90.550.10">G3DSA:3.90.550.10</a><span class="term-type">Gene3D</span></li>
+						<li><a href="#" data-value="MF_01928">MF_01928</a><span class="term-type">Hamap</span></li>
 						<li><a href="#" data-value="PTHR24420">PTHR24420</a><span class="term-type">PANTHER</span></li>
 						<li><a href="#" data-value="PS50011">PS50011</a><span class="term-type">PatternScan</span></li>
-						<li><a href="#" data-value="PF00069">PF00069</a><span class="term-type">PFam</span></li>
+						<li><a href="#" data-value="PF00069">PF00069</a><span class="term-type">Pfam</span></li>
+						<li><a href="#" data-value="PIRSF030250">PIRSF030250</a><span class="term-type">PIRSF</span></li>
 						<li><a href="#" data-value="PR00019">PR00019</a><span class="term-type">PRINTS</span></li>
+						<li><a href="#" data-value="PD005521">PD005521</a><span class="term-type">ProDom</span></li>
 						<li><a href="#" data-value="PS00108">PS00108</a><span class="term-type">ProSite Patterns</span></li>
 						<li><a href="#" data-value="PS50011">PS50011</a><span class="term-type">ProSite Profiles</span></li>
+						<li><a href="#" data-value="SFLDF00063">SFLDF00063</a><span class="term-type">SFLD</span></li>
 						<li><a href="#" data-value="SM00369">SM00369</a><span class="term-type">SMART</span></li>
 						<li><a href="#" data-value="SSF52047">SSF52047</a><span class="term-type">SUPERFAMILY</span></li>
 						<li><a href="#" data-value="TIGR01151">TIGR01151</a><span class="term-type">TIGRFAM</span></li>

@@ -4,7 +4,7 @@
 	try {
 		if(!empty($_GET) && !empty($_GET['id'])) {
 			$id = escapeHTML($_GET['id']);
-			if(!preg_match('/^(cd|ipr|g3dsa|pthr|os|pf|pr|signalp|sm|ssf|tigr).*$/i', $id)) {
+			if(!preg_match('/^(ipr|cd|g3dsa|mf|pthr|pf|pirsf|pr|pd|ps|sfldf|sm|ssf|tigr).*$/i', $id)) {
 				// If ID fails pattern check
 				throw new Exception('Invalid protein domain identifier detected. Please ensure that your protein domain identifier is valid and is generated from the following prediction algorithms: CDD, Gene3D, InterPro, PANTHER, PatternScan, PFam, PRINTS, ProSite Patterns, ProSite Profiles, SMART, SUPERFAMILY, or TIGRFAM.');
 			}
@@ -277,7 +277,7 @@
 					foreach($domain_matrix as $domain => $data) {
 
 						echo '<tr>
-							<td>'.(preg_match('/^(cd|ipr|g3dsa|pthr|os|pf|pr|signalp|sm|ssf|tigr).*$/i', $domain) ? '<a href="'.WEB_ROOT.'/view/domain/'.$domain.'">'.$domain.'</a>' : $domain).'</td>
+							<td>'.(preg_match('/^(ipr|cd|g3dsa|mf|pthr|pf|pirsf|pr|pd|ps|sfldf|sm|ssf|tigr).*$/i', $domain) ? '<a href="'.WEB_ROOT.'/view/domain/'.$domain.'">'.$domain.'</a>' : $domain).'</td>
 							<td>'.$data['source'].'</td>
 							<td>'.$data['count'].'</td>
 							<td>'.number_format($data['count']*100/($q2->rowCount()), 2, '.', '').'</td>
