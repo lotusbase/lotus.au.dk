@@ -14,7 +14,7 @@
 	// Get user input
 	$input = $_GET;
 
-	if($input) {
+	if($_GET && !empty($_GET['v'])) {
 
 		// Fetch all search parameters. Declare empty if not found, and clean them
 		if(!isset($_GET['blast'])) {	$blast = '';		} else { 	$blast =	trim($_GET['blast']);	}	// Sanitized later
@@ -65,7 +65,6 @@
 				"message" => "You have not provided any search parameter, resulting in a overly broad search scope. Please provide either the BLAST header(s), or plant ID, chromosome, position, gene or annotation (or a combination thereof)."
 			);
 			$error_flag = true;
-			
 		}
 
 		// Force minimum length of annotation
