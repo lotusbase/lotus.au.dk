@@ -5,23 +5,23 @@
 	$recaptcha = new \ReCaptcha\ReCaptcha(GRECAPTCHA_API_KEY);
 
 	// LORE1 columns
+	$scale_factor = 1;
 	$lore1_cols = array(
-		array('name' => 'PlantID', 'desc' => '<em>LORE1</em> mutant line identifier', 'size' => 5918438),
-		array('name' => 'Batch', 'desc' => 'Batch name of the line', 'size' => 3340027),
-		array('name' => 'Chromosome', 'desc' => 'Chromosome in which the <em>LORE1</em> insertion is found', 'size' => 3441026),
-		array('name' => 'Position', 'desc' => 'Position in which the <em>LORE1</em> insertion is found', 'size' => 6179836),
-		array('name' => 'Orientation', 'desc' => 'Orientation of the <em>LORE1</em> insert', 'size' => 1376362),
-		array('name' => 'FwPrimer', 'desc' => 'Forward primer designeed using Primer3', 'size' => 17301368),
-		array('name' => 'RevPrimer', 'desc' => 'Reverse primer designeed using Primer3', 'size' => 17330936),
-		array('name' => 'PCRInsPos', 'desc' => 'Size of PCR product for lines with <em>LORE1</em> insert', 'size' => 2681535),
-		array('name' => 'PCRWT', 'desc' => 'Size of PCR product for lines without <em>LORE1</em> insert', 'size' => 2681531),
-		array('name' => 'InsFlank', 'desc' => '&pm;1000bp flanking sequences, relative to the insertion orientation', 'size' => 1377038184),
-		array('name' => 'ColCoord', 'desc' => 'Column coordinate for sequencing', 'size' => 3372140),
-		array('name' => 'RowCoord', 'desc' => 'Row coordinate for sequencing', 'size' => 3371403),
-		array('name' => 'CoordList', 'desc' => 'Coordinates for all instances of the same insertion', 'size' => 7464084),
-		array('name' => 'CoordCount', 'desc' => 'Absolute counts of each column and row coordinate', 'size' => 5429930),
-		array('name' => 'TotalCoverage', 'desc' => 'Total coverage of the sequencing reads', 'size' => 2769986),
-		array('name' => 'Version', 'desc' => 'Version of the genome assembly', 'size' => 4129050)
+		array('name' => 'PlantID', 'desc' => '<em>LORE1</em> mutant line identifier', 'size' => 5827311*$scale_factor),
+		array('name' => 'Batch', 'desc' => 'Batch name of the line', 'size' => 2950374*$scale_factor),
+		array('name' => 'Chromosome', 'desc' => 'Chromosome in which the <em>LORE1</em> insertion is found', 'size' => 3051378*$scale_factor),
+		array('name' => 'Position', 'desc' => 'Position in which the <em>LORE1</em> insertion is found', 'size' => 6086645*$scale_factor),
+		array('name' => 'Orientation', 'desc' => 'Orientation of the <em>LORE1</em> insert', 'size' => 762807*$scale_factor),
+		array('name' => 'FwPrimer', 'desc' => 'Forward primer designeed using Primer3', 'size' => 18397835*$scale_factor),
+		array('name' => 'RevPrimer', 'desc' => 'Reverse primer designeed using Primer3', 'size' => 18430861*$scale_factor),
+		array('name' => 'PCRInsPos', 'desc' => 'Size of PCR product for lines with <em>LORE1</em> insert', 'size' => 2209485*$scale_factor),
+		array('name' => 'PCRWT', 'desc' => 'Size of PCR product for lines without <em>LORE1</em> insert', 'size' => 2209485*$scale_factor),
+		array('name' => 'InsFlank', 'desc' => '&pm;1000bp flanking sequences, relative to the insertion orientation', 'size' => 1525614000*$scale_factor),
+		array('name' => 'ColCoord', 'desc' => 'Column coordinate for sequencing', 'size' => 2974920*$scale_factor),
+		array('name' => 'RowCoord', 'desc' => 'Row coordinate for sequencing', 'size' => 2974882*$scale_factor),
+		array('name' => 'CoordList', 'desc' => 'Coordinates for all instances of the same insertion', 'size' => 7460421*$scale_factor),
+		array('name' => 'CoordCount', 'desc' => 'Absolute counts of each column and row coordinate', 'size' => 5288095*$scale_factor),
+		array('name' => 'TotalCoverage', 'desc' => 'Total coverage of the sequencing reads', 'size' => 2339800*$scale_factor)
 	);
 	foreach($lore1_cols as $v) {
 		$lore1_colnames[] = $v['name'];
