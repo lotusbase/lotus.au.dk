@@ -60,7 +60,6 @@
 					</form>
 				</div>
 
-				<?php if(is_intranet_client()) { ?>
 				<div id="searchform__prediction">
 					<form action="<?php echo WEB_ROOT; ?>/tools/trex" class="search-form flex-wrap__wrap" method="get">
 					<p class="full-width">Search for predictions based on <abbr>GO</abbr> terms and prediction domains (InterPro, PFam, Superfamily, etc.).</p>
@@ -89,7 +88,6 @@
 					</div>
 					</form>
 				</div>
-				<?php } ?>
 
 				<div id="searchform__lore1">
 					<form action="<?php echo WEB_ROOT; ?>/lore1/search" class="search-form flex-wrap__wrap" method="get">

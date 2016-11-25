@@ -90,6 +90,7 @@
 				<div id="view-tabs__nav" class="cols align-items__flex-end ui-tabs-nav__wrapper">
 					<ul class="tabbed">
 						<li><a href="#view-example__gene-transcript" data-custom-smooth-scroll>Gene/Transcript/Protein</a></li>
+						<li><a href="#view-example__domain-prediction" data-custom-smooth-scroll>Predicted domain</a></li>
 						<li><a href="#view-example__go-annotation" data-custom-smooth-scroll>GO Annotation</a></li>
 					</ul>
 				</div>
@@ -101,6 +102,24 @@
 						<li><a href="#" data-value="Lj4g3v0281040.1">Lj4g3v0281040.1</a><span class="term-type">LjFls2 (Transcript/Protein)</span></li>
 						<li><a href="#" data-value="Lj2g3v3373110">Lj2g3v3373110</a><span class="term-type"><em>LjNin</em> (Gene)</span></li>
 						<li><a href="#" data-value="Lj2g3v3373110.1">Lj2g3v3373110.1</a><span class="term-type">LjNin (Transcript/Protein)</span></li>
+					</ul>
+				</div>
+
+				<div class="view-tabs__content" id="view-example__domain-prediction">
+					<ul class="list--floated input-suggestions">
+						<li>Examples:</li>
+						<li><a href="#" data-value="IPR000719">IPR000719</a><span class="term-type">InterPro</span></li>
+						<li><a href="#" data-value="cd14066">cd14066</a><span class="term-type">CDD</span></li>
+						<li><a href="#" data-value="G3DSA:1.10.510.1">G3DSA:1.10.510.1</a><span class="term-type">Gene3D</span></li>
+						<li><a href="#" data-value="PTHR24420">PTHR24420</a><span class="term-type">PANTHER</span></li>
+						<li><a href="#" data-value="PS50011">PS50011</a><span class="term-type">PatternScan</span></li>
+						<li><a href="#" data-value="PF00069">PF00069</a><span class="term-type">PFam</span></li>
+						<li><a href="#" data-value="PR00019">PR00019</a><span class="term-type">PRINTS</span></li>
+						<li><a href="#" data-value="PS00108">PS00108</a><span class="term-type">ProSite Patterns</span></li>
+						<li><a href="#" data-value="PS50011">PS50011</a><span class="term-type">ProSite Profiles</span></li>
+						<li><a href="#" data-value="SM00369">SM00369</a><span class="term-type">SMART</span></li>
+						<li><a href="#" data-value="SSF52047">SSF52047</a><span class="term-type">SUPERFAMILY</span></li>
+						<li><a href="#" data-value="TIGR01151">TIGR01151</a><span class="term-type">TIGRFAM</span></li>
 					</ul>
 				</div>
 
