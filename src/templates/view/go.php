@@ -105,44 +105,43 @@
 
 		<div id="view__card" class="view__facet">
 			<h3>Overview</h3>
-				<table class="table--dense">
-					<thead>
-						<tr>
-							<th scope="col">Field</th>
-							<th scope="col">Value</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<th scope="row">Namespace</th>
-							<td><?php echo $go_namespace[$go_data['Namespace']]; ?></td>
-						</tr>
-						<tr>
-							<th scope="row">Short description</th>
-							<td><?php echo $go_data['Name']; ?></td>
-						</tr>
-						<tr>
-							<th scope="row">Full defintion</th>
-							<td><?php echo $go_data['Definition']; ?></td>
-						</tr>
-						<tr>
-							<th scope="row">Subterm of</th>
-							<td><?php
-								if($go_data['SubtermOf']) {
-									echo '<ul class="list--floated">';
-									foreach(json_decode($go_data['SubtermOf'], true) as $go_parent) {
-										echo '<li><a href="'.WEB_ROOT.'/view/go/'.$go_parent.'" class="link--reset">'.$go_parent.'</a></li>';
-									}
-									echo '</ul>';
-								} else {
-									echo 'Not a subterm/child of another GO identifier.';
+			<table class="table--dense">
+				<thead>
+					<tr>
+						<th scope="col">Field</th>
+						<th scope="col">Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row">Namespace</th>
+						<td><?php echo $go_namespace[$go_data['Namespace']]; ?></td>
+					</tr>
+					<tr>
+						<th scope="row">Short description</th>
+						<td><?php echo $go_data['Name']; ?></td>
+					</tr>
+					<tr>
+						<th scope="row">Full defintion</th>
+						<td><?php echo $go_data['Definition']; ?></td>
+					</tr>
+					<tr>
+						<th scope="row">Subterm of</th>
+						<td><?php
+							if($go_data['SubtermOf']) {
+								echo '<ul class="list--floated">';
+								foreach(json_decode($go_data['SubtermOf'], true) as $go_parent) {
+									echo '<li><a href="'.WEB_ROOT.'/view/go/'.$go_parent.'" class="link--reset">'.$go_parent.'</a></li>';
 								}
-							?></td>
-						</tr>
-					</tbody>
-				</table>
-				<?php
-
+								echo '</ul>';
+							} else {
+								echo 'Not a subterm/child of another GO identifier.';
+							}
+						?></td>
+					</tr>
+				</tbody>
+			</table>
+			<?php
 				$q2 = $db->prepare("SELECT
 					anno.Gene AS Transcript,
 					anno.Annotation AS Description,
