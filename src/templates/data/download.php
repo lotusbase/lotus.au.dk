@@ -54,8 +54,8 @@
 						echo '<li>
 						<a href="'.WEB_ROOT.'/'.$row['FilePath'].$row['FileName'].'" title="'.$row['FileDesc'].'">
 							<div class="file-meta__desc ext-'.str_replace('.', '', $row['FileExt']).'">
-								<span class="file-meta__file-name">'.$row['FileName'].'</span>
 								<span class="file-meta__file-desc">'.$row['FileDesc'].'</span>
+								<span class="file-meta__file-name">'.$row['FileName'].'</span>
 							</div>
 							<div class="file-meta__downloads">
 								<span class="file-meta__download-count" data-count="'.$row['Count'].'">'.nf($count).'</span>

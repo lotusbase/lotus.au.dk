@@ -1845,11 +1845,11 @@ body {
 			&.file-meta__downloads { border-left: 1px solid #ccc; width: 25%; span { text-align: center; }}
 			span {
 				display: block;
-				&.file-meta__file-name {
+				&.file-meta__file-desc {
 					font-size: 1.5rem;
 					line-height: 1.25em;
 				}
-				&.file-meta__file-desc {
+				&.file-meta__file-name {
 					font-size: .875rem;
 				}
 				&.file-meta__download-count {
