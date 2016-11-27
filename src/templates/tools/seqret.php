@@ -117,8 +117,8 @@
 				<div class="col-two">
 					<select id="seqret-strand" name="st">
 						<option value="auto">Auto: Intelligent mode</option>
-						<option value="+">Manual: Plus or (+) or 1</option>
-						<option value="-">Manual: Minus or (-) or 2</option>
+						<option value="plus">Manual: Plus or (+) or 1</option>
+						<option value="minus">Manual: Minus or (-) or 2</option>
 					</select>
 				</div>
 			</div>
