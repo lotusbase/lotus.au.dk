@@ -17,7 +17,22 @@ layout: plain
 				<h3 class="post-title">{{ post.title }}</h3>
 				<span class="post-author"><img class="avatar" src="<?php echo WEB_ROOT; ?>/dist/images/team/{{ post.author | replace:' ','_' | downcase }}.jpg" alt="{{ post.author }}" title="{{ post.author }}" />{{ post.author }}</span>
 			</header>
-			<div class="post-excerpt">{% if post.summary %}{% if post.coverImage and postCount == '1' %}{{ post.summary | truncatewords: 50 }}{% else %}{{ post.summary | truncatewords: 30 }}{% endif %}{% else %}{% if post.coverImage and postCount == '1' %}{{ post.content | truncatewords: 50 }}{% else %}{{ post.content | truncatewords: 30 }}{% endif %}{% endif %}</div>
+			<div class="post-excerpt">
+			{% if post.summary %}
+				{% if post.coverImage and postCount == '1' %}
+					{{ post.summary | truncatewords: 50 }}
+				{% else %}
+					{{ post.summary | truncatewords: 30 }}
+				{% endif %}
+			{% else %}
+				{% if post.coverImage and postCount == '1' %}
+					{% if post.summary %}
+						{{ post.content | truncatewords: 50 }}
+					{% else %}
+						{{ post.content | truncatewords: 30 }}
+					{% endif %}
+				{% endif %}
+			{% endif %}</div>
 		</a>
 	</li>
 	{% endfor %}  

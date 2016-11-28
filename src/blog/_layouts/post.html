@@ -15,6 +15,7 @@ layout: default
 	$header->set_header_background_image('{{ page.coverImage }}');
 	{% endif %}
 	$header->set_header_content('<h1 class="post-title" itemprop="name headline">{{ page.title }}</h1>
+	{% if page.subtitle %}<span class="post-subtitle">{{ page.subtitle }}</span>{% endif %}
 	<p class="post-meta">{% if page.author %}<img src="'.WEB_ROOT.'/dist/images/team/{{ page.author | replace:' ','_' | downcase }}.jpg" class="avatar" alt="{{ page.author }}" title="{{ page.author }}" /><span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span><span itemprop="description" class="author-role">'.$team['{{ page.author }}']['role'].'</span></span>{% endif %}<span><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time> &middot; {% include reading_time.html %}</span></p>');
 	echo $header->get_header();
 ?>

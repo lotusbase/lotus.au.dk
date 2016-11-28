@@ -149,6 +149,13 @@ body.blog {
 			font-weight: bold;
 			line-height: 1;
 			margin-bottom: 2rem;
+			& + span.post-subtitle {
+				display: block;
+				font-size: 1.25rem;
+				font-weight: normal;
+				margin-top: -1rem;
+				margin-bottom: 2rem;
+			}
 		}
 	}
 	article {;
@@ -180,6 +187,11 @@ body.blog {
 			iframe.twitter-tweet.twitter-tweet-rendered {
 				margin: 0 auto 1.5rem !important;
 			}
+			h2 {
+				font-weight: bold;
+				font-size: 2rem;
+				text-align: left;
+			}
 			h3.refs + ul,
 			h3.refs + ol {
 				font-size: 1rem;
@@ -190,6 +202,17 @@ body.blog {
 			}
 			div.MathJax_Display {
 				margin-bottom: 3rem;
+			}
+
+			// Gist
+			.gist {
+				table {
+					tbody {
+						tr {
+							background: rgba(#fff,.5);
+						}
+					}
+				}
 			}
 		}
 
