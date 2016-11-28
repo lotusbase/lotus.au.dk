@@ -165,6 +165,7 @@ class PageHeader {
 					<li class="h-meta" data-group="meta"><a href="'.WEB_ROOT.'/meta/" title="Info">Info</a>
 						<ul>
 							<li><a href="'.WEB_ROOT.'/meta/about" title="About Lotus Base">About the Project</a></li>
+							<li><a href="'.WEB_ROOT.'/meta/citation" title="Citing Lotus Base">Citation Guide</a></li>
 							<li><a href="'.WEB_ROOT.'/meta/team" title="Lotus Base Team">Meet the Team</a></li>
 							<li><a href="'.WEB_ROOT.'/blog" title="Blog">Blog</a></li>
 							<li><a href="'.WEB_ROOT.'/meta/faq" title="Frequently Asked Questions">FAQ</a></li>

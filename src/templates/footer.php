@@ -31,7 +31,7 @@
 	</ul>
 
 	<section class="lastnote">	
-		<p>All rights reserved. 2012&ndash;<?php echo date('Y'); ?> &copy; <a href="http://carb.au.dk/" title="Centre for Carbohydrate Recognition and Signalling">Centre for Carbohydrate Recognition and Signalling</a>, Denmark.<br />Brought to you by the <a href="<?php echo WEB_ROOT; ?>/meta/team"><em>Lotus</em> Base Team</a>, powered by coffee.</p>
+		<p>All rights reserved. 2012&ndash;<?php echo date('Y'); ?> &copy; <a href="http://carb.au.dk/" title="Centre for Carbohydrate Recognition and Signalling">Centre for Carbohydrate Recognition and Signalling</a>, Denmark.<br />Brought to you by the <a href="<?php echo WEB_ROOT; ?>/meta/team"><em>Lotus</em> Base Team</a>, powered by coffee &middot; <a href="<?php echo WEB_ROOT.'/meta/citation'; ?>" title="Citing Lotus Base">How to cite</a></p>
 	</section>
 
 	<!-- Load jQuery Libraries -->
