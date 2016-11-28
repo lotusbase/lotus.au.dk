@@ -65,7 +65,7 @@ the EB-eye REST service.
 LjFls2" title="Domain predictions for my-favourite-gene, the flagellin receptor
 LjFls2" />
 <figcaption>Domain predictions for my-favourite-gene, the flagellin receptor
-<a href="https://lotus.au.dk/view/transcript/Lj4g3v0281040.1">LjFls2</a>. Domain prediction
+<a href="https://lotus.au.dk/view/transcript/Lj4g3v0281040.1"><em>LjFls2</em></a>. Domain prediction
 graph made using <a href="https://github.com/d3/d3">d3.js</a>.</figcaption>
 </figure>
 
