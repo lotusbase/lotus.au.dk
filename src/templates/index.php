@@ -120,13 +120,13 @@
 
 		<ul>
 			<li><strong>The <em>LORE1</em> resource</strong>: Małolepszy et al. (2016). The <em>LORE1</em> insertion mutant resource. <em>Plant J.</em> <a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352">doi:10.1111/tpj.13243</a>.</li>
-			<li><strong>Use of <em>Lotus</em> Base</strong>: Mun et al. (in review). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>.</li>
-			<li><strong><em>LORE1</em> mutagenesis methods</strong> (two papers to be cited together):
-				<ul>
-					<li>Urbanski et al. (2012). Genome-wide <em>LORE1</em> retrotransposon mutagenesis and high-throughput insertion detection in <em>Lotus japonicus</em>. <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014280" title="Genome-wide LORE1 retrotransposon mutagenesis and high-throughput insertion detection in Lotus japonicus.">doi:10.1111/j.1365-313X.2011.04827.x</a>); and</li>
-					<li>Fukai et al. (2012) Establishment of a <em>Lotus japonicus</em> gene tagging population using the exon-targeting endogenous retrotransposon <em>LORE1</em></strong> (2012). <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014259" title="Establishment of a Lotus japonicus gene tagging population using the exon-targeting endogenous retrotransposon LORE1.">doi:10.1111/j.1365-313X.2011.04826.x</a>.</li>
-				</ul>
-			</li>
+			<li><strong>Use of <em>Lotus</em> Base</strong>: Mun et al. (in press). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em></li>
+		</ul>
+
+		<p>If you have used published protocols in establishing an independent <em>LORE1</em> mutagenesis population, please cite the following papers, published back-to-back in <em>Plant Journal</em>:
+		<ul>
+			<li>Urbanski et al. (2012). Genome-wide <em>LORE1</em> retrotransposon mutagenesis and high-throughput insertion detection in <em>Lotus japonicus</em>. <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014280" title="Genome-wide LORE1 retrotransposon mutagenesis and high-throughput insertion detection in Lotus japonicus.">doi:10.1111/j.1365-313X.2011.04827.x</a>); and</li>
+			<li>Fukai et al. (2012) Establishment of a <em>Lotus japonicus</em> gene tagging population using the exon-targeting endogenous retrotransposon <em>LORE1</em></strong> (2012). <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014259" title="Establishment of a Lotus japonicus gene tagging population using the exon-targeting endogenous retrotransposon LORE1.">doi:10.1111/j.1365-313X.2011.04826.x</a>.</li>
 		</ul>
 
 		<p>The majority of the <em>LORE1</em> lines are released pre-publication, and the Centre for Carbohydrate Recognition and Signalling reserves the right to undertake and publish large-scale analysis of the insertion site data. Large-scale in this context refers to any sequence intervals or combinations thereof that exceed one megabase in length.</p>

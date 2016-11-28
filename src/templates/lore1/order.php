@@ -259,7 +259,7 @@
 							<li><strong>You will cite the following manuscripts should plant materials derived from said ordered <em>LORE1</em> mutant lines are used in any published materials</strong>:
 							<ul>
 								<li><strong>The <em>LORE1</em> resource</strong>: Małolepszy et al. (2016). The <em>LORE1</em> insertion mutant resource. <em>Plant J.</em> <a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352">doi:10.1111/tpj.13243</a>.</li>
-								<li><strong>Use of <em>Lotus</em> Base</strong>: Mun et al. (in review). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>.</li>
+								<li><strong>Use of <em>Lotus</em> Base</strong>: Mun et al. (in press). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em></li>
 								<li><strong><em>LORE1</em> mutagenesis methods</strong> (two papers to be cited together):
 									<ul>
 										<li>Urbanski et al. (2012). Genome-wide <em>LORE1</em> retrotransposon mutagenesis and high-throughput insertion detection in <em>Lotus japonicus</em>. <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014280" title="Genome-wide LORE1 retrotransposon mutagenesis and high-throughput insertion detection in Lotus japonicus.">doi:10.1111/j.1365-313X.2011.04827.x</a>); and</li>
