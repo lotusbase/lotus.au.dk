@@ -16,13 +16,23 @@
             "className" : "feature_lore1",
             "arrowheadClass" : "transcript-arrowhead"
          },
-         "key" : "LORE1 insertions",
+         "key" : "<em>LORE1</em> insertions",
          "storeClass" : "JBrowse/Store/SeqFeature/NCList",
          "trackType" : "JBrowse/View/Track/HTMLFeatures",
-         "urlTemplate" : "tracks/20161123_LORE1/{refseq}/trackData.json",
+         "urlTemplate" : "tracks/20161129_LORE1/{refseq}/trackData.json",
          "compress" : 0,
          "type" : "JBrowse/View/Track/HTMLFeatures",
-         "label" : "20161123_LORE1"
+         "label" : "20161129_LORE1",
+         "menuTemplate": [{
+            "label": "<em>Lotus</em> Base integration",
+            "children": [
+               {
+                  "label": "Search for <em>LORE1</em> line",
+                  "action": "newWindow",
+                  "url": "https://lotus.au.dk/lore1/search/"
+               }
+            ]
+         }]
       },
       {
          "style" : {
@@ -324,8 +334,8 @@
       "type" : "Hash"
    },
    "dataset_id" : "lj_v30",
-   "alwaysOnTracks" : "DNA,20140314_Lj30,20161123_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
-   "defaultTracks" : "DNA,20140314_Lj30,20161123_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
+   "alwaysOnTracks" : "DNA,20140314_Lj30,20161129_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
+   "defaultTracks" : "DNA,20140314_Lj30,20161129_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
    "defaultLocation" : "chr1:1..62285374",
    "formatVersion" : 1,
    "highResolutionMode" : "auto",
