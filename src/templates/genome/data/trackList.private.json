@@ -23,16 +23,21 @@
          "compress" : 0,
          "type" : "JBrowse/View/Track/HTMLFeatures",
          "label" : "20161129_LORE1",
-         "menuTemplate": [{
-            "label": "<em>Lotus</em> Base integration",
-            "children": [
-               {
-                  "label": "Search for <em>LORE1</em> line",
-                  "action": "newWindow",
-                  "url": "https://lotus.au.dk/lore1/search/"
-               }
-            ]
-         }]
+         "menuTemplate": [
+            {
+               "label" : "View details"
+            },  
+            {   
+               "label" : "Highlight this <em>LORE1</em> insert"
+            },
+            { "type": "dijit/MenuSeparator" },
+            {
+               "label": "Search for <em>LORE1</em> line",
+               "iconClass": "dijitIconSearch",
+               "action": "newWindow",
+               "url": "https://lotus.au.dk/lore1/search?v=3.0&chr={chromosome}&pos1={start}"
+            }
+         ]
       },
       {
          "style" : {
@@ -190,7 +195,34 @@
          "urlTemplate" : "tracks/20140314_Lj30/{refseq}/trackData.json",
          "compress" : 0,
          "type" : "JBrowse/View/Track/HTMLFeatures",
-         "label" : "20140314_Lj30"
+         "label" : "20140314_Lj30",
+         "menuTemplate": [
+            {
+               "label" : "View details"
+            },  
+            {   
+               "label" : "Highlight this mRNA"
+            },
+            { "type": "dijit/MenuSeparator" },
+            {
+               "label": "View {name}",
+               "iconClass": "dijitIconDatabase",
+               "action": "newWindow",
+               "url": "https://lotus.au.dk/view/transcript/{name}"
+            },
+            {
+               "label": "Retrieve co-expressed genes (CORGI)",
+               "iconClass": "dijitIconDatabase",
+               "action": "newWindow",
+               "url": "https://lotus.au.dk/tools/corgi?ids={name}"
+            },
+            {
+               "label": "Send to Expression Atlas (ExpAt)",
+               "iconClass": "dijitIconDatabase",
+               "action": "newWindow",
+               "url": "https://lotus.au.dk/expat/?ids={name}"
+            }
+         ]
       },
       {
          "storeClass" : "JBrowse/Store/SeqFeature/BAM",
