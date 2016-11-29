@@ -159,8 +159,8 @@
 				// Search type: General search
 				// "\n\t" are for formatting purpose when displaying the query later
 				if($pos1 > $pos2) {
-					if($pos2 == '') {
-						$dbq .= "AND (lore.Position = ?)";
+					if(empty($pos2)) {
+						$dbq .= " AND (lore.Position = ?)";
 						$placeholder_array[] = $pos1;
 					} else {
 						$lower = $pos2;
@@ -171,8 +171,8 @@
 					}
 					$ord = "Position";
 				} elseif($pos1 < $pos2) {
-					if($pos1 == '') {
-						$dbq .= "AND (lore.Position = ?)";
+					if(empty($pos1)) {
+						$dbq .= " AND (lore.Position = ?)";
 						$placeholder_array[] = $pos1;
 					} else {
 						$lower = $pos1;
