@@ -6,7 +6,7 @@ module.exports = {
 
     main: {
     	options: {
-    		 dest: 'build/blog',
+    		dest: 'build/www/blog',
         	config: 'src/blog/_config.yml'
     	}
     }

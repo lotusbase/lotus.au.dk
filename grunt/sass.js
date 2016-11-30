@@ -7,9 +7,9 @@ module.exports = {
         },
         files: [{
             expand: true,
-            cwd: 'build/src/css',
+            cwd: 'build/www/src/css',
             src: ['*.scss'],
-            dest: 'build/dist/css',
+            dest: 'build/www/dist/css',
             ext: '.css'
         }]
     },
@@ -22,9 +22,9 @@ module.exports = {
         },
         files: [{
             expand: true,
-            cwd: 'build/src/css',
+            cwd: 'build/www/src/css',
             src: ['*.scss'],
-            dest: 'build/dist/css',
+            dest: 'build/www/dist/css',
             ext: '.min.css'
         }]
     },

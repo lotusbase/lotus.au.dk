@@ -2,9 +2,9 @@ module.exports = {
     all: [
     	"build/*",
     	"build/**/*.*",
-    	"!build/vendor",
-    	"!build/vendor/**/*.*",
-    	"!build/config.php",
-    	"!build/config.ini"
+    	"!build/www/vendor",
+    	"!build/www/vendor/**/*.*",
+    	"!build/www/config.php",
+    	"!build/www/config.ini"
     	]
 };

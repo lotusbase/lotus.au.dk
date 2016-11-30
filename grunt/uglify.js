@@ -6,12 +6,12 @@ module.exports = {
     all: {
         files: [{
             expand: true,
-            cwd: 'build/src/js',
+            cwd: 'build/www/src/js',
             src: [
             	'**/*.js',
             	'!**/*.min.js'
             ],
-            dest: 'build/dist/js',
+            dest: 'build/www/dist/js',
             ext: '.min.js'
         }]
     }

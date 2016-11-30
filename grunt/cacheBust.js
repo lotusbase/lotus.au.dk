@@ -4,12 +4,12 @@ module.exports = {
         options: {
             assets: ['dist/css/**/*.min.css', 'dist/js/**/*.min.js'],
             queryString: true,
-            baseDir: 'build/',
+            baseDir: 'build/www/',
             jsonOutput: true,
             jsonOutputFilename: 'grunt-cache-bust.json'
         },
         files: [{
-            cwd: 'build/',
+            cwd: 'build/www/',
             expand: true,
             src: [
                 '**/*.php',
@@ -26,10 +26,10 @@ module.exports = {
         options: {
             assets: ['dist/css/**/*.min.css', 'dist/js/**/*.min.js'],
             queryString: true,
-            baseDir: 'build/'
+            baseDir: 'build/www/'
         },
         files: [{
-            cwd: 'build/',
+            cwd: 'build/www/',
             expand: true,
             src: [
                 '**/*.php',

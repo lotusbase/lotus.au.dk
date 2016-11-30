@@ -1,6 +1,6 @@
 {
     "config": {
-        "vendor-dir": "build/vendor"
+        "vendor-dir": "build/www/vendor"
     },
     "require": {
         "phpmailer/phpmailer": "~5.2",

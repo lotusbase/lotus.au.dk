@@ -4,7 +4,7 @@ module.exports = {
             expand: true,
             cwd: 'src/images',
             src: '**/*.{png,jpg,jpeg,gif}',
-            dest: 'dist/images'
+            dest: 'build/www/dist/images'
         }]
     }
 };

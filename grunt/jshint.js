@@ -5,8 +5,8 @@ module.exports = {
     },
 
     main: [
-        'build/src/js/**/*.js',
-        '!build/src/js/**/*.min.js',
-        '!build/src/js/plugins/**/*.js'
+        'build/www/src/js/**/*.js',
+        '!build/www/src/js/**/*.min.js',
+        '!build/www/src/js/plugins/**/*.js'
     ]
 };

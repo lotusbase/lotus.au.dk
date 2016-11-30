@@ -4,12 +4,12 @@ module.exports = {
             expand: true,
             cwd: 'src/js/',
             src: ['**/*.js'],
-            dest: 'build/src/js/'
+            dest: 'build/www/src/js/'
         }, {
             expand: true,
             cwd: 'src/js/',
             src: ['**/*.min.js'],
-            dest: 'build/dist/js/'
+            dest: 'build/www/dist/js/'
         }, {
             expand: true,
             cwd: 'src/css/',
@@ -17,12 +17,12 @@ module.exports = {
                 '**/*.scss',
                 '**/*.css'
             ],
-            dest: 'build/src/css/'
+            dest: 'build/www/src/css/'
         }, {
             expand: true,
             cwd: 'src/images/',
             src: ['**/*.{png,jpg,jpeg,gif,svg}'],
-            dest: 'build/dist/images/'
+            dest: 'build/www/dist/images/'
         }, {
             expand: true,
             cwd: 'src/fonts/',
@@ -42,12 +42,12 @@ module.exports = {
                 '**/*.woff',
                 '**/*.woff2'
             ],
-            dest: 'build/dist/fonts/'
+            dest: 'build/www/dist/fonts/'
         }, {
             expand: true,
             cwd: 'src/templates',
             src: ['**/*.*'],
-            dest: 'build/'
+            dest: 'build/www/'
         }]
     },
     cbc: {
@@ -55,7 +55,7 @@ module.exports = {
             expand: true,
             cwd: 'src/templates',
             src: ['**/*.php'],
-            dest: 'build/'
+            dest: 'build/www/'
         }]
     }
 };

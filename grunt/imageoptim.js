@@ -7,7 +7,7 @@ module.exports = {
     	},
         files: [{
             expand: true,
-            cwd: 'dist/images',
+            cwd: 'build/www/dist/images',
             src: '**/*.{png,jpg,jpeg,gif}',
         }]
     }
