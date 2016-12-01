@@ -5,7 +5,46 @@ $(function() {
 
 	// jQuery DataTable
 	var $transcriptTable = $('#view__transcript table').DataTable({
-		'pagingType': 'full_numbers'
+		'pagingType': 'full_numbers',
+		'dom': 'tiprB',
+		'buttons': [
+			{
+				extend: 'csv',
+				exportOptions: {
+					columns: [0,1,2,3,4],
+					format: {
+						body: function(data, row, column, node) {
+							var _data;
+
+							// Parse table data
+							if (column === 0) {
+								_data = $(data).find('span.dropdown--title').text();
+							} else if (column === 3) {
+								_data = $(data).find('ul.dropdown--list li a span').map(function() {
+									return $(this).text();
+								}).get().join(', ');
+							} else {
+								_data = data;
+							}
+
+							// Return data
+							return (_data === '–') ? '' : _data;
+						}
+					}
+				}
+			},
+			{
+				extend: 'print',
+				exportOptions: {
+					columns: [0,1],
+					format: {
+						body: function(data, row, column, node) {
+							return (column === 1) ? $(data).find('span.dropdown--title').text() : data;
+						}
+					}
+				}
+			}
+		]
 	});
 	$transcriptTable.on('search.dt', function() {
 		var info = $transcriptTable.page.info(),
