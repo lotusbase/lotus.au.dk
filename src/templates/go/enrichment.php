@@ -81,30 +81,8 @@
 			// List of GO roots to exclude
 			$go_exclude = array('GO:0003674','GO:0008150','GO:0005575');
 
-			// Recursively get parents of a GO term
-			function go_ancestors($go) {
-				global $go_json;
-				$go_array = array($go);
 
-				// Check for parents
-				if(count($go_json[$go]['p'])) {
-					foreach ($go_json[$go]['p'] as $parent) {
-						if($parent[1] === 0) {
-							$go_array = array_merge($go_array, go_ancestors($parent[0]));
-						}
-					}
-				}
-				return $go_array;
-			}
 
-			// Load hierarchical relationship of GO annotations
-			$go_json = json_decode(file_get_contents(DOC_ROOT.'/data/go/go.json'), true);
-
-			// Ancestor data
-			$go_ancestors = array();
-			$go_leaves = array();
-			$go_ancestors_counts = array();
-			$go_ancestors_data = array();
 
 			// Process data
 			$data = array();
@@ -114,27 +92,12 @@
 
 			while($r = $q1->fetch(PDO::FETCH_ASSOC)) {
 
-				// Get ancestors
-				$go_ancestors = array_merge($go_ancestors, go_ancestors($r['GOTerm']));
-				$go_leaves[] = $r['GOTerm'];
 
 				// Query Count
 				$query_list = explode(',', $r['QueryList']);
 				$r['QueryCount'] = count($query_list);
 
-				// Store data for ancestors
-				foreach($go_ancestors as $go_ancestor) {
-					if(!array_key_exists($go_ancestor, $go_ancestors_counts)) {
-						$go_ancestors_counts[$go_ancestor] = array(
-							'QueryIDHasTerm' => $query_list
-						);
-					} else {
-						$query_list_filtered = array_diff($query_list, $go_ancestors_counts[$go_ancestor]['QueryIDHasTerm']);
-						if(count($query_list_filtered)) {
-							$go_ancestors_counts[$go_ancestor]['QueryIDHasTerm'] = array_merge($go_ancestors_counts[$go_ancestor]['QueryIDHasTerm'], $query_list_filtered);
-						}
-					}
-				}
+
 
 				// Compute data
 				$r['QueryIDHasTerm'] = $r['QueryCount'];
@@ -158,18 +121,7 @@
 				$data[] = $r;
 			}
 
-			// Get unique ancestors
-			$go_ancestors_filtered = array_values(array_diff(array_unique($go_ancestors),$go_leaves));
 
-			// Construct ancestor data
-			//$go_ancestors_data = array_intersect($go_ancestors_counts, array_flip($go_ancestors_filtered));
-			$go_ancestors_data = array_filter(
-				$go_ancestors_counts,
-				function ($key) use ($go_ancestors_filtered) {
-					return in_array($key, $go_ancestors_filtered);
-				},
-				ARRAY_FILTER_USE_KEY
-				);
 
 			// Compute Scipy
 			$temp_file = tempnam(sys_get_temp_dir(), "go-enrichment_");
