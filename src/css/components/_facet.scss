@@ -50,7 +50,7 @@
 					pointer-events: auto;
 				}
 			}
-			& > *:hover + .floating-controls {
+			& > *:hover .floating-controls {
 				opacity: 1;
 				pointer-events: auto;
 			}
