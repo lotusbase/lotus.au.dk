@@ -1,8 +1,43 @@
 $(function() {
 
+	// Button functions
+	var buttons = {
+		transcript: function(data, row, column, node) {
+			var _data;
+
+			// Parse table data
+			if (column === 0) {
+				_data = $(data).find('span.dropdown--title').text();
+			} else if (column === 3) {
+				_data = $(data).find('ul.dropdown--list li a span').map(function() {
+					return $(this).text();
+				}).get().join(', ');
+			} else {
+				_data = data;
+			}
+
+			// Return data
+			return (_data === '–') ? '' : _data.replace(/<(?:.|\n)*?>/gm, '');
+		},
+		cooccurring: function(data, row, column, node) {
+			var _data;
+
+			// Parse table data
+			if (column === 0) {
+				_data = $(data).find('span.dropdown--title').text();
+			} else {
+				_data = data;
+			}
+
+			// Return data
+			return (_data === '–') ? '' : _data.replace(/<(?:.|\n)*?>/gm, '');
+		}
+	};
+
+	// DataTable for transcripts
 	var $transcriptTable = $('#view__transcript table').DataTable({
 		'pagingType': 'full_numbers',
-		'dom': 'tiprB',
+		'dom': 'lftiprB',
 		'buttons': [
 			{
 				extend: 'csv',
@@ -10,21 +45,7 @@ $(function() {
 					columns: [0,1,2,3,4],
 					format: {
 						body: function(data, row, column, node) {
-							var _data;
-
-							// Parse table data
-							if (column === 0) {
-								_data = $(data).find('span.dropdown--title').text();
-							} else if (column === 3) {
-								_data = $(data).find('ul.dropdown--list li a span').map(function() {
-									return $(this).text();
-								}).get().join(', ');
-							} else {
-								_data = data;
-							}
-
-							// Return data
-							return (_data === '–') ? '' : _data;
+							return buttons.transcript(data, row, column, node);
 						}
 					}
 				}
@@ -32,10 +53,10 @@ $(function() {
 			{
 				extend: 'print',
 				exportOptions: {
-					columns: [0,1],
+					columns: [0,1,2,3,4],
 					format: {
 						body: function(data, row, column, node) {
-							return (column === 1) ? $(data).find('span.dropdown--title').text() : data;
+							return buttons.transcript(data, row, column, node);
 						}
 					}
 				}
@@ -58,9 +79,35 @@ $(function() {
 		}
 	});
 
+	// DataTable for co-occuring terms
 	var $cooccurringTable = $('#view__co-occurring table').DataTable({
 		'pagingType': 'full_numbers',
-		'order': [[3, 'desc']]
+		'dom': 'lftiprB',
+		'order': [[4, 'desc']],
+		'buttons': [
+			{
+				extend: 'csv',
+				exportOptions: {
+					columns: [0,1,2,3,4],
+					format: {
+						body: function(data, row, column, node) {
+							return buttons.cooccurring(data, row, column, node);
+						}
+					}
+				}
+			},
+			{
+				extend: 'print',
+				exportOptions: {
+					columns: [0,1,2,3,4],
+					format: {
+						body: function(data, row, column, node) {
+							return buttons.cooccurring(data, row, column, node);
+						}
+					}
+				}
+			}
+		]
 	});
 	$cooccurringTable.on('search.dt', function() {
 		var info = $cooccurringTable.page.info(),

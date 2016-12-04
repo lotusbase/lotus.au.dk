@@ -174,7 +174,43 @@
 
 	<section class="wrapper">
 		<h2><?php echo $id; ?></h2>
-		<span class="byline">Source: <strong><?php echo $domain_data['Source']; ?></strong></span>
+		<span class="byline">Source: <strong><?php
+			$source = $domain_data['Source'];
+			$source_links = array(
+				'CDD' => 'https://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid={{id}}',
+				'Gene3D' => 'http://www.cathdb.info/version/latest/superfamily/{{id}}',
+				'Hamap' => 'http://hamap.expasy.org/profile/{{id}}',
+				'PANTHER' => 'http://www.pantherdb.org/panther/family.do?clsAccession={{id}}',
+				'Pfam' => 'http://pfam.xfam.org/family/{{id}}',
+				'PIRSF' => 'http://pir.georgetown.edu/cgi-bin/ipcSF?id={{id}}',
+				'PRINTS' => 'http://www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?prints_accn={{id}}&display_opts=Prints&category=None&queryform=false&regexpr=off',
+				'ProDom' => 'http://prodom.prabi.fr/prodom/current/cgi-bin/request.pl?question=DBEN&query={{id}}',
+				'ProSitePatterns' => 'http://prosite.expasy.org/cgi-bin/prosite/prosite-search-ac?{{id}}',
+				'ProSiteProfiles' => 'http://prosite.expasy.org/cgi-bin/prosite/prosite-search-ac?{{id}}',
+				'SFLD' => 'http://sfld.rbvi.ucsf.edu/django/family/{{id}}',
+				'SMART' => 'http://smart.embl-heidelberg.de/smart/do_annotation.pl?BLAST=DUMMY&DOMAIN={{id}}',
+				'SUPERFAMILY' => 'http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?sunid={{id}}',
+				'TIGRFAM' => 'http://jcvi.org/cgi-bin/tigrfams/HmmReportPage.cgi?acc={{id}}'
+				);
+
+			$source_replace = array(
+				'Gene3D' => array('G3DSA:', ''),
+				'SFLD' => array('SFLDF', ''),
+				'SUPERFAMILY' => array('SSF', '')
+				);
+
+			if(array_key_exists($source, $source_links)) {
+				if(array_key_exists($source, $source_replace)) {
+					$_id = str_replace($source_replace[$source][0], $source_replace[$source][1], $id);
+				} else {
+					$_id = $id;
+				}
+				$url = str_replace('{{id}}', $_id, $source_links[$source]);
+				echo '<a href="'.$url.'" title="View '.$id.' on '.$source.'" target="_blank">'.$source.'</a>';
+			} else {
+				echo $source;
+			}
+		?></strong></span>
 
 		<div id="view__description" class="view__facet">
 			<h3>Description</h3>
@@ -211,17 +247,14 @@
 					while($go = $q3->fetch(PDO::FETCH_ASSOC)) {
 				?>
 					<tr>
-						<td><div class="dropdown button">
-							<span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/go/'.$go['GOTerm']; ?>"><?php echo $go['GOTerm']; ?></a></span>
-							<ul class="dropdown--list">
-								<?php
-									$go_links_handler = new \LotusBase\View\GO\Link();
-									$go_links_handler->set_id($go_term);
-									$go_links_handler->add_internal_link();
-									echo $go_links_handler->get_html();
-								?>
-							</ul>
-						</div></td>
+						<td><?
+							// Generate GO dropdown
+							$go_links_handler = new \LotusBase\Component\GODropdown();
+							$go_links_handler->internal_link(true);
+							$go_links_handler->set_title($go['GOTerm']);
+							$go_links_handler->set_go_term($go['GOTerm']);
+							echo $go_links_handler->get_html();
+						?></td>
 						<td><?php echo $go_namespace[$go['Namespace']]; ?></td>
 						<td><?php echo $go['Name']; ?>
 						<td><?php echo $go['Definition']; ?></td>
