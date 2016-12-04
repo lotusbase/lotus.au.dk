@@ -287,6 +287,7 @@ $(function() {
 			globalVar.tables.corgi = $('#coexpression__table').DataTable({
 				'pagingType': 'full_numbers',
 				'dom': 'lftiprB',
+				'order': [[1, 'desc']],
 				'buttons': [
 					{
 						extend: 'csv',
