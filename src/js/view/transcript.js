@@ -2,6 +2,7 @@ $(function() {
 
 	// Global variables
 	globalVar.view = {};
+	globalVar.tables = {};
 
 	// ExpAt functions
 	globalFun.expat = {
@@ -223,9 +224,94 @@ $(function() {
 					);
 			});
 
+			// Buttons
+			var buttons = {
+				dompred: function(data, row, column, node) {
+					var _data;
+
+					// Parse table data
+					if (column === 1 || column === 6) {
+						_data = $(data).find('span.dropdown--title').text();
+					} else {
+						_data = data;
+					}
+
+					// Return data
+					return (_data === '–') ? '' : _data.replace(/<(?:.|\n)*?>/gm, '');
+				},
+				corgi: function(data, row, column, node) {
+					var _data;
+
+					// Parse table data
+					if (column === 0) {
+						_data = $(data).find('span.dropdown--title').text();
+					} else {
+						_data = data;
+					}
+
+					// Return data
+					return (_data === '–') ? '' : _data.replace(/<(?:.|\n)*?>/gm, '');
+				}
+			};
+
 			// jQuery data tables
 			var $domPredTable = $('#view__domain-prediction table').DataTable({
-				'pagingType': 'full_numbers'
+				'pagingType': 'full_numbers',
+				'dom': 'lftiprB',
+				'buttons': [
+					{
+						extend: 'csv',
+						exportOptions: {
+							columns: [0,1,2,3,4,5,6],
+							format: {
+								body: function(data, row, column, node) {
+									return buttons.dompred(data, row, column, node);
+								}
+							}
+						}
+					},
+					{
+						extend: 'print',
+						exportOptions: {
+							columns: [0,1,2,3,45,6],
+							format: {
+								body: function(data, row, column, node) {
+									return buttons.dompred(data, row, column, node);
+								}
+							}
+						}
+					}
+				]
+			});
+
+			globalVar.tables.corgi = $('#coexpression__table').DataTable({
+				'pagingType': 'full_numbers',
+				'dom': 'lftiprB',
+				'order': [[1, 'desc']],
+				'buttons': [
+					{
+						extend: 'csv',
+						exportOptions: {
+							columns: [0,1,2],
+							format: {
+								body: function(data, row, column, node) {
+									return buttons.corgi(data, row, column, node);
+								}
+							}
+						}
+					},
+					{
+						extend: 'print',
+						exportOptions: {
+							columns: [0,1,2],
+							format: {
+								body: function(data, row, column, node) {
+									return buttons.corgi(data, row, column, node);
+								}
+							}
+						}
+					}
+				]
 			});
 
 			// Stupid tables
@@ -1327,32 +1413,33 @@ $(function() {
 			$('#coexpression__loader').slideUp(500);
 
 			// Update table
-			var $ct = $('#coexpression__table'),
-				$ctb = $ct.find('tbody');
-	
+			var $ct = $('#coexpression__table');
 			$ct.slideDown(500);
 			$.each(d.data, function(i, g) {
 				var gene = g.id.replace(/\.\d+?/gi, '');
-				$ctb.append([
-					'<tr>',
-						'<td>',
-							'<div class="dropdown button">',
+
+				globalVar.tables.corgi.row.add([
+					[
+						'<div class="dropdown button">',
 								'<span class="dropdown--title">'+g.id+'</span>',
 								'<ul class="dropdown--list">',
 									'<li><a href="'+root+'/view/gene/'+gene+'" title="View gene"><span class="icon-eye">View gene</span></a></li>',
 									'<li><a href="'+root+'/tools/trex?ids='+gene+'"><span class="icon-search">Send gene to Transcript Explorer (TREX)</span></a></li>',
 									'<li><a href="'+root+'/lore1/search-exec?gene='+gene+'&amp;v=3.0" title="Search for LORE1 insertions in this gene"><span class="pictogram icon-leaf"><em>LORE1</em> v3.0</span></a></li>',
 								'</ul>',
-							'</div>',
-						'</td>',
-						'<td><span title="Pearson\'s correlation value: '+g.score+'">'+g.score.toFixed(3)+'</span></td>',
-						'<td>'+(g.Annotation ? g.Annotation.replace(/\[([\w\s]+)\]?/i, '[<em>$1</em>]') : 'n.a.')+'</td>',
-					'</tr>']
-					.join(''));
+							'</div>'
+					].join(''),
+					'<span title="Pearson\'s correlation value: '+g.score+'">'+g.score.toFixed(3)+'</span>',
+					(g.Annotation ? g.Annotation.replace(/\[([\w\s]+)\]?/i, '[<em>$1</em>]') : 'n.a.')
+				]);
 			});
 
 			// Show table
 			$ct.removeClass('hidden');
+
+			// Update jQuery datatable
+			globalVar.tables.corgi.draw();
+
 		})
 		.fail(function(a, b, c) {
 			// Display failure message

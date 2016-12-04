@@ -424,12 +424,11 @@
 									<td><?php echo $item['Source']; ?></td>
 									<td><?php
 										try {
-											$sourceHandler = new \LotusBase\View\SourceLink();
-											$sourceHandler->set_source($item['Source']);
-											$sourceHandler->set_id($item['SourceID']);
+											$sourceHandler = new \LotusBase\Component\DomainDropdown();
+											$sourceHandler->set_source($item['Source'], $item['SourceID']);
 											echo $sourceHandler->get_HTML();
 										} catch(Exception $e) {
-											echo 'n.a.';
+											echo '&ndash;';
 										}
 									?></td>
 									<td data-type="numeric"><?php echo $item['DomainStart']; ?></td>
@@ -438,14 +437,15 @@
 									<td data-type="numeric"><?php echo $item['Evalue']; ?></td>
 									<td><?php if($item['InterProID'] !== 'Unassigned') { ?>
 										<div class="dropdown button">
-											<span class="dropdown--title"><?php echo $item['InterProID']; ?></span>
+											<span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/domain/'.$item['InterProID']; ?>"><?php echo $item['InterProID']; ?></a></span>
 											<ul class="dropdown--list">
-												<li><a href="<?php echo WEB_ROOT.'/api/v1/view/domain/interpro/'.$item['InterProID']; ?>" data-desc-id="<?php echo $item['InterProID']; ?>" data-desc-source="interpro"><span class="icon-eye">Show description</span></a></li>
-												<li><a href="http://www.ebi.ac.uk/interpro/entry/<?php echo $item['InterProID']; ?>"><span class="icon-link-ext">View external data</span></a></li>
+												<li><a href="<?php echo WEB_ROOT.'/api/v1/view/domain/interpro/'.$item['InterProID']; ?>" data-desc-id="<?php echo $item['InterProID']; ?>" data-desc-source="interpro"><span class="icon-eye">Show description in modal box</span></a></li>
+												<li><a href="<?php echo WEB_ROOT.'/view/domain/'.$item['InterProID']; ?>" title="View details on <?php echo $item['InterProID']; ?>"><span class="icon-eye">View details on <?php echo $item['InterProID']; ?></span></a></li>
 												<li><a href="<?php echo WEB_ROOT; ?>/tools/trex/?ids=<?php echo $item['InterProID']; ?>" title="Search for proteins/transripts with this domain"><span class="icon-search">Search for proteins/transripts with this domain</span></a></li>
+												<li><a href="http://www.ebi.ac.uk/interpro/entry/<?php echo $item['InterProID']; ?>" target="_blank">View on EBI InterPro Service</a></li>
 											</ul>
 										</div>
-									<?php } else { echo '&ndash;'; } ?></td>
+									<?php } else { echo '&ndash;'; } ?>
 								</tr>
 							<?php } ?>
 							</tbody>
@@ -487,17 +487,14 @@
 								);
 							?>
 							<tr>
-								<td><div class="dropdown button">
-									<span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/go/'.$go_term; ?>"><?php echo $go_term; ?></a></span>
-									<ul class="dropdown--list">
-										<?php
-											$go_links_handler = new \LotusBase\View\GO\Link();
-											$go_links_handler->set_id($go_term);
-											$go_links_handler->add_internal_link();
-											echo $go_links_handler->get_html();
-										?>
-									</ul>
-								</div></td>
+								<td><?php
+									// Generate GO dropdown
+									$go_links_handler = new \LotusBase\Component\GODropdown();
+									$go_links_handler->internal_link(true);
+									$go_links_handler->set_title($go_term);
+									$go_links_handler->set_go_term($go_term);
+									echo $go_links_handler->get_html();
+								?></td>
 								<td><?php echo $go_namespace[$go['Namespace']]; ?></td>
 								<td><?php echo $go['Name']; ?>
 								<td><?php echo $go['Definition']; ?></td>
@@ -511,7 +508,7 @@
 											echo '<div class="dropdown button"><span class="dropdown--title">'.ucfirst(str_replace('_', ' ', $type)).'</span><ul class="dropdown--list">';
 											asort($r);
 											foreach($r as $_r) {
-												echo '<li><a href="'.WEB_ROOT.'/view/go/'.$_r.'">'.$_r.'</a></li>';
+												echo '<li><a href="'.WEB_ROOT.'/view/go/'.$_r.'" class="icon-eye">View details of '.$_r.'</a></li>';
 											}
 											echo '</ul></div>';
 										}
@@ -630,7 +627,13 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/colorbrewer.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/d3-tip.min.js"></script>
+
+	<!-- Tabulation -->
 	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/dataTables/buttons.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/dataTables/buttons-flash.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/dataTables/buttons-html5.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/dataTables/buttons-print.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/view/transcript.min.js"></script>
 </body>

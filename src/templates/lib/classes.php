@@ -56,10 +56,6 @@ require_once('classes/phyalign/data.php');
 /* General class for retrieving data from EMBI-EBI server */
 require_once('classes/ebi/eb-eye.php');
 
-/* class: View\SourceLink */
-/* Generate HTML string for source dropdown */
-require_once('classes/view/source-link.php');
-
 /* class: View\GO */
 /* Classes for Gene Ontology */
 require_once('classes/view/go.php');

@@ -90,17 +90,17 @@
 	<section class="wrapper">
 		<?php try { ?>
 		<h2><?php echo $id; ?></h2>
-		<div class="align-center">
-			<div class="dropdown button button--small" role="secondary">
-				<span class="dropdown--title">View this GO term in other databases</span>
-				<ul class="dropdown--list">
-					<?php
-						$go_links_handler = new \LotusBase\View\GO\Link();
-						$go_links_handler->set_id($id);
-						echo $go_links_handler->get_html();
-					?>
-				</ul>
-			</div>
+		<div class="align-center"><?php
+			// Generate dropdown
+			$go_links_handler = new \LotusBase\Component\GODropdown();
+			$go_links_handler->set_title('View this <abbr title="Gene Ontology">GO</abbr> term in other databases');
+			$go_links_handler->add_html_attributes(array(
+				'class' => array('button--small'),
+				'role' => 'secondary'
+				));
+			$go_links_handler->set_go_term($go_term);
+			echo $go_links_handler->get_html();
+		?>
 		</div>
 
 		<div id="view__card" class="view__facet">
@@ -350,15 +350,13 @@
 				</thead>
 				<tbody><?php while($t = $q2->fetch(PDO::FETCH_ASSOC)) { ?>
 					<tr>
-						<td><div class="dropdown button">
-							<span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/transcript/'.$t['Transcript']; ?>"><?php echo $t['Transcript']; ?></a></span>
-							<ul class="dropdown--list">
-								<li><a href="<?php echo WEB_ROOT.'/view/transcript/'.$t['Transcript']; ?>" title="View transcript"><span class="icon-eye">View transcript</span></a></li>
-								<li><a href="<?php echo WEB_ROOT.'/lore1/search-exec?gene='.$t['Transcript'].'&amp;v=3.0'; ?>" title="Search for LORE1 insertions in this transcript"><span class="pictogram icon-leaf"><em>LORE1</em> v3.0</span></a></li>
-								<li><a href="<?php echo WEB_ROOT.'/genome?loc='.$t['Transcript']; ?>" title="View in genome browser"><span class="icon-book">Genome browser</span></a></li>
-								<li><a href="<?php echo WEB_ROOT.'/expat?ids='.$t['Transcript']; ?>" title="Access expression data from the Expression Atlas"><span class="icon-map">Expression Atlas (ExpAt)</span></a></li>
-							</ul>
-						</div></td>
+						<td><?php
+							// Transcript data
+							$dd_handler = new \LotusBase\Component\TranscriptDropdown();
+							$dd_handler->set_title($t['Transcript']);
+							$dd_handler->set_transcript($t['Transcript']);
+							echo $dd_handler->get_html();
+						?></td>
 						<td><?php echo $t['LotusName'] ? $t['LotusName'] : '&ndash;'; ?></td>
 						<td><?php echo ucfirst(preg_replace('/\[([\w\s]+)\]?/', '[<em>$1</em>]', $t['Description'])); ?></td>
 						<td><?php 
@@ -369,7 +367,8 @@
 								// Generate array to be added to dropdown link
 								$go_terms_data[] = array(
 									'link' => WEB_ROOT.'/view/go/'.$go_term,
-									'text' => $go_term
+									'text' => 'View details of '.$go_term,
+									'class' => 'icon-eye'
 									);
 
 								// Append to matrix for co-occurrence analysis
@@ -432,17 +431,13 @@
 					foreach($go_term_matrix as $go_term => $data) {
 
 						// Generate GO dropdown
-						$go_links_handler = new \LotusBase\View\GO\Link();
-						$go_links_handler->set_id($go_term);
-						$go_links_handler->add_internal_link();
+						$go_links_handler = new \LotusBase\Component\GODropdown();
+						$go_links_handler->internal_link(true);
+						$go_links_handler->set_title($go_term);
+						$go_links_handler->set_go_term($go_term);
 
 						echo '<tr>
-							<td>
-								<div class="dropdown button">
-									<span class="dropdown--title"><a href="'.WEB_ROOT.'/view/go/'.$go_term.'">'.$go_term.'</a></span>
-									<ul class="dropdown--list">'.$go_links_handler->get_html().'</ul>
-								</div>
-							</td>
+							<td>'.$go_links_handler->get_html().'</td>
 							<td>'.$go_namespace[$data['Namespace']].'</td>
 							<td>'.$data['Name'].'</td>
 							<td>'.$data['count'].'</td>
@@ -466,11 +461,21 @@
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
+
+	<!-- Vis -->
 	<script type="text/javascript" src="//d3js.org/d3.v3.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/colorbrewer.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/d3-tip.min.js"></script>
+
+	<!-- Tabulation -->
 	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/dataTables/buttons.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/dataTables/buttons-flash.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/dataTables/buttons-html5.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/dataTables/buttons-print.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.min.js"></script>
+
+	<!-- Functions -->
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/go-tree.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/view/go.min.js"></script>
 </body>
