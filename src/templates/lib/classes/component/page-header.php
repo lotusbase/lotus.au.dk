@@ -152,7 +152,7 @@ class PageHeader {
 									<li><a href="'.WEB_ROOT.'/tools/trex" title="Transcript Explorer (TREX>)">Transcript Explorer (<strong>TREX</strong>)</a></li>
 								</ul>
 							</li>
-							'.(is_intranet_client() ? '<li><a href="'.WEB_ROOT.'/view/" title="View">View <span class="badge">BETA</span></a></li>' : '').'
+							<li><a href="'.WEB_ROOT.'/view/" title="View">View</a></li>
 						</ul>
 					</li>
 					<li class="h-data" data-group="data"><a href="'.WEB_ROOT.'/data/" title="Data">Data</a>
