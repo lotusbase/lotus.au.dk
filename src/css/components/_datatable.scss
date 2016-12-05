@@ -47,6 +47,43 @@ table.dataTable {
 	}
 }
 
+// Overflow
+.dataTables_scroll {
+	.dataTables_scrollHead {
+		table.dataTable {
+			margin: 0;
+		}
+	}
+	.dataTables_scrollBody {
+
+		// Hack to allow overflow on the y-axis
+		position: relative;
+		z-index: 1;
+		padding-bottom: 50vh;
+		margin-bottom: -50vh;
+
+		table.dataTable {
+			thead {
+				pointer-events: none;
+				visibility: none;
+				.sorting, .sorting_asc, .sorting_desc {
+					&::after {
+						content: none;
+					}
+				}
+			}
+		}
+	}
+
+	// Stop bottom margin of overflowing table to affect mouse events
+	& ~ .dataTables_info,
+	& ~ .dataTables_paginate,
+	& ~ .dt-buttons {
+		position: relative;
+		z-index: 2;
+	}
+}
+
 div[role="group"] table.dataTable {
 	td, th {
 		border-right-color: #ddd;
