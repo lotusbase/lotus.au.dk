@@ -153,6 +153,47 @@ pre.sequence {
 	}
 }
 
+// LORE1
+body.view.lore1 {
+	#view__insertion-stats__nav li.ui-state-active a {
+		background-color: #ddd;
+	}
+	.ui-tabs-nav__wrapper {
+		margin-bottom: 0;
+	}
+	.view__insertion-stats__tab {
+		background-color: #ddd;
+		padding: 1.5rem;
+		ul {
+			list-style: none;
+			margin-bottom: 0;
+			li {
+				border-right: 1px solid rgba(#000,.25);
+				padding: .25em;
+				width: 100%;
+				&:last-child { border: none; }
+
+				span {
+					display: block;
+					text-align: center;
+					&.count {
+						font-family: 'Open Sans Condensed', $fontface-sansSerifCondensed;
+						font-size: 4em;
+						font-weight: 300;
+						line-height: 1.2em;
+					}
+					&.desc {
+						letter-spacing: 2px;
+						font-weight: 400;
+						font-size: .875rem;
+						text-transform: uppercase;
+					}
+				}
+			}
+		}
+	}
+}
+
 // D3
 @import 'components/d3';
 

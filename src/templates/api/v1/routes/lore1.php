@@ -34,6 +34,116 @@ $api->get('/lore1', function($request, $response, $args) {
 	}
 });
 
+// Get insertion data
+$api->get('/lore1/{pids}', function ($request, $response, $args) {
+
+	try {
+		$db = $this->get('db');
+
+		// Define replacement pattern
+		$lines_pattern = array(
+			'/[\r\n]+/',		// Checks for one or more line breaks
+			'/(\w)\s+(\w)/',	// Checks for words separated by one or more spaces
+			'/,\s*/',			// Checks for words separated by comma, but with variable spaces
+			'/,\s*,/'			// Checks for empty strings (i.e. no words between two commas)
+			);
+		$lines_replace = array(
+			',',
+			'$1, $2',
+			',',
+			','
+			);
+
+		// Get all the pids
+		$pids = array_filter(explode(',', preg_replace($lines_pattern, $lines_replace, $args['pids'])));
+
+		// Validate plant IDs first
+		$pid_invalid = array();
+		foreach ($pids as $pid) {
+			if(!preg_match('/^((DK\d+\-0)?3\d{7}|[apl]\d{4,})$/i', $pid)) {
+				$pid_invalid[] = $pid;
+			}
+		}
+
+		// Strip invalid plant IDs from original query
+		$pid_valid = array_values(array_diff($pids, $pid_invalid));
+
+		// Generate placeholders
+		if($pid_valid) {
+			$placeholders = str_repeat('?,', count($pid_valid)-1).'?';
+		} else {
+			return $response
+				->withStatus(404)
+				->withHeader('Content-Type', 'application/json')
+				->write(json_encode(array(
+					'status' => 404,
+					'message' => 'No valid plant ID has been found.',
+					'data' => array(
+						'pid_invalid' => $pid_invalid
+						),
+					'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/api/v1#not-found'
+					)
+				,JSON_UNESCAPED_SLASHES));
+		}
+
+		// Perform query
+		$q = $db->prepare("SELECT
+			lore.PlantID,
+			lore.Batch,
+			lore.ColCoord,
+			lore.RowCoord,
+			lore.Chromosome,
+			lore.Position,
+			lore.Orientation,
+			lore.CoordList,
+			lore.CoordCount,
+			lore.TotalCoverage,
+			lore.FwPrimer,
+			lore.RevPrimer,
+			lore.PCRInsPos,
+			lore.PCRWT
+		FROM lore1ins AS lore
+		WHERE lore.PlantID IN ($placeholders) AND lore.Version = '3.0'");
+		$q->execute($pid_valid);
+
+		// Get results
+		if($q->rowCount()) {
+			while($r = $q->fetch(PDO::FETCH_ASSOC)) {
+				// Convert certain fields to numeric
+				$numeric = array('Position', 'TotalCoverage', 'PCRInsPos', 'PCRWT');
+				foreach ($numeric as $key) {
+					$r[$key] = (int)$r[$key];
+				}
+
+				// Store in array
+				$results[] = $r;
+			}
+			return $response
+				->withStatus(200)
+				->withHeader('Content-Type', 'application/json')
+				->write(json_encode(array(
+					'status' => 200,
+					'data' => $results
+					))
+				);
+		} else {
+			return $response
+				->withStatus(404)
+				->withHeader('Content-Type', 'application/json')
+				->write(json_encode(array(
+					'status' => 404,
+					'message' => 'No valid plant ID has been found.',
+					'more_info' => DOMAIN_NAME . WEB_ROOT . '/docs/api/v1#404-not-found'
+					)
+				,JSON_UNESCAPED_SLASHES));
+		}
+
+	} catch(PDOException $e) {
+		throw new Exception($e->getMessage());
+	}
+
+});
+
 // Verify LORE1 lines
 $api->get('/lore1/{pids}/verify', function ($request, $response, $args) {
 
