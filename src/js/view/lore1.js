@@ -3,6 +3,15 @@ $(function() {
 	// Tabs
 	var insertionStatsTabs = $('#view__insertion-stats__tabs').tabs();
 
+	// Use select2
+	$('#insertion-dropdown')
+	.select2()
+	.on('change', function() {
+		var loc = $(this).val();
+		$('#view__jbrowse iframe.jbrowse-embed')[0].src = 'https://lotus.au.dk/genome/?data=genomes%2Flotus-japonicus%2Fv3.0&loc='+loc+'&embed=true';
+		$('#current-insertion').text(loc);
+	});
+
 	// Button functions
 	var buttons = {
 		insertion: function(data, row, column, node) {
@@ -159,6 +168,7 @@ $(function() {
 				return ['chr0','chloro','mito'].indexOf(ins.Chromosome) < 0; 
 			}),
 			labels = [],
+			links = [],
 			chrIns = [0,0,0,0,0,0];
 
 		// Append marker
@@ -173,10 +183,24 @@ $(function() {
 				chromosome: chrIndex
 			});
 			
-			console.log(chrIndex);
 			chrIns[chrIndex] += 1;
 		});
-		console.log(JSON.stringify(chrIns));
+
+		// Add links between labels only when they are too close, to ensure proper separation
+		var current_i = 0;
+		$.each(chrIns, function(i,v) {
+			for (var j = 0; j < v-1; j++) {
+				var curr_pos = scale_chrY(data[current_i + j].Position),
+					next_pos = scale_chrY(data[current_i + j + 1].Position);
+				if(Math.abs(next_pos - curr_pos) < 5) {
+					links.push({
+						source: current_i + j,
+						target: current_i + j + 1
+					});
+				}
+			}
+			current_i += v;
+		});
 
 		// Highlight chromosomes with inserts
 		svg.selectAll('line.chromosome__track').each(function(d,i) {
@@ -190,7 +214,9 @@ $(function() {
 		// Single axis force layout to prevent collision
 		var force = d3.layout.force()
 			.nodes(labels)
-			.charge(-1)
+			.links(links)
+			.linkDistance(20)
+			.charge(-2)
 			.gravity(0)
 			.size([map.chart.width, map.chart.height]);
 
@@ -247,6 +273,8 @@ $(function() {
 		});
 
 		force.start();
+		for (var i = 2500; i > 0; --i) force.tick();
+		force.stop();
 
 	})
 	.fail(function() {
