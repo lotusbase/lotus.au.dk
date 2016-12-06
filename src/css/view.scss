@@ -42,7 +42,7 @@
 		background-color: #ccc;
 		li {
 			border-right: 1px solid rgba(#000,.25);
-			a {
+			div, a {
 				color: #333;
 				display: block;
 				padding: .5rem 1rem;
@@ -50,6 +50,12 @@
 				&:hover {
 					background-color: rgba(#fff,.25);
 				}
+			}
+			label {
+				margin-right: .75rem;
+			}
+			select {
+				
 			}
 		}
 	}

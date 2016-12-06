@@ -76,18 +76,14 @@
 			// Store data
 			$q2_data = array();
 			$insertion_counts = array(
-				'type' => array(),
+				'type' => array('Exonic' => 0, 'Intronic' => 0, 'Intergenic' => 0),
 				'chromosome' => array()
 				);
 			while($r = $q2->fetch(PDO::FETCH_ASSOC)) {
 				$q2_data[] = $r;
 
 				// Store insertion types
-				if(!array_key_exists($r['Type'], $insertion_counts['type'])) {
-					$insertion_counts['type'][$r['Type']] = 1;
-				} else {
-					$insertion_counts['type'][$r['Type']] += 1;
-				}
+				$insertion_counts['type'][$r['Type']] += 1;
 
 				// Store by chromosome counts
 				if(!array_key_exists($r['Chromosome'], $insertion_counts['chromosome'])) {
@@ -121,6 +117,7 @@
 			));
 		echo $document_header->get_document_header();
 	?>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/view.min.css" type="text/css" media="screen" />
 </head>
 <body class="view lore1 init-scroll--disabled">
@@ -151,6 +148,48 @@
 			<div class="d3-chart"><svg id="lore1-by-chromosome" data-lore1="<?php echo $id; ?>"></svg></div>
 		</div>
 
+		<div id="view__jbrowse" class="view__facet">
+			<h3>Genome browser</h3>
+			<?php
+				// Get coordinates of first insertion
+				$ins_coord = $q2_data[0]['Chromosome'].':'.$q2_data[0]['Position'];
+			?>
+			<p>You are currently viewing the insertion at <strong><span id="current-insertion"><?php echo $ins_coord; ?></span></strong>.</p>
+			<p>The dispersed location of <em>LORE1</em> inserts mean that typically only one insertion is present in the genomic interval shown in JBrowse. To navigate between the different insertions, please select an insertion using the dropdown menu under the JBrowse window.</p>
+			<iframe name="jbrowse-embed" class="jbrowse-embed" src="<?php echo WEB_ROOT.'/genome/?data=genomes%2Flotus-japonicus%2Fv3.0&amp;loc='.urlencode($ins_coord).'&amp;embed=true'; ?>"></iframe>
+			<ul class="list--reset cols flex-wrap__nowrap justify-content__flex-start jbrowse__action">
+				<li><div><label for="insertion-dropdown">Select insertion:</label><select id="insertion-dropdown"><?php
+					// Generate dropdown options for all insertion positions
+					// Bin by chromosome
+					$insertions_by_chr = array();
+					foreach($q2_data as $ins) {
+						if(!array_key_exists($ins['Chromosome'], $insertions_by_chr)) {
+							$insertions_by_chr[$ins['Chromosome']] = array($ins);
+						} else {
+							$insertions_by_chr[$ins['Chromosome']][] = $ins;
+						}
+					}
+
+					ksort($insertions_by_chr);
+					foreach($insertions_by_chr as $chr => $chr_ins) {
+						echo '<optgroup label="'.$chr.'">';
+
+						// Sort nested arrays by position
+						usort($chr_ins, function($a, $b) {
+							return $a['Position'] - $b['Position'];
+						});
+
+						foreach($chr_ins as $ins) {
+							echo '<option value="'.$ins['Chromosome'].':'.$ins['Position'].'">'.$ins['Chromosome'].':'.$ins['Position'].' ('.($ins['Orientation'] === 'F' ? 'Forward' : 'Reverse').', '.$ins['Type'].($ins['Type'] !== 'Intergenic' ? ': '.(count(explode(',', $ins['Gene'])) > 1 ? count(explode(',', $ins['Gene'])).' genes' : $ins['Gene']) : '').')</option>';
+						}
+						echo '</optgroup>';
+					}
+				?></select></div></li>
+				<li><a href="<?php echo WEB_ROOT.'/genome/?loc='.urlencode($ins_coord); ?>"><span class="icon-resize-full">View larger version</span></a></li>
+				<li><a href="https://jbrowse.org" title="JBrowse">Powered by JBrowse <span class="icon-link-ext-alt icon--no-spacing"></span></a></li>
+			</ul>
+		</div>
+
 		<div id="view__insertion-stats" class="view__facet">
 			<h3>Insertion statistics</h3>
 
@@ -176,6 +215,7 @@
 				<div class="view__insertion-stats__tab" id="view__insertion-stats__by-chromosome">
 					<p>Distribution of insertions among <em>Lotus</em> v3.0 chromosomes.</p>
 					<ul class="cols flex-wrap__nowrap"><?php
+						ksort($insertion_counts['chromosome']);
 						foreach($insertion_counts['chromosome'] as $chromosome => $count) {
 							echo '<li><span class="count">'.$count.'</span><span class="desc">'.$chromosome.'</span></li>';
 						}
@@ -263,6 +303,9 @@
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/dataTables/buttons-flash.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/dataTables/buttons-html5.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/dataTables/buttons-print.min.js"></script>
+
+	<!-- Select2 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
 
 	<!-- Functions -->
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/view/lore1.min.js"></script>

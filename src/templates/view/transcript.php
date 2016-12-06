@@ -529,10 +529,10 @@
 
 		<div id="view__jbrowse" class="view__facet">
 			<h3>Genome browser</h3>
-			<iframe name="jbrowse-embed" class="jbrowse-embed" src="<?php echo WEB_ROOT.'/genome/?loc='.$gene.'&amp;embed=true'; ?>"></iframe>
+			<iframe name="jbrowse-embed" class="jbrowse-embed" src="<?php echo WEB_ROOT.'/genome/?data=genomes%2Flotus-japonicus%2Fv3.0&loc='.$gene.'&amp;embed=true'; ?>"></iframe>
 			<ul class="list--reset cols flex-wrap__nowrap justify-content__flex-start jbrowse__action">
-				<li><a href="<?php echo WEB_ROOT.'/genome/?loc='.$gene.'&amp;embed=true'; ?>" target="jbrowse-embed"><span class="icon-eye">Center view on <strong><?php echo $gene; ?></strong></span></a></li>
-				<li><a href="<?php echo WEB_ROOT.'/genome/?loc='.$gene; ?>"><span class="icon-resize-full">View larger version</span></a></li>
+				<li><a href="<?php echo WEB_ROOT.'/genome/?data=genomes%2Flotus-japonicus%2Fv3.0&loc='.$gene.'&amp;embed=true'; ?>" target="jbrowse-embed"><span class="icon-eye">Center view on <strong><?php echo $gene; ?></strong></span></a></li>
+				<li><a href="<?php echo WEB_ROOT.'/genome/?data=genomes%2Flotus-japonicus%2Fv3.0&loc='.$gene; ?>"><span class="icon-resize-full">View larger version</span></a></li>
 				<li><a href="https://jbrowse.org" title="JBrowse">Powered by JBrowse <span class="icon-link-ext-alt icon--no-spacing"></span></a></li>
 			</ul>
 		</div>
