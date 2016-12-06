@@ -261,7 +261,9 @@
 						<td><?php
 							if(!empty($r['Gene'])) {
 								$genes = explode(',', $r['Gene']);
-								echo implode($genes, ' ');
+								foreach($genes as $gene) {
+									echo '<a href="'.WEB_ROOT.'/view/gene/'.$gene.'" title="View details on '.$gene.'">'.$gene.'</a> ';
+								}
 							} else {
 								echo '&ndash;';
 							}
@@ -269,7 +271,9 @@
 						<td><?php
 							if(!empty($r['Exon'])) {
 								$transcripts = explode(',', $r['Exon']);
-								echo implode($transcripts, ' ');
+								foreach($transcripts as $transcript) {
+									echo '<a href="'.WEB_ROOT.'/view/transcript/'.$transcript.'" title="View details on '.$transcript.'">'.$transcript.'</a> ';
+								}
 							} else {
 								echo '&ndash;';
 							}
