@@ -144,7 +144,7 @@
 		$salt = bin2hex(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM));
 
 		// Write to table that contains aggregated orders
-		$insert_array = array($fname, $lname, $email, $institution, $address, $city, $state, $postalcode, $country, $comments, $salt, !empty($user['Salt'] ? $user['Salt'] : null));
+		$insert_array = array($fname, $lname, $email, $institution, $address, $city, $state, $postalcode, $country, $comments, $salt, !empty($user['Salt']) ? $user['Salt'] : NULL);
 		$q2 = $db->prepare("INSERT INTO orders_unique (FirstName,LastName,Email,Institution,Address,City,State,PostalCode,Country,Comments,Salt,UserSalt) VALUES (".str_repeat('?,', count($insert_array)-1).'?'.")");
 		$q2->execute($insert_array);
 
@@ -202,7 +202,7 @@
 		$q4 = $db->prepare("UPDATE orders_unique SET VerificationEmail = 1 WHERE Salt = :salt");
 		$q4->bindParam(":salt", $salt);
 		$q4->execute();
-
+		
 		// Write session
 		$_SESSION['order_success'] = array(
 			'user_input' => $user_input
