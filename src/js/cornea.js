@@ -1981,12 +1981,12 @@ $(function() {
 		
 	})
 	.on('click', '#cornea-download__canvas-png', function() {
-		var scene = $('#sigma').children('.sigma-scene').first()[0],
+		var $scenes = $('#sigma').find('canvas'),
 			canvasData,
 			$t = $(this),
 			$sigmaControl = $('.sigma-controls__export-image-option[data-image-type="png"]');
 
-		if(typeof scene.toDataURL === 'function') {
+		if(typeof $scenes.first()[0].toDataURL === 'function') {
 			window.clearTimeout(corneaDownloadCanvasTimer);
 
 			// Update button status 
@@ -1994,7 +1994,10 @@ $(function() {
 			$sigmaControl.addClass('disabled').html('Creating file&hellip;');
 
 			// Get data
-			canvasData = (typeof scene.toDataURLHD === 'function' ? scene.toDataURLHD() : scene.toDataURL());
+			canvasData = sigmaInst.renderers[0].snapshot({
+				'format': 'png',
+				'download': false
+			});
 			$('#cornea-download__data').val(canvasData);
 
 			// Set resource type
