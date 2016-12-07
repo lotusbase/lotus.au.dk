@@ -1621,10 +1621,10 @@ body {
 				display: block;
 				text-align: center;
 				&.count {
-					font-family: $fontface-sansSerif;
-					font-size: 3em;
+					font-family: 'Open Sans Condensed', $fontface-sansSerifCondensed;
+					font-size: 4em;
 					font-weight: 300;
-					line-height: 1em;
+					line-height: 1.2em;
 				}
 				&.ins-type {
 					letter-spacing: 2px;
