@@ -20,7 +20,7 @@ if (isset($_SESSION['order_success']) && $_SESSION['order_success']) {
 </head>
 <body class="order-success">
 	<?php
-		$header = new \LotusBase\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<div class="align-center"><h1><span class="icon-mail-alt icon--big icon--no-spacing">You\'ve got mail!</span></h1><p>Please check your inbox at <strong>'.$user_input['Email'].'</strong> to verify your order.</p></div>');
 		$header->set_header_background_image(WEB_ROOT.'/dist/images/hero/hero01.jpg');
 		echo $header->get_header();
