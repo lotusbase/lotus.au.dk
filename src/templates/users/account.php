@@ -188,7 +188,7 @@
 					</ul>
 					<p>Deleting your account will <em>not</em> perform the following operations:</p>
 					<ul>
-						<li>removal of LORE1 orders placed by a user</li>
+						<li>removal of <em>LORE1</em> orders placed by a user</li>
 					</ul>
 					<p>Should you wish to remove the above said metadata, please <a href="<?php echo WEB_ROOT.'/meta/contact'; ?>" title="Contact us">contact us</a>.</p>
 
@@ -203,7 +203,7 @@
 
 							<div class="col-one"></div>
 							<div class="col-two">
-								<label for="ad_consent"><input type="checkbox" name="ad_consent" id="ad_consent" required />I consent to the deletion of my <em>Lotus</em> Base account</label>
+								<label for="ad_consent"><input type="checkbox" name="ad_consent" id="ad_consent" class="prettify" required />I consent to the deletion of my <em>Lotus</em> Base account</label>
 							</div>
 							<input type="hidden" name="salt" value="<?php echo $user['Salt']; ?>" />
 
