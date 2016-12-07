@@ -253,6 +253,9 @@
 								}
 							}
 							$time_elapsed = strtotime($row['end_time'])-strtotime($row['start_time']);
+							if($time_elapsed < 0) {
+								$time_elapsed = 0;
+							}
 							if($time_elapsed > $cornea_max['time_elapsed']) {
 								$cornea_max['time_elapsed'] = $time_elapsed;
 							}
@@ -272,7 +275,7 @@
 							} elseif($job['status'] == 1) {
 								$job_status = '<span class="user-message reminder icon-clock status minimal" title="Job submitted'.(isset($job['submit_time']) && !empty($job['submit_time']) ? ' on '.$job['submit_time'] : '').'">Queued</span>';
 							} elseif($job['status'] == 4) {
-								$job_status = '<span class="user-message warning icon-clock status minimal" title="Error encountered when attempting to process job'.(isset($job['status_reason']) && !empty($job['status_reason']) ? ': '.$job['status_reason'] : '.').'">Error</span>';
+								$job_status = '<span class="user-message warning icon-attention status minimal" title="Error encountered when attempting to process job'.(isset($job['status_reason']) && !empty($job['status_reason']) ? ': '.$job['status_reason'] : '.').'">Error</span>';
 							} elseif($job['status'] == 5) {
 								$job_status = '<span class="user-message unknown icon-clock status minimal" title="Job is more than 30 days old and has expired.">Expired</span>';
 							} else {
@@ -288,7 +291,7 @@
 								<td style="background-image: linear-gradient(90deg, rgba(51,101,138,0.25) '.floatval($job['node_count']/$cornea_max['node_count']*100).'%, rgba(51,101,138,0) '.floatval($job['node_count']/$cornea_max['node_count']*100).'%);">'.number_format($job['node_count'], 0, '.', ',').'</td>
 								<td style="background-image: linear-gradient(90deg, rgba(51,101,138,0.25) '.floatval($job['edge_count']/$cornea_max['edge_count']*100).'%, rgba(51,101,138,0) '.floatval($job['edge_count']/$cornea_max['edge_count']*100).'%);">'.number_format($job['edge_count'], 0, '.', ',').'</td>
 								<td style="background-image: linear-gradient(90deg, rgba(51,101,138,0.25) '.floatval($job['cluster_count']/$cornea_max['cluster_count']*100).'%, rgba(51,101,138,0) '.floatval($job['cluster_count']/$cornea_max['cluster_count']*100).'%);">'.number_format($job['cluster_count'], 0, '.', ',').'</td>
-								<td style="background-image: linear-gradient(90deg, rgba(51,101,138,0.25) '.floatval($job['time_elapsed']/$cornea_max['time_elapsed']*100).'%, rgba(51,101,138,0) '.floatval($job['time_elapsed']/$cornea_max['time_elapsed']*100).'%);">'.friendly_duration(strtotime($job['end_time'])-strtotime($job['start_time'])).'</td>
+								<td style="background-image: linear-gradient(90deg, rgba(51,101,138,0.25) '.floatval($job['time_elapsed']/$cornea_max['time_elapsed']*100).'%, rgba(51,101,138,0) '.floatval($job['time_elapsed']/$cornea_max['time_elapsed']*100).'%);">'.friendly_duration($job['time_elapsed']).'</td>
 								<td>
 									<div class="dropdown button button--small">
 										<span class="dropdown--title">Action</span>
