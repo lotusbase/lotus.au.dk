@@ -75,10 +75,10 @@
 
       if (!sized) {
         merged.width = webgl && context instanceof WebGLRenderingContext ?
-         canvas.width / 2 :
+         canvas.width :
          canvas.width;
         merged.height = webgl && context instanceof WebGLRenderingContext ?
-          canvas.height / 2 :
+          canvas.height :
           canvas.height
         sized = true;
 
@@ -91,8 +91,7 @@
       }
 
       if (context instanceof WebGLRenderingContext)
-        mergedContext.drawImage(canvas, 0, 0,
-          canvas.width / 2, canvas.height / 2);
+        mergedContext.drawImage(canvas, 0, 0);
       else
         mergedContext.drawImage(canvas, 0, 0);
 

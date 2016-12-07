@@ -29,7 +29,8 @@
   function createBlob(data) {
     return new Blob(
       [data],
-      {type: 'image/svg+xml;charset=utf-8'}
+      //{type: 'image/svg+xml;charset=utf-8'}
+      {type: 'text/plain;charset=utf-8'}
     );
   }
 

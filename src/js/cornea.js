@@ -738,7 +738,7 @@ $(function() {
 								'<button type="button" id="sigma-info"><span class="icon-network">View network information</span></button>',
 								'<div class="dropdown button">',
 									'<span class="dropdown--title"><span class="icon-download">Export</span></span><ul class="dropdown--list">',
-										(jobMeta.layout.edge_count <= 100000 && jobMeta.layout.node_count <= 3500 ? '<li class="align-left"><a id="cornea-download__canvas-svg" class="disabled" data-resource-type="svg"><span class="icon-file-image">Drawing canvas&hellip;</span></a></li>' : ''),
+										(jobMeta.layout.edge_count <= 300000 && jobMeta.layout.node_count <= 8000 ? '<li class="align-left"><a id="cornea-download__canvas-svg" class="disabled" data-resource-type="svg"><span class="icon-file-image">Drawing canvas&hellip;</span></a></li>' : ''),
 										'<li class="align-left"><a id="cornea-download__canvas-png" class="disabled" data-resource-type="png"><span class="icon-file-image">Drawing canvas&hellip;</span></a></li>',
 										(!f ? '<li><a id="cornea-download__json" class="disabled" data-resource-type="file" data-file-path="data/cornea/jobs/'+(staticJob ? 'standard_' : '')+jobMeta.job.id+'.json.gz"><span class="icon-file-archive">Loading data file&hellip;</span></a></li>' : ''),
 									'</ul>',
@@ -1429,7 +1429,7 @@ $(function() {
 								'<li><a id="sigma-controls__fullscreen" href="#" class="icon-resize-full icon--no-spacing" title="Toggle fullscreen"></a></li>',
 								'<li><a href="#" id="sigma-controls__export-image" class="icon-camera icon--no-spacing" title="Image export options"></a><ul>',
 									'<li><a href="#" data-image-type="png" title="Export current view as a PNG file" class="sigma-controls__export-image-option">PNG (bitmap)</a></li>',
-									(jobMeta.layout.edge_count <= 100000 && jobMeta.layout.node_count <= 3500 ? '<li><a href="#" data-image-type="svg" title="Export current view as an SVG file" class="sigma-controls__export-image-option">SVG (vector)</a></li>' : ''),
+									(jobMeta.layout.edge_count <= 300000 && jobMeta.layout.node_count <= 8000 ? '<li><a href="#" data-image-type="svg" title="Export current view as an SVG file" class="sigma-controls__export-image-option">SVG (vector)</a></li>' : ''),
 								'</ul></li>',
 							'</ul>',
 						'</div>'
@@ -1951,33 +1951,38 @@ $(function() {
 	.on('click','#cornea-download__canvas-svg', function() {
 		// Generate data URL
 		// Check for dataURL support
-		var scene = $('#sigma').children('.sigma-scene').first()[0],
-			canvasData,
-			$t = $(this),
-			$sigmaControl = $('.sigma-controls__export-image-option[data-image-type="svg"]');
-
-		// Update button status
-		$t.prop('disabled', true).html('Creating file, please wait&hellip;');
-		$sigmaControl.addClass('disabled').html('Creating file&hellip;');
-
-		// Get data and set resource type
-		$('#cornea-download__data').val(btoa(sigmaInst.toSVG()));
-		$('#cornea-download__resourceType').val($t.attr('data-resource-type'));
-
-		// Submit form
-		$t.closest('form')[0].submit();
-		$('#cornea-download__data').val('');
-
-		// Update button status
-		$t.html('Download in progress&hellip;');
-		$sigmaControl.html('Downloading&hellip;');
-
-		// Set timer
-		window.clearTimeout(corneaDownloadCanvasTimer);
-		corneaDownloadCanvasTimer = window.setTimeout(function() {
-			$t.prop('disabled', false).html('<span class="icon-file-image">Export as SVG (vector, larger file)</span>');
-			$sigmaControl.removeClass('disabled').text('SVG (vector)');
-		}, 2000);
+		sigmaInst.toSVG({
+			labels: false,
+			classes: false,
+			data: true,
+			download: true,
+			filename: 'lotusbase_cornea.svg'
+		});
+//		var $t = $(this),
+//			$sigmaControl = $('.sigma-controls__export-image-option[data-image-type="svg"]');
+//
+//		// Update button status
+//		$t.prop('disabled', true).html('Creating file, please wait&hellip;');
+//		$sigmaControl.addClass('disabled').html('Creating file&hellip;');
+//
+//		// Get data and set resource type
+//		$('#cornea-download__data').val(btoa(sigmaInst.toSVG()));
+//		$('#cornea-download__resourceType').val($t.attr('data-resource-type'));
+//
+//		// Submit form
+//		$t.closest('form')[0].submit();
+//		$('#cornea-download__data').val('');
+//
+//		// Update button status
+//		$t.html('Download in progress&hellip;');
+//		$sigmaControl.html('Downloading&hellip;');
+//
+//		// Set timer
+//		window.clearTimeout(corneaDownloadCanvasTimer);
+//		corneaDownloadCanvasTimer = window.setTimeout(function() {
+//			$t.prop('disabled', false).html('<span class="icon-file-image">Export as SVG (vector, larger file)</span>');
+//			$sigmaControl.removeClass('disabled').text('SVG (vector)');
+//		}, 2000);
 		
 	})
 	.on('click', '#cornea-download__canvas-png', function() {
