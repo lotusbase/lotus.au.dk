@@ -275,18 +275,14 @@
 			<tbody>
 			<?php foreach($data as $d) { ?>
 				<tr>
-					<td><div class="dropdown button">
-						<?php $go_term = $d['GOTerm']; ?>
-						<span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/go/'.$go_term; ?>"><?php echo $go_term; ?></a></span>
-						<ul class="dropdown--list">
-							<?php
-								$go_links_handler = new \LotusBase\View\GO\Link();
-								$go_links_handler->set_id($go_term);
-								$go_links_handler->add_internal_link();
-								echo $go_links_handler->get_html();
-							?>
-						</ul>
-					</div></td>
+					<td><?php
+						// Generate GO dropdown
+						$go_links_handler = new \LotusBase\Component\GODropdown();
+						$go_links_handler->internal_link(true);
+						$go_links_handler->set_title($d['GOTerm']);
+						$go_links_handler->set_go_term($d['GOTerm']);
+						echo $go_links_handler->get_html();
+					?></td>
 					<td><?php echo $go_namespace[$d['Namespace']];
 					?></td>
 					<td><?php echo $d['Name']; ?></td>
@@ -296,14 +292,18 @@
 					<td data-type="numeric"><?php echo sn($d['MappedCount'] / $id_count); ?></td>
 					<td data-type="numeric"><?php echo number_format(($d['QueryCount'] / count($ids))/($d['MappedCount'] / $id_count), '2', '.', ''); ?></td>
 					<td data-type="numeric"><?php
-						$pvalue = $scipy['go_data'][$d['GOTerm']]['pvalue'];
-						if(!empty($pvalue['corrected'][$correction])) {
-							$pvalue_c = $pvalue['corrected'][$correction];
-							echo sprintf('%.2e', $pvalue_c);
-						} else if(!is_string($pvalue['uncorrected'])) {
-							echo sprintf('%.2e', $pvalue['uncorrected']);
+						if(!empty($scipy_output)) {
+							$pvalue = $scipy['go_data'][$d['GOTerm']]['pvalue'];
+							if(!empty($pvalue['corrected'][$correction])) {
+								$pvalue_c = $pvalue['corrected'][$correction];
+								echo sprintf('%.2e', $pvalue_c);
+							} else if(!is_string($pvalue['uncorrected'])) {
+								echo sprintf('%.2e', $pvalue['uncorrected']);
+							} else {
+								echo $pvalue['uncorrected'];
+							}
 						} else {
-							echo $pvalue['uncorrected'];
+							echo '&ndash;';
 						}
 						?></td>
 				</tr>
