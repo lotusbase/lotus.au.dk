@@ -188,7 +188,7 @@ $(function() {
 				// Draw arcs
 				var arc = d3.geo
 					.path()
-					.projection(projection.precision(.05)),
+					.projection(projection.precision(.25)),
 					arcData = $.map(topojson.feature(world, world.objects.countries).features, function(obj, idx) {
 						var p = obj.properties;
 						if (obj.properties.orderCount > 0) {
