@@ -5,7 +5,7 @@ $(function() {
 	var	map, projection, svg, path, g,
 		tip = d3.tip()
 			.attr('class', 'd3-tip d3-tip__worldmap tip-position--bottom')
-			.offset([-10,0])
+			.offset([-10, 0])
 			.html(function(d) {
 				var orderCount = d.properties.orderCount,
 					out;
@@ -107,22 +107,22 @@ $(function() {
 				var dataRange = mapFun.getDataRange();
 
 				// Colors
-				var fills = ["#c6dbef","#9ecae1","#6baed6","#4292c6","#2171b5","#08519c","#08306b"],
+				var fills = ["#d0d1e6","#a6bddb","#74a9cf","#3690c0","#0570b0","#034e7b"],
 					color1 = d3.scale.pow().exponent(0.5).domain([dataRange[0], dataRange[1]]).range([0, 1]).nice(),
 					color2 = d3.scale.linear().domain(d3.range(0, 1, 1.0/(fills.length - 1))).range(fills);
 
 				// Make fills
 				svg.selectAll('.country')
 					.attr('fill', function(d) {
-						if(d.properties.orderCount === 0 || d.properties.orderCount === undefined) {
-							return '#ddd';
+						if(d.properties.orderCount === 0 || typeof d.properties.orderCount === typeof undefined) {
+							return '#ccc';
 						} else {
 							return color2(color1(d.properties.orderCount));
 						}
 					});
 
 				// Make legend
-				var ticks = color1.ticks(10),
+				var ticks = color1.ticks(5),
 					gradient = svg.append('defs')
 					.append('linearGradient')
 					.attr('id', 'worldmap-gradient')
@@ -164,12 +164,10 @@ $(function() {
 							return i * ((0.5 * map.height) / (ticks.length - 1));
 						},
 						'x1': 0,
-						'x2': 20,
-						'stroke': function(d, i) {
-							return (i === 0 || i === ticks.length-1 ? '#333' : '#fff');
-						},
+						'x2': 24,
+						'stroke': '#333',
 						'stroke-width': 1,
-						'stroke-dasharray': '4,12,4',
+						'stroke-dasharray': '4,12,8',
 						'stroke-opacity': 1,
 						'class': 'tick-mark'
 					});
@@ -183,17 +181,49 @@ $(function() {
 					'y': 0,
 					'dy': 4,
 					'text-anchor': 'middle',
-					'transform': function(d, i) { return 'translate(35, '+(i * ((0.5 * map.height) / (ticks.length - 1)))+')'; }
+					'transform': function(d, i) { return 'translate(40, '+(i * ((0.5 * map.height) / (ticks.length - 1)))+')'; }
 				})
 				.text(function(d) { return Number(Math.round(d+'e2')+'e-2'); });
 
-//				$.each(color1.ticks(10), function(i,v) {
-//					var legendItem = $('<li />')
-//						.append($('<span />', { 'class': 'legend__color' }).css({ 'background-color': color2(color1(v)) }))
-//						.append($('<span />', { 'class': 'legend__title' }).html(v));
-//
-//					$('#world-map__legend').append(legendItem);
-//				});
+				// Draw arcs
+				var arc = d3.geo
+					.path()
+					.pointRadius(10)
+					.projection(projection),
+					arcData = $.map(topojson.feature(world, world.objects.countries).features, function(obj, idx) {
+						var p = obj.properties;
+						if (obj.properties.orderCount > 0) {
+							return [{
+								type: 'LineString',
+								coordinates: [[10.2039,56.1629], [p.longitude,p.latitude]],
+								orderCount: p.orderCount
+							}];
+						}
+					});
+
+				var strokeWidthScale = d3.scale.pow().exponent(0.5).domain([dataRange[0], dataRange[1]]).range([1, 5]);
+
+				var route = svg.selectAll('path.arc')
+					.data(arcData)
+					.enter()
+					.append('path')
+						.attr({
+							'class': 'arc',
+							'd': arc
+						})
+						.style({
+							'fill': 'none',
+							'stroke': '#777',
+							'stroke-width': function(d) {
+								return strokeWidthScale(d.orderCount);
+							},
+							'stroke-dasharray': function() {
+								return '0,'+this.getTotalLength();
+							},
+							'stroke-opacity': 0,
+							'pointer-events': 'none'
+						});
+
 			},
 			getDataRange: function() {
 				var min = Infinity,

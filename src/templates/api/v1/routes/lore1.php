@@ -356,7 +356,9 @@ $api->get('/lore1/orders/all/by-country', function ($request, $response) {
 		$q = $db->prepare("SELECT
 				COUNT(t2.Salt) AS OrderCount,
 				t1.CountryName AS CountryName,
-				t1.Alpha3 AS CountryCode
+				t1.Alpha3 AS CountryCode,
+				t1.Latitude AS Latitude,
+				t1.Longitude AS Longitude
 			FROM countrycode AS t1
 			LEFT JOIN orders_unique AS t2 ON
 				t1.Alpha3 = t2.Country
@@ -367,7 +369,7 @@ $api->get('/lore1/orders/all/by-country', function ($request, $response) {
 		// Get results
 		if($q->rowCount()) {
 			while($row = $q->fetch(PDO::FETCH_ASSOC)) {
-				$countryData = array('countryCode' => $row['CountryCode'], 'countryName' => $row['CountryName'], 'orderCount' => intval($row['OrderCount']));
+				$countryData = array('countryCode' => $row['CountryCode'], 'countryName' => $row['CountryName'], 'orderCount' => intval($row['OrderCount']), 'latitude' => $row['Latitude'], 'longitude' => $row['Longitude']);
 				$ordersByCountry[] = $countryData;
 			}
 
