@@ -188,8 +188,7 @@ $(function() {
 				// Draw arcs
 				var arc = d3.geo
 					.path()
-					.pointRadius(10)
-					.projection(projection),
+					.projection(projection.precision(.05)),
 					arcData = $.map(topojson.feature(world, world.objects.countries).features, function(obj, idx) {
 						var p = obj.properties;
 						if (obj.properties.orderCount > 0) {
@@ -214,6 +213,7 @@ $(function() {
 						.style({
 							'fill': 'none',
 							'stroke': '#777',
+							'stroke-linecap': 'round',
 							'stroke-width': function(d) {
 								return strokeWidthScale(d.orderCount);
 							},
