@@ -38,7 +38,7 @@
 				<div id="searchform-tabs__nav" class="cols align-items__flex-end ui-tabs-nav__wrapper">
 					<ul class="tabbed">
 						<li><a href="#searchform__gene" data-custom-smooth-scroll>Gene/Transcript</a></li>
-						<?php if(is_intranet_client()) { ?><li><a href="#searchform__prediction" data-custom-smooth-scroll>Prediction</a></li><?php } ?>
+						<li><a href="#searchform__prediction" data-custom-smooth-scroll>Prediction</a></li>
 						<li><a href="#searchform__lore1" data-custom-smooth-scroll><em>LORE1</em></a></li>
 					</ul>
 				</div>
