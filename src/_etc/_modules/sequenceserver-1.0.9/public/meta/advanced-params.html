@@ -1,0 +1,235 @@
+<p>You can supplement and fine-tune your BLAST search with the following parameters. The following information was <a href="http://www.ncbi.nlm.nih.gov/books/NBK279675/">obtained from NCBI</a>&mdash;should there be any discrepancy between NCBI's documentation and the one provided on <em>Lotus Base</em>, the former has precedence.</p>
+
+<h3>General search options</h3>
+<table>
+	<thead>
+		<tr>
+			<th>Parameter</th>
+			<th>Accepted value</th>
+			<th>Default value</th>
+			<th>Description/Comment</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>-evalue</code></td>
+			<td>Integer (real number)</td>
+			<td><code>10</code></td>
+			<td>Expectation value (E) threshold for saving hits</td>
+		</tr>
+		<tr>
+			<td><code>-word_size</code></td>
+			<td>Integer (real number)</td>
+			<td>
+				<ul>
+					<li>BLAST<strong>N</strong>: <code>11</code></li>
+					<li>BLAST<strong>P</strong>: <code>3</code></li>
+					<li>BLAST<strong>X</strong>: <code>3</code></li>
+					<li><strong>T</strong>BLAST<strong>N</strong>: <code>3</code></li>
+					<li><strong>T</strong>BLAST<strong>X</strong>: <code>3</code></li>
+				</ul>
+			</td>
+			<td>Word size for wordfinder algorithm. Must be &ge;2.</td>
+		</tr>
+		<tr>
+			<td><code>-gapopen</code></td>
+			<td>Integer</td>
+			<td>
+				<ul>
+					<li>BLAST<strong>N</strong>: <code>5</code></li>
+					<li>BLAST<strong>P</strong>: <code>11</code></li>
+					<li>BLAST<strong>X</strong>: <code>11</code></li>
+					<li><strong>T</strong>BLAST<strong>N</strong>: <code>11</code></li>
+					<li><strong>T</strong>BLAST<strong>X</strong>: Does not support gapped searches.</li>
+				</ul>
+			</td>
+			<td>Cost to open a gap</td>
+		</tr>
+		<tr>
+			<td><code>-gapextend</code></td>
+			<td>Integer</td>
+			<td>
+				<ul>
+					<li>BLAST<strong>N</strong>: <code>2</code></li>
+					<li>BLAST<strong>P</strong>: <code>1</code></li>
+					<li>BLAST<strong>X</strong>: <code>1</code></li>
+					<li><strong>T</strong>BLAST<strong>N</strong>: <code>1</code></li>
+					<li><strong>T</strong>BLAST<strong>X</strong>: Does not support gapped searches.</li>
+				</ul>
+			</td>
+			<td>Cost to extend a gap</td>
+		</tr>
+		<tr>
+			<td><code>-matrix</code></td>
+			<td>String</td>
+			<td><code>BLOSUM62</code></td>
+			<td>Scoring matrix name</td>
+		</tr>
+		<tr>
+			<td><code>-threshold</code></td>
+			<td>Integer (real number)</td>
+			<td>
+				<ul>
+					<li>BLAST<strong>N</strong>: none</li>
+					<li>BLAST<strong>P</strong>: <code>11</code></li>
+					<li>BLAST<strong>X</strong>: <code>12</code></li>
+					<li><strong>T</strong>BLAST<strong>N</strong>: <code>13</code></li>
+					<li><strong>T</strong>BLAST<strong>X</strong>: <code>13</code></li>
+				</ul>
+			</td>
+			<td>Minimum word score such that the word is added to the BLAST lookup table. Must be &ge;0.</td>
+		</tr>
+		<tr>
+			<td><code>-comp_based_stats</code></td>
+			<td>String</td>
+			<td>
+				<ul>
+					<li>BLAST<strong>N</strong>: none</li>
+					<li>BLAST<strong>P</strong>: <code>2</code></li>
+					<li>BLAST<strong>X</strong>: none</li>
+					<li><strong>T</strong>BLAST<strong>N</strong>: <code>2</code></li>
+					<li><strong>T</strong>BLAST<strong>X</strong>: none</li>
+				</ul>
+			</td>
+			<td>
+				<p>Use composition-based statistics for BLAST<strong>P</strong> or <strong>T</strong>BLAST<strong>N</strong></p>
+				<ul>
+					<li><code>D</code> or <code>d</code>&mdash;default (equivalent to <code>2</code>)</li>
+					<li><code>0</code> or <code>F</code> or <code>f</code>&mdash;no composition-based statistics</li>
+					<li><code>1</code>&mdash;Composition-based statistics as in NAR 29:2994&ndash;3005, 2001</li>
+					<li><code>2</code> or <code>T</code> or <code>t</code>&mdash;Composition-based score adjustment as in Bioinformatics 21:902&ndash;911, 2005, conditioned on sequence properties</li>
+					<li><code>3</code>&mdash;Composition-based score adjustment as in Bioinformatics 21:902&ndash;911, 2005, unconditionally</li>
+				</ul>
+				<p>For other programs, this option is not supported.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><code>-num_descriptions</code></td>
+			<td>Integer (real number)</td>
+			<td><code>500</code></td>
+			<td><p>Number of database sequences to show one-line descriptions for.</p><p class="user-message warning">Incompatbile with <code>max_target_seqs</code></p></td>
+		</tr>
+		<tr>
+			<td><code>-num_alignments</code></td>
+			<td>Integer (real number)</td>
+			<td><code>250</code></td>
+			<td><p>Number of database sequences to show alignments for.</p><p class="user-message warning">Incompatbile with <code>max_target_seqs</code></p></td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Query filtering options</h3>
+<table>
+	<thead>
+		<tr>
+			<th>Parameter</th>
+			<th>Accepted value</th>
+			<th>Default value</th>
+			<th>Description/Comment</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>-seg</code></td>
+			<td>String</td>
+			<td>
+				<ul>
+					<li>BLAST<strong>N</strong>: none</li>
+					<li>BLAST<strong>P</strong>: <code>12 2.2 2.5</code></li>
+					<li>BLAST<strong>X</strong>: none</li>
+					<li><strong>T</strong>BLAST<strong>N</strong>: <code>12 2.2 2.5</code></li>
+					<li><strong>T</strong>BLAST<strong>X</strong>: <code>12 2.2 2.5</code></li>
+				</ul>
+			</td>
+			<td>Filter query sequence with SEG. Possibilities: <code>yes</code> (to enable), <code>window locut hicut</code> (to enable, conditionally) or <code>no</code> (to disable)</td>
+		</tr>
+		<tr>
+			<td><code>-soft_masking</code></td>
+			<td>Boolean</td>
+			<td>
+				<ul>
+					<li>BLAST<strong>N</strong>: <code>true</code></li>
+					<li>BLAST<strong>P</strong>: <code>false</code></li>
+					<li>BLAST<strong>X</strong>: <code>false</code></li>
+					<li><strong>T</strong>BLAST<strong>N</strong>: <code>false</code></li>
+					<li><strong>T</strong>BLAST<strong>X</strong>: <code>false</code></li>
+				</ul>
+			</td>
+			<td>Apply filtering locations as soft masks</td>
+		</tr>
+		<tr>
+			<td><code>-lcase_masking</code></td>
+			<td>Flag</td>
+			<td>none</td>
+			<td>Use lower case filtering in query and subject sequence(s)</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Query filtering options</h3>
+<table>
+	<thead>
+		<tr>
+			<th>Parameter</th>
+			<th>Accepted value</th>
+			<th>Default value</th>
+			<th>Description/Comment</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>-gilist</code></td>
+			<td>String</td>
+			<td>none</td>
+			<td><p>Restrict search of database to GIs listed in this file. Local searches only.</p><p class="user-message warning">Incompatible with <code>negative_gilist</code>, <code>seqidlist</code>, <code>remote</code>, <code>subject</code>, and <code>subject_loc</code>.</p></td>
+		</tr>
+		<tr>
+			<td><code>-seqidlist</code></td>
+			<td></td>
+			<td><code></code></td>
+			<td><p></p><p class="user-message warning">Incompatible with <code>gilist</code>, <code>negative_gilist</code>, <code>remote</code>, <code>subject</code>, and <code>subject_loc</code>.</p></td>
+		</tr>
+		<tr>
+			<td><code>-negative_gilist</code></td>
+			<td>String</td>
+			<td>none</td>
+			<td><p>Restrict search of database to everything except the GIs listed in this file. Local searches only.</p><p class="user-message warning">Incompatible with <code>gilist</code>, <code>seqidlist</code>, <code>remote</code>, <code>subject</code>, and <code>subject_loc</code>.</p></td>
+		</tr>
+		<tr>
+			<td><code>-entrez_query</code></td>
+			<td>String</td>
+			<td>none</td>
+			<td><p>Restrict search with the given Entrez query.</p><p class="user-message warning">Incompatible with <code>remote</code></p></td>
+		</tr>
+		<tr>
+			<td><code>-db_soft_mask</code></td>
+			<td></td>
+			<td><code></code></td>
+			<td><p>Filtering algorithm ID to apply to the BLAST database as soft masking.</p><p class="user-message warning">Incompatible with <code>subject</code> and <code>subject_loc</code></p></td>
+		</tr>
+		<tr>
+			<td><code>-culling_limit</code></td>
+			<td>Integer</td>
+			<td><code></code></td>
+			<td><p>If the query range of a hit is enveloped by that of at least this many higher-scoring hits, delete the hit</p><p class="user-message warning">Incompatible with <code>best_hit_overhang</code> and <code>best_hit_score_edge</code>.</p></td>
+		</tr>
+		<tr>
+			<td><code>-best_hit_overhang</code></td>
+			<td>Real number</td>
+			<td><code></code></td>
+			<td><p>Best hit algorithm overhang value (recommended value: 0.1). <strong>Value should be between 0 and 0.5</strong>.</p><p class="user-message warning">Incompatible with <code>culling_limit</code></p></td>
+		</tr>
+		<tr>
+			<td><code>-best_hit_score_edge</code></td>
+			<td>Real number</td>
+			<td><code></code></td>
+			<td><p>Best hit algorithm score edge value (recommended value: 0.1). <strong>Value should be between 0 and 0.5</strong>.</p><p class="user-message warning">Incompatible with <code>culling_limit</code></p></td>
+		</tr>
+		<tr>
+			<td><code>-max_target_seqs</code></td>
+			<td>Integer</td>
+			<td><code>500</code></td>
+			<td><p>Maximum number of aligned sequences to keep.</p><p class="user-message warning">Incompatible with <code>num_descriptions</code> or <code>num_alignments</code>.</p></td>
+		</tr>
+	</tbody>
+</table>
