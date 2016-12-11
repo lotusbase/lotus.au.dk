@@ -111,7 +111,20 @@
 			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
-			$q1 = $db->prepare("SELECT auth.*, adminprivileges.* FROM auth LEFT JOIN adminprivileges ON auth.Authority = adminprivileges.Authority WHERE auth.Username = :username OR auth.Email = :email");
+			$q1 = $db->prepare("SELECT
+					auth.*,
+					adminprivileges.*,
+					GROUP_CONCAT(userGroup.Component) as Access
+				FROM auth
+				LEFT JOIN adminprivileges ON
+					auth.Authority = adminprivileges.Authority 
+				LEFT JOIN auth_group AS userGroup ON
+					auth.UserGroup = userGroup.UserGroup
+				WHERE
+					auth.Username = :username OR
+					auth.Email = :email
+				GROUP BY auth.UserID
+				");
 			$q1->bindParam(':username', $login);
 			$q1->bindParam(':email', $login);
 			$r1 = $q1->execute();
@@ -145,6 +158,10 @@
 						$db_admin->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 						$q3 = $db_admin->prepare("DELETE FROM login_attempts WHERE UserIP = ?");
 						$q3->execute(array(isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']));
+
+						// Explode access
+						$userAccess = explode(',', $row['Access']);
+						$row['Access'] = $userAccess;
 
 						// Create JWT token and store it on the client-side
 						$jwt = new \LotusBase\Users\AuthToken();

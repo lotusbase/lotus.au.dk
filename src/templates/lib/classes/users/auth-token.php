@@ -44,7 +44,8 @@ class AuthToken {
 				'Salt',
 				'Authority',
 				'Verified',
-				'VerificationKeyTimestamp'
+				'VerificationKeyTimestamp',
+				'Access'
 				)))
 		];
 
