@@ -114,7 +114,7 @@
 			$q1 = $db->prepare("SELECT
 					auth.*,
 					adminprivileges.*,
-					GROUP_CONCAT(userGroup.Component) as Access
+					GROUP_CONCAT(userGroup.ComponentPath) as ComponentPath
 				FROM auth
 				LEFT JOIN adminprivileges ON
 					auth.Authority = adminprivileges.Authority 
@@ -160,8 +160,8 @@
 						$q3->execute(array(isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']));
 
 						// Explode access
-						$userAccess = explode(',', $row['Access']);
-						$row['Access'] = $userAccess;
+						$componentPath = explode(',', $row['ComponentPath']);
+						$row['ComponentPath'] = $componentPath;
 
 						// Create JWT token and store it on the client-side
 						$jwt = new \LotusBase\Users\AuthToken();

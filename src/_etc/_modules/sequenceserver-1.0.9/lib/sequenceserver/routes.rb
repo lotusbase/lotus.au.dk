@@ -138,7 +138,13 @@ target="#{target}">)
             configData = file['secrets']
             jwtSecret = configData['jwt'].tr('\'', '')
             payload, header = JWT.decode token, jwtSecret, true, { :algorithm => 'HS256' }
-            return true
+
+            # Check if user belongs to a group with access to BLAST
+            if payload['data']['ComponentPath'].include?('/blast/')
+              return true
+            else
+              return false
+            end
 
           rescue JWT::DecodeError => e
             return false

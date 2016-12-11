@@ -45,7 +45,7 @@ class AuthToken {
 				'Authority',
 				'Verified',
 				'VerificationKeyTimestamp',
-				'Access'
+				'ComponentPath'
 				)))
 		];
 

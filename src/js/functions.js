@@ -466,10 +466,19 @@ var globalFun = {
 	},
 	getJWT: function() {
 		var c = globalVar.cookies.get('auth_token');
+
 		if(!c || typeof c === undefined) {
 			c = {};
+		} else {
+			c = globalFun.parseJWT(c);
 		}
+
 		return c;
+	},
+	parseJWT: function(token) {
+		var base64Url = token.split('.')[1],
+			base64 = base64Url.replace('-', '+').replace('_', '/');
+		return JSON.parse(window.atob(base64));
 	},
 	color: {
 		// Adapted from https://css-tricks.com/snippets/javascript/lighten-darken-color/

@@ -50,51 +50,89 @@
 
 			<nav class="cf main">
 				<ul>
-					<li class="h-home"><a href="/" title="Home"><img class="logo" src="/dist/images/branding/logo.svg" alt="Lotus Base" title="Lotus Base"><em>Lotus</em> Base</a></li>
+					<li class="h-home"><a href="/" title="Home"><img class="logo" src="/dist/images/branding/logo.svg" alt="Lotus Base" title="Lotus Base"><span><em>Lotus</em> Base</span></a></li>
 					<li class="h-lore1 has-child" data-group="lore1"><a href="/lore1/" title="LORE1 Resources"><em>LORE1</em></a>
 						<ul>
-							<li id="nav--lore1--search"><a href="/lore1/search" title="Search for LORE1 lines"><em>LORE1</em> lines search</a></li>
-							<li id="nav--lore1--order"><a href="/lore1/order" title="Order LORE1 lines">Order lines</a></li>
-							<li id="nav--lore1--order-search"><a href="/lore1/order-search" title="Search for ordered LORE1 lines">Order history</a></li>
-							<li id="nav--lore1--order-status"><a href="/lore1/order-status" title="Check the status of a LORE1 order">Order status</a></li>
+							<li><a href="/lore1/search" title="Search for LORE1 lines"><em>LORE1</em> lines search</a></li>
+							<li><a href="/lore1/order" title="Order LORE1 lines">Order lines</a></li>
+							<li><a href="/lore1/order-search" title="Search for ordered LORE1 lines">Order history</a></li>
+							<li><a href="/lore1/order-status" title="Check the status of a LORE1 order">Order status</a></li>
+							<li><a href="/tools/primers" title="Genotyping Primer Order Sheet">Genotyping Primers</a></li>
 						</ul>
 					</li>
 					<li class="h-tools has-child" data-group="tools"><a href="/tools" title="Tools">Tools</a>
 						<ul>
+							<li><a href="/blast-carb/" title="BLAST">BLAST</a></li>
+							<li class="has-child">
+								<a>Co-expression Toolkit  (<strong>CORx</strong>)</a>
+								<ul>
+									<li><a href="/tools/corgi" title="Correlated Genes Identifier (CORGI)">Correlated Genes Identifier (<strong>CORGI</strong>)</a></li>
+									<li><a href="/tools/cornea" title="Coexpression Network Analysis (CORNEA)">Coexpression Network Analysis (<strong>CORNEA</strong>)</a></li>
+								</ul>
+							</li>
+							<li class="has-child">
+								<a>Expression Analysis &amp; Visualisation</a>
+								<ul>
+									<li><a href="/expat/" title="Expression Atlas (ExpAt)">Expression Atlas (<strong>ExpAt</strong>)</a></li>
+									<li><a href="/expat/mapping" title="Gene/Probe mapping for ExpAt">Gene/Probe Mapping for ExpAt</a></li>
+								</ul>
+							</li>
+							<li><a href="/genome" title="Genome Browser">Genome Browser</a></li>
 							
-							<li id="nav--tools--genome"><a href="/genome" title="Genome Browser"><em>Lotus</em> Genome Browser</a></li>
-							<li id="nav--tools--seqpro"><a href="/tools/seqpro" title="Sequence Processor (SeqPro)">Sequence Processor (<strong>SeqPro</strong>)</a></li>
-							<li id="nav--tools--seqret"><a href="/tools/seqret" title="Sequence Retrieval (SeqRet)">Sequence Retrieval (<strong>SeqRet</strong>)</a></li>
-							<li id="nav--tools--trex"><a href="/tools/trex" title="Transcript Explorer (TREX>)">Transcript Explorer (<strong>TREX</strong>)</a></li>
+							<li class="has-child">
+								<a>Gene Ontology</a>
+								<ul>
+									<li><a href="/go/enrichment" title="GO Enrichment Analysis">GO Enrichment Analysis <span class="badge">BETA</span></a></li>
+									<li><a href="/go/explorer" title="GO Explorer">GO Explorer <span class="badge">BETA</span></a></li>
+								</ul>
+							</li>
+							
+							<li><a href="/tools/phyalign" title="PhyAlign">PhyAlign (<abbr title="Multiple Sequence Alignment">MSA</abbr> + Phylogeny) <span class="badge">BETA</span></a></li>
+							<li class="has-child">
+								<a>Sequence Toolkit</a>
+								<ul>
+									<li><a href="/tools/seqpro" title="Sequence Processor (SeqPro)">Sequence Processor (<strong>SeqPro</strong>)</a></li>
+									<li><a href="/tools/seqret" title="Sequence Retrieval (SeqRet)">Sequence Retrieval (<strong>SeqRet</strong>)</a></li>
+								</ul>
+							</li>
+							<li class="has-child">
+								<a>Transcript Toolkit (<strong>TRx</strong>)</a>
+								<ul>
+									<li><a href="/tools/tram" title="Transcript Mapper (TRAM)">Transcript Mapper (<strong>TRAM</strong>)</a></li>
+									<li><a href="/tools/trex" title="Transcript Explorer (TREX&gt;)">Transcript Explorer (<strong>TREX</strong>)</a></li>
+								</ul>
+							</li>
+							<li><a href="/view/" title="View">View</a></li>
 						</ul>
 					</li>
 					<li class="h-data has-child" data-group="data"><a href="/data/" title="Data">Data</a>
 						<ul>
-							<li id="nav--data--codon-usage"><a href="/data/codon-usage" title="Codon Usage Table">Codon Usage</a></li>
-							<li id="nav--data--download"><a href="/data/download" title="Downloads">Downloads</a></li>
-							<li id="nav--data--lore1"><a href="/data/lore1" title="LORE1 Raw Data"><em>LORE1</em> Raw Data</a></li>
+							<li><a href="/data/codon-usage" title="Codon Usage Table">Codon Usage</a></li>
+							<li><a href="/data/download" title="Downloads">Downloads</a></li>
+							<li><a href="/data/lore1" title="LORE1 Raw Data"><em>LORE1</em> Raw Data</a></li>
 						</ul>
 					</li>
 					<li class="h-meta has-child" data-group="meta"><a href="/meta/" title="Info">Info</a>
 						<ul>
-							<li id="nav--meta--about"><a href="/meta/about" title="About Lotus Base">About the Project</a></li>
-							<li id="nav--meta--team"><a href="/meta/team" title="Lotus Base Team">Meet the Team</a></li>
-							<li id="nav--meta--blog"><a href="/blog" title="Blog">Blog</a></li>
-							<li id="nav--meta--faq"><a href="/meta/faq" title="Frequently Asked Questions">FAQ</a></li>
-							<li id="nav--meta--legal"><a href="/meta/legal" title="Privacy &amp; Terms of Use">Privacy &amp; Terms</a></li>
-							<li id="nav--meta--contact"><a href="/meta/contact" title="Contact Us">Contact</a></li>
-							<li id="nav--meta--issue"><a href="/issue" title="Open issue or propose enhancements">Open Issue</a></li>
+							<li><a href="/meta/about" title="About Lotus Base">About the Project</a></li>
+							<li><a href="/meta/citation" title="Citing Lotus Base">Citation Guide</a></li>
+							<li><a href="/meta/team" title="Lotus Base Team">Meet the Team</a></li>
+							<li><a href="/blog" title="Blog">Blog</a></li>
+							<li><a href="/meta/faq" title="Frequently Asked Questions">FAQ</a></li>
+							<li><a href="/meta/legal" title="Privacy &amp; Terms of Use">Privacy &amp; Terms</a></li>
+							<li><a href="/meta/contact" title="Contact Us">Contact</a></li>
+							<li><a href="/issue" title="Open issue or propose enhancements">Open Issue</a></li>
 						</ul>
 					</li>
 					<li class="h-search">
 						<a href="/search" title="Search site" class="search-link">Search</a>
 						<form method="get" class="search-form" action="/search" id="nav-search-form">
-							<button class="pictogram icon-search icon--no-spacing"></button>
-							<input type="search" name="q" placeholder="Search term">
-							<select class="qtype" id="qtype-1"><option disabled="" value="">Select a search type</option><option value="general" data-input-placeholder="Search term" data-form-query-var="q" data-form-action="/search" data-form-params="">General</option><option value="lore1_v25" data-input-placeholder="Search term" data-form-query-var="pid" data-form-action="/lore1/search-exec" data-form-params="{&quot;v&quot;:25}">LORE1 v2.5</option><option value="lore1_v30" data-input-placeholder="Search term" data-form-query-var="pid" data-form-action="/lore1/search-exec" data-form-params="{&quot;v&quot;:30}">LORE1 v3.0</option><option value="gene" data-input-placeholder="Search term" data-form-query-var="trx" data-form-action="/tools/trex" data-form-params="">Gene</option></select>
-							
-							<button type="submit"><span class="pictogram icon-search icon--no-spacing"></span></button>
-						</form>
+			<button class="pictogram icon-search icon--no-spacing"></button>
+			<input type="search" name="q" placeholder="Search term" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+			<select class="qtype" id="qtype-1"><option disabled="" value="">Select a search type</option><option value="general" data-input-placeholder="Search term" data-form-query-var="q" data-form-action="/search" data-form-params="">General</option><option value="lore1" data-input-placeholder="Search term" data-form-query-var="pid" data-form-action="/lore1/search" data-form-params="{&quot;v&quot;:&quot;3.0&quot;}">LORE1</option><option value="gene" data-input-placeholder="Search term" data-form-query-var="ids" data-form-action="/tools/trex" data-form-params="">Gene</option></select>
+			
+			<button type="submit"><span class="pictogram icon-search icon--no-spacing"></span></button>
+		</form>
 					</li>
 				</ul>
 			</nav>
@@ -122,6 +160,11 @@
 		</section>
 
 		<section class="wrapper">
+
+			<p class="user-message note hidden" id="blast-alt"><span class="icon-info-circled"></span><em>Lotus</em> Base contains alternative versions of BLAST for different user groups. To access the BLAST service that is specifically available to your user group, please <a href="/users/login?redir=https%3A%2F%2Flotus.au.dk%2Fblast-carb%2F" title="Login as a Lotus Base user">login</a>.</p>
+
+			<p class="user-message note hidden" id="blast-alt-available"><span class="icon-info-circled"></span>You are logged in as a user belonging to a group with access to an expanded BLAST tool. Please visit <a href="/blast-carb/">https://lotus.au.dk/blast-carb/</a>.</p>
+
 			<form class="form-horizontal" id="blast" method="post" action="#blast">
 				<div class="cols" role="group">
 					<label for="sequence" class="col-one">Sequence query <a data-modal class="help" title="How should I enter the IDs?" data-modal-content="&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Genome Assembly&lt;/strong&gt; &mdash; For searching in the &lt;em&gt;Lotus japonicus&lt;/em&gt; genome asssembly, the IDs are the chromosome numbers, e.g. &lt;code&gt;chr1&lt;/code&gt; for the version 3.0 assembly.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;mRNA Illumina Read Assembly&lt;/strong&gt; &mdash; For searching in the Illumina read assemblies, the IDs are unique identifiers of each mRNA sequence. An example of an ID would be &lt;code&gt;NODE_30681_length_2141_cov_27.475946&lt;/code&gt;.&lt;/li&gt;&lt;/ul&gt;&lt;p class=&quot;user-message note&quot;&gt;For entering mulitple IDs, please enter each entry on a new line.&lt;/p&gt;">?</a></label>
@@ -212,7 +255,7 @@
 		<div class="col newsletter">
 			<h2>Stay updated</h2>
 			<p>Register to be part of the <em>Lotus</em> Base mailing list to be informed of latest updates and developments. We promise, no spam!</p>
-			<form action="http://carb.us5.list-manage.com/subscribe/post?u=b05ff730875b834016cea7a13&amp;id=c469e14ec3" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+			<form action="https://carb.us5.list-manage.com/subscribe/post?u=b05ff730875b834016cea7a13&amp;id=c469e14ec3" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
 				<input type="text" value="" name="FNAME" class="" id="mce-FNAME" placeholder="First name">
 				<input type="text" value="" name="LNAME" class="" id="mce-LNAME" placeholder="Last name">
 				<input type="email" value="" name="EMAIL" class="" id="mce-EMAIL" placeholder="Email">

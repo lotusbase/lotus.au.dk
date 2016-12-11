@@ -732,17 +732,28 @@ $(document).ready(function(){
 		$('#database-list input[type="checkbox"]').prop('checked', false).trigger('change');
 	});
 
+
 	// Check if user is logged in
 	if(!$.isEmptyObject(globalFun.getJWT())) {
+		var jwt = globalFun.getJWT(),
+			fname = jwt.data.FirstName ? jwt.data.FirstName : 'user';
+
+		if(window.location.href !== 'https://lotus.au.dk/blast-carb/') {
+			$('#blast-alt-available').removeClass('hidden');
+		}
+
 		$('#header nav ul li[data-group="meta"]').after([
 			'<li class="h-user" data-group="user">',
-				'<a href="/users/" title="Your dashboard"><span class="icon-user">Hi, user</span></a><ul>',
+				'<a href="/users/" title="Your dashboard"><span class="icon-user">Hi, '+fname+'</span></a><ul>',
 				'<li><a href="/users/" title="Dashboard">Dashboard</a></li>',
 				'<li><a href="/users/account" title="View your account details">Account</a></li>',
 				'<li><a href="/users/data" title="View data generated from your account">Data</a></li>',
 				'<li><a href="/users/logout?redir='+encodeURIComponent(window.location.href)+'" title="Logout">Logout</a></li>',
 			'</ul></li>'].join(''));
 	} else {
+
+		$('#blast-alt').removeClass('hidden');
+
 		$('#header nav ul li[data-group="meta"]').after([
 			'<li class="h-user" data-group="user">',
 				'<a href="/users/login?redir='+encodeURIComponent(window.location.href)+'" title="Login for existing Lotus Base users">Login</a><ul>',
@@ -751,37 +762,4 @@ $(document).ready(function(){
 				'<li><a href="/users/reset" title="Reset password">Forgot password?</a></li>',
 			'</ul></li>'].join(''));
 	}
-
-	// Make call to API to get IP
-	var ipCheck = $.ajax({
-		url: '/api/v1/ip',
-		type: 'GET',
-		dataType: 'json',
-		beforeSend: function(req) {
-			req.setRequestHeader('X-API-KEY', access_token);
-		}
-	});
-	ipCheck.done(function(d) {
-		var isIntranet = d.data.isIntranet;
-
-		if(isIntranet) {
-			// LORE1
-			$('#header nav ul li[data-group="lore1"] ul').append('<li><a href="/tools/primers" title="Genotyping Primer Order Sheet">Genotyping Primers</a></li>');
-
-			// Tools
-			$('#header nav ul li[data-group="tools"] ul').prepend([
-				'<li id="nav--tools--blast"><a href="../blast-carb/" title="BLAST">BLAST</a></li>',
-				'<li><a href="/tools/corgi" title="Correlated Genes Identifier (CORGI)">Correlated Genes Identifier (<strong>CORGI</strong>)</a></li>',
-				'<li><a href="/tools/cornea" title="Coexpression Network Analysis (CORNEA)">Coexpression Network Analysis (<strong>CORNEA</strong>)</a></li>',
-				'<li><a href="/expat/" title="Expression Atlas (ExpAt)">Expression Atlas (<strong>ExpAt</strong>)</a></li>',
-				'<li><a href="/expat/mapping" title="Gene/Probe mapping for ExpAt">Gene/Probe Mapping for ExpAt</a></li>'
-				].join(''));
-
-			// Top notifications
-			$('#top-notifications').append('<div id="intranet-client" class="site-notification"><p>You appear to be visiting from the Aarhus University intranet'+(d.data.ipAddress ? ' with the IP address of <strong>'+d.data.ipAddress+'</strong>' : '')+'. You will see contents that are usually not seen by public visitors, and will be able to access a wider range of functionalities. <a href="#" class="icon button" data-action="dismiss">Ok, I got it.</a></p></div>');
-		} else {
-			// Tools
-			$('#header nav ul li[data-group="tools"] ul').prepend('<li id="nav--tools--blast"><a href="/blast/" title="BLAST">BLAST</a></li>');
-		}
-	});
 });

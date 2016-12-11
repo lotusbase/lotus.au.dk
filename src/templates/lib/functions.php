@@ -121,6 +121,20 @@ function is_intranet_client() {
 	}
 }
 
+// Check if user has access
+function is_allowed_access($resource = null) {
+	if($resource && isset($_COOKIE['auth_token']) && !empty($_COOKIE['auth_token'])) {
+		$userData = auth_verify($_COOKIE['auth_token']);
+		if(in_array($resource, $userData['ComponentPath'])) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		return false;
+	}
+}
+
 // Transliteration
 function translit($str) {
 	setlocale(LC_CTYPE, 'en_US.utf8');
