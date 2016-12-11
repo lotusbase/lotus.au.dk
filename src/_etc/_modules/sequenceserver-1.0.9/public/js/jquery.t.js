@@ -40,9 +40,11 @@
 
         var setupButtons = function($queryDiv, $graphDiv) {
             $graphDiv
+            .append('<div class="graphing-navigation" />')
+            .find('.graphing-navigation')
             .append(
                 $('<button/>')
-                .addClass('btn btn-link more')
+                .addClass('button--normal more')
                 .attr('type', 'button')
                 .attr('data-parent-query', $queryDiv.attr('id'))
                 .html('View More&nbsp;')
@@ -51,7 +53,7 @@
                     .addClass('fa fa-angle-double-down')
                 ),
                 $('<button/>')
-                .addClass('btn btn-link less')
+                .addClass('button--normal less')
                 .attr('type', 'button')
                 .attr('data-parent-query', $queryDiv.attr('id'))
                 .html('View Less&nbsp;')
@@ -142,6 +144,8 @@
         return hits;
     };
 
+    var fills = ['#F2AE30','#F28F16','#D95A11','#BF1111'];
+
     var drawLegend = function (svg, options, width, height) {
         var svg_legend = svg.append('g')
             .attr('transform',
@@ -166,11 +170,12 @@
         svg.append('linearGradient')
             .attr('id', 'legend-grad')
         .selectAll('stop')
-        .data([
-            {offset: "0%", color: "#ccc"},
-            {offset: '50%', color: '#888'},
-            {offset: "100%", color: "#000"}
-        ])
+        .data($.map(fills.reverse(), function(v,i) {
+            return {
+                'offset': parseFloat(i/(fills.length - 1)*100)+'%',
+                'color': v
+            };
+        }))
         .enter()
         .append('stop')
             .attr('offset', function (d) {
@@ -269,7 +274,8 @@
                         return d.hitEvalue;
                     }))
                 ])
-                .range([40,150]);
+                .range([0,1]),
+                gradScaleColor = d3.scale.linear().domain(d3.range(0, 1, 1.0 / (fills.length - 1))).range(fills.reverse());
 
             svg.append('g')
                 .attr('class', 'ghit')
@@ -305,9 +311,10 @@
                             // Drawing the HSPs connector line using the same
                             // color as that of the hit track (using lookahead).
                             var yHspline = y(p_id) + options.barHeight / 2;
-                            var hsplineColor = d3.rgb(gradScale(p_hsp.hitEvalue),
-                                                      gradScale(p_hsp.hitEvalue),
-                                                      gradScale(p_hsp.hitEvalue));
+                            var hsplineColor = gradScaleColor(gradScale(p_hsp.hitEvalue));
+                            if(p_hsp.hitEvalue == 0.0) {
+                                hsplineColor = fills[0];
+                            }
 
                             if (j+1 < p_count) {
                                 if (p_hsp[j].hspEnd <= p_hsp[j+1].hspStart) {
@@ -342,7 +349,7 @@
                                         return x(d.hspEnd - d.hspStart + 1);
                                     })
                                     .attr('height', options.barHeight)
-                                    .attr('fill', d3.rgb(hsplineColor));
+                                    .attr('fill', hsplineColor);
                         });
                     });
 
