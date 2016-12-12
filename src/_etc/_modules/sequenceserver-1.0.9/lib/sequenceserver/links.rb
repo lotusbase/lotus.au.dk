@@ -71,7 +71,7 @@ module SequenceServer
         :url   => url,
         :title => 'Sequence',
         :class => 'view-sequence',
-        :icon  => 'icon-eye'
+        :icon  => 'icon-eye icon--no-spacing'
       }
     end
 
@@ -86,7 +86,7 @@ module SequenceServer
         :title => 'FASTA',
         :url   => url,
         :class => 'download',
-        :icon  => 'icon-download'
+        :icon  => 'icon-download icon--no-spacing'
       }
     end
 

@@ -738,7 +738,7 @@ $(document).ready(function(){
 		var jwt = globalFun.getJWT(),
 			fname = jwt.data.FirstName ? jwt.data.FirstName : 'user';
 
-		if(window.location.href !== 'https://lotus.au.dk/blast-carb/') {
+		if(window.location.href.split("#")[0] !== 'https://lotus.au.dk/blast-carb/') {
 			$('#blast-alt-available').removeClass('hidden');
 		}
 
