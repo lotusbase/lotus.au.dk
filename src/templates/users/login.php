@@ -283,7 +283,7 @@
 
 		$login_form .= '<label class="col-one" for="remember-login"></label>
 						<div class="col-two">
-							<label for="remember-login"><input type="checkbox" id="remember-login" name="remember_login" tabindex="'.($captcha ? 4 : 3).'" /><span>Remember me for one week</span></label>
+							<label for="remember-login"><input type="checkbox" id="remember-login" name="remember_login" tabindex="'.($captcha ? 4 : 3).'" class="prettify" /><span>Remember me for one week</span></label>
 						</div>
 
 						<button type="submit" tabindex="3">Login</button>
