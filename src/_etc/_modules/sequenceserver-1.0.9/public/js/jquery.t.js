@@ -144,7 +144,7 @@
         return hits;
     };
 
-    var fills = ['#F2AE30','#F28F16','#D95A11','#BF1111'];
+    var fills = ["#fed976","#feb24c","#fd8d3c","#fc4e2a","#e31a1c","#bd0026","#800026"];
 
     var drawLegend = function (svg, options, width, height) {
         var svg_legend = svg.append('g')
@@ -275,7 +275,7 @@
                     }))
                 ])
                 .range([0,1]),
-                gradScaleColor = d3.scale.linear().domain(d3.range(0, 1, 1.0 / (fills.length - 1))).range(fills.reverse());
+                gradScaleColor = d3.scale.linear().domain(d3.range(0, 1, 1.0 / (fills.length - 1))).range(fills.reverse()).interpolate(d3.interpolateHcl);;
 
             svg.append('g')
                 .attr('class', 'ghit')
