@@ -114,12 +114,14 @@
 			$q1 = $db->prepare("SELECT
 					auth.*,
 					adminprivileges.*,
-					GROUP_CONCAT(userGroup.ComponentPath) as ComponentPath
+					GROUP_CONCAT(components.Path) as ComponentPath
 				FROM auth
 				LEFT JOIN adminprivileges ON
 					auth.Authority = adminprivileges.Authority 
-				LEFT JOIN auth_group AS userGroup ON
-					auth.UserGroup = userGroup.UserGroup
+				LEFT JOIN auth_group AS authGroup ON
+					auth.UserGroup = authGroup.UserGroup
+				LEFT JOIN components ON
+					authGroup.ComponentID = components.IDKey
 				WHERE
 					auth.Username = :username OR
 					auth.Email = :email

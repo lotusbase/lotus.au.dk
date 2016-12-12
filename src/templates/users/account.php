@@ -88,7 +88,15 @@
 					}
 
 					// Get user data
-					$qu = $db->prepare('SELECT * FROM auth WHERE Salt = ?');
+					$qu = $db->prepare('SELECT
+							auth.*
+						FROM auth
+						LEFT JOIN auth_group AS authGroup ON
+							auth.UserGroup = authGroup.UserGroup
+						LEFT JOIN auth_group_metadata AS authGroupMeta ON
+							auth.UserGroup = authGroupMeta.UserGroup
+						WHERE auth.Salt = ?
+						GROUP BY auth.Salt');
 					$qu->execute(array($user['Salt']));
 					if($qu->rowCount() === 1) {
 						$userData = $qu->fetch(PDO::FETCH_ASSOC);
@@ -96,6 +104,42 @@
 						throw new Exception('We have a problem retrieving your user data from our database.');
 					}
 
+					?>
+
+					<h3>User group</h3>
+					<?php
+						if($userData['UserGroup']) {
+
+							// Get components user has access to
+							$comps = $db->prepare('SELECT
+								components.Name AS Name,
+								components.Description AS Description,
+								components.Path AS `Path`
+								FROM auth_group AS authGroup
+								LEFT JOIN components ON
+									authGroup.ComponentID = components.IDKey
+								WHERE authGroup.UserGroup = ?');
+							$comps->execute(array($userData['UserGroup']));
+
+							echo '<p>You are a member of the user group called <strong>'.$userData['UserGroupName'].'</strong>. You have access to expanded versions of the following tools:</p>
+								<table>
+									<thead>
+										<tr>
+											<th>Component name</th>
+											<th>Description</th>
+											<th>Path</th>
+										</tr>
+									</thead>
+									<tbody>';
+							while($c = $comps->fetch(PDO::FETCH_ASSOC)) {
+								echo '<tr><th>'.$c['Name'].'</th><td>'.$c['Description'].'</td><td><a href="'.WEB_ROOT.$c['Path'].'" title="'.$c['Name'].'">'.$c['Path'].'</a></td></tr>';
+							}
+							echo '</tbody></table>';
+
+						} else {
+							// User does not belong to any group
+							echo '<p>You do not belong to any user group. On <em>Lotus</em> Base, user groups are used to demarcate groups of users that have access to internally available or restricted data. If you believe you should belong to a user group, please <a href="'.WEB_ROOT.'/meta/contact" title="Contact us">contact us</a>.</p>';
+						}
 					?>
 					
 					<h3>User profile</h3>
