@@ -72,7 +72,7 @@
 
 	} catch(PDOException $e) {
 		if(!isset($_SESSION['user_login_error'])) {
-			$_SESSION['user_login_error'] = $e->getMessage();
+			$_SESSION['user_login_error'] = array('message' => $e->getMessage());
 			session_write_close();
 			header("location: login.php");
 			exit();
@@ -208,7 +208,7 @@
 			}
 
 		} catch(PDOException $e) {
-			$_SESSION['user_login_error'] = $e->getMessage();
+			$_SESSION['user_login_error'] = array('message' => $e->getMessage());
 			session_write_close();
 			header("location: login.php");
 			exit();
@@ -220,7 +220,7 @@
 				isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']
 				));
 
-			$_SESSION['user_login_error'] = $e->getMessage();
+			$_SESSION['user_login_error'] = array('message' => $e->getMessage());
 			session_write_close();
 			header("location: login.php");
 			exit();
@@ -244,7 +244,7 @@
 		';
 
 		if(isset($_SESSION['user_login_error'])) {
-			$login_form .= '<p class="user-message warning">'.$_SESSION['user_login_error'].(isset($_SESSION['oauth_error']) && $_SESSION['oauth_error'] === true ? '<br />If this error persists, please sign in using the regular login form.' : '').'</p>';
+			$login_form .= '<p class="user-message warning">'.$_SESSION['user_login_error']['message'].(isset($_SESSION['oauth_error']) && $_SESSION['oauth_error'] === true ? '<br />If this error persists, please sign in using the regular login form.' : '').'</p>';
 			unset($_SESSION['user_login_error']);
 //		} else if(isset($_SESSION['user_logged_out'])) {
 //			$login_form .= '<p><span class="icon-ok"></span>You have successfully logged out.</p>';

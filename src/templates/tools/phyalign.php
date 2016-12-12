@@ -1,6 +1,7 @@
 <?php
 	// Get important files
 	require_once('../config.php');
+	require_once('../lib/gatekeeper.php');
 
 	// Initiate time count
 	$start_time = microtime(true);
