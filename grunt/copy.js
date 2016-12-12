@@ -48,6 +48,11 @@ module.exports = {
             cwd: 'src/templates',
             src: ['**/*.*'],
             dest: 'build/www/'
+        }, {
+            expand: true,
+            cwd: 'src/gatekeeper',
+            src: ['**/*.*'],
+            dest: 'build/gatekeeper/'
         }]
     },
     cbc: {

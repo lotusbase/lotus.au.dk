@@ -205,7 +205,7 @@ class PageHeader {
 
 				'.(is_intranet_client() ? '
 				<div id="intranet-client" class="site-notification">
-					<p>You appear to be visiting from '.is_intranet_client()['HostName'].(get_ip() ? ' with the IP address of <strong>'.get_ip().'</strong>' : '').'. You will see contents that are usually not seen by public visitors, and will be able to access a wider range of functionalities. <a href="#" class="icon button button--small" data-action="accept">Ok, I got it.</a></p>
+					<p>You appear to be visiting from '.is_intranet_client()['HostName'].(get_ip() ? ' with the IP address of <strong>'.get_ip().'</strong>' : '').'. We are currently migrating away from IP verification, and using user logins as a means to fine tune user access to selected data. <a href="'.WEB_ROOT.'/users/login" class="icon-user button button--small" data-action="read">Login</a> <a href="'.WEB_ROOT.'/users/register" class="icon-user-plus button button--small" data-action="read">Register as new user</a></p>
 				</div>
 				' : '').'
 

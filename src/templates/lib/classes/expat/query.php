@@ -336,7 +336,7 @@ class Query {
 			)
 		);
 
-		if(is_intranet_client()) {
+		if(is_allowed_access('/expat/')) {
 			$private_datasets = array(
 				'rnaseq-simonkelly-2015-bacteria' => array(
 					'277_exoU_24',

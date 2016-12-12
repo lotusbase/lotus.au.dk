@@ -20,7 +20,7 @@
 		$header->set_header_content('
 		<h1><em>Lotus</em> Base tool suite</h1>
 		<p>We have developed some tools that may be useful for you. Should you encounter any difficulties with the tools, check out the end-user documentation for more information.</p>
-		<ul class="list--big">'.(is_intranet_client() ? '
+		<ul class="list--big">
 			<li class="tool-corgi">
 			<a href="'.WEB_ROOT.'/tools/corgi/" title="Correlated Genes Identifier">
 					<div class="tool-icon"><span class="pictogram icon--no-spacing icon-fork"></span></div>
@@ -39,13 +39,12 @@
 					<div class="tool-desc"><h3>ExpAt</h3><p>The <em>Lotus japonicus</em> gene expression atlas (ExpAt) allows users to visualize relative gene expression across multiple sets of genes (annotated as of version 3.0) over all growth conditions.</p></div>
 				</a>
 			</li>
-			' : '').'
 			<li class="tool-genomebrowser">
 				<a href="'.WEB_ROOT.'/genome/" title="Lotus genome browser">
 					<div class="tool-icon"><span class="pictogram icon--no-spacing icon-book"></span></div>
 					<div class="tool-desc"><h3><em>Lotus</em> genome browser</h3><p>Browse through the latest version of the <em>Lotus japonicus</em> genome through a user-friendly web interface.</p></div>
 				</a>
-			</li>'.(is_intranet_client() ? '
+			</li>'.(is_allowed_access('/tools/primers') ? '
 			<li class="tool-primers">
 				<a href="'.WEB_ROOT.'/tools/primers" title="Genotyping primer order generator">
 					<div class="tool-icon"><span class="pictogram icon--no-spacing icon-basket"></span></div>

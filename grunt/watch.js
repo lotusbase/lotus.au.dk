@@ -46,7 +46,8 @@ module.exports = {
             'src/templates/**/*.pl',
             'src/templates/**/*.py',
             'src/templates/**/*.sh',
-            'src/templates/data/**/*.*'
+            'src/templates/data/**/*.*',
+            'src/gatekeeper/**/*.*'
         ],
         tasks: [
             'newer:copy'

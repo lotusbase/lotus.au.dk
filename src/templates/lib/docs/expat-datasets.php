@@ -22,7 +22,7 @@
 			<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23452239" title="Establishment of the Lotus japonicus Gene Expression Atlas (LjGEA) and its use to explore legume seed maturation.">Verdier <em>et al.</em>, 2013</a></td>
 		</tr>
 
-		<?php if(is_intranet_client()) { ?>
+		<?php if(is_allowed_access('/expat/')) { ?>
 		<tr>
 			<td>Simon Kelly's RNAseq data with bacteria treatment</td>
 			<td>Transcript ID</td>

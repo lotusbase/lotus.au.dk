@@ -168,7 +168,7 @@ class DBMetadata {
 
 	// Get blast directory
 	private function get_blast_db_dir() {
-		if(is_intranet_client()) {
+		if(is_allowed_access('/blast/')) {
 			return BLAST_DB_DIR_INTERNAL;
 		} else {
 			return BLAST_DB_DIR_PUBLIC;

@@ -35,6 +35,9 @@ define('DOC_ROOT', rtrim($config['paths']['doc_root'], '/') . WEB_ROOT);
 // DOMAIN_NAME
 define('DOMAIN_NAME', $config['paths']['domain_name']);
 
+// GATEKEEPER_PATH
+define('GATEKEEPER_PATH', $config['paths']['gatekeeper_path']);
+
 
 
 //=============//

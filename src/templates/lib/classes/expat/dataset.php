@@ -129,7 +129,7 @@ class Dataset {
 							!isset($d['intranet_only']) ||
 							(
 								isset($d['intranet_only']) &&
-								$d['intranet_only'] === !!is_intranet_client()
+								$d['intranet_only'] === !!is_allowed_access('/expat/')
 							)
 						) &&
 						(
