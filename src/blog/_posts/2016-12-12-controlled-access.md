@@ -23,11 +23,11 @@ Therefore, all CARB users will be required to [register for a *Lotus Base* accou
 - [*Lotus* BLAST](/blast/)
 - [Sequence Retriever](/tools/seqret) (SeqRet)
 
-<p class="user-message note"><span class="icon-info-circled"></span>Registering for an account does not automatically grant access to internally-available resources.</p>
-
 The current system administrator (Terry, [terry@mbg.au.dk](mailto:terry@mbg.au.dk)) will be responsible for adding verified/validated CARB members into a user group that has exclusive access to internal data. He will be notified when new CARB members have registered for accounts, and will perform necessary validation with new users before granting access.
 
-If you are a CARB collaborator who wish to have access to internal data, [please do not hesitate to reach out to us](/meta/contact).
+<p class="user-message note"><span class="icon-info-circled"></span>Registering for an account does not automatically grant access to internally-available resources.</p>
+
+<p class="user-message"><span class="icon-info-circled"></span>If you are a CARB collaborator who wish to have access to internal data, <a href="/meta/contact">please do not hesitate to reach out to us</a>.</p>
 
 ### How are you affected?
 **Pre-existing CARB users with accounts with *Lotus* Base will not see any service disruptions**—you have been automatically migrated over to the new controlled access system. To access internally available data, simply remember to [log in](/users/login). Users that do not have an account with *Lotus* Base, however, are strongly encouraged to register. Terry will keep in touch with you once you have registered for an account.
