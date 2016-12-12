@@ -128,7 +128,7 @@ class PageHeader {
 								</ul>
 							</li>
 							<li><a href="'.WEB_ROOT.'/genome" title="Genome Browser">Genome Browser</a></li>
-							'.(is_allowed_access('/go/*') ? '
+							'.(is_allowed_access('/go/') ? '
 							<li>
 								<a>Gene Ontology</a>
 								<ul>
