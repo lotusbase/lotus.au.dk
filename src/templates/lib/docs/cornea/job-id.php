@@ -1,0 +1,1 @@
+<p>A job ID is a randomly generated, 32-character long hexadecimal identifier of your job. You should store this ID in order to search for your job on our servers&mdash;note that we will only host jobs for 30 days after their creation.</p>
