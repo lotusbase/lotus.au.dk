@@ -308,7 +308,7 @@ form {
 	background-image:
 		radial-gradient(ellipse at 50% 100%, rgba(#eee,.25) 0%, rgba(#eee,0) 50%),
 		linear-gradient(90deg, rgba($lotusPrimary4,.85) 0%, rgba(adjust-hue($lotusPrimary4,-30deg),.85) 100%),
-		url('/lib/random-image?type=header');
+		url('/lib/random-image?type=header/hero');
 	background-size: cover;
 	background-position: bottom center, center center, center center;
 	background-repeat: no-repeat;
