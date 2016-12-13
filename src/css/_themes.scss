@@ -5,7 +5,7 @@ body.theme--white {
 		background-image:
 			radial-gradient(ellipse at 50% 100%, rgba(#eee,.25) 0%, rgba(#eee,0) 50%),
 			linear-gradient(90deg, rgba(#ddd,.85) 0%, rgba(#ccc,.85) 100%),
-			url('/lib/random-image?type=header');
+			url('/lib/random-image?type=header/hero');
 		.header-content {
 			color: #555;
 			h1 {

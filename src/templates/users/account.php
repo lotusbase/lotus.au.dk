@@ -63,6 +63,7 @@
 				<h1>Your account</h1>
 				<ul class="minimal">
 					<li><a href="#profile" data-custom-smooth-scroll>Profile</a></li>
+					<li><a href="#user-group" data-custom-smooth-scroll>Group</a></li>
 					<li><a href="#security" data-custom-smooth-scroll>Security</a></li>
 					<li><a href="#access_token" data-custom-smooth-scroll>API Token</a></li>
 					<li><a href="#integration" data-custom-smooth-scroll>Integration</a></li>
@@ -105,42 +106,6 @@
 						throw new Exception('We have a problem retrieving your user data from our database.');
 					}
 
-					?>
-
-					<h3>User group</h3>
-					<?php
-						if($userData['UserGroup']) {
-
-							// Get components user has access to
-							$comps = $db->prepare('SELECT
-								components.Name AS Name,
-								components.Description AS Description,
-								components.Path AS `Path`
-								FROM auth_group AS authGroup
-								LEFT JOIN components ON
-									authGroup.ComponentID = components.IDKey
-								WHERE authGroup.UserGroup = ?');
-							$comps->execute(array($userData['UserGroup']));
-
-							echo '<p>You are a member of the user group: <strong>'.$userData['UserGroupName'].'</strong>. You have access to expanded versions of the following tools:</p>
-								<table>
-									<thead>
-										<tr>
-											<th>Component name</th>
-											<th>Description</th>
-											<th>Path</th>
-										</tr>
-									</thead>
-									<tbody>';
-							while($c = $comps->fetch(PDO::FETCH_ASSOC)) {
-								echo '<tr><th>'.$c['Name'].'</th><td>'.$c['Description'].'</td><td><a href="'.WEB_ROOT.$c['Path'].'" title="'.$c['Name'].'">'.$c['Path'].'</a></td></tr>';
-							}
-							echo '</tbody></table>';
-
-						} else {
-							// User does not belong to any group
-							echo '<p>You do not belong to any user group. On <em>Lotus</em> Base, user groups are used to demarcate groups of users that have access to internally available or restricted data. If you believe you should belong to a user group, please <a href="'.WEB_ROOT.'/meta/contact" title="Contact us">contact us</a>.</p>';
-						}
 					?>
 					
 					<h3>User profile</h3>
@@ -264,6 +229,89 @@
 			?>
 			</div>
 
+			<div id="user-group">
+				<?php
+					if($userData['UserGroup']) {
+
+						try {
+							// Get components user has access to
+							$comps = $db->prepare('SELECT
+								components.Name AS Name,
+								components.Description AS Description,
+								components.Path AS `Path`
+								FROM auth_group AS authGroup
+								LEFT JOIN components ON
+									authGroup.ComponentID = components.IDKey
+								WHERE authGroup.UserGroup = ?');
+							$comps->execute(array($userData['UserGroup']));
+
+							// Get users in the same group
+							$groupUsers = $db->prepare('SELECT
+								auth.FirstName AS FirstName,
+								auth.LastName AS LastName,
+								auth.Email AS Email,
+								auth.Organization AS Organization
+								FROM auth
+								WHERE auth.UserGroup = ?
+								ORDER BY auth.FirstName');
+							$groupUsers->execute(array($userData['UserGroup']));
+
+							?>
+
+							<h3>Expanded access</h3>
+							<p>You are a member of the user group: <strong><?php echo $userData['UserGroupName']; ?></strong>. You have access to expanded versions of the following tools:</p>
+							<table>
+								<thead>
+									<tr>
+										<th>Component name</th>
+										<th>Description</th>
+										<th>Path</th>
+									</tr>
+								</thead>
+								<tbody>
+
+							<?php
+								while($c = $comps->fetch(PDO::FETCH_ASSOC)) {
+									echo '<tr><th>'.$c['Name'].'</th><td>'.$c['Description'].'</td><td><a href="'.WEB_ROOT.$c['Path'].'" title="'.$c['Name'].'">'.$c['Path'].'</a></td></tr>';
+								}
+							?>
+
+							</tbody></table>
+
+							<h3>Group members <span class="badge"><?php echo $groupUsers->rowCount(); ?></span></h3>
+							<p>Basic data of all the members in the same group:</p>
+							<table id="user-group__members">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Email</th>
+										<th>Organisation</th>
+									</tr>
+								</thead>
+								<tbody>
+								<?php
+									while($u = $groupUsers->fetch(PDO::FETCH_ASSOC)) {
+										echo '<tr><td>'.$u['FirstName'].' '.$u['LastName'].'</td><td>'.$u['Email'].'</td><td>'.$u['Organization'].'</td></tr>';
+									}
+								?>
+								</tbody>
+							</table>
+
+
+							<?php
+						} catch(PDOException $e) {
+							echo '<p class="user-message warning"><span class="icon-attention"></span>'.$e->getMessage().'</p>';
+						} catch(Exception $e) {
+							echo '<p class="user-message warning"><span class="icon-attention"></span>'.$e->getMessage().'</p>';
+						}
+
+					} else {
+						// User does not belong to any group
+						echo '<p>You do not belong to any user group. On <em>Lotus</em> Base, user groups are used to demarcate groups of users that have access to internally available or restricted data. If you believe you should belong to a user group, please <a href="'.WEB_ROOT.'/meta/contact" title="Contact us">contact us</a>.</p>';
+					}
+				?>
+			</div>
+
 			<div id="security">
 				<p>You can change your password any time you wish. We strongly recommend updating your password if you suspect that your password has been compromised, or disclosed to third parties. <strong>We never disclose your encrypted passwords</strong>. Passwords are encrypted before transmission and storage&mdash;meaning that we have no idea what your password is, too.</p>
 				<form method="post" action="#" class="has-group" id="update-password">
@@ -362,7 +410,7 @@
 								$MailChimp_member = null;
 							}
 
-							echo '<input type="checkbox" class="prettify subscription__toggle" name="subscription" value="'.$l.'" data-provider="mailchimp" data-list=id="'.$l.'" data-list-name="'.$MailChimp_list['name'].'" data-email="'.$user['Email'].'" '.($MailChimp_member ? 'checked' : '').'/>'.preg_replace('/(Lotus)/', '<em>$1</em>', $MailChimp_list['name']);
+							echo '<label for="mailchimp-subscription"><input type="checkbox" class="prettify subscription__toggle" id="mailchimp-subscription" name="subscription" value="'.$l.'" data-provider="mailchimp" data-list=id="'.$l.'" data-list-name="'.$MailChimp_list['name'].'" data-email="'.$user['Email'].'" '.($MailChimp_member ? 'checked' : '').'/><span>'.preg_replace('/(Lotus)/', '<em>$1</em>', $MailChimp_list['name']).'</span></label>';
 						}
 
 						
@@ -433,7 +481,8 @@
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
-	<script src="<?php echo WEB_ROOT; ?>/dist/js/users.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/users/account.min.js"></script>
 	<script>
 		// Select2
 		$(function() {
