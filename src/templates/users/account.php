@@ -89,7 +89,8 @@
 
 					// Get user data
 					$qu = $db->prepare('SELECT
-							auth.*
+							auth.*,
+							authGroupMeta.Name AS UserGroupName
 						FROM auth
 						LEFT JOIN auth_group AS authGroup ON
 							auth.UserGroup = authGroup.UserGroup
@@ -121,7 +122,7 @@
 								WHERE authGroup.UserGroup = ?');
 							$comps->execute(array($userData['UserGroup']));
 
-							echo '<p>You are a member of the user group called <strong>'.$userData['UserGroupName'].'</strong>. You have access to expanded versions of the following tools:</p>
+							echo '<p>You are a member of the user group: <strong>'.$userData['UserGroupName'].'</strong>. You have access to expanded versions of the following tools:</p>
 								<table>
 									<thead>
 										<tr>
