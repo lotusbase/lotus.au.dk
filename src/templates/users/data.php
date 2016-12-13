@@ -16,7 +16,7 @@
 <body class="users data theme--white init-scroll--disabled">
 	<?php
 		// Generate header
-		$header = new \LotusBase\Components\PageHeader();
+		$header = new \LotusBase\Component\PageHeader();
 		echo $header->get_header();
 
 		$breadcrumbs = new \LotusBase\Component\Breadcrumbs();
@@ -29,7 +29,7 @@
 			<div id="data-tabs__nav" class="cols align-items__flex-end ui-tabs-nav__wrapper">
 				<h1>Associated data</h1>
 				<ul class="minimal">
-					<li><a href="#lore1-orders" data-custom-smooth-scroll>LORE1 orders</a></li>
+					<li><a href="#lore1-orders" data-custom-smooth-scroll><em>LORE1</em> orders</a></li>
 					<li><a href="#cornea-networks" data-custom-smooth-scroll>CORNEA</a></li>
 				</ul>
 			</div>
@@ -222,6 +222,9 @@
 								}
 							}
 							$time_elapsed = strtotime($row['end_time'])-strtotime($row['start_time']);
+							if($time_elapsed < 0) {
+								$time_elapsed = 0;
+							}
 							if($time_elapsed > $cornea_max['time_elapsed']) {
 								$cornea_max['time_elapsed'] = $time_elapsed;
 							}
@@ -257,7 +260,7 @@
 								<td style="background-image: linear-gradient(90deg, rgba(51,101,138,0.25) '.floatval($job['node_count']/$cornea_max['node_count']*100).'%, rgba(51,101,138,0) '.floatval($job['node_count']/$cornea_max['node_count']*100).'%);">'.number_format($job['node_count'], 0, '.', ',').'</td>
 								<td style="background-image: linear-gradient(90deg, rgba(51,101,138,0.25) '.floatval($job['edge_count']/$cornea_max['edge_count']*100).'%, rgba(51,101,138,0) '.floatval($job['edge_count']/$cornea_max['edge_count']*100).'%);">'.number_format($job['edge_count'], 0, '.', ',').'</td>
 								<td style="background-image: linear-gradient(90deg, rgba(51,101,138,0.25) '.floatval($job['cluster_count']/$cornea_max['cluster_count']*100).'%, rgba(51,101,138,0) '.floatval($job['cluster_count']/$cornea_max['cluster_count']*100).'%);">'.number_format($job['cluster_count'], 0, '.', ',').'</td>
-								<td style="background-image: linear-gradient(90deg, rgba(51,101,138,0.25) '.floatval($job['time_elapsed']/$cornea_max['time_elapsed']*100).'%, rgba(51,101,138,0) '.floatval($job['time_elapsed']/$cornea_max['time_elapsed']*100).'%);">'.friendly_duration(strtotime($job['end_time'])-strtotime($job['start_time'])).'</td>
+								<td style="background-image: linear-gradient(90deg, rgba(51,101,138,0.25) '.floatval($job['time_elapsed']/$cornea_max['time_elapsed']*100).'%, rgba(51,101,138,0) '.floatval($job['time_elapsed']/$cornea_max['time_elapsed']*100).'%);">'.friendly_duration($job['time_elapsed']).'</td>
 								<td>
 									<div class="dropdown button button--small">
 										<span class="dropdown--title">Action</span>

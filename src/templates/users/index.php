@@ -319,6 +319,6 @@
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
-	<script src="<?php echo WEB_ROOT; ?>/dist/js/users.min.js"></script>
+	<script src="<?php echo WEB_ROOT; ?>/dist/js/users/dashboard.min.js"></script>
 </body>
 </html>
