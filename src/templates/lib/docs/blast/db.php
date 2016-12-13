@@ -1,5 +1,5 @@
 <?php
-	require_once('../config.php');
+	require_once('../../../config.php');
 	require_once(DOC_ROOT.'/lib/classes.php');
 
 	$dbs = new \LotusBase\BLAST\DBMetadata();
