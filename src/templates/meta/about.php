@@ -42,13 +42,13 @@
 		<h4>Modular construction</h4>
 		<p><em>Lotus</em> Base has a modular construction, meaning that additional toolkits and services may be built onto it easily. We adopt object-oriented codes for easy integration of new functionalities and features.</p>
 
-		<h4>Ethical design</h4>
+		<h4>Ethical design</h4> 
 		<p>We adopt a user-centric and ethical design, which prioritises user privacy and ownership over their own data. You can <a href="<?php echo WEB_ROOT; ?>/meta/legal" title="Terms of use of Lotus Base">read our terms of use and privacy policy here</a>.</p>
 
 		<h3>How can I cite <em>Lotus</em> Base?</h3>
 		<p>The manuscript for <em>Lotus</em> Base is currently in press, and should be citated as the following:</p>
 		<pre>Mun et al. (in press). Lotus Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em></pre>
-		<p>For additional guidelines towards citing resources hosted on <em>Lotus</em> Base, please refer to the <a href="<?php echo WEB_ROOT; ?>meta/citation" title="Citation guide">citation guide</a>.</p>
+		<p>For additional guidelines towards citing resources hosted on <em>Lotus</em> Base, please refer to the <a href="<?php echo WEB_ROOT; ?>/meta/citation" title="Citation guide">citation guide</a>.</p>
 
 		<h3>Meet the team</h3>
 		<p><em>Lotus</em> Base is powered by a small group of researchers from the Centre for Carbohydrate Recognition and Signalling, Aarhus University, Denmark. You can <a href="<?php echo WEB_ROOT; ?>/meta/team" tite="Meet the team">learn more about us here</a>.</p>
