@@ -28,6 +28,7 @@
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,300,400,600|Open+Sans+Condensed:300|Lora:400,400italic,700,700italic' rel='stylesheet prefetch' type='text/css'>
 
 	<script src="/dist/js/plugins/modernizr.min.js"></script>
+
 </head>
 
 <body class="tools blast">
@@ -251,6 +252,10 @@
 		<div class="col about-us">
 			<h2>About us</h2>
 			<p>Developed with the end-user in mind, <em>Lotus</em> Base is an user-friendly web interface that brings together various resources, tools and datasets available for the model legume <em>Lotus japonicus</em>. We aim to make access to these data easy for researchers, scientists and members of the public across the world.</p>
+			<ul class="cols">
+				<li class="col bg-fill"><a href="/meta/about/"><img src="/dist/images/header/lore1/lore1_01.jpg" alt="" title="" /><span>About Us</span></a></li>
+				<li class="col bg-fill"><a href="/meta/team/"><img src="/dist/images/team/carb.jpg" alt="" title="" /><span>Meet the Team</span></a></li>
+			</ul>
 		</div>
 		<div class="col newsletter">
 			<h2>Stay updated</h2>
@@ -271,7 +276,7 @@
 	</ul>
 
 	<section class="lastnote">
-		<p>All rights reserved. 2012&ndash;<%= Time.now.year %> &copy; <a href="http://carb.au.dk/" title="Centre for Carbohydrate Recognition and Signalling">Centre for Carbohydrate Recognition and Signalling</a>, Aarhus University, Denmark.<br />Handcoded by <a href="http://terrymun.com">Terry</a>, powered by <a href="http://www.sequenceserver.com/" title="SequenceServer v<%= SequenceServer::VERSION %>">SequenceServer v<%= SequenceServer::VERSION %></a> &amp; coffee.</p>
+		<p>All rights reserved. 2012&ndash;<%= Time.now.year %> &copy; <a href="http://carb.au.dk/" title="Centre for Carbohydrate Recognition and Signalling">Centre for Carbohydrate Recognition and Signalling</a>, Aarhus University, Denmark.<br />Brought to you by the <a href="/meta/team"><em>Lotus</em> Base Team</a>, powered by <a href="http://www.sequenceserver.com/" title="SequenceServer v<%= SequenceServer::VERSION %>">SequenceServer v<%= SequenceServer::VERSION %></a> &amp; coffee.</p>
 	</section>
 
 	<!-- JS -->
@@ -317,6 +322,7 @@
 		var access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NjM4NTY5MzUsImRhdGEiOnsidXNlciI6Ijg4NDM1MTNiZGEyMzgxZWQiLCJhY2Nlc3NfdG9rZW4iOiIxYTk0YTY3YTQ4NTJiMjQ4In19.GLV9d6pv8Ix2a8dunHT1AMFGnVVx9LLMHzSm7V2ijQo';
 	</script>
 	<script src="/dist/js/functions.min.js"></script>
+	<script src="/dist/js/plugins/modernizr-custom.min.js"></script>
 
 	<!-- Google Analyrics -->
 	<script>
