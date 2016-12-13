@@ -635,7 +635,7 @@
 							return linkLegendLabel[d];
 						})
 						.on('click', function(d) {
-							$.ajax('/data/go/'+linkLegendLabel[d].toLowerCase().replace(' ','_'), {
+							$.ajax('/lib/docs/go/'+linkLegendLabel[d].toLowerCase().replace(' ','_'), {
 								dataType: 'html'
 							})
 							.done(function(data) {

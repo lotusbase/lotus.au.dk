@@ -85,7 +85,7 @@
 					<div class="cols has-legend dropzone" role="group">
 						<p class="legend">Sequence information</p>
 						<p class="full-width">Retrieve sequences from our BLAST databases using the form below, or&hellip;</p>
-						<label for="phyalign-db" class="col-one">Database <a class="info" data-modal="wide" title="Database Overview" href="<?php echo WEB_ROOT; ?>/data/blast-db?<?php echo http_build_query(array('whitelist' => $phyalign_db_whitelist)); ?>">?</a></label>
+						<label for="phyalign-db" class="col-one">Database <a class="info" data-modal="wide" title="Database Overview" href="<?php echo WEB_ROOT; ?>/lib/docs/blast/db?<?php echo http_build_query(array('whitelist' => $phyalign_db_whitelist)); ?>">?</a></label>
 						<div class="col-two">
 							<select id="phyalign-db" name="db">
 							<?php
@@ -144,7 +144,7 @@
 							<textarea name="sequence" id="seqs-input" rows="5" class="resize__vertical font-family_monospace" placeholder="Enter sequences in FASTA format" required ></textarea>
 						</div>
 
-						<label for="seq-type" class="col-one">Sequence type <a class="info" data-modal title="Sequence type" href="<?php echo WEB_ROOT; ?>/data/phyalign/seqtype">?</a><span class="asterisk" title="Required Field">*</span></label>
+						<label for="seq-type" class="col-one">Sequence type <a class="info" data-modal title="Sequence type" href="<?php echo WEB_ROOT; ?>/lib/docs/phyalign/seqtype">?</a><span class="asterisk" title="Required Field">*</span></label>
 						<div class="col-two">
 							<select name="stype" id="seq-type">
 								<option value="dna">DNA</option>
@@ -165,7 +165,7 @@
 					<div class="cols has-legend" role="group">
 						<p class="legend">Job options</p>
 
-						<label for="output-format" class="col-one">Output format <a class="info" data-modal title="Output alignment format" href="<?php echo WEB_ROOT; ?>/data/phyalign/outfmt">?</a><span class="asterisk" title="Required Field">*</span></label>
+						<label for="output-format" class="col-one">Output format <a class="info" data-modal title="Output alignment format" href="<?php echo WEB_ROOT; ?>/lib/docs/phyalign/outfmt">?</a><span class="asterisk" title="Required Field">*</span></label>
 						<div class="col-two">
 							<select name="outfmt" id="output-format" class="col-two">
 								<option value="clustal" selected>Clustal without numbers</option>

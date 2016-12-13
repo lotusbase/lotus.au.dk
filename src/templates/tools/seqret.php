@@ -31,7 +31,7 @@
 		<p>This tool allows you to extract sequences by providing the corresponding identification information. This tool is forked from and built upon <a href="https://github.com/aubombarely/wwwfastacmd" target="_new">wwwfastacmd project</a> developed by Aureliano Bombarely. The source code of this project is available on <a href="https://github.com/terrymun/wwwfastacmd" target="_new">GitHub</a>.</p>
 		<form action="" method="get" id="seqret-form" class="has-group">
 			<div class="cols" role="group">
-				<label for="seqret-db" class="col-one">Database <a class="info" data-modal="wide" title="Database Overview" href="<?php echo WEB_ROOT; ?>/data/blast-db">?</a></label>
+				<label for="seqret-db" class="col-one">Database <a class="info" data-modal="wide" title="Database Overview" href="<?php echo WEB_ROOT; ?>/lib/docs/blast/db">?</a></label>
 				<div class="col-two">
 					<select id="seqret-db" name="db">
 					<?php
