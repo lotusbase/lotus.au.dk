@@ -1026,17 +1026,18 @@ $(function() {
 										'</div>',
 									'</div>',
 									'<small><strong>Enter each candidate on a new line, with an optional second column separated by a comma.</strong><br /><a class="format-info" data-modal="wide" href="'+(paramSource === 'request' ? '..' : '../../..')+'/lib/docs/cornea/advanced-highlight" title="File format for advanced node highlighting">How should I format my data?</a></small>',	
+									'<div class="sigma-searchform__input cols" id="sigma-searchform__processing">',
+										'<p class="full-width">If you want to map numerical values in your second column (if specified) into a color scale, enable scaling below and specify the upper and lower ranges for palette values.</p>',
+										'<label for="sigma-searchform__scaler-toggle" class="col-one">Scale values</label><div class="col-two"><input id="sigma-searchform__scaler-toggle" type="checkbox" class="prettify" /></div>',
+										'<label for="sigma-searchform__scaler-min" class="col-one">Lower range</label><input type="number" id="sigma-searchform__scaler-min" value="-5" step="0.1" class="col-two" />',
+										'<label for="sigma-searchform__scaler-max" class="col-one">Upper range</label><input type="number" id="sigma-searchform__scaler-max" value="5" step="0.1" class="col-two" />',
+									'</div>',
 									'<div id="sigma-searchform__highlight--not-found" class="user-message warning"></div>',
 										'<a href="#" id="sigma__highlight-id__mode-switch" class="floating-controls position--right" data-mode="manual">',
 											'<span data-mode="upload" class="icon-doc-text icon--no-spacing" title="Upload CSV file with candidate(s)"></span>',
 											'<span data-mode="manual" class="icon-keyboard icon--no-spacing" title="Manually enter candidate(s)"></span>',
 										'</a>',
-								'</div>',
-								'<div class="sigma-searchform__input cols" id="sigma-searchform__processing">',
-									'<label for="sigma-searchform__scaler-toggle" class="col-one">Scale values</label><div class="col-two"><input id="sigma-searchform__scaler-toggle" type="checkbox" class="prettify" /></div>',
-									'<label for="sigma-searchform__scaler-min" class="col-one">Lower range</label><input type="number" id="sigma-searchform__scaler-min" value="-5" step="0.1" class="col-two" />',
-									'<label for="sigma-searchform__scaler-max" class="col-one">Upper range</label><input type="number" id="sigma-searchform__scaler-max" value="5" step="0.1" class="col-two" />',
-								'</div>',
+									'</div>',
 							'</div>',
 							'<div id="sigma-searchform__controls" class="cols justify-content__center">',
 								'<button id="sigma-searchform__control__highlight" type="button" class="button--small"><span class="icon-filter">Apply filter</span></button>',
@@ -2369,14 +2370,6 @@ $(function() {
 			$('#sigma-card').removeClass('active');
 			$('#sigma-status--long').removeClass('card--open').removeClass('tooltip--open');
 			$b.removeClass('modal--open');
-		}
-	})
-	.on('change blur paste', '#sigma__highlight-id', function(e) {
-		var $i = $('#sigma-searchform__processing :input');
-		if($(this).val()) {
-			$i.prop('disabled', false);
-		} else {
-			$i.prop('disabled', true);
 		}
 	});
 

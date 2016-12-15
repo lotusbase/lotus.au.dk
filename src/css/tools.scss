@@ -651,6 +651,9 @@ body.tools {
 		background-color: rgba(#eee,.5);
 		margin-top: 1.5rem;
 		padding: .75rem 1.5rem;
+		p {
+			margin-bottom: .75rem;
+		}
 	}
 	#sigma-searchform__highlight--not-found {
 		display: none;
