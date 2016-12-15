@@ -54,6 +54,7 @@ define('NOREPLY_EMAIL', $config['mail']['noreply_email']);
 //=======//
 // Python
 define('PYTHON_PATH', $config['paths']['python_path']);
+define('NODE_PATH', $config['paths']['node_path']);
 
 // Location of publicly and internally available BLAST databases
 // Used by BlastDBMetadata class to dynamically generate list of BLAST databases

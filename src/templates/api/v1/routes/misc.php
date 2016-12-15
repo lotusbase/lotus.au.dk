@@ -227,4 +227,61 @@ $api->post('/contact', function($request, $response) {
 	}
 });
 
+// Contact form
+$api->post('/scaler', function($request, $response) {
+
+	// From https://stackoverflow.com/questions/32668186/slim-3-how-to-get-all-get-put-post-variables/
+	$p = $request->getParsedBody();
+
+	try {
+
+		if(empty($p)) {
+			throw new Exception('No data is provided in the request body.', 400);
+		}
+
+		// Set values for scaling
+		if(empty($p['values'])) {
+			throw new Exception('No values have been provided for scaling.', 400);
+		}
+		$values = $p['values'];
+
+		// Merge variables with default
+		$_config = array(
+			'min' => -5,
+			'max' => 5,
+			'scaleColumn' => 0,
+			'fills' => array('#67001f','#b2182b','#d6604d','#f4a582','#92c5de','#4393c3','#2166ac','#053061')
+			);
+		$config = array_replace_recursive($_config, $p['config']);
+		$p['config'] = $config;
+
+		// Generate temp file
+		$temp_file = tempnam(sys_get_temp_dir(), "scaler_");
+		if($writing = fopen($temp_file, 'w')) {
+			fwrite($writing, json_encode($p, JSON_NUMERIC_CHECK));
+		}
+		fclose($writing);
+
+		$scaler = exec(NODE_PATH.' '.DOC_ROOT.'/lib/scaler.js '.$temp_file);
+
+		// Delete file
+		//unlink($temp_file);
+
+		return $response
+			->withStatus(200)
+			->withHeader('Content-Type', 'application/json')
+			->write($scaler);
+
+	} catch(Exception $e) {
+		return $response
+				->withStatus($e->getCode())
+				->withHeader('Content-Type', 'application/json')
+				->write(json_encode(array(
+					'status' => $e->getCode(),
+					'message' => $e->getMessage(),
+					)));
+	}
+
+});
+
 ?>
