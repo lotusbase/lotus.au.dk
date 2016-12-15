@@ -87,7 +87,7 @@
 						GROUP_CONCAT(t2.PlantID ORDER BY t2.OrderLineID ASC) AS PlantID,
 						GROUP_CONCAT(t2.SeedQuantity ORDER BY t2.OrderLineID ASC) AS SeedQuantity,
 						GROUP_CONCAT(t2.ProcessDate ORDER BY t2.OrderLineID ASC) AS ProcessDate,
-						GROUP_CONCAT(t2.AdminID ORDER BY t2.OrderLineID ASC) AS AdminID,
+						GROUP_CONCAT(t2.AdminSalt ORDER BY t2.OrderLineID ASC) AS AdminSalt,
 						GROUP_CONCAT(t2.AdminComments ORDER BY t2.OrderLineID ASC) AS AdminComments,
 						COUNT(t2.ProcessDate) AS ProcessedLines,
 						COUNT(t2.PlantID) AS TotalLines
