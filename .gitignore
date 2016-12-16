@@ -29,11 +29,9 @@ src/_etc/_rawdata
 #-------------------------------------------#
 # Refer to:									#
 # - _sample.config.ini						#
-# - _sample.config.php						#
 # for working samples for the live server.  #
 #############################################
 **/config.ini
-**/config.php
 
 
 
