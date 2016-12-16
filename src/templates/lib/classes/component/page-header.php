@@ -203,9 +203,9 @@ class PageHeader {
 					<p>Your browser is unable to support new features implemented in HTML5 and CSS3 to render this site as intended. Your experience may suffer from functionality degradation but the site should remain usable. We strongly recommend the latest version of <a href="http://google.com/chrome/" title="Google Chrome">Google Chrome</a>, <a href="https://support.apple.com/en-us/HT204416" title="OS X Safari">OS X Safari</a> or <a href="http://mozilla.org/firefox/" title="Mozilla Firefox">Mozilla Firefox</a>. As Safari is bundled with OS X, if you are unable to upgrade to a newer version of OS X, we recommend using an open source browser. <a href="#" class="icon button button--small" title="I understand" data-action="dismiss">Dismiss message</a></p>
 				</div>
 
-				'.(is_intranet_client() ? '
+				'.(is_intranet_client() && !is_logged_in() ? '
 				<div id="intranet-client" class="site-notification">
-					<p>You appear to be visiting from '.is_intranet_client()['HostName'].(get_ip() ? ' with the IP address of <strong>'.get_ip().'</strong>' : '').'. We are currently migrating away from IP verification, and using user logins as a means to fine tune user access to selected data. <a href="'.WEB_ROOT.'/users/login" class="icon-user button button--small" data-action="read">Login</a> <a href="'.WEB_ROOT.'/users/register" class="icon-user-plus button button--small" data-action="read">Register as new user</a></p>
+					<p>You appear to be visiting from '.is_intranet_client()['HostName'].(get_ip() ? ' with the IP address of <strong>'.get_ip().'</strong>' : '').'. We are currently migrating away from IP verification, and using user logins as a means to fine tune user access to selected data. <a href="'.WEB_ROOT.'/users/login" class="icon-user button button--small" data-action="read">Login</a> <a href="'.WEB_ROOT.'/users/register" class="icon-user-plus button button--small" data-action="read">Register as new user</a> <a href="#" class="icon button button--small" title="I understand" data-action="dismiss">Dismiss message</a></p>
 				</div>
 				' : '').'
 
