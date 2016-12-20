@@ -17,7 +17,7 @@
 	<section class="wrapper" id="orders-section">
 		<h2><span class="pictogram icon-download"></span> Downloadable Resources</h2>
 		<?php
-			$del = $user_rights['DeleteFile'];
+			$del = $user['Privileges']['DeleteFile'];
 
 			if(isset($_SESSION['delete_success'])) {
 				echo '<p class="user-message note">The file <code></code> has been successfully deleted from the file directory and removed from the database.</p>';
@@ -79,7 +79,7 @@
 		?>
 	</section>
 
-	<?php if($user_rights['Upload']) { ?>
+	<?php if($user['Privileges']['Upload']) { ?>
 	<section class="wrapper">
 		<h2><span class="pictogram icon-upload"></span> Upload New File</h2>
 		<form id="upload" action="upload" method="post" enctype="multipart/form-data">
@@ -100,6 +100,9 @@
 			<label class="col-one" for="upload-filename">Select file (max 50mb)</label>
 			<input type="hidden" name="MAX_FILE_SIZE" value="52428800" />
 			<input class="col-two" type="file" name="file" id="upload-filename" />
+
+			<label class="col-one" for="upload-filepath">File path</label>
+			<input class="col-two" type="text" name="filepath" id="upload-filepath" />
 
 			<input type="submit" name="submit" value="Upload File" />
 		</form>
