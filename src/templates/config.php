@@ -35,9 +35,6 @@ define('DOC_ROOT', rtrim($config['paths']['doc_root'], '/') . WEB_ROOT);
 // DOMAIN_NAME
 define('DOMAIN_NAME', $config['paths']['domain_name']);
 
-// GATEKEEPER_PATH
-define('GATEKEEPER_PATH', $config['paths']['gatekeeper_path']);
-
 
 
 //=============//
@@ -52,8 +49,9 @@ define('NOREPLY_EMAIL', $config['mail']['noreply_email']);
 //=======//
 // Paths //
 //=======//
-// Python
 define('PYTHON_PATH', $config['paths']['python_path']);
+define('NODE_PATH', $config['paths']['node_path']);
+define('GATEKEEPER_PATH', $config['paths']['gatekeeper_path']);
 
 // Location of publicly and internally available BLAST databases
 // Used by BlastDBMetadata class to dynamically generate list of BLAST databases
@@ -79,6 +77,12 @@ define('MAILCHIMP_API_KEY', $config['apikeys']['mailchimp']);
 define('GRECAPTCHA_API_KEY', $config['apikeys']['grecaptcha']);
 define('MAPBOX_API_KEY', $config['apikeys']['mapbox']);
 define('LOTUSBASE_API_KEY', $config['apikeys']['lotusbase']);
+
+
+//=========//
+// Secrets //
+//=========//
+define('JWT_SECRET', $config['secrets']['jwt']);
 
 
 //==========//

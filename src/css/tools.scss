@@ -647,9 +647,17 @@ body.tools {
 			span[data-mode='manual'] { background-color: #777; color: #eee; }
 		}
 	}
+	#sigma-searchform__processing {
+		background-color: rgba(#eee,.5);
+		margin-top: 1.5rem;
+		padding: .75rem 1.5rem;
+		p {
+			margin-bottom: .75rem;
+		}
+	}
 	#sigma-searchform__highlight--not-found {
 		display: none;
-		max-width: 50vw;	// Hack to prevent right button from collapsing
+		width: 100%;
 		&.active {
 			display: block;
 			margin-top: 1rem;

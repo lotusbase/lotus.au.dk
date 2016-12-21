@@ -240,19 +240,24 @@
 
 						// Construct mail
 						$mail_generator = new \LotusBase\MailGenerator();
-						$mail_generator->set_title('<em>Lotus</em> Base: LORE1 seeds shipped');
+						$mail_generator->set_title('<em>Lotus</em> Base: <em>LORE1</em> seeds shipped');
 						$mail_generator->set_header_image('cid:mail_header_image');
 						$mail_generator->set_content(array(
-							'<h3 style="text-align: center; ">Your LORE1 seeds are on the way</h3>
+							'<h3 style="text-align: center; ">Your <em>LORE1</em> seeds are on the way</h3>
 							<p>Dear '.$firstname.',</p>
 							<p>Your order has been successfully processed and shipped from our location. The delivery time depends on your geographical location, but it should take no longer than four (4) weeks.</p>
 							<p>Your processed order is assigned the following key:<br /><strong>'.$OrderSalt.'</strong></p>
 							<p>The complete order is as follow:</p>
 							'.$seeds_table.'
+							<p>Please <a href="https://lotus.au.dk/meta/citation">refer to the citation guide</a> when citing the use of <em>Lotus</em> Base and the <em>LORE1</em> resource.</p>
+							<ul>
+								<li>Mun et al. (in press). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em></li>
+								<li>Małolepszy et al. (2016). The <em>LORE1</em> insertion mutant resource. <em>Plant J.</em> <a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352">doi:10.1111/tpj.13243</a>.</li>
+							</ul>
 							<p>If you need to return seeds to us after propagating the plant line, please address it to:</p>
 							<blockquote>Stig U. Andersen<br />Centre for Carbohydrate Recognition and Signalling<br />Gustav Wieds Vej 10<br />Aarhus C, DK-8000</blockquote>
-							<p>Should you require any assistance, or have any enquiries, kindly contact us through the <a href="https://lotus.au.dk/contact.php?key='.$OrderSalt.'">contact form</a> on our site. Your order key has been included in the link. <strong>Do not reply to this email because mails to this account (noreply@mb.au.dk) will not be directed to any staff.</strong></p>
-							<p>Yours sincerely,<br />Lotus Base &amp; LORE1 Project Team<br />Centre for Carbohydrate Recognition and Signalling<br />Aarhus University<br />Gustav Wieds Vej 10<br />DK-8000 Aarhus C</p>
+							<p>Should you require any assistance, or have any enquiries, kindly contact us through the <a href="https://lotus.au.dk/meta/contact.php?key='.$OrderSalt.'">contact form</a> on our site. Your order key has been included in the link. <strong>Do not reply to this email because mails to this account (noreply@mb.au.dk) will not be directed to any staff.</strong></p>
+							<p>Yours sincerely,<br /><em>Lotus</em> Base<br />Centre for Carbohydrate Recognition and Signalling<br />Aarhus University<br />Gustav Wieds Vej 10<br />DK-8000 Aarhus C</p>
 							'));
 
 						$mail->IsSMTP();
@@ -261,7 +266,7 @@
 						$mail->SetFrom(NOREPLY_EMAIL, 'Lotus Base');
 						$mail->CharSet		= "utf-8";
 						$mail->Encoding		= "base64";
-						$mail->Subject		= "Lotus Base: LORE1 order shipped";
+						$mail->Subject		= "LORE1 order shipped";
 						$mail->AltBody		= "To view the message, please use an HTML compatible email viewer.";
 						$mail->MsgHTML($mail_generator->get_mail());
 						$mail->AddAddress($email, $firstname.' '.$lastname);

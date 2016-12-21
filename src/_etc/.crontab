@@ -1,5 +1,6 @@
 SHELL=/bin/bash
 
-* * * * * /var/www/html/lib/python/corr/cron_correlationNetworkServer.sh
-@reboot /var/www/html/lib/python/corr/cron_correlationNetworkServer.sh
-00 00 * * * /var/www/html/lib/python/corr/cron_correlationJobDelete.sh
+* * * * * /var/www/html/lib/corx/cron_correlationNetworkServer.sh > /dev/null 2>&1
+@reboot /var/www/html/lib/corx/cron_correlationNetworkServer.sh > /dev/null 2>&1
+00 00 * * * /var/www/html/lib/corx/cron_correlationJobDelete.sh
+* * * * * env > /tmp/cron_is_working.txt

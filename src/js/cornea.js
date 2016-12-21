@@ -349,13 +349,13 @@ $(function() {
 								var progress = row.meta.cursor,
 									newPercent = Math.round(progress / f.size * 100);
 
+								// Push each row into final string
+								csvData.push(row.data[0]);
+
 								// Update progress
 								if (newPercent === percent) return;
 								percent = newPercent;
 								$t.find('.dropzone__message--normal .dropzone__progress span').css('width',percent+'%');
-
-								// Push each row into final string
-								csvData.push(row.data[0]);
 							},
 							complete: function(results, file) {
 
@@ -367,6 +367,11 @@ $(function() {
 
 								// Send data to nodes highlighting function
 								globalFun.sigma.highlightNodes(csvData);
+
+								// Update textarea value
+								$('#sigma__highlight-id').val(csvData.map(function(x){
+									return x.join('\t');
+								}).join('\n')).trigger('change');
 
 							},
 							error: function(error, file) {
@@ -1020,17 +1025,23 @@ $(function() {
 											'<p>Press <kbd>Esc</kbd> to dismiss this message.</p>',
 										'</div>',
 									'</div>',
-									'<small><strong>Enter each candidate on a new line, with an optional second column separated by a comma.</strong><br /><a class="format-info" data-modal="wide" href="'+(paramSource === 'request' ? '..' : '../../..')+'/lib/docs/cornea/advanced-highlight" title="File format for advanced node highlighting">How should I format my data?</a></small>',
+									'<small><strong>Enter each candidate on a new line, with an optional second column separated by a comma.</strong><br /><a class="format-info" data-modal="wide" href="'+(paramSource === 'request' ? '..' : '../../..')+'/lib/docs/cornea/advanced-highlight" title="File format for advanced node highlighting">How should I format my data?</a></small>',	
+									'<div class="sigma-searchform__input cols" id="sigma-searchform__processing">',
+										'<p class="full-width">If you want to map numerical values in your second column (if specified) into a color scale, enable scaling below and specify the upper and lower ranges for palette values.</p>',
+										'<label for="sigma-searchform__scaler-toggle" class="col-one">Scale values</label><div class="col-two"><input id="sigma-searchform__scaler-toggle" type="checkbox" class="prettify" /></div>',
+										'<label for="sigma-searchform__scaler-min" class="col-one">Lower range</label><input type="number" id="sigma-searchform__scaler-min" value="-5" step="0.1" class="col-two" />',
+										'<label for="sigma-searchform__scaler-max" class="col-one">Upper range</label><input type="number" id="sigma-searchform__scaler-max" value="5" step="0.1" class="col-two" />',
+									'</div>',
 									'<div id="sigma-searchform__highlight--not-found" class="user-message warning"></div>',
-									'<a href="#" id="sigma__highlight-id__mode-switch" class="floating-controls position--right" data-mode="manual">',
-										'<span data-mode="upload" class="icon-doc-text icon--no-spacing" title="Upload CSV file with candidate(s)"></span>',
-										'<span data-mode="manual" class="icon-keyboard icon--no-spacing" title="Manually enter candidate(s)"></span>',
-									'</a>',
-								'</div>',
+										'<a href="#" id="sigma__highlight-id__mode-switch" class="floating-controls position--right" data-mode="manual">',
+											'<span data-mode="upload" class="icon-doc-text icon--no-spacing" title="Upload CSV file with candidate(s)"></span>',
+											'<span data-mode="manual" class="icon-keyboard icon--no-spacing" title="Manually enter candidate(s)"></span>',
+										'</a>',
+									'</div>',
 							'</div>',
 							'<div id="sigma-searchform__controls" class="cols justify-content__center">',
-								'<button id="sigma-searchform__control__highlight" type="button"><span class="icon-filter">Apply filter</span></button>',
-								'<button id="sigma-searchform__control__remove-highlights" type="button" disabled><span class="icon-cancel">Remove filter</span></button>',
+								'<button id="sigma-searchform__control__highlight" type="button" class="button--small"><span class="icon-filter">Apply filter</span></button>',
+								'<button id="sigma-searchform__control__remove-highlights" type="button" class="button--small" disabled><span class="icon-cancel">Remove filter</span></button>',
 							'</div>',
 						'</div></form>'
 						].join('')
@@ -1553,6 +1564,30 @@ $(function() {
 
 					};
 
+				// Check if user has chosen to scale values
+				var _min = -5,
+					_max = +5,
+					fills = ['#67001f','#b2182b','#d6604d','#f4a582','#92c5de','#4393c3','#2166ac','#053061'],
+					scale = false;
+
+				if($('#sigma-searchform__scaler-toggle').is(':checked')) {
+					// Get configuration
+					var min = parseFloat($('#sigma-searchform__scaler-min')),
+						max = parseFloat($('#sigma-searchform__scaler-max'));
+
+					// Coerce min and max values
+					if(min > max) {
+						_min = max;
+						_max = min;
+					} else if(min < max) {
+						_min = min;
+						_max = max;
+					}
+
+					// Enable scale
+					scale = true;
+				}
+
 				// First loop: Assign groups and get unique groups
 				nodes.forEach(function(n) {
 
@@ -1560,12 +1595,40 @@ $(function() {
 						nodeGroup = $.trim(n[1] || hash),
 						nodeColor = null;
 
-					// Check of nodeGroup is a color
-					if(colorCheck(nodeGroup)) {
-						nodeColor = colorCheck(nodeGroup);
+					if(scale && n[1]) {
+						// Scale color
+						var scale1 = d3.scale.linear()
+								.domain([_min,_max])
+								.range([0, 1])
+								.nice(),
+
+							scale2 = d3.scale.linear()
+								.domain(d3.range(0, 1, 1.0 / (fills.length - 1)))
+								.interpolate(d3.interpolateHcl)
+								.range(fills),
+
+							scaleColor = function(value) {
+								var _c;
+								if(value < _min) {
+									_c = fills[0];
+								} else if(value > _max) {
+									_c = fills[fills.length-1];
+								} else {
+									_c = scale2(scale1(value));
+								}
+								return _c;
+							};
+
+						// If scale is turned on
+						nodeColor = scaleColor(n[1]);
 					} else {
-						// Store unique node groups only if it is not a valid color (so we can assign a custom color to them)
-						if(nodeGroups.indexOf(nodeGroup) < 0) nodeGroups.push(nodeGroup);
+						// Check of nodeGroup is a color
+						if(colorCheck(nodeGroup)) {
+							nodeColor = colorCheck(nodeGroup);
+						} else {
+							// Store unique node groups only if it is not a valid color (so we can assign a custom color to them)
+							if(nodeGroups.indexOf(nodeGroup) < 0) nodeGroups.push(nodeGroup);
+						}
 					}
 					
 					// Push node settings into array
@@ -2277,6 +2340,9 @@ $(function() {
 
 		// Reset custom highlighted nodes
 		var customHighlightedNodes = [];
+
+		// Remove missing IDs on network map
+		$('#sigma-searchform__highlight--not-found').empty().removeClass('active');
 
 		// Reset sigma node colors
 		var s = sigmaInst;
