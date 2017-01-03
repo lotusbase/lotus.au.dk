@@ -47,7 +47,7 @@
 
 		<h3>How can I cite <em>Lotus</em> Base?</h3>
 		<p>The manuscript for <em>Lotus</em> Base is currently in press, and should be citated as the following:</p>
-		<pre>Mun et al. (in press). Lotus Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em></pre>
+		<pre>Mun et al. (2016). Lotus Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em> doi:10.1038/srep39447</pre>
 		<p>For additional guidelines towards citing resources hosted on <em>Lotus</em> Base, please refer to the <a href="<?php echo WEB_ROOT; ?>/meta/citation" title="Citation guide">citation guide</a>.</p>
 
 		<h3>Meet the team</h3>

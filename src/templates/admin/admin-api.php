@@ -251,7 +251,7 @@
 							'.$seeds_table.'
 							<p>Please <a href="https://lotus.au.dk/meta/citation">refer to the citation guide</a> when citing the use of <em>Lotus</em> Base and the <em>LORE1</em> resource.</p>
 							<ul>
-								<li>Mun et al. (in press). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em></li>
+								<li>Mun et al. (2016). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em> <a href="http://www.nature.com/articles/srep39447">doi:10.1038/srep39447</a>.</li>
 								<li>Małolepszy et al. (2016). The <em>LORE1</em> insertion mutant resource. <em>Plant J.</em> <a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352">doi:10.1111/tpj.13243</a>.</li>
 							</ul>
 							<p>If you need to return seeds to us after propagating the plant line, please address it to:</p>
