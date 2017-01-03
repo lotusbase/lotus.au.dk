@@ -1857,6 +1857,13 @@ body {
 			}
 			span {
 				display: block;
+<<<<<<< HEAD
+=======
+				&.file-meta__file-desc {
+					font-size: 1.5rem;
+					line-height: 1.25em;
+				}
+>>>>>>> f605a0448f9e55ca17b189d5586a3368746e53f4
 				&.file-meta__file-name {
 					font-size: .875rem;
 				}
