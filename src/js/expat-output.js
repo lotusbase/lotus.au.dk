@@ -377,6 +377,7 @@ $(function() {
 				.empty()
 				.append($dataDownload, $userCustom, $userMessage, '<div class="d3-chart" id="expat-linegraph"></div><div class="d3-chart" id="expat-heatmap"></div>', $svgDownload, $('<div class="table-overflow" />').append($table), '<small><strong>* Bolded '+data.rowType.toLowerCase()+' represents best match based on BLAST results.</strong></small>')
 				.find('.toggle.hide-first').children().not('h3').hide();
+				$('#expat-results').show();
 
 				// Enable jQuery UI tabs
 				$('#expat-user-custom').tabs();
@@ -2625,16 +2626,19 @@ $(function() {
 				if(expat.params.ids && expat.params.dataset) {
 					// Update inputs
 					$('#expat-row').val(expat.params.ids).trigger('manualchange');
-					$('#expat-dataset option[value="'+expat.params.dataset+'"]').trigger('change');
+					$('#expat-dataset').val(expat.params.dataset).trigger('change');
 
 					// Submit form
-					$('#expat-form').trigger('submit');
+					window.setTimeout(function() {
+						expat.status.searched = false;
+						$('#expat-form').trigger('submit');
+					}, 500);
 				} else {
 					$('#expat-message').removeClass().addClass('warning user-message').html('You have provided incomplete information to perform a search. Please check that you have provided both an a probe/gene ID and a dataset.').slideDown();
 				}
 			}
 		} else {
-			if(expat.status.searched && !expat.params) {
+			if(expat.status.searched) {
 				// Empty results
 				$('#expat-results').empty();
 
