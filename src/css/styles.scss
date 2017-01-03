@@ -1846,12 +1846,24 @@ body {
 		& > div {
 			&.file-meta__desc { width: 75%; }
 			&.file-meta__downloads { border-left: 1px solid #ccc; width: 25%; span { text-align: center; }}
+			h3.file-meta__file-title {
+				font-size: 1.5rem;
+				font-weight: normal;
+				margin: 0;
+				line-height: 1.25em;
+			}
+			p.file-meta__file-desc {
+				margin-bottom: 0;
+			}
 			span {
 				display: block;
+<<<<<<< HEAD
+=======
 				&.file-meta__file-desc {
 					font-size: 1.5rem;
 					line-height: 1.25em;
 				}
+>>>>>>> f605a0448f9e55ca17b189d5586a3368746e53f4
 				&.file-meta__file-name {
 					font-size: .875rem;
 				}
@@ -1862,6 +1874,27 @@ body {
 					line-height: 1.25em;
 				}
 			}
+		}
+		ul.file-meta__file-data {
+			li {
+				background: none;
+				border: none;
+				font-size: .875rem;
+				margin: 0;
+				padding: 0;
+				&:after {
+					content: '·';
+					display: inline-block;
+					margin: 0 .5rem;
+				}
+				&:last-child:after {
+					content: '';
+				}
+			}
+		}
+		ul.file-meta__tags {
+			color: #333;
+			margin-top: .5rem;
 		}
 		&:hover > div.file-meta__downloads { border-left-color: rgba(#fff,.5); }
 	}

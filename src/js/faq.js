@@ -33,7 +33,7 @@ $(function() {
 
 			// Filtering function
 			filter: function() {
-				$('#faq__user-message').empty().hide().removeClass('reminder approved');
+				$('#faq__user-message').empty().hide().removeClass('warning approved');
 				var keyword = $(this).val(),
 				    count = 0;
 
@@ -47,10 +47,10 @@ $(function() {
 					});
 
 					if(count < 1) {
-						$('#faq__user-message').html('<span class="pictogram icon-cancel"></span><p>Your search term has not matched any questions. Please try again.</p>').show().addClass("reminder");
+						$('#faq__user-message').html('<span class="pictogram icon-cancel"></span><p>Your search term has not matched any questions. Please try again.</p>').show().addClass("warning");
 						$('.faq-action').fadeOut();
 					} else {
-						$('#faq__user-message').html('<span class="pictogram icon-check"></span><p>Your search term has returned '+count+' '+globalFun.pl(count, 'result', 'results')+'.</p>').show().addClass("approved");
+						$('#faq__user-message').html('<span class="pictogram icon-ok"></span><p>Your search term has returned '+count+' '+globalFun.pl(count, 'result', 'results')+'.</p>').show().addClass("approved");
 						$('.faq-action').fadeIn();
 					}
 				} else {
