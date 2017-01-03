@@ -3,30 +3,20 @@ $(function() {
 	// Make tabs
 	$('#citation-tabs').tabs();
 
-	// General function to check popstate events
-	$w.on('popstate', function(e) {
-		if (e.originalEvent.state && e.originalEvent.state.lotusbase) {
-			var $tab = $('.ui-tabs ul.ui-tabs-nav li a[href="'+window.location.hash+'"]'),
-				index = $tab.parent().index(),
-				$parentTab = $tab.closest('.ui-tabs');
-			$parentTab.tabs("option", "active", index);
-		}
-	});
-
 	// Data for citations
 	var refs = [
 		{
 			'tags': ['lotus-base'],
 			'cite': {
 				'list': 'Mun et al. (in press). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em>',
-				'bibtex': '@article{Maolepszy:2016aa,\n    Author = {Mun, Terry and Bachmann, Asger and Gupta, Vikas and Stougaard, Jens and Andersen, Stig Uggerh{\\o}j},\n    Journal = {Sci Rep},\n    Journal-Full = {Scientific Reports},\n    Pst = {aheadofprint},\n    Title = {\\emph{Lotus} Base, an integrated information portal for the model legume \\emph{Lotus japonicus}},\n    Year = {in press}}'
+				'bibtex': '@article{Mun:2016aa,\n    Author = {Mun, Terry and Bachmann, Asger and Gupta, Vikas and Stougaard, Jens and Andersen, Stig U},\n    Doi = {10.1038/srep39447},\n    Journal = {Sci Rep},\n    Journal-Full = {Scientific reports},\n    Month = {Dec},\n    Pages = {39447},\n    Pmid = {28008948},\n    Pst = {epublish},\n    Title = {\emph{Lotus} Base: An integrated information portal for the model legume \emph{Lotus japonicus}},\n    Volume = {6},\n    Year = {2016},\n    Bdsk-Url-1 = {http://dx.doi.org/10.1038/srep39447}}'
 			}
 		},
 		{
 			'tags': ['lore1-mutants'],
 			'cite': {
 				'list': 'Małolepszy et al. (2016). The <em>LORE1</em> insertion mutant resource. <em>Plant J.</em> <a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352">doi:10.1111/tpj.13243</a>.',
-				'bibtex': '@article{Maolepszy:2016aa,\n    Author = {Ma{\\l}olepszy, Anna and Mun, Terry and Sandal, Niels and Gupta, Vikas and Dubin, Manu and Urba{\\\'n}ski, Dorian and Shah, Niraj and Bachmann, Asger and Fukai, Eigo and Hirakawa, Hideki and Tabata, Satoshi and Nadzieja, Marcin and Markmann, Katharina and Su, Junyi and Umehara, Yosuke and Soyano, Takashi and Miyahara, Akira and Sato, Shusei and Hayashi, Makoto and Stougaard, Jens and Andersen, Stig Uggerh{\\o}j},\n    Doi = {10.1111/tpj.13243},\n    Journal = {Plant J},\n    Journal-Full = {The Plant journal : for cell and molecular biology},\n    Month = {Jun},\n    Pmid = {27322352},\n    Pst = {aheadofprint},\n    Title = {The \\emph{\\textsc{LORE1}} insertion mutant resource},\n    Year = {2016},\n    Bdsk-Url-1 = {http://dx.doi.org/10.1111/tpj.13243}}'
+				'bibtex': '@article{Maolepszy:2016aa,\n    Author = {Ma{\l}olepszy, Anna and Mun, Terry and Sandal, Niels and Gupta, Vikas and Dubin, Manu and Urba{\'n}ski, Dorian and Shah, Niraj and Bachmann, Asger and Fukai, Eigo and Hirakawa, Hideki and Tabata, Satoshi and Nadzieja, Marcin and Markmann, Katharina and Su, Junyi and Umehara, Yosuke and Soyano, Takashi and Miyahara, Akira and Sato, Shusei and Hayashi, Makoto and Stougaard, Jens and Andersen, Stig Uggerh{\o}j},\n    Doi = {10.1111/tpj.13243},\n    Journal = {Plant J},\n    Journal-Full = {The Plant journal : for cell and molecular biology},\n    Keywords = {Lotus japonicus; DNA methylation; Long terminal repeat retrotransposon; mutagenesis; palindrome},\n    Month = {Oct},\n    Number = {2},\n    Pages = {306-317},\n    Pmid = {27322352},\n    Pst = {ppublish},\n    Title = {The \emph{\textsc{LORE1}} insertion mutant resource},\n    Volume = {88},\n    Year = {2016},\n    Bdsk-Url-1 = {http://dx.doi.org/10.1111/tpj.13243}}'
 			}
 		},
 		{
@@ -92,5 +82,25 @@ $(function() {
 		$('#citation__html textarea').html(globalFun.escapeHTML('<ul>\n\t<li>'+$.map(_refs, function(r) { return r.cite.list; }).join('</li>\n\t<li>')+'</li>\n</ul>'));
 		$('#citation__bibtex textarea').html($.map(_refs, function(r) { return r.cite.bibtex; }).join('\n\n'));
 
+	});
+
+	// Export function for bibtex
+	globalFun.generateDownloadFile = function(opts) {
+		var _opts = $.extend({}, {
+				string: '',
+				mimeType: 'text/plain',
+				fileExtension: 'txt',
+				fileName: 'lotusbase_output'
+			}, opts),
+			blob = new Blob([_opts.string], {type: _opts.mimeType+";charset=utf-8"});
+		saveAs(blob, _opts.fileName+"."+_opts.fileExtension);
+	};
+	$('button[data-action="export"]').click(function() {
+		globalFun.generateDownloadFile({
+			string: $('#citation__bibtex textarea').val(),
+			mimeType: $(this).data('mime-type'),
+			fileExtension: $(this).data('file-extension'),
+			fileName: $(this).data('file-name')
+		});
 	});
 });

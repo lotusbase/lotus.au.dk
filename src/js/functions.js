@@ -55,6 +55,23 @@ var globalFun = {
 		$w.on('DOMMouseScroll mousewheel', function() {
 			$('html, body').stop(true,true);
 		});
+
+		// jQuery UI tab states
+		$d.on('click', '.ui-tabs a.ui-tabs-anchor', function(e) {
+			e.preventDefault();
+			window.history.pushState({lotusbase: true}, '', $(this).attr('href'));
+		});
+
+		// General function to check popstate events
+		$w.on('popstate', function(e) {
+			console.log(e);
+			if (e.originalEvent.state && e.originalEvent.state.lotusbase) {
+				var $tab = $('.ui-tabs ul.ui-tabs-nav li a[href="'+window.location.hash+'"]'),
+					index = $tab.parent().index(),
+					$parentTab = $tab.closest('.ui-tabs');
+				$parentTab.tabs("option", "active", index);
+			}
+		});
 	},
 	smoothScroll: function(hash) {
 		var target = $(hash);

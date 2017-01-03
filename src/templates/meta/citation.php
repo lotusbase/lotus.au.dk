@@ -14,7 +14,7 @@
 	?>
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/meta.min.css" type="text/css" media="screen" />
 </head>
-<body class="meta citation">
+<body class="meta citation init-scroll--disabled">
 	<?php
 		$header = new \LotusBase\Component\PageHeader();
 		echo $header->get_header();
@@ -69,18 +69,18 @@
 
 			<div id="citation__bibtex">
 				<textarea readonly>@article{Mun:2016aa,
-	Author = {Mun, Terry and Bachmann, Asger and Gupta, Vikas and Stougaard, Jens and Andersen, Stig U},
-	Doi = {10.1038/srep39447},
-	Journal = {Sci Rep},
-	Journal-Full = {Scientific reports},
-	Month = {Dec},
-	Pages = {39447},
-	Pmid = {28008948},
-	Pst = {epublish},
-	Title = {\emph{Lotus} Base: An integrated information portal for the model legume \emph{Lotus japonicus}},
-	Volume = {6},
-	Year = {2016},
-	Bdsk-Url-1 = {http://dx.doi.org/10.1038/srep39447}}
+    Author = {Mun, Terry and Bachmann, Asger and Gupta, Vikas and Stougaard, Jens and Andersen, Stig U},
+    Doi = {10.1038/srep39447},
+    Journal = {Sci Rep},
+    Journal-Full = {Scientific reports},
+    Month = {Dec},
+    Pages = {39447},
+    Pmid = {28008948},
+    Pst = {epublish},
+    Title = {\emph{Lotus} Base: An integrated information portal for the model legume \emph{Lotus japonicus}},
+    Volume = {6},
+    Year = {2016},
+    Bdsk-Url-1 = {http://dx.doi.org/10.1038/srep39447}}
 
 @article{Maolepszy:2016aa,
     Author = {Ma{\l}olepszy, Anna and Mun, Terry and Sandal, Niels and Gupta, Vikas and Dubin, Manu and Urba{\'n}ski, Dorian and Shah, Niraj and Bachmann, Asger and Fukai, Eigo and Hirakawa, Hideki and Tabata, Satoshi and Nadzieja, Marcin and Markmann, Katharina and Su, Junyi and Umehara, Yosuke and Soyano, Takashi and Miyahara, Akira and Sato, Shusei and Hayashi, Makoto and Stougaard, Jens and Andersen, Stig Uggerh{\o}j},
@@ -88,15 +88,15 @@
     Journal = {Plant J},
     Journal-Full = {The Plant journal : for cell and molecular biology},
     Keywords = {Lotus japonicus; DNA methylation; Long terminal repeat retrotransposon; mutagenesis; palindrome},
-	Month = {Oct},
-	Number = {2},
-	Pages = {306-317},
-	Pmid = {27322352},
-	Pst = {ppublish},
+    Month = {Oct},
+    Number = {2},
+    Pages = {306-317},
+    Pmid = {27322352},
+    Pst = {ppublish},
     Title = {The \emph{\textsc{LORE1}} insertion mutant resource},
     Volume = {88},
-	Year = {2016},
-	Bdsk-Url-1 = {http://dx.doi.org/10.1111/tpj.13243}}
+    Year = {2016},
+    Bdsk-Url-1 = {http://dx.doi.org/10.1111/tpj.13243}}
 
 @article{Urbanski:2012aa,
     Author = {Urba{\'n}ski, Dorian Fabian and Ma{\l}olepszy, Anna and Stougaard, Jens and Andersen, Stig Uggerh{\o}j},
@@ -129,11 +129,13 @@
     Volume = {69},
     Year = {2012},
     Bdsk-Url-1 = {http://dx.doi.org/10.1111/j.1365-313X.2011.04826.x}}</textarea>
+    		<p class="align-center form__controls"><button type="button" data-action="export" data-mime-type="text/plain" data-file-extension="bib" data-file-name="lotusbase_citation" class="icon-download">Export</button></p>
 			</div>
 		</div>
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/citation.min.js"></script>
 </body>
 </html>
