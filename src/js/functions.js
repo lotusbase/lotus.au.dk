@@ -56,14 +56,27 @@ var globalFun = {
 			$('html, body').stop(true,true);
 		});
 
+		// jQuery UI tabs
+		$d.on('click', '.ui-tabs a.ui-tabs-anchor', function(e) {
+			e.preventDefault();
+			window.history.pushState({lotusbase: true}, '', $(this).attr('href'));
+			$(':input[name="hash"]').val($(this).attr('href').substring(1));
+		});
 
 		// General function to check popstate events
 		$w.on('popstate', function(e) {
 			if (e.originalEvent.state && e.originalEvent.state.lotusbase) {
 				var $tab = $('.ui-tabs ul.ui-tabs-nav li a[href="'+window.location.hash+'"]'),
-					index = $tab.parent().index() || 0,
+					index = $tab.parent().index(),
 					$parentTab = $tab.closest('.ui-tabs');
-				$parentTab.tabs("option", "active", index);
+
+				if($tab.length) {
+					$parentTab.tabs("option", "active", index);
+				} else {
+					$('.ui-tabs').tabs("option", "active", 0);
+				}
+			} else {
+				$('.ui-tabs').tabs("option", "active", 0);
 			}
 		});
 	},
