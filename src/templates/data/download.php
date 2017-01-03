@@ -77,7 +77,6 @@
 
 						echo '<li>
 						<a href="'.WEB_ROOT.'/'.$row['FilePath'].$row['FileName'].'" title="'.$row['FileDesc'].'">
-<<<<<<< HEAD
 							<div class="file-meta__desc ext-'.str_replace('.', '', $row['FileExtension']).'">
 								<h3 class="file-meta__file-title">'.$row['Title'].'</h3>
 								'.(!empty($row['Description']) ? '<p class="file-meta__file-desc">'.$row['Description'].'</p>' : '').'
@@ -87,11 +86,6 @@
 							echo '<li>'.$tag.'</li>';
 						}
 						echo'</ul>
-=======
-							<div class="file-meta__desc ext-'.str_replace('.', '', $row['FileExt']).'">
-								<span class="file-meta__file-desc">'.$row['FileDesc'].'</span>
-								<span class="file-meta__file-name">'.$row['FileName'].'</span>
->>>>>>> f605a0448f9e55ca17b189d5586a3368746e53f4
 							</div>
 							<div class="file-meta__downloads">
 								<span class="file-meta__download-count" data-count="'.$row['Count'].'">'.nf($count).'</span>
