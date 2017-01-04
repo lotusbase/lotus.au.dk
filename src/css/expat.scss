@@ -66,7 +66,6 @@
 #user-custom {
 	background-color: #ddd;
 	margin-bottom: 1.5em;
-	padding-bottom: 0;
 	overflow: hidden;
 	h3 {
 		font-size: 1.125rem;
@@ -75,7 +74,7 @@
 	}
 }
 #expat-user-custom {
-	margin: 0;
+	margin: 0 0 -0.75rem 0;
 	padding-bottom: 0;
 	position: relative;
 	left: -3rem;
