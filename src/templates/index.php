@@ -30,6 +30,13 @@
 		echo $header->get_header();
 	?>
 
+	<section id="intro" class="wrapper">
+		<h2>An integrated information portal for <em>Lotus</em></h2>
+		<p><em>Lotus</em> Base is an integrated information portal for the model legume <em>Lotus japonicus</em>. Similar to the creation of online portals for other model plants, <em>Lotus</em> Base is motivated by the fragmented landscape of <em>Lotus</em> data, and strives to provide comprehensive data and a unified workflow to legume researchers. In the spirit of open research, <em>Lotus</em> Base is open source and free-of-charge.</p>
+		<p>Further information on how <em>Lotus</em> Base is implemented can be gleaned from our published paper:</p>
+		<blockquote>Mun, T., Bachmann, A., Gupta, V., Stougaard, J., Andersen, S.U. (2016). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em> <a href="http://www.nature.com/articles/srep39447">doi:10.1038/srep39447</a>.</blockquote>
+	</section>
+
 	<section class="wrapper cols">
 		<div class="col">
 			<h2>Search</h2>
@@ -114,22 +121,22 @@
 		</div>
 	</section>
 
+
 	<section id="using-lore1-lines" class="wrapper">
 		<h2>Using <em>LORE1</em> lines</h2>
-		<p>The <em>LORE1</em> lines are currently shipped free of charge and MTAs are not required. If you find the lines useful in your research and have obtained them through <em>Lotus</em> Base, we ask that you cite the following <em>LORE1</em> papers:</p>
-
-		<ul>
-			<li><strong>The <em>LORE1</em> resource</strong>: Małolepszy et al. (2016). The <em>LORE1</em> insertion mutant resource. <em>Plant J.</em> <a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352">doi:10.1111/tpj.13243</a>.</li>
-			<li><strong>Use of <em>Lotus</em> Base</strong>: Mun et al. (2016). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em> <a href="http://www.nature.com/articles/srep39447">doi:10.1038/srep39447</a>.</li>
-		</ul>
-
-		<p>If you have used published protocols in establishing an independent <em>LORE1</em> mutagenesis population, please cite the following papers, published back-to-back in <em>Plant Journal</em>:
+		<p>The <em>LORE1</em> lines are currently shipped free of charge and MTAs are not required. If you have used published protocols in establishing an independent <em>LORE1</em> mutagenesis population, please cite the following papers, published back-to-back in <em>Plant Journal</em>:
 		<ul>
 			<li>Urbanski et al. (2012). Genome-wide <em>LORE1</em> retrotransposon mutagenesis and high-throughput insertion detection in <em>Lotus japonicus</em>. <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014280" title="Genome-wide LORE1 retrotransposon mutagenesis and high-throughput insertion detection in Lotus japonicus.">doi:10.1111/j.1365-313X.2011.04827.x</a>.</li>
 			<li>Fukai et al. (2012) Establishment of a <em>Lotus japonicus</em> gene tagging population using the exon-targeting endogenous retrotransposon <em>LORE1</em></strong> (2012). <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014259" title="Establishment of a Lotus japonicus gene tagging population using the exon-targeting endogenous retrotransposon LORE1.">doi:10.1111/j.1365-313X.2011.04826.x</a>.</li>
 		</ul>
 
-		<p class="user-message note align-center"><span class="icon-info-circled"></span>For further citation help, please refer to the <a href="<?php echo WEB_ROOT.'/meta/citation'; ?>" title="Citing Lotus Base">citation guide</a>.</p>
+		<p>For the general use of <em>LORE1</em> mutants, we ask you to cite:</p>
+
+		<ul>
+			<li>Małolepszy et al. (2016). The <em>LORE1</em> insertion mutant resource. <em>Plant J.</em> <a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352">doi:10.1111/tpj.13243</a>.</li>
+		</ul>
+
+		<p class="user-message note align-center"><span class="icon-book"></span>For further citation help, please refer to the <a href="<?php echo WEB_ROOT.'/meta/citation'; ?>" title="Citing Lotus Base">citation guide</a>.</p>
 
 		<p>The majority of the <em>LORE1</em> lines are released pre-publication, and the Centre for Carbohydrate Recognition and Signalling reserves the right to undertake and publish large-scale analysis of the insertion site data. Large-scale in this context refers to any sequence intervals or combinations thereof that exceed one megabase in length.</p>
 

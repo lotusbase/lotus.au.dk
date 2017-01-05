@@ -6,6 +6,18 @@
 @import 'components/form/input-suggestions';
 @import 'components/odometer';
 
+#header {
+	.header-content {
+		padding: 3rem 0;
+		h1 {
+			font-weight: 300;
+			em {
+				font-weight: 500;
+			}
+		}
+	}
+}
+
 #searchform-tabs {
 	#searchform-tabs__nav {
 		ul {

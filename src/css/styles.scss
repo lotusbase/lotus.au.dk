@@ -348,8 +348,8 @@ form {
 		}
 		svg.lotusbase-logo {
 			display: block;
-			width: 3em;
-			height: 3em;
+			width: 2.5em;
+			height: 2.5em;
 			margin: 0 auto 2rem;
 			position: relative;
 			top: .35em;
@@ -1829,12 +1829,8 @@ body {
 -----------------------------------*/
 #header.alt {
 	background-image:
-		radial-gradient(circle at 50% 50%, rgba(#eee,.35) 0%, rgba(#eee,0) 50%),
-		linear-gradient(90deg, rgba(#000,.25) 0%, rgba(#000,.25) 100%),
+		linear-gradient(135deg, rgba(darken(#c99a53,15),.5) 0%, rgba(darken(#57ada2,15),.5) 100%),
 		url('/dist/images/background/trianglify.svg');
-	.header-content {
-		text-shadow: 1px 1px 1px rgba(#000,.15);
-	}
 }
 
 
