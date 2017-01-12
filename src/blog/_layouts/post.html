@@ -12,6 +12,7 @@ layout: default
 	$header = new \LotusBase\Component\PageHeader();
 	$header->add_header_class('blog post');
 	{% if page.coverImage %}
+	$header->add_header_class('hasCoverImage');
 	$header->set_header_background_image('{{ page.coverImage }}');
 	{% endif %}
 	$header->set_header_content('<h1 class="post-title" itemprop="name headline">{{ page.title }}</h1>

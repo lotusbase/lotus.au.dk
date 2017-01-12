@@ -17,6 +17,7 @@ However, in light of the changing personnel in the lab, coupled with collaborato
 ### Ensuring continue, undisrupted acccess
 
 Therefore, all CARB users will be required to [register for a *Lotus Base* account](/users/register) in order to access internal files, if they have not done so already. Features that are affected by this change are:
+
 - [Expression Atlas](/expat/) (ExpAt)
 - [Genome Browser](/genome/) (JBrowse)
 - [*LORE1* genotyping primers](/tools/primers)
@@ -25,7 +26,7 @@ Therefore, all CARB users will be required to [register for a *Lotus Base* accou
 
 The current system administrator (Terry, [terry@mbg.au.dk](mailto:terry@mbg.au.dk)) will be responsible for adding verified/validated CARB members into a user group that has exclusive access to internal data. He will be notified when new CARB members have registered for accounts, and will perform necessary validation with new users before granting access.
 
-<p class="user-message note"><span class="icon-info-circled"></span>Registering for an account does not automatically grant access to internally-available resources.</p>
+<p class="user-message reminder"><span class="icon-info-circled"></span>Registering for an account does not automatically grant access to internally-available resources.</p>
 
 <p class="user-message"><span class="icon-info-circled"></span>If you are a CARB collaborator who wish to have access to internal data, <a href="/meta/contact">please do not hesitate to reach out to us</a>.</p>
 
