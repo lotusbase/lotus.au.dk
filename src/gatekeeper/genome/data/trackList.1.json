@@ -54,6 +54,19 @@
       },
       {
          "style" : {
+            "className" : "feature_repeat-masker",
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "Duplicated gene mask",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "JBrowse/View/Track/HTMLFeatures",
+         "urlTemplate" : "tracks/20170111_duplicated_gene_mask/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "JBrowse/View/Track/HTMLFeatures",
+         "label" : "20170111_duplicated_gene_mask"
+      },
+      {
+         "style" : {
             "className" : "generic_parent",
             "subfeatureClasses" : {
                "exon" : "feature_exon",
