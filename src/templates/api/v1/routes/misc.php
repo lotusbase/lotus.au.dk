@@ -128,50 +128,48 @@ $api->post('/contact', function($request, $response) {
 				'messages' => $error_messages
 			)));
 	} else {
-		// Send verification email
-		$mail = new PHPMailer(true);
+		// Create new PHPMailer instances for superadmin and user mails
+		$admin_mail = new PHPMailer(true);
+		$user_mail = new PHPMailer(true);
 
 		try {
 			// Get super admin details
 			$q2 = $db->prepare("SELECT auth.FirstName AS FirstName, auth.LastName AS LastName, auth.Email AS Email FROM auth LEFT JOIN adminprivileges AS adminrights ON auth.Authority = adminrights.Authority WHERE adminrights.Authority = 1");
 			$q2->execute();
 
-			// Construct mail
-			$mail_generator = new \LotusBase\MailGenerator();
-			$mail_generator->set_title('<em>Lotus</em> Base: Contact form submission');
-			$mail_generator->set_header_image('cid:mail_header_image');
-			$mail_generator->set_content(array(
+			// Construct super admin mail
+			$admin_mail_generator = new \LotusBase\MailGenerator();
+			$admin_mail_generator->set_title('<em>Lotus</em> Base: Contact form submission');
+			$admin_mail_generator->set_header_image('cid:mail_header_image');
+			$admin_mail_generator->set_content(array(
 				'<h3 style="text-align: center; ">'.($user ? 'Registered user' : 'User').' contact from <em>Lotus</em> Base</h3>
-				<br>
-				You have received a message from '.$fname.' '.$lname.'. '.($user ? 'The user is a registered member and logged in when this mail was sent.' : '').'
-				<br><br>
-				<strong>Topic: </strong> '.$topic.'
-				<br>
-				'.(!empty($org) ? '<strong>Organization: </strong>'.$org.'<br>' : '').'
-				'.(!empty($subject) ? '<strong>Subject:</strong> '.$subject.'<br>' : '').'
-				'.(!empty($salt) ? '<strong>Order ID:</strong> <a href="https://'.$_SERVER['HTTP_HOST'].'/admin/orders.php?salt='.$salt.'">'.$salt.'</a><br>' : '').'
-				<strong>Message:</strong>
+				<p>You have received a message from '.$fname.' '.$lname.'. '.($user ? 'The user is a registered member and logged in when this mail was sent.' : '').'</p>
+				<p><strong>Topic: </strong> '.$topic.'<br />
+				'.(!empty($org) ? '<strong>Organization: </strong>'.$org.'<br />' : '').'
+				'.(!empty($subject) ? '<strong>Subject:</strong> '.$subject.'<br />' : '').'
+				'.(!empty($salt) ? '<strong>Order ID:</strong> <a href="https://'.$_SERVER['HTTP_HOST'].'/admin/orders.php?salt='.$salt.'">'.$salt.'</a>' : '').'</p>
+				<p><strong>Message:</strong></p>
 				<blockquote style="background-color: #ddd; padding: 16px; margin: 0; border: 1px solid #ccc;">'.$message.'</blockquote>
 				'));
 
-			$mail->IsSMTP();
-			$mail->IsHTML(true);
-			$mail->Host			= SMTP_MAILSERVER;
-			$mail->AddReplyTo($email, $fname.' '.$lname);
-			$mail->SetFrom(NOREPLY_EMAIL, 'Lotus Base');
-			$mail->CharSet		= "utf-8";
-			$mail->Encoding		= "base64";
-			$mail->Subject		= "Lotus Base user message on ".$topic.(!empty($subject) ? ': '.$subject : '');
-			$mail->AltBody		= "To view the message, please use an HTML compatible email viewer.";
-			$mail->MsgHTML($mail_generator->get_mail());
+			$admin_mail->IsSMTP();
+			$admin_mail->IsHTML(true);
+			$admin_mail->Host			= SMTP_MAILSERVER;
+			$admin_mail->AddReplyTo($email, $fname.' '.$lname);
+			$admin_mail->SetFrom(NOREPLY_EMAIL, 'Lotus Base');
+			$admin_mail->CharSet		= "utf-8";
+			$admin_mail->Encoding		= "base64";
+			$admin_mail->Subject		= "Lotus Base user message on ".$topic.(!empty($subject) ? ': '.$subject : '');
+			$admin_mail->AltBody		= "To view the message, please use an HTML compatible email viewer.";
+			$admin_mail->MsgHTML($admin_mail_generator->get_mail());
 			
 			// Add super admins
 			while($admin = $q2->fetch(PDO::FETCH_ASSOC)) {
-				$mail->AddAddress($admin['Email'], $admin['FirstName'].' '.$admin['LastName']);
+				$admin_mail->AddAddress($admin['Email'], $admin['FirstName'].' '.$admin['LastName']);
 			}
 
-			$mail->AddEmbeddedImage(DOC_ROOT."/dist/images/mail/header.jpg", mail_header_image);
-			$mail->smtpConnect(
+			$admin_mail->AddEmbeddedImage(DOC_ROOT."/dist/images/mail/header.jpg", mail_header_image);
+			$admin_mail->smtpConnect(
 				array(
 					"ssl" => array(
 						"verify_peer" => false,
@@ -181,7 +179,52 @@ $api->post('/contact', function($request, $response) {
 				)
 			);
 
-			$mail->Send();
+			$admin_mail->Send();
+
+
+
+			// Construct user mail
+			$user_mail_generator = new \LotusBase\MailGenerator();
+			$user_mail_generator->set_title('<em>Lotus</em> Base: Contact form submission');
+			$user_mail_generator->set_header_image('cid:mail_header_image');
+			$user_mail_generator->set_content(array(
+				'<h3 style="text-align: center; ">'.($user ? 'Registered user' : 'User').' contact from <em>Lotus</em> Base</h3>
+				<p>Hi '.$fname.',</p>
+				<p>Thank you for reaching out to us. We will respond to your inquiery as soon as possible. The following is the receipt of the message you have sent, included for your own reference:</p>
+				<p><strong>Topic: </strong> '.$topic.'<br />
+				'.(!empty($org) ? '<strong>Organization: </strong>'.$org.'<br />' : '').'
+				'.(!empty($subject) ? '<strong>Subject:</strong> '.$subject.'<br />' : '').'
+				'.(!empty($salt) ? '<strong>Order ID:</strong> <a href="https://'.$_SERVER['HTTP_HOST'].'/admin/orders.php?salt='.$salt.'">'.$salt.'</a>' : '').'</p>
+				<p><strong>Message:</strong></p>
+				<blockquote style="background-color: #ddd; padding: 16px; margin: 0; border: 1px solid #ccc;">'.$message.'</blockquote>
+				'));
+
+			$user_mail->IsSMTP();
+			$user_mail->IsHTML(true);
+			$user_mail->Host			= SMTP_MAILSERVER;
+			$user_mail->AddReplyTo(NOREPLY_EMAIL, 'Lotus Base');
+			$user_mail->SetFrom(NOREPLY_EMAIL, 'Lotus Base');
+			$user_mail->CharSet		= "utf-8";
+			$user_mail->Encoding	= "base64";
+			$user_mail->Subject		= "Receipt of contact from submssion on ".$topic.(!empty($subject) ? ': '.$subject : '');
+			$user_mail->AltBody		= "To view the message, please use an HTML compatible email viewer.";
+			$user_mail->MsgHTML($user_mail_generator->get_mail());
+			$user_mail->AddAddress($email, $fname.' '.$lname);
+			$user_mail->AddEmbeddedImage(DOC_ROOT."/dist/images/mail/header.jpg", mail_header_image);
+			$user_mail->smtpConnect(
+				array(
+					"ssl" => array(
+						"verify_peer" => false,
+						"verify_peer_name" => false,
+						"allow_self_signed" => true
+					)
+				)
+			);
+
+			$user_mail->Send();
+
+
+
 
 			// Mail successfully sent
 			return $response

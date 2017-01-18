@@ -87,17 +87,25 @@ $(function() {
 							'title': 'Whoops!',
 							'content': message,
 							'allowClose': true,
-							'class': 'warning'
+							'class': 'warning',
+							'actionButtons': [
+								'<a class="button" href="#" data-action="close">Dismiss</a>'
+							]
 						});
 					} else {
 						globalFun.modal.update({
 							'title': 'Mail sent!',
-							'content': '<p>Your mail has been successfully dispatched. We promise we will get back to you as soon as possible.</p>',
-							'allowClose': true,
+							'content': '<p>Your mail has been successfully dispatched. We promise we will get back to you as soon as possible. You will be redirected to the homepage in 3 seconds.</p>',
+							'allowClose': false,
 							'class': 'approved',
-							'actionText': 'Back to site',
-							'actionHref': '/'
+							'actionButtons': [
+								'<a class="button" href="/">Back to site</a>'
+							]
 						});
+
+						window.setTimeout(function() {
+							window.location.href = '/';
+						}, 3000);
 					}
 				}, 1000);
 			})

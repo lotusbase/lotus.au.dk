@@ -133,7 +133,7 @@
 				<div class="col-two">
 					<select id="topic" name="topic" tabindex="1">
 
-						<option value="">Select One</option>
+						<option value="Miscellaneous" data-target="misc" data-message="1" selected>General enquiry</option>
 						
 						<optgroup label="LORE1 orders">
 							<option value="LORE1 order" data-target="lore1-order" data-message="1" <?php echo ($row ? 'selected' : ''); ?>>Issue with a specific order</option>
@@ -145,7 +145,6 @@
 							<option value="Bug report" data-target="bug-report" data-message="0">Bug report</option>
 							<option value="Datasets" data-target="datasets" data-message="1">Dataset availability</option>
 							<option value="User account" data-target="users" data-message="1">User account</option>
-							<option value="Miscellaneous" data-target="misc" data-message="1">General enquiry</option>
 						</optgroup>
 
 					</select>
@@ -286,6 +285,8 @@
 
 	</script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/contact.min.js"></script>
-	<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&amp;render=explicit" async defer></script>
+	<?php if(!is_logged_in()) { ?>
+		<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&amp;render=explicit" async defer></script>
+	<?php } ?>
 </body>
 </html>
