@@ -91,7 +91,7 @@
 			$mail->AltBody		= "To view the message, please use an HTML compatible email viewer.";
 			$mail->MsgHTML($mail_generator->get_mail());
 			$mail->AddAddress($login, $d['FirstName']." ".$d['LastName']);
-			$mail->AddEmbeddedImage(DOC_ROOT."/dist/images/mail/header.jpg", mail_header_image);
+			$mail->AddEmbeddedImage(DOC_ROOT."/dist/images/branding/logo-256x256.png", mail_header_image);
 			$mail->smtpConnect(
 				array(
 					"ssl" => array(

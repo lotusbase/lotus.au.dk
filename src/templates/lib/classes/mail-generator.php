@@ -569,15 +569,46 @@ class MailGenerator {
                         <tbody><tr>
                             <td class="mcnImageContent" valign="top" style="padding-right: 0px; padding-left: 0px; padding-top: 0; padding-bottom: 0; text-align:center;">
                                 
-                                    
-                                        <img align="center" alt="" src="'.(isset($this->mail_content['header_image']) ? $this->mail_content['header_image'] : 'https://lotus.au.dk/data/mail/header.jpg').'" width="600" style="max-width:1024px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
-                                    
+                                		<img align="center" alt="" src="'.(isset($this->mail_content['header_image']) ? $this->mail_content['header_image'] : 'https://lotus.au.dk/dist/images/branding/logo-256x256.png').'" width="128" style="max-width:256px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
                                 
                             </td>
                         </tr>
                     </tbody></table>
                 </td>
             </tr>
+    </tbody>
+</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
+    <tbody class="mcnTextBlockOuter">
+        <tr>
+            <td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
+              	<!--[if mso]>
+				<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+				<tr>
+				<![endif]-->
+			    
+				<!--[if mso]>
+				<td valign="top" width="600" style="width:600px;">
+				<![endif]-->
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+                    <tbody><tr>
+                        
+                        <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
+                        
+                            <h1 style="text-align: center; color: #467770; font-weight: normal;"><strong><em>Lotus</em></strong> Base</h1>
+
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+                
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
+            </td>
+        </tr>
     </tbody>
 </table></td>
 										</tr>
@@ -634,7 +665,11 @@ class MailGenerator {
                         
                         <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-right: 18px; padding-bottom: 9px; padding-left: 18px;">
                         
-                            <em>Content © '.date('Y').' Centre for Carbohydrate Recognition and Signalling, All rights reserved.</em><br>
+                        	Mun, T., Bachmann, A., Gupta, V., Stougaard, J., Andersen, S.U. (2016).<br>
+<em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>.<br>
+Scientific Reports.<a href="http://www.nature.com/articles/srep39447" target="_blank" title="Lotus Base: An integrated information portal for the model legume Lotus japonicus">doi:10.1038/srep39447</a>.<br>
+<br>
+<em>Content © '.date('Y').' Centre for Carbohydrate Recognition and Signalling, All rights reserved.</em><br>
 <br>
 <strong>Our mailing address is:</strong><br>
 Gustav Wieds Vej 10A, 8000 Aarhus C, Denmark.<br>

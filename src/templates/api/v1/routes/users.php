@@ -324,7 +324,7 @@ $api->put('/users/{salt}/profile', function($request, $response, $args) {
 					$mail->MsgHTML($mail_generator->get_mail());
 					$mail->AddAddress($p['email'], $auth_token['FirstName'].' '.$auth_token['LastName']);
 
-					$mail->AddEmbeddedImage(DOC_ROOT."/dist/images/mail/header.jpg", mail_header_image);
+					$mail->AddEmbeddedImage(DOC_ROOT."/dist/images/branding/logo-256x256.png", mail_header_image);
 					$mail->smtpConnect(
 						array(
 							"ssl" => array(

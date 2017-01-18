@@ -168,7 +168,7 @@ $api->post('/contact', function($request, $response) {
 				$admin_mail->AddAddress($admin['Email'], $admin['FirstName'].' '.$admin['LastName']);
 			}
 
-			$admin_mail->AddEmbeddedImage(DOC_ROOT."/dist/images/mail/header.jpg", mail_header_image);
+			$admin_mail->AddEmbeddedImage(DOC_ROOT."/dist/images/branding/logo-256x256.png", mail_header_image);
 			$admin_mail->smtpConnect(
 				array(
 					"ssl" => array(
@@ -210,7 +210,7 @@ $api->post('/contact', function($request, $response) {
 			$user_mail->AltBody		= "To view the message, please use an HTML compatible email viewer.";
 			$user_mail->MsgHTML($user_mail_generator->get_mail());
 			$user_mail->AddAddress($email, $fname.' '.$lname);
-			$user_mail->AddEmbeddedImage(DOC_ROOT."/dist/images/mail/header.jpg", mail_header_image);
+			$user_mail->AddEmbeddedImage(DOC_ROOT."/dist/images/branding/logo-256x256.png", mail_header_image);
 			$user_mail->smtpConnect(
 				array(
 					"ssl" => array(

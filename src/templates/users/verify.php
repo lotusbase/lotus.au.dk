@@ -103,7 +103,7 @@
 				}
 			}
 
-			$mail->AddEmbeddedImage(DOC_ROOT."/dist/images/mail/header.jpg", mail_header_image);
+			$mail->AddEmbeddedImage(DOC_ROOT."/dist/images/branding/logo-256x256.png", mail_header_image);
 			$mail->smtpConnect(
 				array(
 					"ssl" => array(
