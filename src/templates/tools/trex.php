@@ -562,9 +562,9 @@
 						<td class="str"><?php echo $row['Strand']; ?></td>
 						<td>
 							<?php
-								$interpro_ids = explode(',', $row['Interpro_ID']);
-								$dompred_ids = explode(',', $row['DomPred_ID']);
-								$go_ids = explode(',', $row['GO_ID']);
+								$interpro_ids = array_filter(explode(',', $row['Interpro_ID']));
+								$dompred_ids = array_filter(explode(',', $row['DomPred_ID']));
+								$go_ids = array_filter(explode(',', $row['GO_ID']));
 
 								// Domains
 								$domains_grouped = array('interpro' => $interpro_ids);
@@ -612,9 +612,9 @@
 								}
 
 								// Print domain predictions
-								$domains = array_unique(array_merge($interpro_ids, $dompred_ids));
+								$domains = array_filter(array_unique(array_merge($interpro_ids, $dompred_ids)));
 								asort($domains);
-								if(count($domains)) {
+								if(!empty($domains)) {
 									$out = '<div class="dropdown button"><span class="dropdown--title">'.count($domains).' domain '.pl(count($domains), 'prediction').'</span><ul class="dropdown--list">';
 									foreach($domains as $d) {
 										$out .= '<li><a href="'.WEB_ROOT.'/view/domain/'.$d.'">'.$d.'</a></li>';
@@ -628,7 +628,7 @@
 							?>
 						</td>
 						<td><?php
-							if(count($go_ids)) {
+							if(!empty($go_ids)) {
 								$out = '<div class="dropdown button"><span class="dropdown--title">'.count($go_ids).' GO '.pl(count($go_ids), 'term').'</span><ul class="dropdown--list">';
 									foreach($go_ids as $go_id) {
 										$out .= '<li><a href="'.WEB_ROOT.'/view/go/'.$go_id.'">'.$go_id.'</a></li>';
