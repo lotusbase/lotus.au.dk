@@ -1848,8 +1848,12 @@ body {
 				margin: 0;
 				line-height: 1.25em;
 			}
-			p.file-meta__file-desc {
+			p.file-meta__file-desc,
+			p.file-meta__ref {
 				margin-bottom: 0;
+			}
+			p.file-meta__ref {
+				font-size: .875rem;
 			}
 			span {
 				display: block;

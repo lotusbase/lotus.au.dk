@@ -58,9 +58,10 @@
 					t1.Description AS Description,
 					t1.Tags AS Tags,
 					t1.Count AS Count,
+					t1.PMID AS PMID,
 					t1.FileKey AS FileKey
 					FROM download AS t1
-					ORDER BY t1.FileName");
+					ORDER BY t1.Category, t1.FileName");
 				$q->execute();
 
 				// Retrieve results
@@ -75,11 +76,40 @@
 							$fileMeta[] = human_filesize(filesize($filePath));
 						}
 
+						// Get citation metadata if exists
+						$ref = false;
+						if($row['PMID']) {
+							try {
+								// Make GET request
+								$ch = curl_init();
+								curl_setopt($ch, CURLOPT_URL, 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id='.$row['PMID']);
+								curl_setopt($ch, CURLOPT_HEADER, 0);
+								curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+								$resp = json_decode(curl_exec($ch), true);
+								
+								// Parse response and construct reference
+								$pub = $resp['result'][$row['PMID']];
+
+								$_ref = array(
+									explode(' ', $pub['authors'][0]['name'])[0].' et al.',
+									'('.date('Y', strtotime($pub['sortpubdate'])).')',
+									$pub['source'].', '.$pub['volume'].(!empty($pub['issue']) ? '('.$pub['issue'].')' : '').'.',
+									$pub['elocationid']
+									);
+								$ref = implode(' ', $_ref);
+
+							} catch(Exception $e) {
+
+							}
+						}
+
 						echo '<li>
 						<a href="'.WEB_ROOT.'/'.$row['FilePath'].$row['FileName'].'" title="'.$row['FileDesc'].'">
 							<div class="file-meta__desc ext-'.str_replace('.', '', $row['FileExtension']).'">
 								<h3 class="file-meta__file-title">'.$row['Title'].'</h3>
 								'.(!empty($row['Description']) ? '<p class="file-meta__file-desc">'.$row['Description'].'</p>' : '').'
+								'.(!empty($ref) ? '<p class="file-meta__ref">'.$ref.'</p>' : '').'
 								<ul class="list--floated file-meta__file-data"><li>'.implode('</li><li>', $fileMeta).'</li></ul>
 								<ul class="list--floated file-meta__tags">';
 						foreach($tags as $tag) {
