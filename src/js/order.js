@@ -31,6 +31,8 @@ $(function() {
 			}
 		},
 		submitHandler: function(form) {
+			window.localStorage.clear();
+			window.localStorage.setItem('_si_currentStepIndex', 0);
 			form.submit();
 		}
 	});
@@ -187,6 +189,7 @@ $(function() {
 			$d.on('click', '#reset-local-storage', function(e) {
 				e.preventDefault();
 				window.localStorage.clear();
+				window.localStorage.setItem('_si_currentStepIndex', 0);
 				document.location.reload(false);
 			});
 

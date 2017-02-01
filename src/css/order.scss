@@ -154,7 +154,11 @@
 
 #order-overview__lore1-lines {
 	p { margin-bottom: .5rem; }
-	ul { margin: 0 0 1.5rem 0; }
+	ul {
+		margin: 0 0 1.5rem 0;
+		max-height: 33vh;
+		overflow-y: auto;
+	}
 
 	table {
 		tr {
