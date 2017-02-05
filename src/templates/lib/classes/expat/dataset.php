@@ -64,6 +64,30 @@ class Dataset {
 			'text' => 'Nod factor treatment of L. japonicus',
 			'intranet_only' => true,
 			'label' => 'Eiichi Murakami, RNAseq data (2016)'
+			),
+		'rnaseq-handay-2015' => array(
+			'idType' => 'geneid',
+			'experiment' => 'rnaseq-handay-2015',
+			'value' => 'rnaseq-handay-2015',
+			'text' => 'Inoculation of L. japonicus with Rhizophagus irregularis, an AM fungi',
+			'intranet_only' => false,
+			'label' => 'Handa, Y. et al., RNAseq data (2015)'
+			),
+		'rnaseq-sasakit-2014' => array(
+			'idType' => 'geneid',
+			'experiment' => 'rnaseq-sasakit-2014',
+			'value' => 'rnaseq-sasakit-2014',
+			'text' => 'Shoot of L. japonicus MG20 WT, har1, CLE-RS1/2 overexpression.',
+			'intranet_only' => false,
+			'label' => 'Sasaki, T. et al., RNAseq data (2014)'
+			),
+		'rnaseq-suzakit-2015' => array(
+			'idType' => 'geneid',
+			'experiment' => 'rnaseq-suzakit-2014',
+			'value' => 'rnaseq-suzakit-20154',
+			'text' => 'Endoreduplication-mediated initiation of symbiotic organ development in Lotus japonicus',
+			'intranet_only' => false,
+			'label' => 'Suzaki, T. et al., RNAseq data (2014)'
 			)
 		);
 

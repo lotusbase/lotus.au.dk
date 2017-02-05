@@ -167,6 +167,33 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-eiichimurakami-2016-01';
 			$this->expat['rowType'] = 'Transcript ID';
 			$this->expat['rowText'] = 'Transcript(s)';
+		} else if ($dataset == 'rnaseq-handay-2015') {
+			$this->_expat['query'] = array(
+				'table' => 'expat_RNAseq_HandaY2015',
+				'id' => $_POST['idtype']
+			);
+			$this->expat['mapped'] = false;
+			$this->expat['experiment'] = 'rnaseq-handay-2015';
+			$this->expat['rowType'] = 'Gene ID';
+			$this->expat['rowText'] = 'Gene(s)';
+		} else if ($dataset == 'rnaseq-sasakit-2014') {
+			$this->_expat['query'] = array(
+				'table' => 'expat_RNAseq_SasakiT2014',
+				'id' => $_POST['idtype']
+			);
+			$this->expat['mapped'] = false;
+			$this->expat['experiment'] = 'rnaseq-sasakit-2014';
+			$this->expat['rowType'] = 'Gene ID';
+			$this->expat['rowText'] = 'Gene(s)';
+		} else if ($dataset == 'rnaseq-suzakit-2014') {
+			$this->_expat['query'] = array(
+				'table' => 'expat_RNAseq_SuzakiT2014',
+				'id' => $_POST['idtype']
+			);
+			$this->expat['mapped'] = false;
+			$this->expat['experiment'] = 'rnaseq-suzakit-2014';
+			$this->expat['rowType'] = 'Gene ID';
+			$this->expat['rowText'] = 'Gene(s)';
 		} else {
 			$this->error->set_status(404);
 			$this->error->set_message('The dataset you have selected is not available. Please try again.');
@@ -333,6 +360,31 @@ class Query {
 				'Root_1',
 				'Root0h_1',
 				'Nod21_1'
+			),
+			'rnaseq-marcogiovanetti-2015-am' => array(
+				'Control_H2O',
+				'Treatment_AMGSE_24h',
+				'Treatment_AMGSE_48h'
+			),
+			'rnaseq-handay-2015' => array(
+				'MAFF3',
+				'MAFF12',
+				'AM15',
+				'AM27',
+				'rhnon',
+				'AMnon'
+			),
+			'rnaseq-sasakit-2014' => array(
+				'MG20_shoot',
+				'har1_shoot',
+				'CLE_RS1ox',
+				'CLE_RS2ox'
+			),
+			'rnaseq-suzakit-2014' => array(
+				'MG20_5dMAFF',
+				'MG20_mock',
+				'vag1_5dMAFF',
+				'vag1_mock'
 			)
 		);
 
@@ -383,11 +435,6 @@ class Query {
 					'G_NF_UEPS_24',
 					'277_NF_UEPS_24',
 					'311_NF_UEPS_24'
-				),
-				'rnaseq-marcogiovanetti-2015-am' => array(
-					'Control_H2O',
-					'Treatment_AMGSE_24h',
-					'Treatment_AMGSE_48h'
 				),
 				'rnaseq-eiichimurakami-2016-01' => array(
 					'G_H2O',
@@ -529,7 +576,12 @@ class Query {
 					// Define output header (only for download)
 					$outHeader = "\"".$query['id']."\",\"".implode($columns,'","')."\"\n";
 
-				} else if($this->expat['experiment'] === 'rnaseq-marcogiovanetti-2015' || $this->expat['experiment'] === 'rnaseq-eiichimurakami-2016-01') {
+				} else if(
+					$this->expat['experiment'] === 'rnaseq-marcogiovanetti-2015' ||
+					$this->expat['experiment'] === 'rnaseq-eiichimurakami-2016-01' ||
+					$this->expat['experiment'] === 'rnaseq-handay-2015' || 
+					$this->expat['experiment'] === 'rnaseq-sasakit-2014' ||
+					$this->expat['experiment'] === 'rnaseq-suzakit-2014') {
 					// Marco Giovanetti's dataset does not require joining
 					// Construct LIKE query
 					$likeQuery = '';
