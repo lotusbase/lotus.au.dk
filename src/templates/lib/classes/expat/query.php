@@ -158,13 +158,13 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-marcogiovanetti-2015';
 			$this->expat['rowType'] = 'Probe ID';
 			$this->expat['rowText'] = 'Probe(s)';
-		} else if ($dataset == 'rnaseq-eiichimurakami-2016-01') {
+		} else if ($dataset == 'rnaseq-eiichimurakami-2016') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_EiichiMurakami',
 				'id' => $_POST['idtype']
 			);
 			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-eiichimurakami-2016-01';
+			$this->expat['experiment'] = 'rnaseq-eiichimurakami-2016';
 			$this->expat['rowType'] = 'Transcript ID';
 			$this->expat['rowText'] = 'Transcript(s)';
 		} else if ($dataset == 'rnaseq-handay-2015') {
@@ -436,7 +436,7 @@ class Query {
 					'277_NF_UEPS_24',
 					'311_NF_UEPS_24'
 				),
-				'rnaseq-eiichimurakami-2016-01' => array(
+				'rnaseq-eiichimurakami-2016' => array(
 					'G_H2O',
 					'G_NF',
 					'38534_H2O',
@@ -578,7 +578,7 @@ class Query {
 
 				} else if(
 					$this->expat['experiment'] === 'rnaseq-marcogiovanetti-2015' ||
-					$this->expat['experiment'] === 'rnaseq-eiichimurakami-2016-01' ||
+					$this->expat['experiment'] === 'rnaseq-eiichimurakami-2016' ||
 					$this->expat['experiment'] === 'rnaseq-handay-2015' || 
 					$this->expat['experiment'] === 'rnaseq-sasakit-2014' ||
 					$this->expat['experiment'] === 'rnaseq-suzakit-2014') {

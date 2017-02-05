@@ -69,4 +69,7 @@ require_once('classes/component/site-search-form.php');
 require_once('classes/component/paginate.php');
 require_once('classes/component/dropdown.php');
 
+/* class: Getter */
+require_once('classes/getter.php');
+
 ?>

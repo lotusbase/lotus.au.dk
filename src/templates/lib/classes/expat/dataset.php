@@ -57,10 +57,10 @@ class Dataset {
 			'text' => 'C. trifolii germinating spore exudates by probe ID',
 			'label' => 'Marco Giovanetti, RNAseq data (2015)'
 			),
-		'rnaseq-eiichimurakami-2016-01' => array(
+		'rnaseq-eiichimurakami-2016' => array(
 			'idType' => 'transcriptid',
-			'experiment' => 'rnaseq-eiichimurakami-2016-01',
-			'value' => 'rnaseq-eiichimurakami-2016-01',
+			'experiment' => 'rnaseq-eiichimurakami-2016',
+			'value' => 'rnaseq-eiichimurakami-2016',
 			'text' => 'Nod factor treatment of L. japonicus',
 			'intranet_only' => true,
 			'label' => 'Eiichi Murakami, RNAseq data (2016)'
@@ -81,10 +81,10 @@ class Dataset {
 			'intranet_only' => false,
 			'label' => 'Sasaki, T. et al., RNAseq data (2014)'
 			),
-		'rnaseq-suzakit-2015' => array(
+		'rnaseq-suzakit-2014' => array(
 			'idType' => 'geneid',
 			'experiment' => 'rnaseq-suzakit-2014',
-			'value' => 'rnaseq-suzakit-20154',
+			'value' => 'rnaseq-suzakit-2014',
 			'text' => 'Endoreduplication-mediated initiation of symbiotic organ development in Lotus japonicus',
 			'intranet_only' => false,
 			'label' => 'Suzaki, T. et al., RNAseq data (2014)'

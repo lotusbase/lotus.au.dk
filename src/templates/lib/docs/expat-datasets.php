@@ -1,59 +1,117 @@
-<?php require_once('../../config.php'); ?>
-<table>
+<?php
+	require_once('../../config.php');
+
+	try {
+
+		// Database connection
+		$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+		// Query 1: Collect all PMID
+		$q1 = $db->prepare('SELECT DISTINCT(PMID) FROM expat_datasets');
+		$q1->execute();
+
+		if(!$q1->rowCount()) {
+			throw new Exception('No rows returned.');
+		} else {
+
+			$pmids = array();
+			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
+				$pmids[] = $row['PMID'];
+			}
+
+			$refHandler = new \LotusBase\Getter\PMID;
+			$refHandler->set_pmid($pmids);
+			$refs = $refHandler->get_data();
+		}
+		
+
+		// Query 2: Get actual data
+		$q2 = $db->prepare('SELECT `Text`, IDtype, Description, CORNEA, PMID, IntranetOnly, Curators FROM expat_datasets ORDER BY YearAdded ASC');
+		$q2->execute();
+
+		// Check results
+		if($q2->rowCount()) {
+
+			echo '<table>
 	<thead>
 		<tr>
-			<th>Database description</th>
+			<th>Dataset</th>
 			<th>ID type</th>
 			<th>Description</th>
+			<th>Curation</th>
 			<th>Reference</th>
 		</tr>
 	</thead>
-	<tbody>
-		<tr>
-			<td>LjGEA</td>
-			<td>Gene ID</td>
-			<td>The LjGEA dataset contains all gene expression data from the <a href="http://ljgea.noble.org/v2/" title="LjGEA Project">LjGEA project</a> with transcripts mapped against <em>Lotus japonicus</em> v3.0 predicted proteins. Grouping and classification are based on the <a href="http://ljgea.noble.org/v2/slides.php#a_genotype_17">information available via LjGEA</a>. There may be instances of one/many-to-many relatioships between mapped proteins and probes.</td>
-			<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23452239" title="Establishment of the Lotus japonicus Gene Expression Atlas (LjGEA) and its use to explore legume seed maturation.">Verdier <em>et al.</em>, 2013</a></td>
-		</tr>
-		<tr>
-			<td>LjGEA</td>
-			<td>Probe ID</td>
-			<td>The LjGEA dataset contains all gene expression data from the <a href="http://ljgea.noble.org/v2/" title="LjGEA Project">LjGEA project</a> with probe IDs preserved. Grouping and classification are based on the <a href="http://ljgea.noble.org/v2/slides.php#a_genotype_17">information available via LjGEA</a>. There may be instances of one/many-to-many relatioships between mapped proteins and probes.</td>
-			<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23452239" title="Establishment of the Lotus japonicus Gene Expression Atlas (LjGEA) and its use to explore legume seed maturation.">Verdier <em>et al.</em>, 2013</a></td>
-		</tr>
+	<tbody>';
 
-		<?php if(is_allowed_access('/expat/')) { ?>
-		<tr>
-			<td>Simon Kelly's RNAseq data with bacteria treatment</td>
-			<td>Transcript ID</td>
-			<td>RNAseq data from <em>Lotus japonicus</em> roots from various mutants, after inoculation with various rhizobial strains.</td>
-			<td>Kelly, S., unpublished data.</td>
-		</tr>
-		<tr>
-			<td>Simon Kelly's RNAseq data with purified compounds treatment</td>
-			<td>Transcript ID</td>
-			<td>RNAseq data from <em>Lotus japonicus</em> roots from various mutants, after treatment with purified compounds from rhizobia.</td>
-			<td>Kelly, S., unpublished data.</td>
-		</tr>
-		<tr>
-			<td>Eiichi Murakami's RNAseq data with purified compounds treatment</td>
-			<td>Transcript ID</td>
-			<td>
-				<p>RNAseq data from <em>Lotus japonicus</em> samples from Gifu wildtype, <em>nfr1</em>, and <em>lys1</em> mutants, after treatment with <em>M. loti</em> R7A Nod factor (1e-10M).</p>
-				<p class="user-message warning">Due to insufficient number of conditions, this dataset is not available for CORNEA.</p>
-			</td>
-			<td>Murakami, E., unpublished data.</td>
-		</tr>
-		<?php } ?>
+			// Iterate through each row
+			while($row = $q2->fetch(PDO::FETCH_ASSOC)) {
 
-		<tr>
-			<td><em>Lotus japonicus</em> early root responses to fungal exudates</td>
-			<td>Probe ID</td>
-			<td>
-				<p>RNAseq data from <em>Lotus japonicus</em> roots after exposure to <em>C. trifolii</em> germinating spore exudates.</p>
-				<p class="user-message warning">Due to insufficient number of conditions, this dataset is not available for CORNEA.</p>
-			</td>
-			<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/26175746" title="Early Lotus japonicus root transcriptomic responses to symbiotic and pathogenic fungal exudates.">Giovanetti <em>et al.</em>, 2015</a></td>
-		</tr>
-	</tbody>
-</table>
+				// For rows that are marked for intranet only, check if user is allowed to view it
+				if(intval($row['IntranetOnly']) === 1 && !is_allowed_access('/expat/')) {
+					continue;
+				}
+
+				// Curators
+				$curators = array_filter(explode(',', $row['Curators']));
+
+				// Construct reference
+				$ref = $refs[$row['PMID']];
+
+				// Reference link
+				$_articleids = $ref['articleids'];
+				$doi = false;
+				foreach ($_articleids as $ai) {
+					if($ai['idtype'] === 'doi') {
+						$doi = $ai['value'];
+					}
+				}
+
+				// Reference authors
+				$_authors = $ref['authors'];
+				if(count($_authors) !== 2) {
+					$authors = $_authors[0]['name'].' et al.';
+				} else {
+					$authors = implode(' and ', array_map(function($a) {
+						return $a['name'];
+					}, $_authors));
+				}
+
+				// Publication year
+				$year = DateTime::createFromFormat('Y/m/d G:i', $ref['sortpubdate'])->format('Y');
+
+				echo '<tr>
+					<th>'.$row['Text'].'</th>
+					<td>'.preg_replace(
+						array(
+							'/geneid/',
+							'/probeid/',
+							'/transcriptid/'
+							),
+						array(
+							'Gene ID',
+							'Probe ID',
+							'Transcript ID'
+							),
+						$row['IDtype']).'</td>
+					<td><p>'.$row['Description'].'</p>'.(intval($row['CORNEA']) !== 1 ? '<p class="user-message warning"><span class="icon-attention"></span>This dataset is not available for CORNEA because of the low number of conditions available.</p>' : '').'</td>
+					<td>'.(count($curators) ? '<ul class="list--reset"><li>'.implode('</li><li>', $curators).'</li></ul>' : '').'</td>
+					<td><a href="'.(!empty($doi) ? 'https://doi.org/'.$doi : 'https://www.ncbi.nlm.nih.gov/pubmed/'.$row['PMID']).'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a></td>
+				</tr>';
+			}
+
+			echo '</tbody></table>';
+
+		} else {
+			throw new Exception('No rows returned.');
+		}
+
+	} catch(PDOexception $e) {
+		echo '<p class="user-message">We have encountered an error: </p>'.$e->getMessage();
+	} catch(Exception $e) {
+		echo '<p class="user-message">We have encountered an error: </p>'.$e->getMessage();
+	}
+
+?>
