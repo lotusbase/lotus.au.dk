@@ -9,7 +9,7 @@
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 		// Query 1: Collect all PMID
-		$q1 = $db->prepare('SELECT DISTINCT(PMID) FROM expat_datasets');
+		$q1 = $db->prepare('SELECT PMID, IntranetOnly FROM expat_datasets GROUP BY PMID');
 		$q1->execute();
 
 		if(!$q1->rowCount()) {
@@ -18,6 +18,9 @@
 
 			$pmids = array();
 			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
+				if(intval($row['IntranetOnly']) === 1 && !is_allowed_access('/expat/')) {
+					continue;
+				}
 				$pmids[] = $row['PMID'];
 			}
 
@@ -58,29 +61,31 @@
 				$curators = array_filter(explode(',', $row['Curators']));
 
 				// Construct reference
-				$ref = $refs[$row['PMID']];
+				if(!empty($row['PMID'])) {
+					$ref = $refs[$row['PMID']];
 
-				// Reference link
-				$_articleids = $ref['articleids'];
-				$doi = false;
-				foreach ($_articleids as $ai) {
-					if($ai['idtype'] === 'doi') {
-						$doi = $ai['value'];
+					// Reference link
+					$_articleids = $ref['articleids'];
+					$doi = false;
+					foreach ($_articleids as $ai) {
+						if($ai['idtype'] === 'doi') {
+							$doi = $ai['value'];
+						}
 					}
-				}
 
-				// Reference authors
-				$_authors = $ref['authors'];
-				if(count($_authors) !== 2) {
-					$authors = $_authors[0]['name'].' et al.';
-				} else {
-					$authors = implode(' and ', array_map(function($a) {
-						return $a['name'];
-					}, $_authors));
-				}
+					// Reference authors
+					$_authors = $ref['authors'];
+					if(count($_authors) !== 2) {
+						$authors = $_authors[0]['name'].' et al.';
+					} else {
+						$authors = implode(' and ', array_map(function($a) {
+							return $a['name'];
+						}, $_authors));
+					}
 
-				// Publication year
-				$year = DateTime::createFromFormat('Y/m/d G:i', $ref['sortpubdate'])->format('Y');
+					// Publication year
+					$year = DateTime::createFromFormat('Y/m/d G:i', $ref['sortpubdate'])->format('Y');
+				}
 
 				echo '<tr>
 					<th>'.$row['Text'].'</th>
@@ -98,7 +103,7 @@
 						$row['IDtype']).'</td>
 					<td><p>'.$row['Description'].'</p>'.(intval($row['CORNEA']) !== 1 ? '<p class="user-message warning"><span class="icon-attention"></span>This dataset is not available for CORNEA because of the low number of conditions available.</p>' : '').'</td>
 					<td>'.(count($curators) ? '<ul class="list--reset"><li>'.implode('</li><li>', $curators).'</li></ul>' : '').'</td>
-					<td><a href="'.(!empty($doi) ? 'https://doi.org/'.$doi : 'https://www.ncbi.nlm.nih.gov/pubmed/'.$row['PMID']).'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a></td>
+					<td>'.(!empty($row['PMID']) ? '<a href="'.(!empty($doi) ? 'https://doi.org/'.$doi : 'https://www.ncbi.nlm.nih.gov/pubmed/'.$row['PMID']).'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a>' : 'Unpublished').'</td>
 				</tr>';
 			}
 
