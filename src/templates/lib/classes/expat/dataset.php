@@ -6,90 +6,45 @@ use \PDO;
 /* ExpAt\Dataset*/
 class Dataset {
 
-	// Default settings for select element
-	private $_vars = array(
-		'id' => 'expat-dataset',
-		'name' => 'dataset',
-		'blacklist' => array()
+	// Construct
+	function __construct() {
+
+		// Default settings for select element
+		$this->_vars = array(
+			'id' => 'expat-dataset',
+			'name' => 'dataset',
+			'blacklist' => array()
 		);
 
-	// Initialize optgroups
-	private $_optgroups = array();
+		// Initialize optgroups
+		$this->_optgroups = array();
 
-	// Options
-	private $_opts = array(
-		'ljgea-geneid' => array(
-			'idType' => 'geneid',
-			'column_share' => 'ljgea',
-			'experiment' => 'ljgea',
-			'value' => 'ljgea-geneid',
-			'text' => 'Entire LjGEA dataset by gene ID',
-			'label' => 'LjGEA'
-			),
-		'ljgea-probeid' => array(
-			'idType' => 'probeid',
-			'column_share' => 'ljgea',
-			'experiment' => 'ljgea',
-			'value' => 'ljgea-probeid',
-			'text' => 'Entire LjGEA dataset by probe ID',
-			'label' => 'LjGEA'
-			),
-		'rnaseq-simonkelly-2015-bacteria' => array(
-			'idType' => 'transcriptid',
-			'experiment' => 'rnaseq-simonkelly-2015',
-			'value' => 'rnaseq-simonkelly-2015-bacteria',
-			'text' => 'Bacteria treatment by transcript ID',
-			'intranet_only' => true,
-			'label' => 'Simon Kelly, RNAseq data (2015)'
-			),
-		'rnaseq-simonkelly-2015-purifiedcompounds' => array(
-			'idType' => 'transcriptid',
-			'experiment' => 'rnaseq-simonkelly-2015',
-			'value' => 'rnaseq-simonkelly-2015-purifiedcompounds',
-			'text' => 'Purified compounds treatment by transcript ID',
-			'intranet_only' => true,
-			'label' => 'Simon Kelly, RNAseq data (2015)'
-			),
-		'rnaseq-marcogiovanetti-2015-am' => array(
-			'idType' => 'probeid',
-			'experiment' => 'rnaseq-marcogiovanetti-2015',
-			'value' => 'rnaseq-marcogiovanetti-2015-am',
-			'text' => 'C. trifolii germinating spore exudates by probe ID',
-			'label' => 'Marco Giovanetti, RNAseq data (2015)'
-			),
-		'rnaseq-eiichimurakami-2016' => array(
-			'idType' => 'transcriptid',
-			'experiment' => 'rnaseq-eiichimurakami-2016',
-			'value' => 'rnaseq-eiichimurakami-2016',
-			'text' => 'Nod factor treatment of L. japonicus',
-			'intranet_only' => true,
-			'label' => 'Eiichi Murakami, RNAseq data (2016)'
-			),
-		'rnaseq-handay-2015' => array(
-			'idType' => 'geneid',
-			'experiment' => 'rnaseq-handay-2015',
-			'value' => 'rnaseq-handay-2015',
-			'text' => 'Inoculation of L. japonicus with Rhizophagus irregularis, an AM fungi',
-			'intranet_only' => false,
-			'label' => 'Handa, Y. et al., RNAseq data (2015)'
-			),
-		'rnaseq-sasakit-2014' => array(
-			'idType' => 'geneid',
-			'experiment' => 'rnaseq-sasakit-2014',
-			'value' => 'rnaseq-sasakit-2014',
-			'text' => 'Shoot of L. japonicus MG20 WT, har1, CLE-RS1/2 overexpression.',
-			'intranet_only' => false,
-			'label' => 'Sasaki, T. et al., RNAseq data (2014)'
-			),
-		'rnaseq-suzakit-2014' => array(
-			'idType' => 'geneid',
-			'experiment' => 'rnaseq-suzakit-2014',
-			'value' => 'rnaseq-suzakit-2014',
-			'text' => 'Endoreduplication-mediated initiation of symbiotic organ development in Lotus japonicus',
-			'intranet_only' => false,
-			'label' => 'Suzaki, T. et al., RNAseq data (2014)'
-			)
-		);
+		// Options
+		$this->_opts = array();
+
+		// Database connection
+		$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+		// Query 1: Collect all PMID
+		$q1 = $db->prepare('SELECT * FROM expat_datasets');
+		$q1->execute();
+
+		if($q1->rowCount()) {
+			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
+				$this->_opts[$row['Dataset']] = array(
+					'idType' => $row['IDtype'],
+					'column_share' => $row['ColumnShare'],
+					'experiment' => $row['Experiment'],
+					'value' => $row['Dataset'],
+					'text' => $row['Text'],
+					'label' => $row['Label'],
+					'intranet_only' => $row['IntranetOnly']
+					);
+			}
+		}
+	}
 
 	// PRIVATE
 	// Get all option groups by label
@@ -153,7 +108,7 @@ class Dataset {
 							!isset($d['intranet_only']) ||
 							(
 								isset($d['intranet_only']) &&
-								$d['intranet_only'] === !!is_allowed_access('/expat/')
+								!!$d['intranet_only'] === !!is_allowed_access('/expat/')
 							)
 						) &&
 						(

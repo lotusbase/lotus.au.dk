@@ -28,7 +28,7 @@
 		
 
 		// Query 2: Get actual data
-		$q2 = $db->prepare('SELECT `Text`, IDtype, Description, CORNEA, PMID, IntranetOnly, Curators FROM expat_datasets ORDER BY YearAdded ASC');
+		$q2 = $db->prepare('SELECT `Text`, IDtype, Description, CORNEA, PMID, IntranetOnly, Curators FROM expat_datasets');
 		$q2->execute();
 
 		// Check results
