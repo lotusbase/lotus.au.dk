@@ -11,6 +11,7 @@
 	use SameerShelavale\PhpCountriesArray\CountriesArray;
 
 	// Declare global user object
+	$user = null;
 	if(isset($_COOKIE['auth_token']) && auth_verify($_COOKIE['auth_token'])) {
 		$user = auth_verify($_COOKIE['auth_token']);
 	}
@@ -48,7 +49,7 @@
 		}
 
 		// Get user address
-		if($user['Salt']) {
+		if($user && $user['Salt']) {
 			$ua = $db->prepare('SELECT Address, City, State, PostalCode, Country FROM auth WHERE Salt = ?');
 			$ua->execute(array($user['Salt']));
 			$ua_data = $ua->fetch(PDO::FETCH_ASSOC);
@@ -146,7 +147,7 @@
 						<div class="multiple-text-input input-mimic">
 							<ul class="input-values">
 							<?php
-								if($_GET['lore1']) {
+								if(!empty($_GET['lore1'])) {
 									$lore1_array = explode(',', $_GET['lore1']);
 									foreach($lore1_array as $lore1_item) {
 										echo '<li data-input-value="'.escapeHTML($lore1_item).'">'.escapeHTML($lore1_item).'<span class="icon-cancel" data-action="delete"></span></li>';
