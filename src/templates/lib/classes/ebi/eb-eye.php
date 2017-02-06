@@ -64,6 +64,7 @@ class EBeye {
 
 		// Execute and receive server response
 		$response = json_decode(curl_exec($ch), true);
+		$_response = array();
 		curl_close($ch);
 
 		// Since Interpro IDs are unique, use them as keys
