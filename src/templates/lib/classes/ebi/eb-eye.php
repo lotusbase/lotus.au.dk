@@ -68,7 +68,7 @@ class EBeye {
 		curl_close($ch);
 
 		// Since Interpro IDs are unique, use them as keys
-		if(!empty($response)) {
+		if(!empty($response['entries'])) {
 			foreach($response['entries'] as $entry) {
 				$_response[$entry[$this->_vars['id'][$this->_vars['domain']]]] = $entry;
 
