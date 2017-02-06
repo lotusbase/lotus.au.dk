@@ -32,7 +32,8 @@ $(function() {
 			{value: 'PlantGenotype', text: 'Plant genotype', sort: 'string'},
 			{value: 'Age', text: 'Age at harvest (days)', sort: 'string'},
 			{value: 'Inoculation', text: 'Inoculation (<abbr title="hours post-inoculation">hpi</abbr>)', sort: 'int'},
-			{value: 'Inocula', text: 'Inocula', sort: 'string'}
+			{value: 'Inocula', text: 'Inocula', sort: 'string'},
+			{value: 'Reference', text: 'Reference', sort: 'string'}
 		],
 		'rnaseq-marcogiovanetti-2015': [
 			{value: 'ExperimentalFactor', text: 'Experimental factor', sort: 'string'},
@@ -41,17 +42,59 @@ $(function() {
 			{value: 'PlantEcotype', text: 'Plant ecotype', sort: 'string'},
 			{value: 'Inoculation', text: 'Inoculation (<abbr title="hours post-inoculation">hpi</abbr>)', sort: 'int'},
 			{value: 'Inocula', text: 'Inocula', sort: 'string'},
+			{value: 'Reference', text: 'Reference', sort: 'string'},
 			{value: 'Reference', text: 'Reference', sort: 'string'}
 		],
-		'rnaseq-eiichimurakami-2016-01': [
+		'rnaseq-eiichimurakami-2016': [
 			{value: 'ExperimentalFactor', text: 'Experimental factor', sort: 'string'},
 			{value: 'Treatment', text: 'Treatment', sort: 'string'},
 			{value: 'PlantSpecies', text: 'Plant species', sort: 'string'},
-			{value: 'PlantEcotype', text: 'Plant species', sort: 'string'},
+			{value: 'PlantEcotype', text: 'Plant ecotype', sort: 'string'},
 			{value: 'PlantGenotype', text: 'Plant genotype', sort: 'string'},
 			{value: 'Age', text: 'Age (days)', sort: 'int'},
 			{value: 'Inoculation', text: 'Inoculation (<abbr title="days post-inoculation">dpi</abbr>)', sort: 'int'},
-			{value: 'Inocula', text: 'Inocula', sort: 'string'}
+			{value: 'Inocula', text: 'Inocula', sort: 'string'},
+			{value: 'Reference', text: 'Reference', sort: 'string'}
+		],
+		'rnaseq-handay-2015': [
+			{value: 'Treatment', text: 'Treatment', sort: 'string'},
+			{value: 'Inocula', text: 'Inocula', sort: 'string'},
+			{value: 'Strain', text: 'Strain', sort: 'string'},
+			{value: 'InoculationPressure', text: 'Inoculation pressure', sort: 'string'},
+			{value: 'SoilNutrientStatus', text: 'Soiul nutrient status', sort: 'string'},
+			{value: 'TimeUnit', text: 'Time unit', sort: 'string'},
+			{value: 'TimeDuration', text: 'Duration', sort: 'int'},
+			{value: 'PlantSpecies', text: 'Plant species', sort: 'string'},
+			{value: 'PlantEcotype', text: 'Plant ecotype', sort: 'string'},
+			{value: 'PlantGenotype', text: 'Plant genotype', sort: 'string'},
+			{value: 'GrowthMedium', text: 'Growth medium', sort: 'string'},
+			{value: 'GrowthTemperature', text: 'Growth temperature', sort: 'int'},
+			{value: 'DayNightRegime', text: 'Day/night regime', sort: 'string'},
+			{value: 'Reference', text: 'Reference', sort: 'string'}
+		],
+		'rnaseq-sasakit-2014': [
+			{value: 'Treatment', text: 'Treatment', sort: 'string'},
+			{value: 'Inocula', text: 'Inocula', sort: 'string'},
+			{value: 'Strain', text: 'Strain', sort: 'string'},
+			{value: 'TimeUnit', text: 'Time unit', sort: 'string'},
+			{value: 'TimeDuration', text: 'Duration', sort: 'int'},
+			{value: 'PlantSpecies', text: 'Plant species', sort: 'string'},
+			{value: 'PlantEcotype', text: 'Plant ecotype', sort: 'string'},
+			{value: 'PlantGenotype', text: 'Plant genotype', sort: 'string'},
+			{value: 'Tissue', text: 'Tissue', sort: 'string'},
+			{value: 'Reference', text: 'Reference', sort: 'string'}
+		],
+		'rnaseq-suzakit-2014': [
+			{value: 'Treatment', text: 'Treatment', sort: 'string'},
+			{value: 'Inocula', text: 'Inocula', sort: 'string'},
+			{value: 'Strain', text: 'Strain', sort: 'string'},
+			{value: 'TimeUnit', text: 'Time unit', sort: 'string'},
+			{value: 'TimeDuration', text: 'Duration', sort: 'int'},
+			{value: 'PlantSpecies', text: 'Plant species', sort: 'string'},
+			{value: 'PlantEcotype', text: 'Plant ecotype', sort: 'string'},
+			{value: 'PlantGenotype', text: 'Plant genotype', sort: 'string'},
+			{value: 'Tissue', text: 'Tissue', sort: 'string'},
+			{value: 'Reference', text: 'Reference', sort: 'string'}
 		]
 	};
 
@@ -244,52 +287,16 @@ $(function() {
 									'id': i
 								});
 							});
-						} else if(experiment === 'rnaseq-simonkelly-2015') {
-							$.each(data, function(i,r) {
-								var row = '<tr>';
-								$.each(r, function(k,c) {
-									// Note: Cast c to string if you are using .replace(). The method doesn't want to work with integers
-									row += (k==='ConditionName'?'<td class="chk"><input type="checkbox" data-condition="'+c+'" /></td>':'')+'<td class="'+k+'">'+(k==='PlantGenotype'&&c!=='Wildtype'?'<em>':'')+String(c).replace(/((Gigaspora margarita)|(Mesorhizobium loti))/gi,'<em>$1</em>')+(k==='PlantGenotype'&&c!=='Wildtype'?'</em>':'')+'</td>';
-								});
-								row += '</tr>';
-
-								// Append to condition sort
-								if(datasetColumns.indexOf(r.ConditionName) > -1) {
-									columns.push(r.ConditionName);
-									$('#expat-sort-conditions').append('<li data-condition="'+r.ConditionName+'">'+r.ConditionName+'<span class="icon-cancel icon--no-spacing"></span></li>');
-								}
-
-								// Append to row
-								$('#expat-dataset-subset table tbody').append(row);
-							});
-						} else if(experiment === 'rnaseq-marcogiovanetti-2015') {
+						} else {
 							$.each(data, function(i,r) {
 								var row = '<tr>';
 								$.each(r, function(k,c) {
 									if(k.indexOf('Reference') === -1) {
 										// Note: Cast c to string if you are using .replace(). The method doesn't want to work with integers
-										row += (k==='ConditionName'?'<td class="chk"><input type="checkbox" data-condition="'+c+'" /></td>':'')+'<td class="'+k+'">'+String(c).replace(/((Gigaspora margarita)|(Mesorhizobium loti))/gi,'<em>$1</em>')+'</td>';
+										row += (k==='ConditionName'?'<td class="chk"><input type="checkbox" data-condition="'+c+'" /></td>':'')+'<td class="'+k+'">'+(c===null?'&ndash;':c)+'</td>';
 									} else if(k==='Reference') {
 										row += '<td class="'+k+'"><a href="'+r.ReferenceURL+'" title="'+r.ReferenceTitle+'">'+c.replace(/(et al\.)/gi,'<em>$1</em>')+'</a></td>';
 									}
-								});
-								row += '</tr>';
-
-								// Append to condition sort
-								if(datasetColumns.indexOf(r.ConditionName) > -1) {
-									columns.push(r.ConditionName);
-									$('#expat-sort-conditions').append('<li data-condition="'+r.ConditionName+'">'+r.ConditionName+'<span class="icon-cancel icon--no-spacing"></span></li>');
-								}
-
-								// Append to row
-								$('#expat-dataset-subset table tbody').append(row);
-							});
-						} else if(experiment === 'rnaseq-eiichimurakami-2016-01') {
-							$.each(data, function(i,r) {
-								var row = '<tr>';
-								$.each(r, function(k,c) {
-									// Note: Cast c to string if you are using .replace(). The method doesn't want to work with integers
-									row += (k==='ConditionName'?'<td class="chk"><input type="checkbox" data-condition="'+c+'" /></td>':'')+'<td class="'+k+'">'+String(c).replace(/((Gigaspora margarita)|(Mesorhizobium loti))/gi,'<em>$1</em>')+'</td>';
 								});
 								row += '</tr>';
 
