@@ -326,7 +326,11 @@
 									);
 
 								// Append to matrix for co-occurrence analysis
-								$domain_matrix[$domain]['count'] += 1;
+								if(!isset($domain_matrix[$domain])) {
+									$domain_matrix[$domain] = array('count' => 1);
+								} else {
+									$domain_matrix[$domain]['count'] += 1;
+								}
 							}
 
 							$dd_handler = new \LotusBase\Component\Dropdown();
