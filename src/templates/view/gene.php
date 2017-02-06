@@ -133,10 +133,10 @@
 		<div id="view__jbrowse" class="view__facet">
 			<h3>Genome browser</h3>
 			<p class="user-message note">Structures showed in JBrowse are predicted transcripts. Each gene may contain more than one predicted transcript.</p>
-			<iframe name="jbrowse-embed" class="jbrowse-embed" src="<?php echo WEB_ROOT.'/genome/?loc='.$gene.'.1&amp;embed=true'; ?>"></iframe>
+			<iframe name="jbrowse-embed" class="jbrowse-embed" src="<?php echo WEB_ROOT.'/genome/?loc='.$id.'.1&amp;embed=true'; ?>"></iframe>
 			<ul class="list--reset cols flex-wrap__nowrap justify-content__flex-start jbrowse__action">
-				<li><a href="<?php echo WEB_ROOT.'/genome/?loc='.$gene.'.1&amp;embed=true'; ?>" target="jbrowse-embed"><span class="icon-eye">Center view on <strong><?php echo $gene; ?></strong></span></a></li>
-				<li><a href="<?php echo WEB_ROOT.'/genome/?loc='.$gene.'.1'; ?>"><span class="icon-resize-full">View larger version</span></a></li>
+				<li><a href="<?php echo WEB_ROOT.'/genome/?loc='.$id.'.1&amp;embed=true'; ?>" target="jbrowse-embed"><span class="icon-eye">Center view on <strong><?php echo $id; ?></strong></span></a></li>
+				<li><a href="<?php echo WEB_ROOT.'/genome/?loc='.$id.'.1'; ?>"><span class="icon-resize-full">View larger version</span></a></li>
 				<li><a href="https://jbrowse.org" title="JBrowse">Powered by JBrowse <span class="icon-link-ext-alt icon--no-spacing"></span></a></li>
 			</ul>
 		</div>
@@ -206,7 +206,7 @@
 			</form>
 
 			<h4>Expression pattern</h4>
-			<p>Expression pattern of <strong><?php echo $id; ?></strong>, powered by <a href="<?php echo WEB_ROOT; ?>/expat" title="Expression Atlas">ExpAt</a>. For advanced configuration, data transformation and export options, <a id="view__expat__link" href="<?php echo WEB_ROOT; ?>/expat?ids=<?php echo $is; ?>&amp;dataset=ljgea-geneid&amp;idtype=geneid" title="" data-root="<?php echo WEB_ROOT; ?>">view expression data in the ExpAt application</a>.</p>
+			<p>Expression pattern of <strong><?php echo $id; ?></strong>, powered by <a href="<?php echo WEB_ROOT; ?>/expat" title="Expression Atlas">ExpAt</a>. For advanced configuration, data transformation and export options, <a id="view__expat__link" href="<?php echo WEB_ROOT; ?>/expat?ids=<?php echo $id; ?>&amp;dataset=ljgea-geneid&amp;idtype=geneid" title="" data-root="<?php echo WEB_ROOT; ?>">view expression data in the ExpAt application</a>.</p>
 			<div id="expat__loader" class="align-center loader__wrapper">
 				<div class="loader"><svg class="loader"><circle class="path" cx="40" cy="40" r="30" /></svg></div>
 				<p>Loading expression data from <span id="expat__loader__dataset">ljgea-geneid</span>. Please wait&hellip;</p>

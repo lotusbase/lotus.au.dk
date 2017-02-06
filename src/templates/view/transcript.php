@@ -224,24 +224,28 @@
 						throw new Exception('No InterPro domain data available');
 					}
 
-					$q3 = $db->prepare("SELECT
-						GROUP_CONCAT(ip_go.InterPro_ID) AS InterPro,
-						ip_go.GO_ID AS GeneOntology,
-						go.NameSpace AS Namespace,
-						go.Name AS Name,
-						go.Definition AS Definition,
-						go.ExtraData AS ExtraData,
-						go.SubtermOf AS SubtermOf,
-						go.Relationships AS Relationships,
-						go.URL AS URL
-					FROM interpro_go_mapping AS ip_go
-					LEFT JOIN gene_ontology AS go
-						ON ip_go.GO_ID = go.GO_ID
-					WHERE ip_go.InterPro_ID IN (".str_repeat("?,", count($ip_unique)-1)."?)
-					GROUP BY ip_go.GO_ID
-					ORDER BY ip_go.GO_ID ASC
-						");
-					$q3->execute($ip_unique);
+					if(!empty($ip_unique)) {
+						$q3 = $db->prepare("SELECT
+							GROUP_CONCAT(ip_go.InterPro_ID) AS InterPro,
+							ip_go.GO_ID AS GeneOntology,
+							go.NameSpace AS Namespace,
+							go.Name AS Name,
+							go.Definition AS Definition,
+							go.ExtraData AS ExtraData,
+							go.SubtermOf AS SubtermOf,
+							go.Relationships AS Relationships,
+							go.URL AS URL
+						FROM interpro_go_mapping AS ip_go
+						LEFT JOIN gene_ontology AS go
+							ON ip_go.GO_ID = go.GO_ID
+						WHERE ip_go.InterPro_ID IN (".str_repeat("?,", count($ip_unique)-1)."?)
+						GROUP BY ip_go.GO_ID
+						ORDER BY ip_go.GO_ID ASC
+							");
+						$q3->execute($ip_unique);
+					} else {
+						$q3 = null;
+					}
 
 				} catch(PDOException $e) { ?>
 					<p class="user-message warning">We have encountered an error with querying the database: <?php echo $e->getMessage(); ?></p>

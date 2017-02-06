@@ -98,7 +98,7 @@
 				'class' => array('button--small'),
 				'role' => 'secondary'
 				));
-			$go_links_handler->set_go_term($go_term);
+			$go_links_handler->set_go_term($id);
 			echo $go_links_handler->get_html();
 		?>
 		</div>
@@ -372,7 +372,12 @@
 									);
 
 								// Append to matrix for co-occurrence analysis
-								$go_term_matrix[$go_term]['count'] += 1;
+								$go_term_matrix = array();
+								if(!isset($go_term_matrix[$go_term])) {
+									$go_term_matrix[$go_term] = array('count' => 1);
+								} else{
+									$go_term_matrix[$go_term]['count'] += 1;
+								}
 							}
 
 							$dd_handler = new \LotusBase\Component\Dropdown();
