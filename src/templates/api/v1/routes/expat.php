@@ -14,83 +14,184 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 		// Trim experiment from dataset variable
 		$dataset_wildcard = '%'.str_replace($experiment.'-', '', $dataset).'%';
 
-		if($experiment === 'ljgea') {
-			$sqlQuery = "SELECT
-				ConditionName,
-				PlantSpecies,
-				PlantEcotype,
-				PlantGenotype,
-				Standard,
-				ExperimentalFactor,
-				Age,
-				Inoculation,
-				Inocula,
-				InoculaStrain,
-				CultureSystem,
-				Organ,
-				TissueType,
-				Comments,
-				Reference,
-				ReferenceTitle,
-				ReferenceURL
-			FROM expat_ljgea_columns
+		// Store array of columns to display for each experiment
+		$dataset_metadata = array(
+			'ljgea' => array(
+				'table' => 'expat_ljgea_columns',
+				'columns' => array(
+					'PlantSpecies',
+					'PlantEcotype',
+					'PlantGenotype',
+					'Standard',
+					'ExperimentalFactor',
+					'Age',
+					'Inoculation',
+					'Inocula',
+					'InoculaStrain',
+					'CultureSystem',
+					'Organ',
+					'TissueType',
+					'Comments'
+					)
+				),
+			'rnaseq-simonkelly-2015' => array(
+				'table' => 'expat_RNAseq_SimonKelly_columns',
+				'columns' => array(
+					'ExperimentalFactor',
+					'Treatment',
+					'PlantSpecies',
+					'PlantEcotype',
+					'PlantGenotype',
+					'Age',
+					'Inoculation',
+					'Inocula'
+					)
+				),
+			'rnaseq-marcogiovanetti-2015' => array(
+				'table' => 'expat_RNAseq_MarcoGiovanetti_AMGSE_columns',
+				'columns' => array(
+					'ExperimentalFactor',
+					'Treatment',
+					'PlantSpecies',
+					'PlantEcotype',
+					'Inoculation',
+					'Inocula'
+					)
+				),
+			'rnaseq-eiichimurakami-2016' => array(
+				'table' => 'expat_RNAseq_EiichiMurakami_columns',
+				'columns' => array(
+					'ExperimentalFactor',
+					'Treatment',
+					'PlantSpecies',
+					'PlantEcotype',
+					'PlantGenotype',
+					'Age',
+					'Inoculation',
+					'Inocula'
+					)
+				),
+			'rnaseq-handay-2015' => array(
+				'table' => 'expat_RNAseq_HandaY2015_columns',
+				'columns' => array(
+						'Treatment',
+						'Inocula',
+						'Strain',
+						'InoculationPressure',
+						'SoilNutrientStatus',
+						'TimeUnit',
+						'TimeDuration',
+						'PlantSpecies',
+						'PlantEcotype',
+						'PlantGenotype',
+						'GrowthMedium',
+						'GrowthTemperature',
+						'DayNightRegime'
+					)
+				),
+			'rnaseq-sasakit-2014' => array(
+				'table' => 'expat_RNAseq_SasakiT2014_columns',
+				'columns' => array(
+						'Treatment',
+						'Inocula',
+						'Strain',
+						'TimeUnit',
+						'TimeDuration',
+						'PlantSpecies',
+						'PlantEcotype',
+						'PlantGenotype',
+						'Tissue'
+					)
+				),
+			'rnaseq-suzakit-2014' => array(
+				'table' => 'expat_RNAseq_SuzakiT2014_columns',
+				'columns' => array(
+						'Treatment',
+						'Inocula',
+						'Strain',
+						'TimeUnit',
+						'TimeDuration',
+						'PlantSpecies',
+						'PlantEcotype',
+						'PlantGenotype',
+						'Tissue'
+					)
+				)
+			);
+
+		$sqlQuery = "SELECT
+			`ConditionName`,`".implode('`,`', $dataset_metadata[$experiment]['columns'])."`,`PMID`
+			FROM ".$dataset_metadata[$experiment]['table']."
 			WHERE Dataset LIKE ?
 			ORDER BY ID";
-		} else if ($experiment === 'rnaseq-simonkelly-2015') {
-			$sqlQuery = "SELECT
-				ConditionName,
-				ExperimentalFactor,
-				Treatment,
-				PlantSpecies,
-				PlantEcotype,
-				PlantGenotype,
-				Age,
-				Inoculation,
-				Inocula
-			FROM expat_RNAseq_SimonKelly_columns
-			WHERE Dataset LIKE ?
-			ORDER BY ID";
-		} else if ($experiment === 'rnaseq-marcogiovanetti-2015') {
-			$sqlQuery = "SELECT
-				ConditionName,
-				ExperimentalFactor,
-				Treatment,
-				PlantSpecies,
-				PlantEcotype,
-				Inoculation,
-				Inocula,
-				Reference,
-				ReferenceTitle,
-				ReferenceURL
-			FROM expat_RNAseq_MarcoGiovanetti_AMGSE_columns
-			WHERE Dataset LIKE ?
-			ORDER BY ID";
-		} else if($experiment === 'rnaseq-eiichimurakami-2016-01') {
-			$sqlQuery = "SELECT
-				ConditionName,
-				ExperimentalFactor,
-				Treatment,
-				PlantSpecies,
-				PlantEcotype,
-				PlantGenotype,
-				Age,
-				Inoculation,
-				Inocula
-			FROM expat_RNAseq_EiichiMurakami_columns
-			WHERE Dataset LIKE ?
-			ORDER BY ID";
+
+		// Prepare query to collect PMIDs
+		$q1 = $db->prepare('SELECT PMID FROM '.$dataset_metadata[$experiment]['table'].' GROUP BY PMID');
+		$q1->execute();
+
+		if(!$q1->rowCount()) {
+			throw new Exception('No rows returned.', 400);
+		} else {
+			$pmids = array();
+			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
+				$pmids[] = $row['PMID'];
+			}
+
+			$refHandler = new \LotusBase\Getter\PMID;
+			$refHandler->set_pmid($pmids);
+			$refs = $refHandler->get_data();
 		}
 
-		// Prepare query
-		$q = $db->prepare($sqlQuery);
+		// Prepare actual query
+		$q2 = $db->prepare($sqlQuery);
 
 		// Execute query with array of values
-		$q->execute(array($dataset_wildcard));
+		$q2->execute(array($dataset_wildcard));
 
 		// Get results
-		if($q->rowCount() > 0) {
-			while($row = $q->fetch(PDO::FETCH_ASSOC)) {
+		if($q2->rowCount() > 0) {
+			while($row = $q2->fetch(PDO::FETCH_ASSOC)) {
+
+				// Construct reference
+				if(!empty($row['PMID'])) {
+					$ref = $refs[$row['PMID']];
+
+					// Reference link
+					$_articleids = $ref['articleids'];
+					$doi = false;
+					foreach ($_articleids as $ai) {
+						if($ai['idtype'] === 'doi') {
+							$doi = $ai['value'];
+						}
+					}
+
+					// Reference authors
+					$_authors = $ref['authors'];
+					if(count($_authors) !== 2) {
+						$authors = $_authors[0]['name'].' et al.';
+					} else {
+						$authors = implode(' and ', array_map(function($a) {
+							return $a['name'];
+						}, $_authors));
+					}
+
+					// Publication year
+					$year = DateTime::createFromFormat('Y/m/d G:i', $ref['sortpubdate'])->format('Y');
+
+					// Write to reference
+					if(!empty($row['PMID'])) {
+						$row['Reference'] = $authors.', '.$year;
+						$row['ReferenceTitle'] = $ref['title'];
+						$row['ReferenceURL'] = 'https://doi.org/'.$doi;
+					}
+				}
+
+				// Remove PMID
+				unset($row['PMID']);
+
+				// Append data
 				$group[] = $row;
+
 			}
 			return $response
 				->withStatus(200)
@@ -102,6 +203,7 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 		}
 
 	} catch(PDOException $e) {
+
 		return $response
 			->withStatus(500)
 			->withHeader('Content-Type', 'application/json')
@@ -111,6 +213,18 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 				'data' => $e->getMessage(),
 				'more_info' => DOMAIN_NAME . '/' . WEB_ROOT . '/docs/errors/pdo-exception'
 				),JSON_UNESCAPED_SLASHES));
+
+	} catch(Exception $e) {
+
+		return $response
+			->withStatus(500)
+			->withHeader('Content-Type', 'application/json')
+			->write(json_encode(array(
+				'status' => 500,
+				'code' => $e->getCode(),
+				'data' => $e->getMessage()
+				),JSON_UNESCAPED_SLASHES));
+
 	}
 });
 
