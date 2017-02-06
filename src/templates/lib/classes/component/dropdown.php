@@ -78,7 +78,7 @@ class Dropdown {
 	public function get_html() {
 
 		$out = '<div '.$this->get_attributes().'>
-			<span class="dropdown--title">'.(!empty($this->_vars['title_link']) ? '<a href="'.$this->_vars['title_link'].'" title="'.$this->_vars['title'].'">' : '').$this->_vars['title'].($this->_vars['title_counter'] ? ' ('.$this->_vars['title_counter'].')' : '').(!empty($this->_vars['title_link']) ? '</a>' : '').'</span>
+			<span class="dropdown--title">'.(!empty($this->_vars['title_link']) ? '<a href="'.$this->_vars['title_link'].'" title="'.$this->_vars['title'].'">' : '').$this->_vars['title'].(!empty($this->_vars['title_counter']) ? ' ('.$this->_vars['title_counter'].')' : '').(!empty($this->_vars['title_link']) ? '</a>' : '').'</span>
 			<ul class="dropdown--list">'.$this->get_list().'</ul>
 		</div>';
 
