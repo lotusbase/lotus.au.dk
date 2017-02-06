@@ -21,12 +21,12 @@
 	}
 
 	// If it is a search query
+	$searched = false;
 	if($_GET) {
 		// Perform search when $_GET variable is found
 
 		// Declare variables to be executed
 		$exec_vars = array();
-		$searched = false;
 
 		// What version are we filtering for?
 		if(!isset($_GET['v']) || empty($_GET['v'])) {
