@@ -40,7 +40,7 @@ class Dataset {
 					'value' => $row['Dataset'],
 					'text' => $row['Text'],
 					'label' => $row['Label'],
-					'intranet_only' => $row['IntranetOnly']
+					'intranet_only' => !!$row['IntranetOnly']
 					);
 			}
 		}
@@ -105,10 +105,10 @@ class Dataset {
 				if($d['label'] === $og) {
 					if(
 						(
-							!isset($d['intranet_only']) ||
+							!$d['intranet_only'] ||
 							(
-								isset($d['intranet_only']) &&
-								!!$d['intranet_only'] === !!is_allowed_access('/expat/')
+								$d['intranet_only'] &&
+								$d['intranet_only'] === !!is_allowed_access('/expat/')
 							)
 						) &&
 						(

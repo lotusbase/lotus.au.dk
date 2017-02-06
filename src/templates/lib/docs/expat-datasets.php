@@ -18,7 +18,7 @@
 
 			$pmids = array();
 			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
-				if(intval($row['IntranetOnly']) === 1 && !is_allowed_access('/expat/')) {
+				if(!!$row['IntranetOnly'] === true && !is_allowed_access('/expat/')) {
 					continue;
 				}
 				$pmids[] = $row['PMID'];
@@ -53,7 +53,7 @@
 			while($row = $q2->fetch(PDO::FETCH_ASSOC)) {
 
 				// For rows that are marked for intranet only, check if user is allowed to view it
-				if(intval($row['IntranetOnly']) === 1 && !is_allowed_access('/expat/')) {
+				if(!!$row['IntranetOnly'] === true && !is_allowed_access('/expat/')) {
 					continue;
 				}
 
@@ -101,7 +101,7 @@
 							'Transcript ID'
 							),
 						$row['IDtype']).'</td>
-					<td><p>'.$row['Description'].'</p>'.(intval($row['CORNEA']) !== 1 ? '<p class="user-message warning"><span class="icon-attention"></span>This dataset is not available for CORNEA because of the low number of conditions available.</p>' : '').'</td>
+					<td><p>'.$row['Description'].'</p>'.(!!$row['CORNEA'] !== true ? '<p class="user-message warning"><span class="icon-attention"></span>This dataset is not available for CORNEA because of the low number of conditions available.</p>' : '').'</td>
 					<td>'.(count($curators) ? '<ul class="list--reset"><li>'.implode('</li><li>', $curators).'</li></ul>' : '').'</td>
 					<td>'.(!empty($row['PMID']) ? '<a href="'.(!empty($doi) ? 'https://doi.org/'.$doi : 'https://www.ncbi.nlm.nih.gov/pubmed/'.$row['PMID']).'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a>' : 'Unpublished').'</td>
 				</tr>';
