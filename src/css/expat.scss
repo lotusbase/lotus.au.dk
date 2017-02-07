@@ -210,7 +210,7 @@
 			height: 8rem;
 			& > li {
 				width: 100%;
-				height: 100%;
+				flex: 1 1 100%;
 			}
 		}
 		&.selected, &:hover {
