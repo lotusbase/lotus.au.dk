@@ -286,7 +286,9 @@ $(function() {
 			}
 
 			// Indicate to user that form is currently using stored data
-			$('#incomplete-order').removeClass('hidden');
+			if(window.localStorage.getItem('_si_validStepIndex') !== null) {
+				$('#incomplete-order').removeClass('hidden');
+			}
 		},
 		step: {
 			activate: function(i) {
