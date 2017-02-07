@@ -31,7 +31,7 @@
 		
 
 		// Query 2: Get actual data
-		$q2 = $db->prepare('SELECT `Text`, IDtype, Description, CORNEA, PMID, IntranetOnly, Curators FROM expat_datasets');
+		$q2 = $db->prepare('SELECT `Text`, IDtype, Description, CORx, PMID, IntranetOnly, Curators FROM expat_datasets');
 		$q2->execute();
 
 		// Check results
@@ -101,7 +101,7 @@
 							'Transcript ID'
 							),
 						$row['IDtype']).'</td>
-					<td><p>'.$row['Description'].'</p>'.(!!$row['CORNEA'] !== true ? '<p class="user-message warning"><span class="icon-attention"></span>This dataset is not available for CORNEA because of the low number of conditions available.</p>' : '').'</td>
+					<td><p>'.$row['Description'].'</p>'.(!!$row['CORx'] !== true ? '<p class="user-message warning"><span class="icon-attention"></span>This dataset is not available for CORx because of the low number of conditions available.</p>' : '').'</td>
 					<td>'.(count($curators) ? '<ul class="list--reset"><li>'.implode('</li><li>', $curators).'</li></ul>' : '').'</td>
 					<td>'.(!empty($row['PMID']) ? '<a href="'.(!empty($doi) ? 'https://doi.org/'.$doi : 'https://www.ncbi.nlm.nih.gov/pubmed/'.$row['PMID']).'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a>' : 'Unpublished').'</td>
 				</tr>';
