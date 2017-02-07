@@ -90,10 +90,15 @@ giovanetti_probe = Dataset("rnaseq-marcogiovanetti-2015-am", "expat_RNAseq_Marco
     "Mean_Control_H2O", "Mean_Treatment_AMGSE_24h", "Mean_Treatment_AMGSE_48h"
 ])
 
-eiichi_murakami_2016 = Dataset("rnaseq-eiichimurakami-2016-01", "expat_RNAseq_EiichiMurakami", "TranscriptID", [
+eiichi_murakami_2016 = Dataset("rnaseq-eiichimurakami-2016", "expat_RNAseq_EiichiMurakami", "TranscriptID", [
     #"TranscriptID",
     "Mean_G_H2O", "Mean_G_NF", "Mean_38534_H2O", "Mean_38534_NF", "Mean_4820_H2O", "Mean_4820_NF", "Mean_nfr1_H2O", "Mean_nfr1_NF"
 ])
+
+handay_2015 = Dataset("rnaseq-handay-2015", "expat_RNAseq_HandaY2015", "GeneID", [
+	#"GeneID",
+	"Mean_MAFF3", "Mean_MAFF12", "Mean_AM15", "Mean_AM27", "Mean_rhnon", "Mean_AMnon"
+	])
 
 all_by_name = {
     u"ljgea-geneid": ljgea_gene,
@@ -101,5 +106,6 @@ all_by_name = {
     u"rnaseq-simonkelly-2015-bacteria": simon_kelly_bacteria,
     u"rnaseq-simonkelly-2015-purifiedcompounds": simon_kelly_purified_compounds,
     u"rnaseq-marcogiovanetti-2015-am": giovanetti_probe,
-    u"rnaseq-eiichimurakami-2016-01": eiichi_murakami_2016
+    u"rnaseq-eiichimurakami-2016": eiichi_murakami_2016,
+    u"rnaseq-handay-2015": handay_2015
 }

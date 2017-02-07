@@ -279,12 +279,31 @@
 						<label for="expat-dataset" class="col-one">Dataset <a href="<?php echo WEB_ROOT.'/lib/docs/expat-datasets'; ?>" data-modal="wide" class="info" title="What are the available datasets?">?</a></label>
 						<div class="col-two">
 							<?php
-								$expat_dataset = new \Lotusbase\ExpAt\Dataset();
-								$expat_dataset->set_blacklist(array('rnaseq-marcogiovanetti-2015-am', 'rnaseq-eiichimurakami-2016-01'));
-								if(!empty($_GET['dataset'])) {
-									$expat_dataset->set_dataset($_GET['dataset']);
+
+								// Retrieve blacklist datasets from database
+								try {
+									$bl = $db->prepare("SELECT Dataset from expat_datasets WHERE CORNEA = 0");
+									$bl->execute();
+									$blacklist = array();
+									
+									if($bl) {
+										while($row = $bl->fetch(PDO::FETCH_ASSOC)) {
+											$blacklist[] = $row['Dataset'];
+										}
+									} else {
+										throw new Exception;
+									}
+
+									$expat_dataset = new \Lotusbase\ExpAt\Dataset();
+									$expat_dataset->set_blacklist($blacklist);
+									if(!empty($_GET['dataset'])) {
+										$expat_dataset->set_dataset($_GET['dataset']);
+									}
+									echo $expat_dataset->render();
+
+								} catch(Exception $e) {
+									echo '<p class="user-message warning">Unable to retrieve list of expression datasets from database.</p>';
 								}
-								echo $expat_dataset->render();
 							?>
 						</div>
 
