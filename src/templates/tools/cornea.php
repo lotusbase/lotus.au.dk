@@ -282,7 +282,7 @@
 
 								// Retrieve blacklist datasets from database
 								try {
-									$bl = $db->prepare("SELECT Dataset from expat_datasets WHERE CORNEA = 0");
+									$bl = $db->prepare("SELECT Dataset from expat_datasets WHERE CORx = 0");
 									$bl->execute();
 									$blacklist = array();
 									
