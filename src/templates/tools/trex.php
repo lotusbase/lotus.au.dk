@@ -236,7 +236,7 @@
 				tc.Strand AS Strand,
 				tc.Chromosome AS Chromosome,
 				anno.Annotation AS Annotation,
-				anno.LjAnnotation AS LjAnnotation,
+				anno.LjAnnotation AS LjAnnotation
 				FROM annotations AS anno
 				LEFT JOIN transcriptcoord AS tc ON (anno.Gene = tc.Transcript AND anno.Version = tc.Version)
 				WHERE
