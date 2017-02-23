@@ -1,6 +1,18 @@
 <?php
 
+	// Load configuration
 	require_once('../config.php');
+
+	// Population statistics query
+	try {
+		$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306", DB_USER, DB_PASS);
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+		
+	} catch(PDOException $e) {
+
+	}
 
 ?>
 <!doctype html>
@@ -15,9 +27,9 @@
 		echo $document_header->get_document_header();
 	?>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
-	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/order.min.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/lore1.min.css" type="text/css" media="screen">
 </head>
-<body class="order">
+<body class="lore1 stats">
 	<?php
 		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<div class="align-center">
@@ -34,9 +46,57 @@
 
 	<section class="wrapper">
 		<h2>Population statistics</h2>
+		<form id="stats-toggle" class="form--reset lore1__stats__form" action="<?php echo $_SERVER['PHP_SELF']?>">
+			<div class="align-center">
+				<label for="stats-toggle__subset">Insertion type</label>
+				<span class="subset subset--genic">Genic</span><input type="checkbox" class="prettify" id="stats-toggle__subset" /><span class="subset subset--exonic inactive">Exonic</span>
+			</div>
+		</form>
+		<p>Population statistics for the entire <em>LORE1</em> mutant collection that spans 20 individual batches. Numbers are based on unique insertions (redundant insertions are collapsed by chromosome, position, and orientation).</p>
+		<div class="cols lore1__stats lore1__stats--total">
+			<div class="align-center metric__insertions">
+				<div class="count" data-target-value="707573">0</div>
+				total insertions
+			</div>
+			<div class="align-center metric__lines">
+				<div class="count" data-target-value="135716">0</div>
+				total lines
+			</div>
+			<div class="align-center metric__genes">
+				<div class="count" data-target-value="87230">0</div>
+				total genes
+			</div>
+		</div>
+
+		<div class="cols lore1__pie">
+			<div class="align-center"><svg id="lore1--pie__insertions"></svg></div>
+			<div class="align-center"><svg id="lore1--pie__lines"></svg></div>
+			<div class="align-center"><svg id="lore1--pie__genes"></svg></div>
+		</div>
+
+		<div class="cols lore1__stats lore1__stats--subset hidden">
+			<div class="align-center metric__insertions">
+				<div class="count" data-target-value="0">0</div>
+				<span class="subset-text">genic</span> insertions
+			</div>
+			<div class="align-center metric__lines">
+				<div class="count" data-target-value="0">0</div>
+				lines with ≥1 <span class="subset-text">genic</span> insertion
+			</div>
+			<div class="align-center metric__genes">
+				<div class="count" data-target-value="0">0</div>
+				genes with ≥1 <span class="subset-text">genic</span> insertion
+			</div>
+		</div>
+	</section>
+
+	<section class="wrapper">
+		<h2>Usage statistics</h2>
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/lore1.min.js"></script>
 </body>
 </html>
