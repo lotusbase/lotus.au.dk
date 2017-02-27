@@ -101,7 +101,8 @@ $(function() {
 
 			// Tween pie chart
 			$.each(metrics, function(i,m) {
-				var data = [];
+				var data = [],
+					percentage = 0;
 				if(type === 'total') {
 					data = data.concat([{
 						type: 'filler',
@@ -110,6 +111,9 @@ $(function() {
 						type: 'total',
 						count: globalVar.lore1.total[m]
 					}]);
+
+					percentage = 0;
+
 				} else if(type === 'genic') {
 					data = data.concat([{
 						type: 'genic',
@@ -118,6 +122,9 @@ $(function() {
 						type: 'others',
 						count: globalVar.lore1.total[m]-globalVar.lore1.subset.genic[m]
 					}]);
+
+					percentage = globalVar.lore1.subset.genic[m]/globalVar.lore1.total[m];
+
 				} else {
 					data = data.concat([{
 						type: 'exonic',
@@ -129,17 +136,14 @@ $(function() {
 						type: 'others',
 						count: globalVar.lore1.total[m]-globalVar.lore1.subset.genic[m]
 					}]);
+
+					percentage = globalVar.lore1.subset.exonic[m]/globalVar.lore1.total[m];
+
 				}
 
 				var pieSVG = d3.select('#lore1--pie__'+m).select('g'),
-					pieRatio = pieSVG.append('text').attr({
-						'class': 'percentage',
-						'dy': '-0.35em'
-					}).style({
-						'text-anchor': 'middle',
-						'font-size': '32px'
-					}).text(0).data(0),
-					pieG = pieSVG.selectAll('.arc').data(pie(data));
+					pieG = pieSVG.selectAll('.arc').data(pie(data)),
+					piePercentage = pieSVG.selectAll('text.percentage').data([percentage]);
 
 				// arcTween function
 				var arcTween = function(a) {
@@ -162,6 +166,19 @@ $(function() {
 					.each(function(d) {
 						this._current = d;
 					});
+				piePercentage.enter().append('text')
+					.attr({
+						'class': 'percentage',
+						'dy': '0.25em'
+					})
+					.style({
+						'text-anchor': 'middle',
+						'font-family': '"Open Sans Condensed", "Helvetica Condensed", "Arial Narrow", "sans-serif"',
+						'font-size': '48px'
+					}).each(function(d) {
+						this._current = d;
+						d3.select(this).text(d.toFixed(2)+'%');
+					});
 
 				// Transition
 				pieG.transition()
@@ -170,9 +187,27 @@ $(function() {
 						return pieColors[d.data.type] || '#ccc';
 					})
 					.attrTween('d', arcTween);
+				piePercentage.transition()
+					.duration(duration || 1500)
+					.tween('text', function(d) {
+						var i = d3.interpolate(this._current, d);
+						return function(t) {
+							var p = i(t) * 100;
+							d3.select(this).text(p.toFixed(2)+'%');
+						};
+					})
+					.each('end', function(d) {
+						this._current = d;
+					});
 
 				// Exit
 				pieG.exit()
+					.transition()
+					.duration(duration || 1500)
+					.style('fill', function(d) {
+						return pieColors[d.data.type] || '#ccc';
+					})
+					.attrTween('d', arcTween)
 					.remove();
 			});
 		}
