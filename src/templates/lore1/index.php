@@ -55,37 +55,37 @@
 		<p>Population statistics for the entire <em>LORE1</em> mutant collection that spans 20 individual batches. Numbers are based on unique insertions (redundant insertions are collapsed by chromosome, position, and orientation).</p>
 		<div class="cols lore1__stats lore1__stats--total">
 			<div class="align-center metric__insertions">
-				<div class="count" data-target-value="707573">0</div>
-				total insertions
+				<div class="lore1__stats--total">
+					<div class="count" data-target-value="707573">0</div>
+					total insertions
+				</div>
+				<svg class="lore1__pie" id="lore1__pie__insertions"></svg>
+				<div class="lore1__stats--subset">
+					<div class="count" data-target-value="0">0</div>
+					<span class="subset-text">genic</span> insertions
+				</div>
 			</div>
 			<div class="align-center metric__lines">
-				<div class="count" data-target-value="135716">0</div>
-				total lines
+				<div class="lore1__stats--total">
+					<div class="count" data-target-value="135716">0</div>
+					total lines
+				</div>
+				<svg class="lore1__pie" id="lore1__pie__lines"></svg>
+				<div class="lore1__stats--subset">
+					<div class="count" data-target-value="0">0</div>
+					lines with ≥1 <span class="subset-text">genic</span> insertion
+				</div>
 			</div>
 			<div class="align-center metric__genes">
-				<div class="count" data-target-value="87230">0</div>
-				total genes
-			</div>
-		</div>
-
-		<div class="cols lore1__pie">
-			<div class="align-center"><svg id="lore1--pie__insertions"></svg></div>
-			<div class="align-center"><svg id="lore1--pie__lines"></svg></div>
-			<div class="align-center"><svg id="lore1--pie__genes"></svg></div>
-		</div>
-
-		<div class="cols lore1__stats lore1__stats--subset hidden">
-			<div class="align-center metric__insertions">
-				<div class="count" data-target-value="0">0</div>
-				<span class="subset-text">genic</span> insertions
-			</div>
-			<div class="align-center metric__lines">
-				<div class="count" data-target-value="0">0</div>
-				lines with ≥1 <span class="subset-text">genic</span> insertion
-			</div>
-			<div class="align-center metric__genes">
-				<div class="count" data-target-value="0">0</div>
-				genes with ≥1 <span class="subset-text">genic</span> insertion
+				<div class="lore1__stats--total">
+					<div class="count" data-target-value="87230">0</div>
+					total genes
+				</div>
+				<svg class="lore1__pie" id="lore1__pie__genes"></svg>
+				<div class="lore1__stats--subset">
+					<div class="count" data-target-value="0">0</div>
+					genes with ≥1 <span class="subset-text">genic</span> insertion
+				</div>
 			</div>
 		</div>
 	</section>

@@ -24,10 +24,12 @@
 
 // Statistics
 .lore1__stats {
-	margin-bottom: 1.5rem;
 
 	& > div {
 		width: 33%;
+		& > div {
+			margin-bottom: 1.5rem;
+		}
 	}
 
 	.count {
@@ -46,13 +48,29 @@
 }
 
 // Pie charts
-.lore1__pie {
+svg.lore1__pie {
+	margin-bottom: .75rem;
+	width: 75%;
+}
 
-	& > div {
-		width: 33%;
-	}
+@media (max-width: 767px) {
+	// Statistics
+	.lore1__stats {
+		& > div {
+			display: flex;
+			margin-bottom: 3rem;
+			justify-content: center;
+			flex-wrap: wrap;
 
-	svg {
-		width: 75%;
+			.lore1__stats--total,
+			.lore1__stats--subset {
+				order: 1;
+				width: 50%;
+			}
+			.lore1__pie {
+				order: 2;
+				width: 50%;
+			}
+		}
 	}
 }

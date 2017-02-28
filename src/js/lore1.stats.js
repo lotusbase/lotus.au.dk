@@ -37,7 +37,7 @@ $(function() {
 			filler: '#ccc',
 			genic: '#5ca4a9',
 			intronic: '#aaa',
-			exonic: '#33658a'
+			exonic: '#5ca4a9'
 		},
 		pie = d3.layout.pie().sort(null).value(function(d) {
 			return +d.count;
@@ -46,7 +46,7 @@ $(function() {
 	// Draw pie chart for each metric
 	$.each(metrics, function(i,m) {
 		
-		var pieSVG = d3.select('#lore1--pie__'+m).attr({
+		var pieSVG = d3.select('#lore1__pie__'+m).attr({
 			viewBox: '0 0 '+pieChart.width+' '+pieChart.height
 		}).append('g')
 			.attr('transform', 'translate('+pieChart.width/2+','+pieChart.height/2+')');
@@ -78,7 +78,7 @@ $(function() {
 				$('.lore1__stats--subset')
 				.removeClass('lore1__stats--genic lore1__stats--exonic')
 				.addClass('lore1__stats--'+type);
-				$('.lore1__stats--subset .metric__'+m+' .count').attr('data-target-value', globalVar.lore1.subset[type][m]);
+				$('.lore1__stats .metric__'+m+' .lore1__stats--subset .count').attr('data-target-value', globalVar.lore1.subset[type][m]);
 				$('.lore1__stats--subset .subset-text').text(type);
 			});
 
@@ -141,7 +141,7 @@ $(function() {
 
 				}
 
-				var pieSVG = d3.select('#lore1--pie__'+m).select('g'),
+				var pieSVG = d3.select('#lore1__pie__'+m).select('g'),
 					pieG = pieSVG.selectAll('.arc').data(pie(data)),
 					piePercentage = pieSVG.selectAll('text.percentage').data([percentage]);
 
