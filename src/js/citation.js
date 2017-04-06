@@ -18,8 +18,8 @@ $(function() {
 		{
 			'tags': ['lotus-base'],
 			'cite': {
-				'list': 'Mun et al. (in press). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em>',
-				'bibtex': '@article{Maolepszy:2016aa,\n    Author = {Mun, Terry and Bachmann, Asger and Gupta, Vikas and Stougaard, Jens and Andersen, Stig Uggerh{\\o}j},\n    Journal = {Sci Rep},\n    Journal-Full = {Scientific Reports},\n    Pst = {aheadofprint},\n    Title = {\\emph{Lotus} Base, an integrated information portal for the model legume \\emph{Lotus japonicus}},\n    Year = {in press}}'
+				'list': 'Mun et al. (2016). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em> <a href="http://www.nature.com/articles/srep39447">doi:10.1038/srep39447</a>',
+				'bibtex': '@article{Mun:2016aa,\n    Author = {Mun, Terry and Bachmann, Asger and Gupta, Vikas and Stougaard, Jens and Andersen, Stig U},\n    Doi = {10.1038/srep39447},\n    Journal = {Sci Rep},\n    Journal-Full = {Scientific reports},\n    Month = {Dec},\n    Pages = {39447},\n    Pmc = {PMC5180183},\n    Pmid = {28008948},\n    Pst = {epublish},\n    Title = {\emph{Lotus} Base: An integrated information portal for the model legume \emph{Lotus japonicus}},\n    Volume = {6},\n    Year = {2016},\n    Bdsk-Url-1 = {http://dx.doi.org/10.1038/srep39447}}'
 			}
 		},
 		{

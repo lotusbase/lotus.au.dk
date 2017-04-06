@@ -51,7 +51,7 @@
 
 			<div id="citation__list">
 				<ul>
-					<li>Mun et al. (in press). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em></li>
+					<li>Mun et al. (2016). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em> <a href="http://www.nature.com/articles/srep39447">doi:10.1038/srep39447</a>.</li>
 					<li>Małolepszy et al. (2016). The <em>LORE1</em> insertion mutant resource. <em>Plant J.</em> <a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352">doi:10.1111/tpj.13243</a>.</li>
 					<li>Urbański et al. (2012). Genome-wide <em>LORE1</em> retrotransposon mutagenesis and high-throughput insertion detection in <em>Lotus japonicus</em>. <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014280" title="Genome-wide LORE1 retrotransposon mutagenesis and high-throughput insertion detection in Lotus japonicus.">doi:10.1111/j.1365-313X.2011.04827.x</a>.</li>
 					<li>Fukai et al. (2012) Establishment of a <em>Lotus japonicus</em> gene tagging population using the exon-targeting endogenous retrotransposon <em>LORE1</em></strong> (2012). <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014259" title="Establishment of a Lotus japonicus gene tagging population using the exon-targeting endogenous retrotransposon LORE1.">doi:10.1111/j.1365-313X.2011.04826.x</a>.</li>
@@ -60,7 +60,7 @@
 
 			<div id="citation__html">
 				<textarea readonly>&lt;ul&gt;
-	&lt;li&gt;Mun et al. (in press). &lt;em&gt;Lotus&lt;/em&gt; Base: An integrated information portal for the model legume &lt;em&gt;Lotus japonicus&lt;/em&gt;. &lt;em&gt;Sci. Rep.&lt;/em&gt;&lt;/li&gt;
+	&lt;li&gt;Mun et al. (2016). &lt;em&gt;Lotus&lt;/em&gt; Base: An integrated information portal for the model legume &lt;em&gt;Lotus japonicus&lt;/em&gt;. &lt;em&gt;Sci. Rep.&lt;/em&gt; &lt;a href="http://www.nature.com/articles/srep39447"&gt;doi:10.1038/srep39447&lt;/a&gt;.&lt;/li&gt;
 	&lt;li&gt;Małolepszy et al. (2016). The &lt;em&gt;LORE1&lt;/em&gt; insertion mutant resource. &lt;em&gt;Plant J.&lt;/em&gt; &lt;a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352"&gt;doi:10.1111/tpj.13243&lt;/a&gt;.&lt;/li&gt;
 	&lt;li&gt;Urbański et al. (2012). Genome-wide &lt;em&gt;LORE1&lt;/em&gt; retrotransposon mutagenesis and high-throughput insertion detection in &lt;em&gt;Lotus japonicus&lt;/em&gt;. &lt;em&gt;Plant J.&lt;/em&gt;, 69(4). &lt;a href="http://www.ncbi.nlm.nih.gov/pubmed/22014280" title="Genome-wide LORE1 retrotransposon mutagenesis and high-throughput insertion detection in Lotus japonicus."&gt;doi:10.1111/j.1365-313X.2011.04827.x&lt;/a&gt;.&lt;/li&gt;
 	&lt;li&gt;Fukai et al. (2012) Establishment of a &lt;em&gt;Lotus japonicus&lt;/em&gt; gene tagging population using the exon-targeting endogenous retrotransposon &lt;em&gt;LORE1&lt;/em&gt;&lt;/strong&gt; (2012). &lt;em&gt;Plant J.&lt;/em&gt;, 69(4). &lt;a href="http://www.ncbi.nlm.nih.gov/pubmed/22014259" title="Establishment of a Lotus japonicus gene tagging population using the exon-targeting endogenous retrotransposon LORE1."&gt;doi:10.1111/j.1365-313X.2011.04826.x&lt;/a&gt;.&lt;/li&gt;
@@ -68,13 +68,21 @@
 			</div>
 
 			<div id="citation__bibtex">
-				<textarea readonly>@article{Maolepszy:2016aa,
-    Author = {Mun, Terry and Bachmann, Asger and Gupta, Vikas and Stougaard, Jens and Andersen, Stig Uggerh{\o}j},
-    Journal = {Sci Rep},
-    Journal-Full = {Scientific Reports},
-    Pst = {aheadofprint},
-    Title = {\emph{Lotus} Base, an integrated information portal for the model legume \emph{Lotus japonicus}},
-    Year = {in press}}
+				<textarea readonly>@article{Mun:2016aa,
+	Author = {Mun, Terry and Bachmann, Asger and Gupta, Vikas and Stougaard, Jens and Andersen, Stig U},
+	Doi = {10.1038/srep39447},
+	Journal = {Sci Rep},
+	Journal-Full = {Scientific reports},
+	Month = {Dec},
+	Pages = {39447},
+	Pmc = {PMC5180183},
+	Pmid = {28008948},
+	Pst = {epublish},
+	Title = {\emph{Lotus} Base: An integrated information portal for the model legume \emph{Lotus japonicus}},
+	Volume = {6},
+	Year = {2016},
+	Bdsk-Url-1 = {http://dx.doi.org/10.1038/srep39447}}
+
 
 @article{Maolepszy:2016aa,
     Author = {Ma{\l}olepszy, Anna and Mun, Terry and Sandal, Niels and Gupta, Vikas and Dubin, Manu and Urba{\'n}ski, Dorian and Shah, Niraj and Bachmann, Asger and Fukai, Eigo and Hirakawa, Hideki and Tabata, Satoshi and Nadzieja, Marcin and Markmann, Katharina and Su, Junyi and Umehara, Yosuke and Soyano, Takashi and Miyahara, Akira and Sato, Shusei and Hayashi, Makoto and Stougaard, Jens and Andersen, Stig Uggerh{\o}j},
