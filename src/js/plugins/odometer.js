@@ -10,8 +10,7 @@
 
   FORMAT_MARK_HTML = '<span class="odometer-formatting-mark"></span>';
 
-  //DIGIT_FORMAT = '(,ddd).dd';
-  DIGIT_FORMAT = '';
+  DIGIT_FORMAT = '(,ddd).dd';
 
   FORMAT_PARSER = /^\(?([^)]*)\)?(?:(.)(d+))?$/;
 
@@ -642,7 +641,7 @@
   }
 
   if (typeof define === 'function' && define.amd) {
-    define(['jquery'], function() {
+    define([], function() {
       return Odometer;
     });
   } else if (typeof exports !== "undefined" && exports !== null) {

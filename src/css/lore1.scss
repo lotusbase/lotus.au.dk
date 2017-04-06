@@ -1,0 +1,76 @@
+// Mixins
+@import 'variables';
+@import 'mixins';
+@import 'type';
+
+@import 'components/odometer';
+
+// Toggle
+#stats-toggle {
+	span.subset {
+		line-height: 2rem;
+		font-weight: bold;
+		color: $lotusPrimary3;
+
+		&.inactive {
+			color: #999;
+		}
+	}
+	#stats-toggle__subset {
+		margin-left: .75rem;
+		margin-right: .75rem;
+	}
+}
+
+// Statistics
+.lore1__stats {
+
+	& > div {
+		width: 33%;
+		& > div {
+			margin-bottom: 1.5rem;
+		}
+	}
+
+	.count {
+		color: #555;
+		display: block;
+		font-family: 'Open Sans Condensed', $fontface-sansSerifCondensed;
+		font-weight: 300;
+		font-size: 4em;
+		line-height: 1.2em;
+	}
+	.subset-text {
+		color: darken($lotusPrimary3,10);
+		font-weight: bold;
+	}
+
+}
+
+// Pie charts
+svg.lore1__pie {
+	margin-bottom: .75rem;
+	width: 75%;
+}
+
+@media (max-width: 767px) {
+	// Statistics
+	.lore1__stats {
+		& > div {
+			display: flex;
+			margin-bottom: 3rem;
+			justify-content: center;
+			flex-wrap: wrap;
+
+			.lore1__stats--total,
+			.lore1__stats--subset {
+				order: 1;
+				width: 50%;
+			}
+			.lore1__pie {
+				order: 2;
+				width: 50%;
+			}
+		}
+	}
+}

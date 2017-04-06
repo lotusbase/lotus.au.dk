@@ -20,7 +20,12 @@ $(function() {
 		};
 
 	// Use select2 for dropdowns
-	$('#searchform__lore1 select, #filetype').select2();
+	var s2 = ['#searchform__lore1 select', '#filetype'];
+	$.each(s2,function(i,v) {
+		if($(v).length) {
+			$(v).select2();
+		}
+	});
 
 	// Regex validation LORE1 lines
 	$('#searchform__lore1 .field__plant-id ul.input-values').on('update', function() {
