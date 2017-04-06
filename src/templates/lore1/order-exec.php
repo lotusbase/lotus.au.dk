@@ -171,6 +171,11 @@
 			<ul style="background-color: #eee; border: 1px solid #aaa; margin: 0; padding: 8px 8px 8px 32px;"><li>'.implode('</li><li>', $ordered_lines).'</li></ul>
 			<p>Your order has been assigned an automatically generated identification chit (order key):<br /><strong>'.$salt.'</strong></p>
 			<p>You may track your order status using the aforementioned order identifer, or the following link: <br /><a href="'.DOMAIN_NAME.'/lore1/order-status?id='.urlencode($salt).'"><strong>'.DOMAIN_NAME.'/lore1/order-status?id='.urlencode($salt).'</strong></a></p>
+			<p>The use of <em>LORE1</em> lines should be cited as follow:</p>
+			<ul>
+				<li>Małolepszy et al. (2016). The <em>LORE1</em> insertion mutant resource. <em>Plant J.</em> <a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352">doi:10.1111/tpj.13243</a>.</li>
+				<li>Mun et al. (2016). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em> <a href="http://www.nature.com/articles/srep39447">doi:10.1038/srep39447</a></li>
+			</ul>
 			<p>Should you require any assistance, or have any enquiries, kindly contact us through the <a href="https://'.$_SERVER['HTTP_HOST'].'/meta/contact.php?key='.urlencode($salt).'">contact form</a> on our site. <strong>Do not reply to this email because mails to this account (noreply@mb.au.dk) will not be directed to any staff.</strong></p>
 			'));
 
