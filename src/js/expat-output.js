@@ -813,7 +813,7 @@ $(function() {
 					.on('mouseout', heatmapTip.hide);
 
 				// Add a legend for the color values.
-				var ticks = heatmapZ.ticks();
+				var ticks = heatmapZ.nice().ticks();
 
 				// Heatmap color gradient legend
 				var gradient = expatHeatmap.append('defs')
@@ -1758,8 +1758,11 @@ $(function() {
 					// Update heatmap fills
 					expatHeatmap.selectAll('rect.tile').transition().duration(500).style('fill', function(d) { return heatmapFill(heatmapZ(d.value)); });
 
+					// Ticks
+					var ticks = heatmapZ.ticks();
+
 					// Update heatmap legend
-					expatHeatmap.select('#heatmap-gradient').selectAll('stop').transition().duration(500)
+					var gradientStops = expatHeatmap.select('#heatmap-gradient').selectAll('stop').data(ticks)
 						.attr({
 							'offset': function(d,i) {
 								return (i / ticks.length) * 100 + '%';
@@ -1769,10 +1772,19 @@ $(function() {
 							}
 						});
 
-					// Add class
-//					$('#expatLinegraph g.row').attr('class', function(i, classNames) {
-//						return classNames +  ' ' + cb;
-//					});
+					// Enter
+					gradientStops.enter().append('stop')
+					.attr({
+						'offset': function(d,i) {
+							return (i / ticks.length) * 100 + '%';
+						},
+						'stop-color': function(d) {
+							return heatmapFill(heatmapZ(d));
+						}
+					});
+
+					// Exit
+					gradientStops.exit().remove();
 
 				});
 
@@ -1856,6 +1868,7 @@ $(function() {
 
 				// Custom heatmap colour scale
 				$d.on('change.expatSuccess', '#expat-user-custom-heatmap-scale-color', function() {
+
 					// Update colours
 					heatmapFill = d3.scale.linear().domain(d3.range(0, 1, 1.0 / (fills.length - 1))).range(fills);
 
@@ -1870,9 +1883,11 @@ $(function() {
 					}
 					
 					// Change fill in heatmap
-					expatHeatmap.selectAll('rect.tile').transition().duration(500).attr('fill', function(d) { return heatmapFill(heatmapZ(d.value)); });
+					expatHeatmap.selectAll('rect.tile').transition().duration(500).style('fill', function(d, i) {
+						return heatmapFill(heatmapZ(d.value));
+					});
 
-					var ticks = heatmapZ.ticks(10);
+					var ticks = heatmapZ.nice().ticks(10);
 					var heatmapLegend = expatHeatmap.select('#heatmap-legend');
 
 					// Update current ticks
