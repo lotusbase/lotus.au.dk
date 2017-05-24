@@ -1762,15 +1762,6 @@ $(function() {
 					var ticks = heatmapZ.ticks();
 
 					// Update heatmap legend
-//					expatHeatmap.select('#heatmap-gradient').selectAll('stop').transition().duration(500)
-//						.attr({
-//							'offset': function(d,i) {
-//								return (i / ticks.length) * 100 + '%';
-//							},
-//							'stop-color': function(d) {
-//								return heatmapFill(heatmapZ(d));
-//							}
-//						});
 					var gradientStops = expatHeatmap.select('#heatmap-gradient').selectAll('stop').data(ticks)
 						.attr({
 							'offset': function(d,i) {
@@ -1794,11 +1785,6 @@ $(function() {
 
 					// Exit
 					gradientStops.exit().remove();
-
-					// Add class
-//					$('#expatLinegraph g.row').attr('class', function(i, classNames) {
-//						return classNames +  ' ' + cb;
-//					});
 
 				});
 
@@ -1882,6 +1868,7 @@ $(function() {
 
 				// Custom heatmap colour scale
 				$d.on('change.expatSuccess', '#expat-user-custom-heatmap-scale-color', function() {
+
 					// Update colours
 					heatmapFill = d3.scale.linear().domain(d3.range(0, 1, 1.0 / (fills.length - 1))).range(fills);
 
@@ -1896,7 +1883,9 @@ $(function() {
 					}
 					
 					// Change fill in heatmap
-					expatHeatmap.selectAll('rect.tile').transition().duration(500).attr('fill', function(d) { return heatmapFill(heatmapZ(d.value)); });
+					expatHeatmap.selectAll('rect.tile').transition().duration(500).style('fill', function(d, i) {
+						return heatmapFill(heatmapZ(d.value));
+					});
 
 					var ticks = heatmapZ.ticks(10);
 					var heatmapLegend = expatHeatmap.select('#heatmap-legend');
