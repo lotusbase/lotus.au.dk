@@ -1758,8 +1758,20 @@ $(function() {
 					// Update heatmap fills
 					expatHeatmap.selectAll('rect.tile').transition().duration(500).style('fill', function(d) { return heatmapFill(heatmapZ(d.value)); });
 
+					// Ticks
+					var ticks = heatmapZ.ticks();
+
 					// Update heatmap legend
-					expatHeatmap.select('#heatmap-gradient').selectAll('stop').transition().duration(500)
+//					expatHeatmap.select('#heatmap-gradient').selectAll('stop').transition().duration(500)
+//						.attr({
+//							'offset': function(d,i) {
+//								return (i / ticks.length) * 100 + '%';
+//							},
+//							'stop-color': function(d) {
+//								return heatmapFill(heatmapZ(d));
+//							}
+//						});
+					var gradientStops = expatHeatmap.select('#heatmap-gradient').selectAll('stop').data(ticks)
 						.attr({
 							'offset': function(d,i) {
 								return (i / ticks.length) * 100 + '%';
@@ -1768,6 +1780,20 @@ $(function() {
 								return heatmapFill(heatmapZ(d));
 							}
 						});
+
+					// Enter
+					gradientStops.enter().append('stop')
+					.attr({
+						'offset': function(d,i) {
+							return (i / ticks.length) * 100 + '%';
+						},
+						'stop-color': function(d) {
+							return heatmapFill(heatmapZ(d));
+						}
+					});
+
+					// Exit
+					gradientStops.exit().remove();
 
 					// Add class
 //					$('#expatLinegraph g.row').attr('class', function(i, classNames) {
