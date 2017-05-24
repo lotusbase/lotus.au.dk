@@ -813,7 +813,7 @@ $(function() {
 					.on('mouseout', heatmapTip.hide);
 
 				// Add a legend for the color values.
-				var ticks = heatmapZ.ticks();
+				var ticks = heatmapZ.nice().ticks();
 
 				// Heatmap color gradient legend
 				var gradient = expatHeatmap.append('defs')
@@ -1887,7 +1887,7 @@ $(function() {
 						return heatmapFill(heatmapZ(d.value));
 					});
 
-					var ticks = heatmapZ.ticks(10);
+					var ticks = heatmapZ.nice().ticks(10);
 					var heatmapLegend = expatHeatmap.select('#heatmap-legend');
 
 					// Update current ticks
