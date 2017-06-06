@@ -37,11 +37,24 @@ $(function() {
 
 	// Store selected databse
 	$('#seqret-form').validate({
+		ignore: [],
 		rules: {
 			db: 'required',
 			id: {
 				required: true,
 				regex: /^[^;><\'\"\`:\/\\\*\?!&]+$/
+			}
+		},
+		errorPlacement: function(error, element) {
+			var $e = element;
+			if($e.attr('id') === 'seqret-db') {
+				$e.siblings('.select2')
+					.addClass('error')
+					.after(error);
+			} else if($e.hasClass('input-hidden')) {
+				$e.parent('div').addClass('error').parent().append(error);
+			} else {
+				error.insertAfter(element);
 			}
 		},
 		submitHandler: function(form) {
