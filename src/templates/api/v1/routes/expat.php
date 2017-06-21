@@ -34,8 +34,8 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 					'Comments'
 					)
 				),
-			'rnaseq-simonkelly-2015' => array(
-				'table' => 'expat_RNAseq_SimonKelly_columns',
+			'rnaseq-kellys-2015' => array(
+				'table' => 'expat_RNAseq_KellyS_columns',
 				'columns' => array(
 					'ExperimentalFactor',
 					'Treatment',
@@ -47,8 +47,8 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 					'Inocula'
 					)
 				),
-			'rnaseq-marcogiovanetti-2015' => array(
-				'table' => 'expat_RNAseq_MarcoGiovanetti_AMGSE_columns',
+			'rnaseq-giovanettim-2015' => array(
+				'table' => 'expat_RNAseq_GiovanettiM_AMGSE_columns',
 				'columns' => array(
 					'ExperimentalFactor',
 					'Treatment',
@@ -58,8 +58,8 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 					'Inocula'
 					)
 				),
-			'rnaseq-eiichimurakami-2016' => array(
-				'table' => 'expat_RNAseq_EiichiMurakami_columns',
+			'rnaseq-murakamie-2016' => array(
+				'table' => 'expat_RNAseq_MurakamiE_columns',
 				'columns' => array(
 					'ExperimentalFactor',
 					'Treatment',
@@ -115,6 +115,20 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 						'PlantEcotype',
 						'PlantGenotype',
 						'Tissue'
+					)
+				),
+			'rnaseq-kellys-2017' => array(
+				'table' => 'expat_RNAseq_KellyS2017_columns',
+				'columns' => array(
+						'Treatment',
+						'Inocula',
+						'Strain',
+						'TimeUnit',
+						'TimeDuration',
+						'PlantSpecies',
+						'PlantEcotype',
+						'Tissue',
+						'Age'
 					)
 				)
 			);
@@ -184,6 +198,9 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 						$row['ReferenceTitle'] = $ref['title'];
 						$row['ReferenceURL'] = 'https://doi.org/'.$doi;
 					}
+				} else {
+					$row['Reference'] = 'Unpublished data';
+					$row['ReferenceURL'] = null;
 				}
 
 				// Remove PMID

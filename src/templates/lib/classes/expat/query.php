@@ -103,7 +103,7 @@ class Query {
 		$this->expat['dataTransform'] = $this->_expat['dataTransform'];
 
 		// Perform sanity check on selected dataset
-		if ($dataset == 'ljgea-geneid') {
+		if ($dataset === 'ljgea-geneid') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_ljgea_geneid',
 				'id' => $_POST['idtype'],
@@ -117,7 +117,7 @@ class Query {
 				'rowType' => 'Probe ID',
 				'text' => 'Probe(s)'
 			);
-		} else if ($dataset == 'ljgea-probeid') {
+		} else if ($dataset === 'ljgea-probeid') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_ljgea_probeid',
 				'id' => $_POST['idtype'],
@@ -131,43 +131,43 @@ class Query {
 				'rowType' => 'Gene ID',
 				'text' => 'Gene(s)'
 			);
-		} else if ($dataset == 'rnaseq-simonkelly-2015-bacteria') {
+		} else if ($dataset === 'rnaseq-kellys-2015-bacteria') {
 			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_SimonKelly_bacteria',
+				'table' => 'expat_RNAseq_KellyS_bacteria',
 				'id' => $_POST['idtype']
 			);
 			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-simonkelly-2015';
+			$this->expat['experiment'] = 'rnaseq-kellys-2015';
 			$this->expat['rowType'] = 'Transcript ID';
 			$this->expat['rowText'] = 'Transcript(s)';
-		} else if ($dataset == 'rnaseq-simonkelly-2015-purifiedcompounds') {
+		} else if ($dataset === 'rnaseq-kellys-2015-purifiedcompounds') {
 			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_SimonKelly_purifiedcompounds',
+				'table' => 'expat_RNAseq_KellyS_purifiedcompounds',
 				'id' => $_POST['idtype']
 			);
 			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-simonkelly-2015';
+			$this->expat['experiment'] = 'rnaseq-kellys-2015';
 			$this->expat['rowType'] = 'Transcript ID';
 			$this->expat['rowText'] = 'Transcript(s)';
-		} else if ($dataset == 'rnaseq-marcogiovanetti-2015-am') {
+		} else if ($dataset === 'rnaseq-giovanettim-2015-am') {
 			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_MarcoGiovanetti_AMGSE',
+				'table' => 'expat_RNAseq_GiovanettiM_AMGSE',
 				'id' => $_POST['idtype']
 			);
 			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-marcogiovanetti-2015';
+			$this->expat['experiment'] = 'rnaseq-giovanettim-2015';
 			$this->expat['rowType'] = 'Probe ID';
 			$this->expat['rowText'] = 'Probe(s)';
-		} else if ($dataset == 'rnaseq-eiichimurakami-2016') {
+		} else if ($dataset === 'rnaseq-murakamie-2016') {
 			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_EiichiMurakami',
+				'table' => 'expat_RNAseq_MurakamiE',
 				'id' => $_POST['idtype']
 			);
 			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-eiichimurakami-2016';
+			$this->expat['experiment'] = 'rnaseq-murakamie-2016';
 			$this->expat['rowType'] = 'Transcript ID';
 			$this->expat['rowText'] = 'Transcript(s)';
-		} else if ($dataset == 'rnaseq-handay-2015') {
+		} else if ($dataset === 'rnaseq-handay-2015') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_HandaY2015',
 				'id' => $_POST['idtype']
@@ -176,7 +176,7 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-handay-2015';
 			$this->expat['rowType'] = 'Gene ID';
 			$this->expat['rowText'] = 'Gene(s)';
-		} else if ($dataset == 'rnaseq-sasakit-2014') {
+		} else if ($dataset === 'rnaseq-sasakit-2014') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_SasakiT2014',
 				'id' => $_POST['idtype']
@@ -185,7 +185,7 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-sasakit-2014';
 			$this->expat['rowType'] = 'Gene ID';
 			$this->expat['rowText'] = 'Gene(s)';
-		} else if ($dataset == 'rnaseq-suzakit-2014') {
+		} else if ($dataset === 'rnaseq-suzakit-2014') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_SuzakiT2014',
 				'id' => $_POST['idtype']
@@ -194,9 +194,27 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-suzakit-2014';
 			$this->expat['rowType'] = 'Gene ID';
 			$this->expat['rowText'] = 'Gene(s)';
+		} else if ($dataset === 'rnaseq-kellys-2017-rootshoottotalreads') {
+			$this->_expat['query'] = array(
+				'table' => 'expat_RNAseq_KellyS2017_RootShootTotalReads',
+				'id' => $_POST['idtype']
+			);
+			$this->expat['mapped'] = false;
+			$this->expat['experiment'] = 'rnaseq-kellys-2017';
+			$this->expat['rowType'] = 'Gene ID';
+			$this->expat['rowText'] = 'Gene(s)';
+		} else if ($dataset === 'rnaseq-kellys-2017-rootshootuniquereads') {
+			$this->_expat['query'] = array(
+				'table' => 'expat_RNAseq_KellyS2017_RootShootUniqueReads',
+				'id' => $_POST['idtype']
+			);
+			$this->expat['mapped'] = false;
+			$this->expat['experiment'] = 'rnaseq-kellys-2017';
+			$this->expat['rowType'] = 'Gene ID';
+			$this->expat['rowText'] = 'Gene(s)';
 		} else {
 			$this->error->set_status(404);
-			$this->error->set_message('The dataset you have selected is not available. Please try again.');
+			$this->error->set_message('The dataset you have selected: ' + $dataset + ' is not available. Please try again.');
 			$this->error->execute();
 		}
 
@@ -361,7 +379,7 @@ class Query {
 				'Root0h_1',
 				'Nod21_1'
 			),
-			'rnaseq-marcogiovanetti-2015-am' => array(
+			'rnaseq-giovanettim-2015-am' => array(
 				'Control_H2O',
 				'Treatment_AMGSE_24h',
 				'Treatment_AMGSE_48h'
@@ -385,12 +403,24 @@ class Query {
 				'MG20_mock',
 				'vag1_5dMAFF',
 				'vag1_mock'
+			),
+			'rnaseq-kellys-2017-rootshoottotalreads' => array(
+				'Root_H2O',
+				'Root_R7A',
+				'Shoot_H2O',
+				'Shoot_R7A'
+			),
+			'rnaseq-kellys-2017-rootshootuniquereads' => array(
+				'Root_H2O',
+				'Root_R7A',
+				'Shoot_H2O',
+				'Shoot_R7A'
 			)
 		);
 
 		if(is_allowed_access('/expat/')) {
 			$private_datasets = array(
-				'rnaseq-simonkelly-2015-bacteria' => array(
+				'rnaseq-kellys-2015-bacteria' => array(
 					'277_exoU_24',
 					'277_exoU_72',
 					'277_exoYF_24',
@@ -416,7 +446,7 @@ class Query {
 					'G_R7A_24',
 					'G_R7A_72'
 				),
-				'rnaseq-simonkelly-2015-purifiedcompounds' => array(
+				'rnaseq-kellys-2015-purifiedcompounds' => array(
 					'G_H2O_24',
 					'277_H2O_24',
 					'311_H2O_24',
@@ -436,7 +466,7 @@ class Query {
 					'277_NF_UEPS_24',
 					'311_NF_UEPS_24'
 				),
-				'rnaseq-eiichimurakami-2016' => array(
+				'rnaseq-murakamie-2016' => array(
 					'G_H2O',
 					'G_NF',
 					'38534_H2O',
@@ -445,7 +475,7 @@ class Query {
 					'4820_NF',
 					'nfr1_H2O',
 					'nfr1_NF'
-					)
+				)
 			);
 
 			$datasets = array_merge($datasets, $private_datasets);
@@ -548,41 +578,16 @@ class Query {
 					// Set query array of $ids
 					$ids_query = $ids;
 
-				} else if ($this->expat['experiment'] === 'rnaseq-simonkelly-2015') {
-					// Simon RNAseq dataset does not require joining
-					// Construct LIKE query
-					$likeQuery = '';
-					foreach($ids as $id) {
-						$likeQuery .= "t1.".$query['id']." LIKE ? OR ";
-					}
-
-					$sqlQuery = "SELECT
-						t1.".$query['id']." AS RowID, ".implode($columns,',')."
-					FROM
-						".$query['table']." AS t1
-					WHERE ".substr($likeQuery, 0, -4)."
-					GROUP BY t1.".$query['id']."
-					ORDER BY FIELD(t1.".$query['id'].", '".implode($ids,"','")."')";
-
-					// Allow for wildcard search
-					$ids_query = array();
-					foreach($ids as $value) {
-						$ids_query[] = $value.'%';
-					}
-
-					// Skip only the first column
-					$colSkip = 1;
-
-					// Define output header (only for download)
-					$outHeader = "\"".$query['id']."\",\"".implode($columns,'","')."\"\n";
-
 				} else if(
-					$this->expat['experiment'] === 'rnaseq-marcogiovanetti-2015' ||
-					$this->expat['experiment'] === 'rnaseq-eiichimurakami-2016' ||
+					$this->expat['experiment'] === 'rnaseq-giovanettim-2015' ||
+					$this->expat['experiment'] === 'rnaseq-murakamie-2016' ||
 					$this->expat['experiment'] === 'rnaseq-handay-2015' || 
 					$this->expat['experiment'] === 'rnaseq-sasakit-2014' ||
-					$this->expat['experiment'] === 'rnaseq-suzakit-2014') {
-					// Marco Giovanetti's dataset does not require joining
+					$this->expat['experiment'] === 'rnaseq-suzakit-2014' ||
+					$this->expat['experiment'] === 'rnaseq-kellys-2015' ||
+					$this->expat['experiment'] === 'rnaseq-kellys-2017'
+					) {
+					
 					// Construct LIKE query
 					$likeQuery = '';
 					foreach($ids as $id) {
