@@ -198,6 +198,9 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 						$row['ReferenceTitle'] = $ref['title'];
 						$row['ReferenceURL'] = 'https://doi.org/'.$doi;
 					}
+				} else {
+					$row['Reference'] = 'Unpublished data';
+					$row['ReferenceURL'] = null;
 				}
 
 				// Remove PMID

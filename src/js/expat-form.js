@@ -307,7 +307,11 @@ $(function() {
 										// Note: Cast c to string if you are using .replace(). The method doesn't want to work with integers
 										row += (k==='ConditionName'?'<td class="chk"><input type="checkbox" data-condition="'+c+'" /></td>':'')+'<td class="'+k+'">'+(c===null?'&ndash;':c)+'</td>';
 									} else if(k==='Reference') {
-										row += '<td class="'+k+'"><a href="'+r.ReferenceURL+'" title="'+r.ReferenceTitle+'">'+c.replace(/(et al\.)/gi,'<em>$1</em>')+'</a></td>';
+										if (!r.ReferenceURL) {
+											row += '<td class="'+k+'">'+c.replace(/(et al\.)/gi,'<em>$1</em>')+'</td>';
+										} else {
+											row += '<td class="'+k+'"><a href="'+r.ReferenceURL+'" title="'+r.ReferenceTitle+'">'+c.replace(/(et al\.)/gi,'<em>$1</em>')+'</a></td>';
+										}
 									}
 								});
 								row += '</tr>';
