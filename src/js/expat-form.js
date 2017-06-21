@@ -24,7 +24,7 @@ $(function() {
 			{value: 'Comments', text: 'Comments', sort: 'string'},
 			{value: 'Reference', text: 'Reference', sort: 'string'}
 		],
-		'rnaseq-simonkelly-2015': [
+		'rnaseq-kellys-2015': [
 			{value: 'ExperimentalFactor', text: 'Experiment factor', sort: 'string'},
 			{value: 'Treatment', text: 'Treatment', sort: 'string'},
 			{value: 'PlantSpecies', text: 'Plant species', sort: 'string'},
@@ -35,7 +35,7 @@ $(function() {
 			{value: 'Inocula', text: 'Inocula', sort: 'string'},
 			{value: 'Reference', text: 'Reference', sort: 'string'}
 		],
-		'rnaseq-marcogiovanetti-2015': [
+		'rnaseq-giovanettim-2015': [
 			{value: 'ExperimentalFactor', text: 'Experimental factor', sort: 'string'},
 			{value: 'Treatment', text: 'Treatment', sort: 'string'},
 			{value: 'PlantSpecies', text: 'Plant species', sort: 'string'},
@@ -45,7 +45,7 @@ $(function() {
 			{value: 'Reference', text: 'Reference', sort: 'string'},
 			{value: 'Reference', text: 'Reference', sort: 'string'}
 		],
-		'rnaseq-eiichimurakami-2016': [
+		'rnaseq-murakamie-2016': [
 			{value: 'ExperimentalFactor', text: 'Experimental factor', sort: 'string'},
 			{value: 'Treatment', text: 'Treatment', sort: 'string'},
 			{value: 'PlantSpecies', text: 'Plant species', sort: 'string'},
@@ -95,7 +95,19 @@ $(function() {
 			{value: 'PlantGenotype', text: 'Plant genotype', sort: 'string'},
 			{value: 'Tissue', text: 'Tissue', sort: 'string'},
 			{value: 'Reference', text: 'Reference', sort: 'string'}
-		]
+		],
+		'rnaseq-kellys-2017': [
+			{value: 'Treatment', text: 'Treatment', sort: 'string'},
+			{value: 'Inocula', text: 'Inocula', sort: 'string'},
+			{value: 'Strain', text: 'Strain', sort: 'string'},
+			{value: 'TimeUnit', text: 'Time unit', sort: 'string'},
+			{value: 'TimeDuration', text: 'Duration', sort: 'int'},
+			{value: 'PlantSpecies', text: 'Plant species', sort: 'string'},
+			{value: 'PlantEcotype', text: 'Plant ecotype', sort: 'string'},
+			{value: 'Tissue', text: 'Tissue', sort: 'string'},
+			{value: 'Age', text: 'Age (days)', sort: 'int'},
+			{value: 'Reference', text: 'Reference', sort: 'string'}
+		],
 	};
 
 	// Display subset options
