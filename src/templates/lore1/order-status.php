@@ -10,164 +10,166 @@
 	$searched = false;
 	$error = null;
 
-	try {
-		// Check if ID is valid
-		if($_GET && isset($_GET['id']) && !empty($_GET['id'])) {
-			if(preg_match('/^[A-Fa-f0-9]{32}$/', $_GET['id'])) {
-				$searched = true;
-			} else {
-				throw new Exception('You have provided an invalid order identifier. Make sure that it is a 32-character hexademical string.');
+	if(!empty($_GET['id'])) {
+		try {
+			// Check if ID is valid
+			if($_GET && isset($_GET['id']) && !empty($_GET['id'])) {
+				if(preg_match('/^[A-Fa-f0-9]{32}$/', $_GET['id'])) {
+					$searched = true;
+				} else {
+					throw new Exception('You have provided an invalid order identifier. Make sure that it is a 32-character hexademical string.');
+				}
 			}
+
+			// Database connection
+			$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
+			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+			// Query for order
+			$q1 = $db->prepare('SELECT
+				t1.FirstName AS FirstName,
+				t1.LastName AS LastName,
+				t1.Email AS Email,
+				t1.Institution AS Institution,
+				t1.Address AS Address,
+				t1.City AS City,
+				t1.State AS State,
+				t1.PostalCode AS PostalCode,
+				t1.Country AS Country,
+				t1.Comments AS Comments,
+				t1.Timestamp AS OrderTime,
+				t1.Verified AS VerificationStatus,
+				t1.Shipped AS ShippingStatus,
+				t1.ShippedTimestamp AS ShippedTimestamp,
+				t1.Payment AS Payment,
+				t1.PaymentWaiver AS PaymentWaiver,
+				GROUP_CONCAT(t2.PlantID ORDER BY t2.OrderLineID ASC) AS PlantID,
+				GROUP_CONCAT(t2.SeedQuantity ORDER BY t2.OrderLineID ASC) AS SeedQuantity,
+				GROUP_CONCAT(t2.ProcessDate ORDER BY t2.OrderLineID ASC) AS ProcessDate,
+				GROUP_CONCAT(t2.AdminSalt ORDER BY t2.OrderLineID ASC) AS AdminSalt,
+				GROUP_CONCAT(t2.AdminComments ORDER BY t2.OrderLineID ASC) AS AdminComments,
+				COUNT(t2.ProcessDate) AS ProcessedLines,
+				COUNT(t2.PlantID) AS TotalLines
+			FROM orders_unique AS t1
+			LEFT JOIN orders_lines AS t2 ON
+				t1.Salt = t2.Salt
+			WHERE t1.Salt = ?
+			GROUP BY t1.Salt
+			ORDER BY t1.Timestamp DESC
+			LIMIT 1');
+			$q1->execute(array($_GET['id']));
+
+			// Query for other unprocessed orders
+			$q2 = $db->prepare('SELECT
+				t1.Salt AS Salt,
+				COUNT(t2.ProcessDate) AS ProcessedLines,
+				COUNT(t2.PlantID) AS TotalLines
+			FROM orders_unique AS t1
+			LEFT JOIN orders_lines AS t2 ON
+				t1.Salt = t2.Salt
+			WHERE
+				t1.Verified = 1
+			GROUP BY t1.Salt
+			HAVING
+				COUNT(t2.ProcessDate) < COUNT(t2.PlantID)
+				');
+			$q2->execute();
+
+			// Check if order exists
+			if (!$q1->rowCount()) {
+				throw new Exception('We are unable to retrieve the records for the provided order identifier of <code>'.escapeHTML($_GET['id']).'</code>. Are you sure that you have provided the correct order ID?');
+			}
+
+			// Retrieve order data
+			$row = $q1->fetch(PDO::FETCH_ASSOC);
+
+			// Retrieve queue data and set queue message
+			$queue_size = $q2->rowCount();
+			$queue_message = '';
+			if($queue_size === 1) {
+				$queue_message = 'Your order is the only one in the queue, and it will be processed immediately.';
+			} else if($queue_size > 1) {
+				$queue_message = 'There are <strong>'.($queue_size-1).' other '.pl($queue_size-1, 'order', 'orders').'</strong> currently in the queue.';
+			}
+
+			// Reverse geocoding
+			$countries = CountriesArray::get2d('alpha3', array('alpha2', 'name'));
+			$country_name = $countries[$row['Country']]['name'];
+			$country_alpha2 = $countries[$row['Country']]['alpha2'];
+			$mapbox_curl = curl_init();
+			curl_setopt($mapbox_curl, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($mapbox_curl, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($mapbox_curl, CURLOPT_URL, 'https://api.mapbox.com/geocoding/v5/mapbox.places/'.urlencode(preg_replace('/\s{2,}/', ' ', implode(' ', array($row['City'], $row['State'])))).'.json?country='.strtolower($countries[$row['Country']]['alpha2']).'&access_token='.MAPBOX_API_KEY);
+			$mapbox_result = curl_exec($mapbox_curl);
+			curl_close($mapbox_curl);
+
+
+
+			$places = json_decode($mapbox_result, true);
+			$map_image = null;
+			if(count($places['features'])) {
+				$c = $places['features'][0]['geometry']['coordinates'];
+				$map_image = 'https://api.mapbox.com/v4/lotusbase.o9e761mh/'.$c[0].','.$c[1].',6/1280x1280.png?access_token='.MAPBOX_API_KEY;
+			}
+
+			// Order status
+			$order_status = 0;
+			if($row['VerificationStatus']) {
+				$order_status = 1;
+			}
+			if($row['ProcessedLines'] > 0) {
+				$order_status = 2;
+			}
+			if($row['ProcessedLines'] === $row['TotalLines']) {
+				$order_status = 3;
+			}
+			if($row['ShippingStatus']) {
+				$order_status = 4;
+			}
+			$order_statuses = array(
+				array(
+					'title' => 'Please verify order',
+					'icon' => 'icon-attention',
+					'step_title' => 'Verify',
+					'description' => 'We have received your order, but will not process it until you have verified it. Please follow the instructions in the email you have received from us.'
+					),
+				array(
+					'title' => 'Submitted to queue',
+					'icon' => 'icon-clock',
+					'step_title' => 'Queued',
+					'description' => 'Thank you for verifying your order&mdash;it has been submitted to the processing queue. We will have a look at your order at the next possibile opportunity. '.$queue_message
+					),
+				array(
+					'title' => 'Order being processed',
+					'icon' => 'icon-clock',
+					'step_title' => 'Processing',
+					'description' => 'Your order is currently being processed.'
+					),
+				array(
+					'title' => 'Order awaiting for dispatch',
+					'icon' => 'icon-ok',
+					'step_title' => 'Dispatching',
+					'description' => 'Your order has been processed, and is currently awaiting to be dispatched for shipping.'
+					),
+				array(
+					'title' => 'Order shipped',
+					'icon' => 'icon-paper-plane',
+					'step_title' => 'Shipped',
+					'description' => 'Your order has been shipped. '.($row['ShippedTimestamp'] ? 'You have received an email from us on: '.date("F j, Y, g:ia", strtotime($row['ShippedTimestamp'])).' (Central European Time, GMT'.(date('P')).'). ' : '').'Regardless of your geographical location, you should expect to receive your shipment within 4 weeks.'
+					)
+				);
+
+			// LORE1 lines
+			$lines = explode(',', $row['PlantID']);
+			$lines_seed_count = explode(',', $row['SeedQuantity']);
+			$lines_comment = explode(',', $row['AdminComments']);
+
+		} catch(PDOException $e) {
+			$error = $e->getMessage();
+		} catch(Exception $e) {
+			$error = $e->getMessage();
 		}
-
-		// Database connection
-		$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-		// Query for order
-		$q1 = $db->prepare('SELECT
-			t1.FirstName AS FirstName,
-			t1.LastName AS LastName,
-			t1.Email AS Email,
-			t1.Institution AS Institution,
-			t1.Address AS Address,
-			t1.City AS City,
-			t1.State AS State,
-			t1.PostalCode AS PostalCode,
-			t1.Country AS Country,
-			t1.Comments AS Comments,
-			t1.Timestamp AS OrderTime,
-			t1.Verified AS VerificationStatus,
-			t1.Shipped AS ShippingStatus,
-			t1.ShippedTimestamp AS ShippedTimestamp,
-			t1.Payment AS Payment,
-			t1.PaymentWaiver AS PaymentWaiver,
-			GROUP_CONCAT(t2.PlantID ORDER BY t2.OrderLineID ASC) AS PlantID,
-			GROUP_CONCAT(t2.SeedQuantity ORDER BY t2.OrderLineID ASC) AS SeedQuantity,
-			GROUP_CONCAT(t2.ProcessDate ORDER BY t2.OrderLineID ASC) AS ProcessDate,
-			GROUP_CONCAT(t2.AdminSalt ORDER BY t2.OrderLineID ASC) AS AdminSalt,
-			GROUP_CONCAT(t2.AdminComments ORDER BY t2.OrderLineID ASC) AS AdminComments,
-			COUNT(t2.ProcessDate) AS ProcessedLines,
-			COUNT(t2.PlantID) AS TotalLines
-		FROM orders_unique AS t1
-		LEFT JOIN orders_lines AS t2 ON
-			t1.Salt = t2.Salt
-		WHERE t1.Salt = ?
-		GROUP BY t1.Salt
-		ORDER BY t1.Timestamp DESC
-		LIMIT 1');
-		$q1->execute(array($_GET['id']));
-
-		// Query for other unprocessed orders
-		$q2 = $db->prepare('SELECT
-			t1.Salt AS Salt,
-			COUNT(t2.ProcessDate) AS ProcessedLines,
-			COUNT(t2.PlantID) AS TotalLines
-		FROM orders_unique AS t1
-		LEFT JOIN orders_lines AS t2 ON
-			t1.Salt = t2.Salt
-		WHERE
-			t1.Verified = 1
-		GROUP BY t1.Salt
-		HAVING
-			COUNT(t2.ProcessDate) < COUNT(t2.PlantID)
-			');
-		$q2->execute();
-
-		// Check if order exists
-		if (!$q1->rowCount()) {
-			throw new Exception('We are unable to retrieve the records for the provided order identifier of <code>'.escapeHTML($_GET['id']).'</code>. Are you sure that you have provided the correct order ID?');
-		}
-
-		// Retrieve order data
-		$row = $q1->fetch(PDO::FETCH_ASSOC);
-
-		// Retrieve queue data and set queue message
-		$queue_size = $q2->rowCount();
-		$queue_message = '';
-		if($queue_size === 1) {
-			$queue_message = 'Your order is the only one in the queue, and it will be processed immediately.';
-		} else if($queue_size > 1) {
-			$queue_message = 'There are <strong>'.($queue_size-1).' other '.pl($queue_size-1, 'order', 'orders').'</strong> currently in the queue.';
-		}
-
-		// Reverse geocoding
-		$countries = CountriesArray::get2d('alpha3', array('alpha2', 'name'));
-		$country_name = $countries[$row['Country']]['name'];
-		$country_alpha2 = $countries[$row['Country']]['alpha2'];
-		$mapbox_curl = curl_init();
-		curl_setopt($mapbox_curl, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($mapbox_curl, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($mapbox_curl, CURLOPT_URL, 'https://api.mapbox.com/geocoding/v5/mapbox.places/'.urlencode(preg_replace('/\s{2,}/', ' ', implode(' ', array($row['City'], $row['State'])))).'.json?country='.strtolower($countries[$row['Country']]['alpha2']).'&access_token='.MAPBOX_API_KEY);
-		$mapbox_result = curl_exec($mapbox_curl);
-		curl_close($mapbox_curl);
-
-
-
-		$places = json_decode($mapbox_result, true);
-		$map_image = null;
-		if(count($places['features'])) {
-			$c = $places['features'][0]['geometry']['coordinates'];
-			$map_image = 'https://api.mapbox.com/v4/lotusbase.o9e761mh/'.$c[0].','.$c[1].',6/1280x1280.png?access_token='.MAPBOX_API_KEY;
-		}
-
-		// Order status
-		$order_status = 0;
-		if($row['VerificationStatus']) {
-			$order_status = 1;
-		}
-		if($row['ProcessedLines'] > 0) {
-			$order_status = 2;
-		}
-		if($row['ProcessedLines'] === $row['TotalLines']) {
-			$order_status = 3;
-		}
-		if($row['ShippingStatus']) {
-			$order_status = 4;
-		}
-		$order_statuses = array(
-			array(
-				'title' => 'Please verify order',
-				'icon' => 'icon-attention',
-				'step_title' => 'Verify',
-				'description' => 'We have received your order, but will not process it until you have verified it. Please follow the instructions in the email you have received from us.'
-				),
-			array(
-				'title' => 'Submitted to queue',
-				'icon' => 'icon-clock',
-				'step_title' => 'Queued',
-				'description' => 'Thank you for verifying your order&mdash;it has been submitted to the processing queue. We will have a look at your order at the next possibile opportunity. '.$queue_message
-				),
-			array(
-				'title' => 'Order being processed',
-				'icon' => 'icon-clock',
-				'step_title' => 'Processing',
-				'description' => 'Your order is currently being processed.'
-				),
-			array(
-				'title' => 'Order awaiting for dispatch',
-				'icon' => 'icon-ok',
-				'step_title' => 'Dispatching',
-				'description' => 'Your order has been processed, and is currently awaiting to be dispatched for shipping.'
-				),
-			array(
-				'title' => 'Order shipped',
-				'icon' => 'icon-paper-plane',
-				'step_title' => 'Shipped',
-				'description' => 'Your order has been shipped. '.($row['ShippedTimestamp'] ? 'You have received an email from us on: '.date("F j, Y, g:ia", strtotime($row['ShippedTimestamp'])).' (Central European Time, GMT'.(date('P')).'). ' : '').'Regardless of your geographical location, you should expect to receive your shipment within 4 weeks.'
-				)
-			);
-
-		// LORE1 lines
-		$lines = explode(',', $row['PlantID']);
-		$lines_seed_count = explode(',', $row['SeedQuantity']);
-		$lines_comment = explode(',', $row['AdminComments']);
-
-	} catch(PDOException $e) {
-		$error = $e->getMessage();
-	} catch(Exception $e) {
-		$error = $e->getMessage();
 	}
 
 ?>
