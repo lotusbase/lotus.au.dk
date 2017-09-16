@@ -15,16 +15,34 @@ try {
 	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 	// Get list of files from database, and check again user query if they actually exist
-	$q1 = $db->prepare("SELECT * FROM download");
+	$q1 = $db->prepare("SELECT
+			t1.FileKey AS FileKey,
+			GROUP_CONCAT(t2.AuthGroup) AS AuthGroups
+		FROM download AS t1
+		LEFT JOIN download_auth AS t2 ON
+			t1.FileKey = t2.FileKey
+		WHERE CONCAT_WS('',t1.FilePath,t1.FileName) = :filename
+		GROUP BY t1.FileKey
+		ORDER BY t1.Category, t1.FileName");
+	$q1->bindParam(':filename', $filename);
 	$q1->execute();
-	while($f = $q1->fetch(PDO::FETCH_ASSOC)) {
-		$valid_files[] = $f['FileName'];
+	$f = $q1->fetch(PDO::FETCH_ASSOC);
+
+	if ($q1->rowCount() === 1) {
+		$file_exists = true;
 	}
-	foreach($valid_files as $item) {
-		if(stripos($fullPath, $item)) {
-			$file_exists = true;
-		}
+	
+	// Only allow download when user is allow access to file
+	// ...when AuthGroup is null, or when is not null, is found in the user
+	$user_auth = auth_verify($_COOKIE['auth_token']);
+	$user_groups = explode(',', $f['AuthGroups']);
+	if ($f['AuthGroups'] !== null && !in_array($user_auth['UserGroup'], $user_groups)) {
+		$_SESSION['download_error'] = 'You are not authenticated to download the file. Please <a href="'.WEB_ROOT.'/users/login?redir='.urlencode('/data/download').'">log in</a> to perform this action.';
+		session_write_close();
+		header('location: '.WEB_ROOT.'/data/download.php');
+		exit();
 	}
+
 	unset($item);
 
 	if(!$file_exists) {
@@ -63,9 +81,8 @@ try {
 		fclose ($fd);
 		exit();
 	}
-} catch(PDOException $err) {
-	$e = $db->errorInfo();
-	$_SESSION['download_error'] = 'There is a problem retrieving the download file.';
+} catch(PDOException $e) {
+	$_SESSION['download_error'] = 'There is a problem retrieving the download file: '.$e->getMessage();
 	session_write_close();
 	header('location: '.WEB_ROOT.'/data/download.php');
 	exit();

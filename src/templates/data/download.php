@@ -51,16 +51,20 @@
 
 				// Prepare and execute statement
 				$q = $db->prepare("SELECT
-					t1.FileName AS FileName,
-					t1.FilePath AS FilePath,
-					t1.FileExtension AS FileExtension,
-					t1.Title AS Title,
-					t1.Description AS Description,
-					t1.Tags AS Tags,
-					t1.Count AS Count,
-					t1.PMID AS PMID,
-					t1.FileKey AS FileKey
+						t1.FileName AS FileName,
+						t1.FilePath AS FilePath,
+						t1.FileExtension AS FileExtension,
+						t1.Title AS Title,
+						t1.Description AS Description,
+						t1.Tags AS Tags,
+						t1.Count AS Count,
+						t1.PMID AS PMID,
+						t1.FileKey AS FileKey,
+						GROUP_CONCAT(t2.AuthGroup) AS AuthGroups
 					FROM download AS t1
+					LEFT JOIN download_auth AS t2 ON
+						t1.FileKey = t2.FileKey
+					GROUP BY t1.FileKey
 					ORDER BY t1.Category, t1.FileName");
 				$q->execute();
 
@@ -74,6 +78,13 @@
 						$filePath = DOC_ROOT.'/'.$row['FilePath'].$row['FileName'];
 						if(file_exists($filePath)) {
 							$fileMeta[] = human_filesize(filesize($filePath));
+						}
+
+						// Show file when AuthGroup is null, or when is not null, is found in the user
+						$user_auth = auth_verify($_COOKIE['auth_token']);
+						$user_groups = explode(',', $row['AuthGroups']);
+						if ($row['AuthGroups'] !== null && !in_array($user_auth['UserGroup'], $user_groups)) {
+							continue;
 						}
 
 						// Get citation metadata if exists
@@ -105,7 +116,7 @@
 						}
 
 						echo '<li>
-						<a href="'.WEB_ROOT.'/'.$row['FilePath'].$row['FileName'].'" title="'.$row['FileDesc'].'">
+						<a href="'.WEB_ROOT.'/'.$row['FilePath'].$row['FileName'].'" title="'.$row['Description'].'">
 							<div class="file-meta__desc ext-'.str_replace('.', '', $row['FileExtension']).'">
 								<h3 class="file-meta__file-title">'.$row['Title'].'</h3>
 								'.(!empty($row['Description']) ? '<p class="file-meta__file-desc">'.$row['Description'].'</p>' : '').'
