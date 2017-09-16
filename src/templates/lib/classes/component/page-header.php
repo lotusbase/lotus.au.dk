@@ -205,7 +205,7 @@ class PageHeader {
 
 				'.(is_intranet_client() && !is_logged_in() ? '
 				<div id="intranet-client" class="site-notification">
-					<p>You appear to be visiting from '.is_intranet_client()['HostName'].(get_ip() ? ' with the IP address of <strong>'.get_ip().'</strong>' : '').'. We are currently migrating away from IP verification, and using user logins as a means to fine tune user access to selected data. <a href="'.WEB_ROOT.'/users/login" class="icon-user button button--small" data-action="read">Login</a> <a href="'.WEB_ROOT.'/users/register" class="icon-user-plus button button--small" data-action="read">Register as new user</a> <a href="#" class="icon button button--small" title="I understand" data-action="dismiss">Dismiss message</a></p>
+					<p>You appear to be visiting from '.is_intranet_client()['HostName'].(get_ip() ? ' with the IP address of <strong>'.get_ip().'</strong>' : '').'. We are currently migrating away from IP verification, and using user logins as a means to fine tune user access to selected data. <a href="'.WEB_ROOT.'/users/login?redir='.urlencode($_SERVER['PHP_SELF']).'" class="icon-user button button--small" data-action="read">Login</a> <a href="'.WEB_ROOT.'/users/register" class="icon-user-plus button button--small" data-action="read">Register as new user</a> <a href="#" class="icon button button--small" title="I understand" data-action="dismiss">Dismiss message</a></p>
 				</div>
 				' : '').'
 
