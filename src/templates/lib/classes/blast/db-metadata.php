@@ -14,34 +14,39 @@ class DBMetadata {
 	// Database metadata
 	private $blast_db_metadata = array();
 	private $blast_db_metadata_extra = array(
+		'20170916_lj_m40.fa' => array(
+			'category' => '<em>Lotus japoncius</em> genome',
+			'type' => 'genome',
+			'description' => '<p>Version 4.0 of the <em>Lotus japonicus</em> Gifu genome, with assembled contigs merged with Canu using mapping data from Gifu&times;Burttii and Gifu&times;MG20 recombinant inbred line (RIL) populations.</p>'
+			),
 		'20161004_lj_r40.fa' => array(
 			'category' => '<em>Lotus japonicus</em> genome',
 			'type' => 'genome',
-			'description' => '<p>Version 4.0 of the <em>Lotus</em> genome Gifu.</p><p class="user-message warning">This is a raw PacBio assembly that is not curated</p>'
+			'description' => '<p>Version 4.0 of the <em>Lotus japonicus</em> Gifu genome.</p><p class="user-message warning">This is a raw PacBio assembly that is not curated</p>'
 			),
 		'lj_r30.fa' => array(
 			'gi_dropdown' => true,
 			'category' => '<em>Lotus japonicus</em> genome',
 			'type' => 'genome',
-			'description' => 'Version 3.0 of the <em>Lotus</em> genome including chr0 with unanchored contigs, chr1&ndash;6, chloroplast and mitochondrion sequences.'
+			'description' => 'Version 3.0 of the <em>Lotus japonicus</em> MG20 genome including chr0 with unanchored contigs, chr1&ndash;6, chloroplast and mitochondrion sequences.'
 			),
 		'lj_pr28.fa' => array(
 			'gi_dropdown' => true,
 			'category' => '<em>Lotus japonicus</em> genome',
 			'type' => 'genome',
-			'description' => '<em>Lotus</em> genome pre-release 2.8. This is not an official release but the current state of the new Lotus genome assembly. Overlaps between contigs still need to be checked, and the coordinates will not match the version to be published. Contains only sequences anchored on the six Lotus chromosomes.'
+			'description' => '<em>Lotus japonicus</em> MG20 genome pre-release 2.8. This is not an official release but the current state of the new Lotus genome assembly. Overlaps between contigs still need to be checked, and the coordinates will not match the version to be published. Contains only sequences anchored on the six Lotus chromosomes.'
 			),
 		'lj_r25.fa' => array(
 			'gi_dropdown' => true,
 			'category' => '<em>Lotus japonicus</em> genome',
 			'type' => 'genome',
-			'description' => '<em>Lotus</em> genome release 2.5, only sequences anchored on chromosomes, including chr0 long contigs with unknown position and the chloroplast sequence.'
+			'description' => '<em>Lotus japonicus</em> MG20 genome release 2.5, only sequences anchored on chromosomes, including chr0 long contigs with unknown position and the chloroplast sequence.'
 			),
 		'lj_r24.fa' => array(
 			'gi_dropdown' => true,
 			'category' => '<em>Lotus japonicus</em> genome',
 			'type' => 'genome',
-			'description' => '<em>Lotus</em> genome release 2.4. This is the genome version that matches the Apollo browser GFF files in the folder "-Apollo favourite genes/2010_09_06_GFF" on the commom server. According to Shusei Sato, there should only be minor changes to the coordinates on a part of chr5 between version 2.4 and 2.5. There are large differences with respect to the annotation between the two versions due to removal of a lot of retro-element-related sequence annotation in v2.5.'
+			'description' => '<em>Lotus japonicus</em> MG20 genome release 2.4. This is the genome version that matches the Apollo browser GFF files in the folder "-Apollo favourite genes/2010_09_06_GFF" on the commom server. According to Shusei Sato, there should only be minor changes to the coordinates on a part of chr5 between version 2.4 and 2.5. There are large differences with respect to the annotation between the two versions due to removal of a lot of retro-element-related sequence annotation in v2.5.'
 			),
 		'lj_r25_incl_SGA.fa' => array(
 			'category' => '<em>Lotus japonicus</em> genome',
@@ -71,7 +76,7 @@ class DBMetadata {
 		'lj_probes.fa' => array(
 			'category' => '<em>Lotus japonicus</em> probes',
 			'type' => 'probes',
-			'description' => 'Probes for <em>L. japonicus</em> used in LjGEA.'
+			'description' => 'Probes for <em>Lotus japonicus</em> used in LjGEA.'
 			),
 		'20150304_Lj2.5_proteins.fa' => array(
 			'category' => '<em>Lotus japonicus</em> proteins',
