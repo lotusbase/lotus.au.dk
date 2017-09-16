@@ -121,6 +121,7 @@
 								<h3 class="file-meta__file-title">'.$row['Title'].'</h3>
 								'.(!empty($row['Description']) ? '<p class="file-meta__file-desc">'.$row['Description'].'</p>' : '').'
 								'.(!empty($ref) ? '<p class="file-meta__ref">'.$ref.'</p>' : '').'
+								'.($row['AuthGroups'] !== null ? '<p class="user-message info"><span class="icon-lock">This file is available to internal users only. Please do not redistribute this file.</span></p>' : '').'
 								<ul class="list--floated file-meta__file-data"><li>'.implode('</li><li>', $fileMeta).'</li></ul>
 								<ul class="list--floated file-meta__tags">';
 						foreach($tags as $tag) {
