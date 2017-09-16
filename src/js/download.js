@@ -11,6 +11,7 @@ $(function() {
 		this.field('desc');
 		this.field('tag');
 		this.field('name');
+		this.field('data');
 		this.ref('id');
 	});
 
@@ -20,11 +21,14 @@ $(function() {
 
 		globalVar.download.index.add({
 			id: i,
-			desc: $t.find('span.file-meta__file-desc').text(),
-			tag: $t.find('ul.file-meta__tags li').map(function() {
+			desc: $t.find('.file-meta__file-desc').text(),
+			tag: $t.find('.file-meta__tags li').map(function() {
 				return $(this).text();
 			}).get().join(' '),
-			name: $t.find('span.file-meta__file-name').text()
+			data: $t.find('.file-meta__data li').map(function() {
+				return $(this).text();
+			}).get().join(' '),
+			name: $t.find('.file-meta__file-title').text()
 		});
 	});
 
@@ -44,7 +48,6 @@ $(function() {
 		if(keyword.length > 2) {
 			$('#downloads__file-list > li').hide();
 			globalVar.download.index.search(keyword).map(function(r) {
-				console.log(r);
 				var $result = $('#downloads__file-list > li').eq(r.ref);
 				$result.show();
 				count++;
