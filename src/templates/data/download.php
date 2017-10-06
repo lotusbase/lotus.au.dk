@@ -115,8 +115,8 @@
 							}
 						}
 
-						echo '<li>
-						<a href="'.WEB_ROOT.'/'.$row['FilePath'].$row['FileName'].'" title="'.$row['Description'].'">
+						echo '<li id="file-'.$row['FileKey'].'">
+						<a href="'.WEB_ROOT.'/'.$row['FilePath'].$row['FileName'].'" title="'.$row['Description'].'" class="downloads__file-list-item">
 							<div class="file-meta__desc ext-'.str_replace('.', '', $row['FileExtension']).'">
 								<h3 class="file-meta__file-title">'.$row['Title'].'</h3>
 								'.(!empty($row['Description']) ? '<p class="file-meta__file-desc">'.$row['Description'].'</p>' : '').'
