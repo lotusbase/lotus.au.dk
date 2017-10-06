@@ -63,4 +63,16 @@ $(function() {
 		}
 	}));
 
+	// Increment download count when clicked on
+	$('#downloads__file-list a.downloads__file-list-item').on('click', function(e) {
+		var $count = $(this).find('span.file-meta__download-count'),
+			count = parseInt($count.data('count'));
+
+		// Increment count
+		count++;
+
+		// Update count
+		$count.text(globalFun.addCommas(count));
+	});
+
 });
