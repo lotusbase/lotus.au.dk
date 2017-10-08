@@ -43,6 +43,7 @@
 			<th>Dataset</th>
 			<th>ID type</th>
 			<th>Description</th>
+			<th>CORx support</th>
 			<th>Curation</th>
 			<th>Reference</th>
 		</tr>
@@ -101,7 +102,8 @@
 							'Transcript ID'
 							),
 						$row['IDtype']).'</td>
-					<td><p>'.$row['Description'].'</p>'.(!!$row['CORx'] !== true ? '<p class="user-message warning"><span class="icon-attention"></span>This dataset is not available for CORx because of the low number of conditions available.</p>' : '').'</td>
+					<td><p>'.$row['Description'].'</p></td>
+					<td class="align-center">'.(!!$row['CORx'] === true ? '<span class="icon-ok"></span>' : '<span class="icon-cancel"></span>').'</td>
 					<td>'.(count($curators) ? '<ul class="list--reset"><li>'.implode('</li><li>', $curators).'</li></ul>' : '').'</td>
 					<td>'.(!empty($row['PMID']) ? '<a href="'.(!empty($doi) ? 'https://doi.org/'.$doi : 'https://www.ncbi.nlm.nih.gov/pubmed/'.$row['PMID']).'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a>' : 'Unpublished').'</td>
 				</tr>';
