@@ -42,10 +42,11 @@
 		// If an ID is used in a search
 		if(isset($_GET['ids']) && !empty($_GET['ids'])) {
 			// Construct query
-			$trx = escapeHTML($_GET['ids']);
-			if(is_array($trx)) {
+			if(is_array($_GET['ids'])) {
+				$trx = $_GET['ids'];
 				$vars = array_filter($trx);
 			} else {
+				$trx = escapeHTML($_GET['ids']);
 				$trx_rep = preg_match_all('/([\.\w\+\-\:<>]+|[\"\'][\.\w\s\+\-\:<>]*[\"\'])+/' , $trx , $trx_matched);
 				$vars = $trx_matched[0];
 			}
