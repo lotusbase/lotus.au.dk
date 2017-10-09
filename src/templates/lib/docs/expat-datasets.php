@@ -9,7 +9,7 @@
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 		// Query 1: Collect all PMID
-		$q1 = $db->prepare('SELECT PMID, IntranetOnly FROM expat_datasets GROUP BY PMID');
+		$q1 = $db->prepare('SELECT PMID, DOI, IntranetOnly FROM expat_datasets');
 		$q1->execute();
 
 		if(!$q1->rowCount()) {
@@ -17,21 +17,33 @@
 		} else {
 
 			$pmids = array();
+			$dois = array();
 			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
 				if(!!$row['IntranetOnly'] === true && !is_allowed_access('/expat/')) {
 					continue;
 				}
-				$pmids[] = $row['PMID'];
+
+				if ($row['PMID']) {
+					$pmids[] = $row['PMID'];
+				}
+
+				if ($row['DOI']) {
+					$dois[] = $row['DOI'];
+				}
 			}
 
-			$refHandler = new \LotusBase\Getter\PMID;
-			$refHandler->set_pmid($pmids);
-			$refs = $refHandler->get_data();
+			$PMIDRefHandler = new \LotusBase\Getter\PMID;
+			$PMIDRefHandler->set_pmid(array_unique($pmids));
+			$PMIDRefs = $PMIDRefHandler->get_data();
+
+			$DOIRefHandler = new \LotusBase\Getter\DOI;
+			$DOIRefHandler->set_doi(array_unique($dois));
+			$DOIRefs = $DOIRefHandler->get_data();
 		}
 		
 
 		// Query 2: Get actual data
-		$q2 = $db->prepare('SELECT `Text`, IDtype, Description, CORx, PMID, IntranetOnly, Curators FROM expat_datasets');
+		$q2 = $db->prepare('SELECT `Text`, IDtype, Description, CORx, PMID, DOI, IntranetOnly, Curators FROM expat_datasets');
 		$q2->execute();
 
 		// Check results
@@ -60,10 +72,34 @@
 
 				// Curators
 				$curators = array_filter(explode(',', $row['Curators']));
+				$referenceHTML = 'Unpublished';
 
 				// Construct reference
-				if(!empty($row['PMID'])) {
-					$ref = $refs[$row['PMID']];
+				if (!empty($row['DOI'])) {
+
+					// Get reference
+					$ref = $DOIRefs[$row['DOI']];
+
+					// Publication year
+					$year = $ref['posted']['date-parts'][0][0];
+
+					// Authors
+					$_authors = $ref['author'];
+					if(count($_authors) !== 2) {
+						$authors = $_authors[0]['family'].' et al.';
+					} else {
+						$authors = implode(' and ', array_map(function($a) {
+							return $a['family'];
+						}, $_authors));
+					}
+
+					// Reference
+					$referenceHTML = '<a href="https://dx.doi.org/'.$doi.'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a>';
+
+				} elseif(!empty($row['PMID'])) {
+
+					// Get reference
+					$ref = $PMIDRefs[$row['PMID']];
 
 					// Reference link
 					$_articleids = $ref['articleids'];
@@ -86,6 +122,10 @@
 
 					// Publication year
 					$year = DateTime::createFromFormat('Y/m/d G:i', $ref['sortpubdate'])->format('Y');
+
+					// Reference
+					$referenceHTML = '<a href="'.(!empty($doi) ? 'https://doi.org/'.$doi : 'https://www.ncbi.nlm.nih.gov/pubmed/'.$row['PMID']).'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a>';
+
 				}
 
 				echo '<tr>
@@ -105,7 +145,7 @@
 					<td><p>'.$row['Description'].'</p></td>
 					<td class="align-center">'.(!!$row['CORx'] === true ? '<span class="icon-ok"></span>' : '<span class="icon-cancel"></span>').'</td>
 					<td>'.(count($curators) ? '<ul class="list--reset"><li>'.implode('</li><li>', $curators).'</li></ul>' : '').'</td>
-					<td>'.(!empty($row['PMID']) ? '<a href="'.(!empty($doi) ? 'https://doi.org/'.$doi : 'https://www.ncbi.nlm.nih.gov/pubmed/'.$row['PMID']).'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a>' : 'Unpublished').'</td>
+					<td>'.$referenceHTML.'</td>
 				</tr>';
 			}
 
