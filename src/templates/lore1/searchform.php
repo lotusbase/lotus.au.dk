@@ -31,7 +31,7 @@
 				?>
 					<li class="input-wrapper"><input type="text" id="plantid-input" placeholder="Plant ID (e.g. 30000146)" autocomplete="off" /></li>
 				</ul>
-				<input class="input-hidden search-param" type="hidden" name="pid" id="plantid" value="<?php echo (!empty($input['pid'])) ? $input['pid'] : ''; ?>" readonly />
+				<input class="input-hidden search-param" type="hidden" name="pid" id="plantid" value="<?php echo (!empty($input['pid'])) ? escapeHTML($input['pid']) : ''; ?>" readonly />
 			</div>
 			<small><strong>Separate each PlantID with a comma, space or tab.</strong></small>
 		</div>
@@ -52,7 +52,7 @@
 				?>
 					<li class="input-wrapper"><input type="text" name="blast-input" id="blastheader-input" placeholder="BLAST Header (e.g. chr5_3085263_R or LjSGA_055002_657_R)" autocomplete="off" /></li>
 				</ul>
-				<input class="input-hidden search-param" type="hidden" name="blast" id="blastheader" value="<?php echo (!empty($input['blast'])) ? $input['blast'] : ''; ?>" readonly />
+				<input class="input-hidden search-param" type="hidden" name="blast" id="blastheader" value="<?php echo (!empty($input['blast'])) ? escapeHTML($input['blast']) : ''; ?>" readonly />
 			</div>
 			<small><strong>Separate each BLAST header with a comma, space or tab. BLAST search terms will override all other filtering parameters below.</strong></small>
 		</div>
@@ -85,7 +85,7 @@
 
 		<label class="col-one">Position <a class="info" data-modal="search-help" data-modal-content="&lt;em&gt;LORE1&lt;/em&gt; inserts can be searched between two positions (inclusive). However: &lt;ul&gt;&lt;li&gt;if only one position is filled in, the search will only look for an exact position, or...&lt;/li&gt;&lt;li&gt;if nothing is filled in, search will not look for lines based on positions.&lt;/li&gt;&lt;/ul&gt;" title="How to search for the position of &lt;em&gt;LORE1&lt;/em&gt; insert?">?</a></label>
 		<div class="col-two cols flex-wrap__nowrap field__positions">
-			<label for="pos1">Between</label> <input type="number" name="pos1" id="pos1" class="search-param" placeholder="Start " value="<?php echo (!empty($input['pos1'])) ? $input['pos1'] : ''; ?>" min="0" /> <label for="pos2">and</label> <input type="number" name="pos2" id="pos2" class="search-param" placeholder="End" value="<?php echo (!empty($input['pos2'])) ? $input['pos2'] : ''; ?>" min="0" />
+			<label for="pos1">Between</label> <input type="number" name="pos1" id="pos1" class="search-param" placeholder="Start " value="<?php echo (!empty($input['pos1'])) ? escapeHTML($input['pos1']) : ''; ?>" min="0" /> <label for="pos2">and</label> <input type="number" name="pos2" id="pos2" class="search-param" placeholder="End" value="<?php echo (!empty($input['pos2'])) ? escapeHTML($input['pos2']) : ''; ?>" min="0" />
 		</div>
 	</div>
 
