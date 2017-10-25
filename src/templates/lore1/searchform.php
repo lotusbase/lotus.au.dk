@@ -63,7 +63,7 @@
 		<p class="minimal full-width">The following options can be used to fine-tune your query. Note that queries using BLAST headers will override this fieldset.</p>
 		<label for="gene" class="col-one">Gene ID <a class="info" data-modal="search-help" data-modal-content="Gene ID search utilizes an exact match&mdash;in other words, you cannot enter a partial Gene ID and expect results to be returned. The gene ID should be in the format of: &lt;codeLj[Chromosome][GenomeVersion][ID Number]&gt;&lt;/code&gt;, e.g. &lt;code&gt;Ljchlorog3v0000610&lt;/code&gt;, &lt;code&gt;Lj1g3v2671450&lt;/code&gt;. There should not be any period in the gene ID, e.g. &lt;code&gt;Ljchlorog3v0000610.1&lt;/code&gt;" title="How should I enter the gene ID?">?</a></label>
 		<div class="col-two field__gene-id">
-			<input type="text" name="gene" id="gene" class="search-param" placeholder="Gene ID (exact match)" value="<?php echo (!empty($input['gene'])) ? $input['gene'] : ''; ?>" />
+			<input type="text" name="gene" id="gene" class="search-param" placeholder="Gene ID (exact match)" value="<?php echo (!empty($input['gene'])) ? escapeHTML($input['gene']) : ''; ?>" />
 		</div>
 
 		<label for="chromosome" class="col-one">Chromosome</label>
