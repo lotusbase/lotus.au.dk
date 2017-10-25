@@ -133,6 +133,11 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 				)
 			);
 
+		// Check if experiment exists
+		if (!isset($dataset_metadata[$experiment])) {
+			throw new Exception('Experiment does not exist.', 404);
+		}
+
 		$sqlQuery = "SELECT
 			`ConditionName`,`".implode('`,`', $dataset_metadata[$experiment]['columns'])."`,`PMID`
 			FROM ".$dataset_metadata[$experiment]['table']."
