@@ -39,15 +39,20 @@
 			)
 		);
 
+	$isError = false;
+
 	if(isset($_GET['status'])) {
 		$status = intval($_GET['status']);
+		$isError = true;
 	} else {
 		$status = intval($_SERVER['REDIRECT_STATUS']);
+		$isError = true;
 	}
 
 	if(isset($status) && !empty($status) && array_key_exists($status, $error_meta)) {
 		if(!array_key_exists($status, $error_meta)) {
 			$status = 'default';
+			$isError = true;
 		}
 	} else {
 		header('Location: /'.WEB_ROOT);
@@ -57,7 +62,13 @@
 <html lang="en">
 <head>
 	<title><?php echo $error_meta[$status]['pageTitle']; ?>&mdash;Lotus Base</title>
-	<?php include('head.php'); ?>
+	<?php
+		$document_header = new \LotusBase\Component\DocumentHeader();
+		if ($isError) {
+			$document_header->set_canonical_url(null);
+		}
+		echo $document_header->get_document_header();
+	?>
 </head>
 <body class="error">
 	<?php

@@ -23,7 +23,9 @@ class DocumentHeader {
 
 	// Set canonical URL
 	public function set_canonical_url($canonical_url) {
-		if(strpos($canonical_url, 'https://lotus.au.dk') >= 0) {
+		if ($canonical_url === null) {
+			$this->header['canonical_url'] = null;
+		} else if(strpos($canonical_url, 'https://lotus.au.dk') >= 0) {
 			$this->header['canonical_url'] = $canonical_url;
 		} else {
 			$this->header['canonical_url'] = 'https://lotus.au.dk'.$canonical_url;
@@ -66,7 +68,7 @@ class DocumentHeader {
 			'.$this->get_meta_tags().'
 
 			<!-- Canonical URL -->
-			<link rel="canonical" href="'.$this->header['canonical_url'].'" itemprop="url" />
+			'.($this->header['canonical_url'] !== null ? '<link rel="canonical" href="'.$this->header['canonical_url'].'" itemprop="url" />' : '').'
 
 			<!--[if IE]>
 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
