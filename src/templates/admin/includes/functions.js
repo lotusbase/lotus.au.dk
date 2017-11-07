@@ -2,6 +2,47 @@ $(document).ready(function() {
 
 	$w	= $(window);
 
+	// Global vars
+	var globalVar = {
+		cookies: Cookies.noConflict()
+	};
+	var globalFun = {
+		getCookie: function() {
+			var c = globalVar.cookies.getJSON('lotusbase');
+			if(!c || typeof c === undefined) {
+				c = {};
+			}
+			return c;
+		},
+		getJWT: function() {
+			var c = globalVar.cookies.get('auth_token');
+
+			if(!c || typeof c === undefined) {
+				c = {};
+			} else {
+				c = globalFun.parseJWT(c);
+			}
+
+			return c;
+		},
+		parseJWT: function(token) {
+			var base64Url = token.split('.')[1],
+				base64 = base64Url.replace('-', '+').replace('_', '/');
+			return JSON.parse(window.atob(base64));
+		}
+	};
+
+	// Set custom headers for all API calls
+	$.ajaxPrefilter(function(options) {
+		if (!options.beforeSend) {
+			options.beforeSend = function (xhr) { 
+				if(globalVar.cookies.get('auth_token')) {
+					xhr.setRequestHeader('Authorization', 'Bearer '+globalVar.cookies.get('auth_token'));
+				}
+			};
+		}
+	});
+
 	// Fix table widths
 	$("#rows tbody td").each(function(i) {
 		$("#rows tbody td").eq(i).attr("data-width", $(this).width());
@@ -37,15 +78,7 @@ $(document).ready(function() {
 		},
 		errorElement: "label"
 	});
-
-	// jQuery Masonry on selected form fields
-	$(".settings #settings-form .form-wrapper").masonry({
-		itemSelector: 'fieldset',
-		columnWidth: function(containerWidth) {
-			return containerWidth / 2;
-		},
-	});
-
+	
 	// Hide first
 	$(".toggle.hide-first > form").hide();
 
@@ -175,24 +208,25 @@ $(document).ready(function() {
 			ProcessDate = $(this).find("#input-date-"+OrderID).val();
 
 		if(SeedQuantity<0 || SeedQuantity=='') {
-			SeedQuantity = null;
+			SeedQuantity = '';
 		}
 
 		var DataString = "type=1&id="+OrderID+"&salt="+OrderSalt+"&seed="+SeedQuantity+"&admin="+AdminID+"&com="+encodeURIComponent(AdminComments)+"&intcom="+encodeURIComponent(InternalComments)+"&date="+ProcessDate;
+
 		$.ajax({
 			type: "GET",
-			url: "api.php",
+			url: "admin-api",
 			data: DataString,
 			dataType: 'json',
 			cache: false,
 			success: function(data) {
 				if(data.success==false) {
-					modal('API has responded, but an error occurred',data.message+'</p><p>Please contact the system administrator.','warntext');
+					modal('API has responded, but an error occurred'+data.message+'</p><p>Please contact the system administrator.','warntext');
 				} else if(data.success==true) {
 					$("#admin-"+OrderID).html(data.admin);
 					$("#com-"+OrderID).html(AdminComments);
 					$("#int-"+OrderID).html(InternalComments);
-					$("#seed-"+OrderID).html(SeedQuantity);
+					$("#seeds-"+OrderID).html(SeedQuantity);
 					$("#date-"+OrderID).html(ProcessDate);
 					$("#order-"+OrderID+" td").css({
 						"background-color": "#A2D39C"
@@ -220,14 +254,12 @@ $(document).ready(function() {
 
 		$.ajax({
 			type: "GET",
-			url: "api.php",
+			url: "admin-api",
 			data: DataString,
 			dataType: "json",
 			cache: false,
 			success: function(data) {
-				if(data.success==false) {
-					modal('API has responded, but an error occurred',data.message+'</p><p>Please contact the system administrator.','warntext');
-				} else if(data.success==true) {
+				if(data.success) {
 					context.parents(".order-card").css({"background-color": "#A2D39C"});
 					context.html('<span class="pictogram icon-check"></span>Notification Sent').css({
 						"color":"#297030"
@@ -239,7 +271,7 @@ $(document).ready(function() {
 						});
 					}, 1000);
 				} else {
-					modal('No data returned by API','No data has been returned from the backend. Please contact the system administrator.','warntext');
+					modal('API has responded, but an error occurred'+data.message+'</p><p>Please contact the system administrator.','warntext');
 				}
 			}
 		});
@@ -267,13 +299,13 @@ $(document).ready(function() {
 		var DataString = "type=2&id="+DownloadID+"&desc="+FileDesc+"&count="+FileCount;
 		$.ajax({
 			type: "GET",
-			url: "api.php",
+			url: "admin-api",
 			data: DataString,
 			dataType: 'json',
 			cache: false,
 			success: function(data) {
 				if(data.success==false) {
-					modal('API has responded, but an error occurred',data.message+'</p><p>Please contact the system administrator.','warntext');
+					modal('API has responded, but an error occurred'+data.message+'</p><p>Please contact the system administrator.','warntext');
 				} else if(data.success==true) {
 					$("#desc-"+DownloadID).html(FileDesc);
 					$("#count-"+DownloadID).html(FileCount);
@@ -322,21 +354,21 @@ $(document).ready(function() {
 		var DataString = "type=3&id="+FileID;
 		$.ajax({
 			type: "GET",
-			url: "api.php",
+			url: "admin-api",
 			data: DataString,
 			dataType: 'json',
 			cache: false,
 			success: function(data) {
-				if(data.success==false) {
-					modal('API has responded, but an error occurred',data.message+'</p><p>Please contact the system administrator.','warntext');
-				} else if(data.success==true) {
+				console.log(data);
+				if(data.success) {
 					$("#row-"+FileID)
 						.css({"background-color": "#eab4b4"})
 						.fadeOut(500, function() {
 							$(this).remove();
 						});
+					
 				} else {
-					modal('No data returned by API','No data has been returned from the backend. Please contact the system administrator.','warntext');
+					modal('API has responded, but an error occurred'+data.message+'</p><p>Please contact the system administrator.','warntext');
 				}
 			},
 			failure: function() {
@@ -441,7 +473,7 @@ $(document).ready(function() {
 			// Make ajax call
 			$.ajax({
 				type: "POST",
-				url: "api.php",
+				url: "admin-api",
 				data: "type=6&scope="+scope+"&action="+parseInt($(this).data('admin-action'))+"&salts="+os,
 				dataType: 'json',
 				cache: false,
@@ -537,36 +569,9 @@ $(document).ready(function() {
 		});
 
 		// Model box: Fetch content
-		$("[data-modal]").live("click", function(){
+		$("[data-modal]").on("click", function(){
 			modal($(this).attr('title'), "<p>"+$(this).attr('data-modal-content')+"</p>", "");
 		});
-
-	// Make AJAX call for world map content
-	var mapData;
-	function setMapData(item) {
-		mapData = item;
-	}
-	$.ajax({
-		type: "GET",
-		url: "api.php",
-		data: "type=5",
-		dataType: 'json',
-		cache: false,
-		global: false,
-		async: false,
-		success: function(data) {
-			if(data.success==false) {
-				$("#world-map").hide().before('<div class="user-message warning">Failure to retrieve data for world map.</div>');
-			} else if(data.success==true) {
-				setMapData(data.ordersByCountry);
-			} else {
-				modal('No data returned by API','No data has been returned from the backend. Please contact the system administrator.','warntext');
-			}
-		},
-		failure: function() {
-			modal('AJAX call to API has failed','There is an error making an AJAX call to the API, and no specific information has been returned.','warntext');
-		}
-	});
 
 	// Finally, fire off resize events for all dynamically-sized elements
 	$w.resize(function() {
@@ -602,33 +607,5 @@ $(document).ready(function() {
 		});
 
 	}).resize();
-
-	// Display world map, but empty the map container and labels first
-	$("#world-map").vectorMap({
-		backgroundColor: '#eee',
-		zoomOnScroll: false,
-		zoomMax: 6,
-		regionStyle: {
-			initial: {
-				fill: '#ccc'
-			},
-			hover: {
-				fill: '#333'
-			}
-		},
-		series: {
-			regions: [{
-				values: mapData,
-				scale: ['#ACF0F2','#1695A3','#225378'],
-				normalizeFunction: 'polynomial'
-			}]
-		},
-		onRegionLabelShow: function(e, el, code) {
-			if(mapData[code] == null) {
-				mapData[code] = 'No'
-			} 
-			el.html(mapData[code]+' orders shipped to '+el.html()+' <img src="./includes/images/'+code.toLowerCase()+'.png" title="'+el.html()+' ('+code+')" alt="'+el.html()+' ('+code+')" />');
-		}
-	});
 
 });
