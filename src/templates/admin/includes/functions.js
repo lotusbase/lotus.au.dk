@@ -359,7 +359,6 @@ $(document).ready(function() {
 			dataType: 'json',
 			cache: false,
 			success: function(data) {
-				console.log(data);
 				if(data.success) {
 					$("#row-"+FileID)
 						.css({"background-color": "#eab4b4"})
@@ -481,7 +480,6 @@ $(document).ready(function() {
 				async: false,
 				success: function(data) {
 					if(data.success) {
-						console.log(data.success);
 						if(action == '4') {
 							$.each(data.os, function() {
 								$("#order-"+data.os)
