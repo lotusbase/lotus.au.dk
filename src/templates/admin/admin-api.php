@@ -2,8 +2,53 @@
 
 	require_once('../config.php');
 
+	// Use JWT
+	use \Firebase\JWT\JWT;
+
 	// Set header
 	header('Content-Type: application/json');
+
+	// Force authentication check
+	class AuthException extends Exception { };
+	try {
+		$headers = apache_request_headers();
+
+		// If Authorization header is not found, throw error
+		if (!isset($headers['Authorization'])) {
+			throw new AuthException();
+		}
+
+		// Attempt to extract bearer token
+		$matches = array();
+		$matched = preg_match('/^Bearer\s(.*)$/', $headers['Authorization'], $matches);
+		if (!$matched) {
+			throw new AuthException();
+		}
+
+		$jwt = $matches[1];
+		JWT::$leeway = 5;
+		JWT::decode($jwt, JWT_SECRET, array('HS256'));
+
+		// Attempt to match
+	} catch(AuthException $e) {
+		echo json_encode(
+			array(
+				'error' => true,
+				'errorCode' => 401,
+				'message' => 'Unauthorized access'
+			)
+		);
+		exit();
+	} catch(Exception $e) {
+		echo json_encode(
+			array(
+				'error' => true,
+				'errorCode' => 500,
+				'message' => 'Unable to process request: ' . $e->getMessage() . ' ' . time()
+			)
+		);
+		exit();
+	}
 
 	// Try database connection
 	try {

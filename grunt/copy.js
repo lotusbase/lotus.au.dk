@@ -12,6 +12,11 @@ module.exports = {
             dest: 'build/www/dist/js/'
         }, {
             expand: true,
+            cwd: 'src/templates/admin/includes/',
+            src: ['**/*.js'],
+            dest: 'build/www/admin/includes/'
+        }, {
+            expand: true,
             cwd: 'src/css/',
             src: [
                 '**/*.scss',

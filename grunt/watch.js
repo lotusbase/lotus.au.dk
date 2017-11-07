@@ -8,7 +8,8 @@ module.exports = {
 
     scripts: {
         files: [
-            'src/js/**/*.js'
+            'src/js/**/*.js',
+            'src/templates/admin/includes/**/*.js'
         ],
         tasks: [
             'newer:copy',
