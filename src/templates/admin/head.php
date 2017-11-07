@@ -8,4 +8,4 @@
 <!-- Load Google fonts -->
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,300,400,600|Open+Sans+Condensed:300' rel='stylesheet prefetch' type='text/css'>
 
-<script src="../dist/js/modernizr.min.js"></script>
+<script src="../dist/js/plugins/modernizr.min.js"></script>
