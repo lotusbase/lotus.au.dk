@@ -35,7 +35,9 @@
 								FROM orders_lines AS lin
 								LEFT JOIN orders_unique AS ord ON
 									lin.Salt = ord.Salt
-								WHERE ord.ShippingEmail = 0
+								WHERE
+									ord.ShippingEmail = 0 AND
+									ord.Verified = 1
 								GROUP BY Salt
 								) AS temp
 							WHERE temp.PD IS NOT NULL");
