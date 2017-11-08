@@ -59,7 +59,7 @@ $c['globalvars'] = array(
 
 // Middleware for user token authentication
 $api->add(new \Slim\Middleware\JwtAuthentication([
-	'secret' => JWT_SECRET,
+	'secret' => JWT_USER_LOGIN_SECRET,
 	'path' => ['/admin', '/users'],
 	'secure' => false,
 	'relaxed' => ['localhost'],

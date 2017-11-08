@@ -122,6 +122,12 @@ $(function() {
 						remote: {
 							url: root + '/api/v1/registration',
 							type: 'GET',
+							beforeSend: function(xhr) {
+								xhr.setRequestHeader('X-API-KEY', access_token);
+								if(globalVar.cookies.get('auth_token')) {
+									xhr.setRequestHeader('Authorization', 'Bearer '+globalVar.cookies.get('auth_token'));
+								}
+							},
 							data: {
 								field: 'username',
 								value: function() {
@@ -138,6 +144,12 @@ $(function() {
 						remote: {
 							url: root + '/api/v1/registration',
 							type: 'GET',
+							beforeSend: function(xhr) {
+								xhr.setRequestHeader('X-API-KEY', access_token);
+								if(globalVar.cookies.get('auth_token')) {
+									xhr.setRequestHeader('Authorization', 'Bearer '+globalVar.cookies.get('auth_token'));
+								}
+							},
 							data: {
 								field: 'email',
 								value: function() {

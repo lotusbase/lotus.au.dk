@@ -7,7 +7,7 @@
 	if(isset($_COOKIE['auth_token']) && !empty($_COOKIE['auth_token'])) {
 		try {
 			// Cast decoded JWT to array
-			$jwt_decoded = json_decode(json_encode(JWT::decode($_COOKIE['auth_token'], JWT_SECRET, array('HS256'))), true);
+			$jwt_decoded = json_decode(json_encode(JWT::decode($_COOKIE['auth_token'], JWT_USER_LOGIN_SECRET, array('HS256'))), true);
 
 			// Check if token has expired
 			if($jwt_decoded['exp'] < time()) {

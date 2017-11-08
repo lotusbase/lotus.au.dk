@@ -170,7 +170,7 @@ function auth_verify($jwt) {
 		}
 
 		// Cast decoded JWT to array
-		$jwt_decoded = json_decode(json_encode(JWT::decode($jwt, JWT_SECRET, array('HS256'))), true);
+		$jwt_decoded = json_decode(json_encode(JWT::decode($jwt, JWT_USER_LOGIN_SECRET, array('HS256'))), true);
 
 		// Check if token has expired
 		if($jwt_decoded['exp'] < time()) {

@@ -83,6 +83,8 @@ define('LOTUSBASE_API_KEY', $config['apikeys']['lotusbase']);
 // Secrets //
 //=========//
 define('JWT_SECRET', $config['secrets']['jwt']);
+define('JWT_USER_LOGIN_SECRET', $config['secrets']['jwt_user_login']);
+define('JWT_CSRF_SECRET', $config['secrets']['jwt_csrf']);
 
 
 //==========//
