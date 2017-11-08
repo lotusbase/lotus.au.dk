@@ -61,7 +61,7 @@ $c['globalvars'] = array(
 $api->add(new \Slim\Middleware\JwtAuthentication([
 	'secret' => JWT_SECRET,
 	'path' => ['/admin', '/users'],
-	'secure' => true,
+	'secure' => false,
 	'relaxed' => ['localhost'],
 	'attribute' => 'user_auth_token',
 	'error' => function($request, $response, $arguments) {
@@ -81,7 +81,7 @@ $api->add(new \Slim\Middleware\JwtAuthentication([
 	'environment' => ['HTTP_X_API_KEY'],
 	'header' => 'X-API-KEY',
 	'regexp' => '/(.*)/',
-	'secure' => true,
+	'secure' => false,
 	'relaxed' => ['localhost'],
 	'passthrough' => ['/cornea/job/data'],
 	'path' => ['/'],
