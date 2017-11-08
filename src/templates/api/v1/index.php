@@ -83,7 +83,7 @@ $api->add(new \Slim\Middleware\JwtAuthentication([
 	'regexp' => '/(.*)/',
 	'secure' => true,
 	'relaxed' => ['localhost'],
-	'passthrough' => ['/', '/cornea/job/data'],
+	'passthrough' => ['/cornea/job/data'],
 	'path' => ['/'],
 	'attribute' => 'access_token',
 	'error' => function($request, $response, $arguments) {
