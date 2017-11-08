@@ -13,7 +13,7 @@
 			header("location: login.php?redir=".$origin);
 		} else {
 			// Attempt to decrypt token
-			$jwt_decoded = json_decode(json_encode(JWT::decode($_COOKIE['auth_token'], JWT_SECRET, array('HS256'))), true);
+			$jwt_decoded = json_decode(json_encode(JWT::decode($_COOKIE['auth_token'], JWT_USER_LOGIN_SECRET, array('HS256'))), true);
 			$user = $jwt_decoded['data'];
 
 			// Deny access to users that have insufficient privilege

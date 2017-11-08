@@ -3,6 +3,13 @@ var $w = $(window),
 	$b = $('body'),
 	root = '';
 
+// Fix console error in IE8
+if(typeof console === typeof undefined) {
+	var console = {
+		log: function (logMsg) { }
+	};
+}
+
 // Global function: Pluralize
 var globalVar = {
 	errorMessage: 'Should this error persist, please contact the system administrator',
@@ -10,12 +17,6 @@ var globalVar = {
 };
 var globalFun = {
 	init: function() {
-		// Fix console error in IE8
-		if(typeof console === typeof undefined) {
-			var console = {
-				log: function (logMsg) { }
-			};
-		}
 
 		// Set custom headers for all API calls
 		$.ajaxPrefilter(function(options) {
@@ -859,8 +860,6 @@ $(function() {
 	$d.on('click', '.input-mimic__clear', function() {
 		var $input = $(this).prev('.input-mimic').find('ul.input-values li.input-wrapper input'),
 			$tags = $(this).prev('.input-mimic').find('ul.input-values li[data-input-value]');
-
-		console.log($input, $tags);
 
 		$input.focus();
 		$tags.remove();

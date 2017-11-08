@@ -28,7 +28,7 @@
 			$vals = array($g['value']);
 			if(isset($g['ignoreCurrent'])) {
 				// Attempt to decrypt token
-				$jwt_decoded = json_decode(json_encode(JWT::decode(preg_replace('/^Bearer\s?(.*)$/', '$1', $request->getHeaders()['HTTP_AUTHORIZATION'][0]), JWT_SECRET, array('HS256'))), true);
+				$jwt_decoded = json_decode(json_encode(JWT::decode(preg_replace('/^Bearer\s?(.*)$/', '$1', $request->getHeaders()['HTTP_AUTHORIZATION'][0]), JWT_USER_LOGIN_SECRET, array('HS256'))), true);
 				$userData = $jwt_decoded['data'];
 				if(!isset($userData[$field_list[$g['field']]])) {
 					throw new Exception('User identifier not found.', 400);

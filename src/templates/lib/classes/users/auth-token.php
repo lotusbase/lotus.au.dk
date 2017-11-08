@@ -50,7 +50,7 @@ class AuthToken {
 				)))
 		];
 
-		$secretKey = JWT_SECRET;
+		$secretKey = JWT_USER_LOGIN_SECRET;
 		$jwt = JWT::encode(
 			$jwtData,
 			$secretKey,
