@@ -8,10 +8,20 @@
 	// Set header
 	header('Content-Type: application/json');
 
-	// Force authentication check
+	// Force API key and user authentication check
 	class AuthException extends Exception { };
+	class APIKeyException extends Exception { };
 	try {
 		$headers = apache_request_headers();
+
+		// If API key is not found, throw error
+		if (!isset($headers['X-API-KEY'])) {
+			throw new APIKeyException();
+		}
+
+		// Decode API key
+		$jwt_api_key = $headers['X-API-KEY'];
+		JWT::decode($jwt_api_key, JWT_SECRET, array('HS256'));
 
 		// If Authorization header is not found, throw error
 		if (!isset($headers['Authorization'])) {
@@ -25,9 +35,9 @@
 			throw new AuthException();
 		}
 
-		$jwt = $matches[1];
-		JWT::$leeway = 5;
-		JWT::decode($jwt, JWT_SECRET, array('HS256'));
+		// Decode user authentication
+		$jwt_user_login = $matches[1];
+		JWT::decode($jwt_user_login, JWT_USER_LOGIN_SECRET, array('HS256'));
 
 		// Attempt to match
 	} catch(AuthException $e) {
@@ -39,12 +49,21 @@
 			)
 		);
 		exit();
+	} catch(APIKeyException $e) {
+		echo json_encode(
+			array(
+				'error' => true,
+				'errorCode' => 403,
+				'message' => 'Invalid API key'
+			)
+		);
+		exit();
 	} catch(Exception $e) {
 		echo json_encode(
 			array(
 				'error' => true,
 				'errorCode' => 500,
-				'message' => 'Unable to process request: ' . $e->getMessage() . ' ' . time()
+				'message' => 'Unable to process request: ' . $e->getMessage()
 			)
 		);
 		exit();

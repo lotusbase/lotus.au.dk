@@ -36,6 +36,7 @@ $(document).ready(function() {
 	$.ajaxPrefilter(function(options) {
 		if (!options.beforeSend) {
 			options.beforeSend = function (xhr) { 
+				xhr.setRequestHeader('X-API-KEY', access_token);
 				if(globalVar.cookies.get('auth_token')) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+globalVar.cookies.get('auth_token'));
 				}
