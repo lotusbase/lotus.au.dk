@@ -354,6 +354,7 @@
 
 					<input type="hidden" name="actiontype" id="action-type" value="" />
 					<input type="hidden" name="orderview" id="order-view" value="<?php echo $view; ?>" />
+					<input type="hidden" name="CSRF_token" value="<?php echo CSRF_TOKEN; ?>" />
 					<input type="hidden" name="origin" id="origin" value="<?php echo $origin = urlencode($_SERVER["REQUEST_URI"]); ?>" />
 				</div>
 

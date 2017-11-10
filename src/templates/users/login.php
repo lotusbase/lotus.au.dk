@@ -84,6 +84,9 @@
 		
 		try {
 
+			// Verify CSRF token
+			$csrf_protector->verify_token();
+
 			// Check login and password
 			if(empty($_POST['login'])) {
 				throw new \LotusBase\AuthException('Username or email is missing.');
@@ -207,6 +210,11 @@
 				throw new Exception('Username and password combination is invalid.');
 			}
 
+		} catch(CSRFTokenVerificationException $e) {
+			$_SESSION['user_login_error'] = array('message' => $e->getMessage());
+			session_write_close();
+			header("location: login.php");
+			exit();
 		} catch(PDOException $e) {
 			$_SESSION['user_login_error'] = array('message' => $e->getMessage());
 			session_write_close();
@@ -290,7 +298,9 @@
 
 						<button type="submit" tabindex="3">Login</button>
 
-						<input type="hidden" name="redir" value="'.(isset($_GET['redir']) ? htmlspecialchars($_GET['redir']) : '').'">
+						<input type="hidden" name="CSRF_token" value="'.CSRF_TOKEN.'" />
+
+						<input type="hidden" name="redir" value="'.(isset($_GET['redir']) ? htmlspecialchars($_GET['redir']) : '').'" />
 					</div>
 				</form>
 			</div>

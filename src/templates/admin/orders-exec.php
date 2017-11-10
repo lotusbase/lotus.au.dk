@@ -1,5 +1,10 @@
 <?php
 
+namespace LotusBase;
+use \PDO;
+
+class Exception	extends \Exception {};
+
 // Database connection
 require_once('../config.php');
 
@@ -8,6 +13,14 @@ use SameerShelavale\PhpCountriesArray\CountriesArray;
 
 // Error flag
 $error_flag = false;
+
+// Verify CSRF token
+try {
+	$csrf_protector->verify_token();
+} catch(CSRFTokenVerificationException $e) {
+	$error_flag = true;
+	$error_msg = $e->getMessage();
+}
 
 if(isset($_POST['actiontype'])) {
 	$actiontype = $_POST['actiontype'];

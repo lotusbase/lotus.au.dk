@@ -93,4 +93,8 @@ define('JWT_CSRF_SECRET', $config['secrets']['jwt_csrf']);
 require_once(DOC_ROOT.'/vendor/autoload.php');
 require_once(DOC_ROOT.'/lib/autoload.php');
 
+// Setup CSRF token for all pages
+$csrf_protector = new \LotusBase\CSRFProtector();
+define('CSRF_TOKEN', $csrf_protector->get_token());
+
 ?>
