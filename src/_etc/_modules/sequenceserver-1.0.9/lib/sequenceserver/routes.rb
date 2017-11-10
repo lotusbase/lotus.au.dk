@@ -136,7 +136,7 @@ target="#{target}">)
           begin
             file = IniFile.load('/var/www/html/config.ini')
             configData = file['secrets']
-            jwtSecret = configData['jwt'].tr('\'', '')
+            jwtSecret = configData['jwt_user_login'].tr('\'', '')
             payload, header = JWT.decode token, jwtSecret, true, { :algorithm => 'HS256' }
 
             # Check if user belongs to a group with access to BLAST
