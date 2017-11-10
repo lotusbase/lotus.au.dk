@@ -72,4 +72,7 @@ require_once('classes/component/dropdown.php');
 /* class: Getter */
 require_once('classes/getter.php');
 
+/* class: CSRFProtector */
+require_once('classes/csrf-protector.php');
+
 ?>
