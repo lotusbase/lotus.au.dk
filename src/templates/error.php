@@ -56,6 +56,7 @@
 		}
 	} else {
 		header('Location: /'.WEB_ROOT);
+		exit();
 	}
 ?>
 <!doctype html>

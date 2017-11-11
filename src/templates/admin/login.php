@@ -5,6 +5,7 @@
 	// Redirect to profile page if user is already logged in
 	if(isset($_SESSION['user_id']) && !empty(trim($_SESSION['user_id']))) {
 		header('location: '.DOC_ROOT.'/users/profile');
+		exit();
 	}
 
 	// Check login attempt

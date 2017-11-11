@@ -53,6 +53,7 @@
 		} else {
 			header('location: ../admin/');
 		}
+		exit();
 	}
 
 	// Check if user has failed too many logins

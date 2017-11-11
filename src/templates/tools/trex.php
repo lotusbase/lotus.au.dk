@@ -268,6 +268,7 @@
 			}
 			$_SESSION['trex_error'] = $e->getMessage();
 			header('Location: '.$url);
+			exit();
 		}
 	}
 

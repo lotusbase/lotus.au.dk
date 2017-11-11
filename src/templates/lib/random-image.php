@@ -13,4 +13,5 @@
 	$randomImage = $images[array_rand($images)];
 	header("Content-type: image/jpeg");
 	echo file_get_contents($randomImage);
+	exit();
 ?>

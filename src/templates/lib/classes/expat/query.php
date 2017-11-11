@@ -874,6 +874,7 @@ class Query {
 			header('Content-Length: ' . filesize($file_path . '/' . $zipFile));
 			readfile($file_path . '/' . $zipFile);
 			unlink($file_path . '/' . $zipFile);
+			exit();
 		} else {
 			throw new \Exception('No valid purpose is provided.');
 		}

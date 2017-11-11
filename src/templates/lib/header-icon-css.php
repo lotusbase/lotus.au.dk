@@ -14,4 +14,6 @@
 	if(extension_loaded('zlib')) {
 		ob_end_flush();
 	}
+
+	exit();
 ?>

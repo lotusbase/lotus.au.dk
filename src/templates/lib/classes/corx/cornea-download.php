@@ -56,6 +56,7 @@ class Download {
 			header('Cache-Control: no-cache, must-revalidate');
 			header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
 			echo $content;
+			exit();
 
 		} elseif($resource_type === 'png') {
 
@@ -73,6 +74,7 @@ class Download {
 			header('Cache-Control: no-cache, must-revalidate');
 			header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
 			echo $content;
+			exit();
 
 		} elseif($resource_type === 'file') {
 
@@ -90,6 +92,7 @@ class Download {
 			// Check file path
 			$file_path = DOC_ROOT.'/'.$file_data;
 			if(file_exists($file_path)) {
+				
 				$content = file_get_contents($file_path);
 				header('Content-type: multipart/x-gzip');
 				header('Content-length: '.strlen($content));
@@ -97,6 +100,8 @@ class Download {
 				header('Cache-Control: no-cache, must-revalidate');
 				header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
 				echo $content;
+				exit();
+
 			} else {
 				throw new Exception('File requested does not exist.');
 			}
