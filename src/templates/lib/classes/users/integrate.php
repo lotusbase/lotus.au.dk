@@ -40,10 +40,15 @@ class Integrate {
 				authGroup.ComponentID = components.IDKey
 			WHERE
 				".$this->_vars['provider']."ID = ?
+			GROUP BY auth.UserID
 			");
 		$q1->execute(array($this->_vars['userData']['ID']));
 		if($q1->rowCount()) {
+
 			$userData = $q1->fetch(PDO::FETCH_ASSOC);
+
+			print_r($userData);
+			exit();
 
 			// Explode access
 			$componentPath = explode(',', $userData['ComponentPath']);

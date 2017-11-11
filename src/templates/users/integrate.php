@@ -274,7 +274,7 @@
 		if(isset($_SESSION['user_integration_error'])) {
 			unset($_SESSION['user_integration_error']);
 		}
-		$_SESSION['user_login_error'] = $e->getMessage();
+		$_SESSION['user_login_error'] = array('message' => $e->getMessage());
 		session_write_close();
 		header("location: login.php");
 		exit();
@@ -460,8 +460,6 @@
 						}
 
 						// Prompt user to provide email if it is missing
-						print_r('OAuth: '.$session['OAuth_userData']['Email']);
-						print_r('Local: '.$session['local_userData']['Email']);
 						if(empty($session['OAuth_userData']['Email']) && empty($session['local_userData']['Email'])) {
 							?>
 							<label class="col-one" for="email">Email</label>
