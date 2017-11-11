@@ -2,6 +2,9 @@
 
 	// Use JWT
 	use \Firebase\JWT\JWT;
+
+	// Start session
+	session_start();
 	
 	// Decode JWT if present
 	if(isset($_COOKIE['auth_token']) && !empty($_COOKIE['auth_token'])) {
@@ -11,8 +14,7 @@
 
 			// Check if token has expired
 			if($jwt_decoded['exp'] < time()) {
-				setcookie('auth_token', '', time()-60, '/');
-				header("Refresh:0");
+				throw new Exception('Authentication has expired, please login again.');
 			}
 
 			// Check if component paths are identical to database.
@@ -35,17 +37,34 @@
 			$userData = $q->fetch(PDO::FETCH_ASSOC);
 			$userComps = explode(',', $userData['ComponentPath']);
 			$tokenComps = $jwt_decoded['data']['ComponentPath'];
-			$diffComps = array_diff($userComps, $tokenComps);
-			if(count($diffComps)) {
-				// If user group access has been changed, force delete JWT cookie
-				setcookie('auth_token', '', time()-60, '/');
-				header("Refresh:0");
+
+			// If ComponentPath is unavailable, force delete JWT cookie
+			if (!$tokenComps) {
+				throw new Exception('User data incomplete.');
 			}
 
-		} catch(Firebase\JWT\SignatureInvalidException $e) {
+			// If user group access has been changed, force delete JWT cookie to be
+			$diffComps = array_diff($userComps, $tokenComps);
+			if(count($diffComps)) {
+				throw new Exception('User&rsquo;s group access has been changed, please login again.');
+			}
+
+		} catch(\Firebase\JWT\SignatureInvalidException $e) {
+
+			$_SESSION['user_login_error'] = array('message' => $e->getMessage());
+
 			// If signature is invalid, force delete JWT cookie
 			setcookie('auth_token', '', time()-60, '/');
 			header("Refresh:0");
+			exit();
+		} catch(Exception $e) {
+
+			$_SESSION['user_login_error'] = array('message' => $e->getMessage());
+
+			// If there is something wrong with authentication, force delete JWT cookie
+			setcookie('auth_token', '', time()-60, '/');
+			header("Refresh:0");
+			exit();
 		}
 	}
 ?>
