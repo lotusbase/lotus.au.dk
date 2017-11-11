@@ -47,9 +47,6 @@ class Integrate {
 
 			$userData = $q1->fetch(PDO::FETCH_ASSOC);
 
-			print_r($userData);
-			exit();
-
 			// Explode access
 			$componentPath = explode(',', $userData['ComponentPath']);
 			$userData['ComponentPath'] = $componentPath;
