@@ -13,6 +13,7 @@
 			if($jwt_decoded['exp'] < time()) {
 				setcookie('auth_token', '', time()-60, '/');
 				header("Refresh:0");
+				exit();
 			}
 
 			// Check if component paths are identical to database.
@@ -41,12 +42,14 @@
 				// If user group access has been changed, force delete JWT cookie
 				setcookie('auth_token', '', time()-60, '/');
 				header("Refresh:0");
+				exit();
 			}
 
 		} catch(Firebase\JWT\SignatureInvalidException $e) {
 			// If signature is invalid, force delete JWT cookie
 			setcookie('auth_token', '', time()-60, '/');
 			header("Refresh:0");
+			exit();
 		}
 	}
 ?>
