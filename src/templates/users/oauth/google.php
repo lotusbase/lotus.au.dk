@@ -44,21 +44,19 @@
 			$ui->processUser();
 
 		} catch(Google_Auth_Exception $e) {
-			print_r($e);
-			exit();
-			$_SESSION['user_login_error'] = 'We have encountered an issue with Google account authentication: '.$e->getMessage();
+			$_SESSION['user_login_error'] = array('message' => 'We have encountered an issue with Google account authentication: '.$e->getMessage());
 			$_SESSION['oauth_error'] = true;
 			session_write_close();
 			header("location: ../login.php");
 			exit();
 		} catch(PDOException $e) {
-			$_SESSION['user_login_error'] = 'We have encountered a problem with our database: '. $e->getMessage();
+			$_SESSION['user_login_error'] = array('message' => 'We have encountered a problem with our database: '. $e->getMessage());
 			$_SESSION['oauth_error'] = true;
 			session_write_close();
 			header("location: ../login.php");
 			exit();
 		} catch(Exception $e) {
-			$_SESSION['user_login_error'] = 'We have encountered a general error: '.$e->getMessage();
+			$_SESSION['user_login_error'] = array('message' => 'We have encountered a general error: '.$e->getMessage());
 			$_SESSION['oauth_error'] = true;
 			session_write_close();
 			header("location: ../login.php");
@@ -66,7 +64,7 @@
 		}
 
 	} else {
-		$_SESSION['user_login_error'] = 'OAuth2 authorization code not found in request. Please try another method to log in.';
+		$_SESSION['user_login_error'] = array('message' => 'OAuth2 authorization code not found in request. Please try another method to log in.');
 		session_write_close();
 		header("location: ../login.php");
 		exit();

@@ -13,7 +13,7 @@
 			if(!empty($_GET['code']) && !empty($_GET['state']) && !empty($_SESSION['oauth2_state'])) {
 
 				if($_GET['state'] !== $_SESSION['oauth2_state']) {
-					$_SESSION['user_login_error'] = 'OAuth2 state mismatch, a possible CSRF attack detected.';
+					$_SESSION['user_login_error'] = array('message' => 'OAuth2 state mismatch, a possible CSRF attack detected.');
 					session_write_close();
 					header("location: ../login.php");
 					exit();
@@ -106,20 +106,20 @@
 				$ui->processUser();
 
 			} else if(isset($_GET['error'])) {
-				$_SESSION['user_login_error'] = 'We have encountered an error (code '.$_GET['error'].') with LinkedIn OAuth2 interface'.(isset($_GET['error_description']) && !empty($_GET['error_description']) ? ': '.$_GET['error_description'] : '.');
+				$_SESSION['user_login_error'] = array('message' => 'We have encountered an error (code '.$_GET['error'].') with LinkedIn OAuth2 interface'.(isset($_GET['error_description']) && !empty($_GET['error_description']) ? ': '.$_GET['error_description'] : '.'));
 				session_write_close();
 				header("location: ../login.php");
 				exit();
 			}
 
 		} else {
-			$_SESSION['user_login_error'] = 'OAuth2 authorization code not found in request. Please try another method to log in.';
+			$_SESSION['user_login_error'] = array('message' => 'OAuth2 authorization code not found in request. Please try another method to log in.');
 			session_write_close();
 			header("location: ../login.php");
 			exit();
 		}
 	} catch(Exception $e) {
-		$_SESSION['user_login_error'] = $e->getMessage();
+		$_SESSION['user_login_error'] = array('message' => $e->getMessage());
 		session_write_close();
 		header("location: ../login.php");
 		exit();
