@@ -24,6 +24,7 @@
 
 		if(!$error) {
 			header('Location: '.WEB_ROOT.'/view/'.$id_type.'/'.$_GET['id']);
+			exit();
 		}
 	}
 

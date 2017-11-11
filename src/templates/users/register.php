@@ -44,6 +44,7 @@
 		} else {
 			header('location: ../admin/');
 		}
+		exit();
 	}
 
 	try {
@@ -210,6 +211,7 @@
 				$_SESSION['user_verification_required'] = true;
 				session_write_close();
 				header("location: ./");
+				exit();
 
 			} catch(PDOException $e) {
 				// PDO Exception

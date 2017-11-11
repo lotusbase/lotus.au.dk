@@ -23,11 +23,13 @@
 
 		header('Content-Type: '.$mime_type);
 		echo file_get_contents($path);
+		exit();
 	}
 
 	// Check if file is defined in GET request
 	if(empty($_GET) || empty($_GET['file'])) {
 		header('Location: /');
+		exit();
 	} else {
 		$file_path = GATEKEEPER_PATH.'/'.$_GET['file'];
 
@@ -74,7 +76,7 @@
 
 			// General exception
 			header('Location: /');
-
+			exit();
 		}
 	}
 ?>

@@ -74,6 +74,7 @@
 				$_SESSION['reset_err'] = 'Your password reset token with a validity of 24 hours has expired. Please repeat the reset process.';
 				session_write_close();
 				header("location: reset.php");
+				exit();
 			} else {
 				// Check if user is verified AND activated
 				if($user['Verified'] == 1 && $user['Activated'] == 1) {
