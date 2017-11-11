@@ -14,6 +14,7 @@
 			) {
 			$origin = urlencode($_SERVER["REQUEST_URI"]);
 			header("location: login.php?redir=".$origin);
+			exit();
 		} else {
 			// Attempt to decrypt token
 			$jwt_decoded = json_decode(json_encode(JWT::decode($_COOKIE['auth_token'], JWT_USER_LOGIN_SECRET, array('HS256'))), true);
@@ -46,13 +47,16 @@
 		setcookie('auth_token', '', time()-60, '/');
 		$_SESSION['user_login_error'] = array('message' => $e->getMessage().'. There is a possibility that your user token has been tempered with.');
 		header("location: login.php");
+		exit();
 	} catch(ComponentPathException $e) {
 		setcookie('auth_token', '', time()-60, '/');
 		header("location: login.php");
+		exit();
 	} catch(Exception $e) {
 		setcookie('auth_token', '', time()-60, '/');
 		$_SESSION['user_login_error'] = array('message' => $e->getMessage().'. We have encountered a server side error that prevents us from authenticating your login attempt.');
 		header("location: login.php");
+		exit();
 	}
 
 ?>
