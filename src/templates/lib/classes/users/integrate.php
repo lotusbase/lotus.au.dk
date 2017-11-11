@@ -27,10 +27,27 @@ class Integrate {
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 		// Query 1: Check if user already exists, and has linked account
-		$q1 = $db->prepare('SELECT * FROM auth WHERE '.$this->_vars['provider'].'ID = ?');
+		$q1 = $db->prepare("SELECT
+				auth.*,
+				adminprivileges.*,
+				GROUP_CONCAT(components.Path) as ComponentPath
+			FROM auth
+			LEFT JOIN adminprivileges ON
+				auth.Authority = adminprivileges.Authority 
+			LEFT JOIN auth_group AS authGroup ON
+				auth.UserGroup = authGroup.UserGroup
+			LEFT JOIN components ON
+				authGroup.ComponentID = components.IDKey
+			WHERE
+				".$this->_vars['provider']."ID = ?
+			");
 		$q1->execute(array($this->_vars['userData']['ID']));
 		if($q1->rowCount()) {
 			$userData = $q1->fetch(PDO::FETCH_ASSOC);
+
+			// Explode access
+			$componentPath = explode(',', $userData['ComponentPath']);
+			$userData['ComponentPath'] = $componentPath;
 
 			// Create JWT token and store it on the client-side
 			$jwt = new \LotusBase\Users\AuthToken();

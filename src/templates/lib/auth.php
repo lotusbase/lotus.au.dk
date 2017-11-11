@@ -35,6 +35,7 @@
 			$userData = $q->fetch(PDO::FETCH_ASSOC);
 			$userComps = explode(',', $userData['ComponentPath']);
 			$tokenComps = $jwt_decoded['data']['ComponentPath'];
+
 			$diffComps = array_diff($userComps, $tokenComps);
 			if(count($diffComps)) {
 				// If user group access has been changed, force delete JWT cookie
