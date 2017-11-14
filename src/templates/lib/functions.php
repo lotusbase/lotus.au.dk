@@ -1,7 +1,8 @@
 <?php
 // Escape HTML
 function escapeHTML($str) {
-	return htmlspecialchars(@trim($str), ENT_QUOTES, "UTF-8");
+	$_str = @trim(utf8_encode($str));
+	return htmlspecialchars($_str, ENT_QUOTES);
 }
 
 // Pluralize
