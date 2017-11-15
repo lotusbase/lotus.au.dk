@@ -118,6 +118,7 @@
 			</div>
 
 			<input type="hidden" id="expat-idtype" name="idtype" value="" />
+			<input type="hidden" name="CSRF_token" value="<?php echo CSRF_TOKEN; ?>" />
 
 			<div class="cols justify-content__center">
 				<button type="submit" role="primary"><span class="pictogram icon-search">Search</span></button>
