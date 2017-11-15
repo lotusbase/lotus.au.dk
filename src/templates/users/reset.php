@@ -127,6 +127,11 @@
 			session_write_close();
 			header("location: reset.php");
 			exit();
+		} catch(Exception $e) {
+			$_SESSION['reset_err'] = $e->getMessage();
+			session_write_close();
+			header("location: reset.php");
+			exit();
 		}
 	}
 
@@ -301,7 +306,7 @@
 				<div class="cols">
 					<label class="col-one" for="login">Registered Email</label>
 					<input class="col-two" type="text" name="login" id="login" placeholder="Registered Email" required />
-					<input type="hidden" name="CSRF_token" value="<?php echo CSRF_TOKEN; ?>" />
+					<input type="hidden" name="CSRF_token" value="'.CSRF_TOKEN.'" />
 					<button type="submit">Send reset request to email</button>
 				</div>
 			</form>';
@@ -331,7 +336,7 @@
 					<input type="hidden" name="key" value="'.$_GET['key'].'" />
 
 					<input type="hidden" name="origin" value="'.urlencode($_SERVER['REQUEST_URI']).'" />
-					<input type="hidden" name="CSRF_token" value="<?php echo CSRF_TOKEN; ?>" />
+					<input type="hidden" name="CSRF_token" value="'.CSRF_TOKEN.'" />
 
 					<input type="hidden" name="action" value="update" />
 					<button type="submit">Update password</button>
