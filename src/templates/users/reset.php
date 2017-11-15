@@ -28,8 +28,10 @@
 			exit();
 		}
 
-		// 
 		try {
+
+			// Verify CSRF token
+			$csrf_protector->verify_token();
 
 			$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_ADMIN_USER, DB_ADMIN_PASS);
 			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -157,6 +159,10 @@
 		// Validate again
 		// Check if reset key has already expired
 		try {
+
+			// Verify CSRF token
+			$csrf_protector->verify_token();
+
 			$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_ADMIN_USER, DB_ADMIN_PASS);
 			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -295,6 +301,7 @@
 				<div class="cols">
 					<label class="col-one" for="login">Registered Email</label>
 					<input class="col-two" type="text" name="login" id="login" placeholder="Registered Email" required />
+					<input type="hidden" name="CSRF_token" value="<?php echo CSRF_TOKEN; ?>" />
 					<button type="submit">Send reset request to email</button>
 				</div>
 			</form>';
@@ -324,6 +331,7 @@
 					<input type="hidden" name="key" value="'.$_GET['key'].'" />
 
 					<input type="hidden" name="origin" value="'.urlencode($_SERVER['REQUEST_URI']).'" />
+					<input type="hidden" name="CSRF_token" value="<?php echo CSRF_TOKEN; ?>" />
 
 					<input type="hidden" name="action" value="update" />
 					<button type="submit">Update password</button>
