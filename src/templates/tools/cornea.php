@@ -33,6 +33,14 @@
 					cornea_error_catch($errors);
 				}
 
+				// Verify CSRF
+				try {
+					$csrf_protector->verify_token();
+				} catch(Exception $e) {
+					$errors[] = $e->getMessage();
+					cornea_error_catch($errors);
+				}
+
 				// Attempt to decode JWT. If user is not logged in, perform additional checks
 				$user = is_logged_in();
 				if(!$user) {
@@ -346,6 +354,7 @@
 					</div>
 					<?php } else { ?>
 					<input type="hidden" name="user_auth_token" value="<?php echo $_COOKIE['auth_token']; ?>" />
+					<input type="hidden" name="CSRF_token" value="<?php echo CSRF_TOKEN; ?>" />
 					<?php } ?>
 
 					<div class="cols justify-content__center">
