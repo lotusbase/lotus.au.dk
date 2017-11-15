@@ -389,6 +389,7 @@
 					<input type="hidden" value='<?php echo $ak; ?>' name="ak" />
 					<input type="hidden" value="<?php echo $version; ?>" name="v" />
 					<input type="hidden" value="<?php echo $_SERVER['REQUEST_URI']; ?>" name="origin" />
+					<input type="hidden" name="CSRF_token" value="<?php echo CSRF_TOKEN; ?>" />
 				</div>				
 			</div>
 

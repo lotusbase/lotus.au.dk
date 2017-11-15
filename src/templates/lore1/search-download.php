@@ -18,15 +18,20 @@ function error_function($error_message, $origin) {
 	exit();
 }
 
-// Establish connection
 try {
+
+	// Verify CSRF token
+	$csrf_protector->verify_token();
+
+	// Establish database connection
 	$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch(PDOException $e) {
 	error_function('We have experienced a problem trying to establish a database connection. Please contact the system administrator should this issue persist.', $origin);
+} catch(Exception $e) {
+	error_function($e->getMessage(), $origin);
 }
-
 
 // Is version specified?
 if(!isset($_POST['v']) || !in_array($_POST['v'], $lj_genome_versions)) {
