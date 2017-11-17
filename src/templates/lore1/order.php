@@ -314,29 +314,31 @@
 	<?php include(DOC_ROOT.'/footer.php'); ?>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/order.min.js"></script>
-	<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&amp;render=explicit" async defer></script>
-	<script>
-		// Google ReCaptcha
-		var onloadCallback = function() {
-				grecaptcha.render('google-recaptcha', {
-					'sitekey' : '6Ld3VQ8TAAAAAO7VZkD4zFAvqUxUuox5VN7ztwM5',
-					'callback': verifyCallback,
-					'expired-callback': expiredCallback,
-					'tabindex': 9
-				});
-			},
-			verifyCallback = function(response) {
-				console.log(globalVar.stepForm.validStepIndex, $('form.has-steps .form-step').length);
+	<?php if(!is_logged_in()) { ?>
+		<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&amp;render=explicit" async defer></script>
+		<script>
+			// Google ReCaptcha
+			var onloadCallback = function() {
+					grecaptcha.render('google-recaptcha', {
+						'sitekey' : '6Ld3VQ8TAAAAAO7VZkD4zFAvqUxUuox5VN7ztwM5',
+						'callback': verifyCallback,
+						'expired-callback': expiredCallback,
+						'tabindex': 9
+					});
+				},
+				verifyCallback = function(response) {
+					console.log(globalVar.stepForm.validStepIndex, $('form.has-steps .form-step').length);
 
-				// Only enable submit button when form is complete
-				if(globalVar.stepForm.validStepIndex >= $('form.has-steps .form-step').length - 2) {
-					$('#form-step__submit').removeClass('disabled');
-				}
-			},
-			expiredCallback = function() {
-				grecaptcha.reset();
-			};
+					// Only enable submit button when form is complete
+					if(globalVar.stepForm.validStepIndex >= $('form.has-steps .form-step').length - 2) {
+						$('#form-step__submit').removeClass('disabled');
+					}
+				},
+				expiredCallback = function() {
+					grecaptcha.reset();
+				};
 
-	</script>
+		</script>
+	<?php } ?>
 </body>
 </html>
