@@ -48,7 +48,7 @@ $(function() {
 			globalFun.stepForm.navigation.init();
 
 			// Validate lines
-			$d.on('change manualchange', '#lines', function() {
+			$d.on('change manualchange', '#lines', $.debounce(150, function() {
 				var $t = $(this),
 					$currentStep = $(this).closest('.form-step');
 
@@ -57,6 +57,7 @@ $(function() {
 
 				// Execute AJAX call
 				if($t.val()) {
+
 					var linesCheck = $.ajax({
 							url: root + '/api/v1/lore1/'+$t.val()+'/verify',
 							type: 'GET',
@@ -136,7 +137,7 @@ $(function() {
 					// Invalidate step
 					globalFun.stepForm.step.invalidate($currentStep);
 				}
-			});
+			}));
 			
 			// Declare clearance count
 			$('form.has-steps .form-step').data('step-cleared-count', 0);
