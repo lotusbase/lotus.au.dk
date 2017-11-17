@@ -100,3 +100,9 @@ lib/python/corr/correlation_network_jobs.db
 # SASS cache					#
 #################################
 .sass-cache
+
+#################################
+# Ignore vscode					#
+#################################
+.vscode/
+
