@@ -109,8 +109,8 @@ $api->add(new \Slim\Middleware\JwtAuthentication([
 			WHERE t1.UserSalt = ? AND t1.Token = ?');
 		$r = $access_token_query->execute(array($data['user'], $data['access_token']));
 
-		// Check if exection is successful and that exactly ONE row is updated
-		if($r && $access_token_query->rowCount() === 1) {
+		// Check if exection is successful
+		if($r) {
 			return true;
 		} else {
 			throw new Exception('Access token is invalid.', 401);
