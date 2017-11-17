@@ -153,7 +153,20 @@
 				}
 
 				// Fetch newly inserted user data
-				$q3 = $db->prepare("SELECT * FROM auth WHERE Salt = ?");
+				$q3 = $db->prepare("SELECT
+						auth.*,
+						adminprivileges.*,
+						GROUP_CONCAT(components.Path) as ComponentPath
+					FROM auth
+					LEFT JOIN adminprivileges ON
+						auth.Authority = adminprivileges.Authority 
+					LEFT JOIN auth_group AS authGroup ON
+						auth.UserGroup = authGroup.UserGroup
+					LEFT JOIN components ON
+						authGroup.ComponentID = components.IDKey
+					WHERE
+						auth.Salt = ?
+					GROUP BY auth.UserID");
 				$r3 = $q3->execute(array($usersalt));
 
 				if(!$r3 || $q3->rowCount() !== 1) {

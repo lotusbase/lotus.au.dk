@@ -136,7 +136,6 @@
 			// Set redirection header
 			$d = 5;
 			header('refresh:'.$d.';url=./');
-			exit();
 
 		} catch(PDOException $e) {
 			$error[] = 'We have encountered an error with the database: '.$e->getMessage();

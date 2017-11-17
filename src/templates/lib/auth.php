@@ -35,12 +35,12 @@
 				");
 			$q->execute(array($jwt_decoded['data']['Salt']));
 			$userData = $q->fetch(PDO::FETCH_ASSOC);
-			$userComps = explode(',', $userData['ComponentPath']);
+			$userComps = array_filter(explode(',', $userData['ComponentPath']));
 			$tokenComps = $jwt_decoded['data']['ComponentPath'];
-
-			// If ComponentPath is unavailable, force delete JWT cookie
 			if (!$tokenComps) {
-				throw new Exception('User data incomplete.');
+				$tokenComps = array();
+			} else {
+				$tokenComps = array_filter($tokenComps);
 			}
 
 			// If user group access has been changed, force delete JWT cookie to be
