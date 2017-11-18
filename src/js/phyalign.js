@@ -96,7 +96,7 @@ $(function() {
 			if(l.match(/>/)) {
 				fasta_headers.push(l.replace(/^>\s?/, ''));
 			} else {
-				if(typeof fasta_seqs[fasta_headers.length - 1] === typeof undefined) {
+				if(fasta_seqs[fasta_headers.length - 1] === void 0) {
 					fasta_seqs[fasta_headers.length - 1] = '';
 				}
 				fasta_seqs[fasta_headers.length - 1] += l.replace(/[\d\s]/, '');
@@ -337,7 +337,7 @@ $(function() {
 
 			// Job has been completed
 			console.log(job);
-			if(typeof job.status !== typeof undefined && job.status === 0) {
+			if(job.status !== void 0 && job.status === 0) {
 
 				// Create data
 				globalVar.phyalign.data = job;
@@ -492,18 +492,18 @@ $(function() {
 		d3: {
 			setScale: {
 				radial: function(d, y0, k) {
-					if(typeof d.length === typeof undefined) d.length = 1;
+					if(d.length === void 0) d.length = 1;
 					d.scale = (y0 += d.length) * k;
 					if (d.children) d.children.forEach(function(d) { globalFun.phyalign.d3.setScale.radial(d, y0, k); });
 				},
 				dendrogram: function(d, y0, k) {
-					if(typeof d.length === typeof undefined) d.length = 1;
+					if(d.length === void 0) d.length = 1;
 					d.scale = (y0 += d.length) * k;
 					if (d.children) d.children.forEach(function(d) { globalFun.phyalign.d3.setScale.dendrogram(d, y0, k); });
 				}
 			},
 			maxLength: function(d) {
-				if(typeof d.length === typeof undefined) d.length = 1;
+				if(d.length === void 0) d.length = 1;
 				return d.length + (d.children ? d3.max(d.children, globalFun.phyalign.d3.maxLength) : 0);
 			},
 			step: {

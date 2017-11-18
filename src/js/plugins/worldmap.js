@@ -114,7 +114,7 @@ $(function() {
 				// Make fills
 				svg.selectAll('.country')
 					.attr('fill', function(d) {
-						if(d.properties.orderCount === 0 || typeof d.properties.orderCount === typeof undefined) {
+						if(d.properties.orderCount === 0 || d.properties.orderCount === void 0) {
 							return '#ccc';
 						} else {
 							return color2(color1(d.properties.orderCount));
@@ -232,9 +232,9 @@ $(function() {
 				d3.selectAll('.country')
 					.each(function(d, i) {
 						var currentValue = d.properties.orderCount;
-						if (currentValue <= min && typeof currentValue !== typeof undefined) {
+						if (currentValue <= min && currentValue !== void 0) {
 							min = currentValue;
-						} else if (currentValue >= max && typeof currentValue !== typeof undefined) {
+						} else if (currentValue >= max && currentValue !== void 0) {
 							max = currentValue;
 						}
 					});

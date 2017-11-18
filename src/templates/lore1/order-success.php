@@ -36,7 +36,7 @@ if (isset($_SESSION['order_success']) && $_SESSION['order_success']) {
 	<?php include(DOC_ROOT.'/footer.php'); ?>
 	<script>
 		// Clear out local storage
-		if(typeof window.localStorage !== typeof undefined) {
+		if(window.localStorage !== void 0) {
 			window.localStorage.clear();
 		}
 	</script>

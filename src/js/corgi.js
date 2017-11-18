@@ -63,7 +63,7 @@ $(function() {
 					});
 
 				// Check if grecaptcha is required
-				if(typeof grecaptcha !== typeof undefined) {
+				if(grecaptcha !== void 0) {
 					// Reset captcha
 					grecaptcha.reset();
 

@@ -77,7 +77,7 @@ $(function() {
 							globalFun.stepForm.update.lore1lines();
 
 							// Write to storage
-							if(typeof window.localStorage !== typeof undefined && d.data.pid_found) {
+							if(window.localStorage !== void 0 && d.data.pid_found) {
 								window.localStorage.setItem('lines', d.data.pid_found.join(','));
 							}
 
@@ -130,7 +130,7 @@ $(function() {
 					$('#id-check').slideUp(125);
 
 					// Write to storage
-					if(typeof window.localStorage !== typeof undefined) {
+					if(window.localStorage !== void 0) {
 						window.localStorage.removeItem('lines');
 					}
 
@@ -143,10 +143,10 @@ $(function() {
 			$('form.has-steps .form-step').data('step-cleared-count', 0);
 
 			// Fetch data from local storage
-			if(typeof window.localStorage !== typeof undefined && window.localStorage.length) {
+			if(window.localStorage !== void 0 && window.localStorage.length) {
 				globalFun.stepForm.loadData();
 				globalFun.stepForm.update.overview();
-			} else if(typeof window.localStorage === typeof undefined) {
+			} else if(window.localStorage === void 0) {
 				$('#order-form').before('<p class="user-message warning"><span class="icon-attention">HTML5 local storage is not available or enabled, and we will not be able to store your progress. Please consider upgrading to a browser that supports the feature, or enable local storage in your browser settings.</span></p>');
 				globalFun.stepForm.step.activate(0);
 			} else {
@@ -323,7 +323,7 @@ $(function() {
 				});
 
 				// Update cleared count
-				if(typeof window.localStorage !== typeof undefined) {
+				if(window.localStorage !== void 0) {
 					window.localStorage.setItem('_scc_' + $step.attr('id'), $step.data('step-cleared-count'));
 				}
 
@@ -359,7 +359,7 @@ $(function() {
 				}
 
 				// Store current index
-				if(typeof window.localStorage !== typeof undefined) {
+				if(window.localStorage !== void 0) {
 					// Set current step
 					window.localStorage.setItem('_si_currentStepIndex', i);
 				}
@@ -421,7 +421,7 @@ $(function() {
 				$('#form-step__next').addClass('disabled').data('button-status', 'disabled');
 			},
 			storeData: function(i) {
-				if(typeof window.localStorage !== typeof undefined) {
+				if(window.localStorage !== void 0) {
 					$('form.has-steps .form-step').each(function() {
 						if($(this).data('step-status') === 'valid') {
 							$(this).find(':input[name]').each(function() {
@@ -442,7 +442,7 @@ $(function() {
 				$('form.has-steps .form-step').each(function(i) {
 					var formStepTitle = $(this).data('form-step-title'),
 						formStepTitleShort = $(this).data('form-step-title-short'),
-						content = $('<li class="form-step-nav form-step-nav--disabled disabled"><a href="#form-step__step-'+(i+1)+'" data-target-step="'+(i+1)+'"><span class="step-label step-status">Step '+(i+1)+'</span><span class="step-desc">'+(typeof formStepTitleShort === typeof undefined ? formStepTitle : formStepTitleShort)+'</span></a></li>');
+						content = $('<li class="form-step-nav form-step-nav--disabled disabled"><a href="#form-step__step-'+(i+1)+'" data-target-step="'+(i+1)+'"><span class="step-label step-status">Step '+(i+1)+'</span><span class="step-desc">'+(formStepTitleShort === void 0 ? formStepTitle : formStepTitleShort)+'</span></a></li>');
 					$nav.append(content);
 				});
 			},

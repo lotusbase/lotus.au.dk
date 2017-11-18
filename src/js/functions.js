@@ -4,7 +4,7 @@ var $w = $(window),
 	root = '';
 
 // Fix console error in IE8
-if(typeof console === typeof undefined) {
+if(console === void 0) {
 	var console = {
 		log: function (logMsg) { }
 	};
@@ -96,7 +96,7 @@ var globalFun = {
 		}
 	},
 	pl: function(number, singular, plural) {
-		if(typeof plural === typeof undefined) {
+		if(plural === void 0) {
 			plural = singular + 's';
 		}
 		if(number <= 1) {
@@ -420,7 +420,7 @@ var globalFun = {
 				if(!b) {
 					// Explode into array with delimiters: space, tab, newline, comma
 					// And then return string
-					return string.replace(/([\s\,;\|#]+)/gi, ' ').split(' ').filter(function(n) { return typeof n !== typeof undefined; });
+					return string.replace(/([\s\,;\|#]+)/gi, ' ').split(' ').filter(function(n) { return n !== void 0; });
 				} else {
 					// If we are using boolean mode:
 					return string.match(/([\.\w\+\-\:<>]+|[\"\'][\.\w\s\+\-\:<>]*[\"\'])+/gi);
@@ -551,7 +551,7 @@ var globalFun = {
 	friendlyTime: function(t, p) {
 		// Note: time (t) must be provided in milliseconds
 
-		if (typeof p === typeof undefined) {
+		if (p === void 0) {
 			p = 2;
 		}
 

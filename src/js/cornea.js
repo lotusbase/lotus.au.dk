@@ -107,7 +107,7 @@ $(function() {
 		cornea: {
 			init: function() {
 				// Check for FileReader support
-				if(typeof window.FileReader === typeof undefined) {
+				if(window.FileReader === void 0) {
 					$('#upload-job').empty().html('<p class="user-message warning"><span class="icon-attention"></span> Your browser does not support the <a href="http://caniuse.com/#feat=filereader"><code>FileReader</code> specification</a>, which means we are unable to parse uploaded file with your browser. We recommending using a modern, standards-compliant browser so that all features of <em>Lotus</em> Base can be accessed.</p>');
 				} else {
 					globalFun.cornea.dropzone.init();
@@ -948,11 +948,11 @@ $(function() {
 			init: function(job, jobJSON, opts) {
 
 				// Check options
-				if(typeof opts === typeof undefined) {
+				if(opts === void 0) {
 					console.warn('Sigma initialization options not specified.');
 					return;
 				}
-				if(typeof opts.target === typeof undefined) {
+				if(opts.target === void 0) {
 					console.warn('Tab target of Sigma rendering not specified.');
 					return;
 				}
@@ -961,11 +961,11 @@ $(function() {
 				var jobData = {};
 
 				// Check options
-				if(typeof opts === typeof undefined) {
+				if(opts === void 0) {
 					console.warn('Sigma initialization options not specified.');
 					return;
 				}
-				if(typeof opts.target === typeof undefined) {
+				if(opts.target === void 0) {
 					console.warn('Tab target of Sigma rendering not specified.');
 					return;
 				}
@@ -1098,7 +1098,7 @@ $(function() {
 				
 				// Zoom
 				sigma.prototype.zoomToNode = function(node, ratio, camera){
-					if(typeof camera === typeof undefined){
+					if(camera === void 0){
 						camera = this.camera;
 					}
 					camera.ratio = ratio;

@@ -280,7 +280,7 @@
 
 							}
 
-							if(typeof go_parent_index !== typeof undefined) {
+							if(go_parent_index !== void 0) {
 								// Create link object
 								var link = {
 									'source': go_parent_index,
