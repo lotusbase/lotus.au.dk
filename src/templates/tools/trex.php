@@ -398,9 +398,9 @@
 					<div class="dropdown button">
 						<span class="dropdown--title">Download all sequences</span>
 						<ul class="dropdown--list">
-							<li><a href="../api/v1/blast/20130521_Lj30_CDS.fa/'.implode(',', $q1_filtered_rows['Transcript']).'?download"><span class="pictogram icon-switch">Download all coding sequences</span></a></li>
-							<li><a href="../api/v1/blast/20130521_Lj30_cDNA.fa/'.implode(',', $q1_filtered_rows['Transcript']).'?download"><span class="pictogram icon-switch">Download all mRNA sequences</span></a></li>
-							<li><a href="../api/v1/blast/20130521_Lj30_proteins.fa/'.implode(',', $q1_filtered_rows['Transcript']).'?download"><span class="pictogram icon-switch">Download all amino acid sequences</span></a></li>
+							<li><a href="../api/v1/blast/20130521_Lj30_CDS.fa/'.implode(',', $q1_filtered_rows['Transcript']).'?download&access_token='.LOTUSBASE_API_KEY.'"><span class="pictogram icon-switch">Download all coding sequences</span></a></li>
+							<li><a href="../api/v1/blast/20130521_Lj30_cDNA.fa/'.implode(',', $q1_filtered_rows['Transcript']).'?download&access_token='.LOTUSBASE_API_KEY.'"><span class="pictogram icon-switch">Download all mRNA sequences</span></a></li>
+							<li><a href="../api/v1/blast/20130521_Lj30_proteins.fa/'.implode(',', $q1_filtered_rows['Transcript']).'?download&access_token='.LOTUSBASE_API_KEY.'"><span class="pictogram icon-switch">Download all amino acid sequences</span></a></li>
 						</ul>
 					</div>
 					' : '').
@@ -478,7 +478,7 @@
 								<li><a href="../lore1/search?gene=<?php echo preg_replace('/\.\d+?$/', '', $row['Transcript']); ?>&amp;v=<?php echo $row['Version']; ?>" title="Search for LORE1 insertions in this gene"><span class="icon-leaf"><em>LORE1</em> v<?php echo $row['Version']; ?></span></a></li>
 								<li>
 									<a
-										href="../api/v1/blast/<?php echo 'lj_r30.fa/'.$row['Chromosome'].'?from='.$start.'to='.$end; ?>"
+										href="../api/v1/blast/<?php echo 'lj_r30.fa/'.$row['Chromosome'].'?from='.$start.'&to='.$end.'&access_token='.LOTUSBASE_API_KEY; ?>"
 										data-seqret
 										data-seqret-id="<?php echo $row['Chromosome']; ?>"
 										data-seqret-data-type="genomic"
@@ -492,7 +492,7 @@
 								</li>
 								<li>
 									<a
-										href="../api/v1/blast/<?php echo '20130521_Lj30_CDS.fa/'.$row['Transcript']; ?>"
+										href="../api/v1/blast/<?php echo '20130521_Lj30_CDS.fa/'.$row['Transcript'].'&access_token='.LOTUSBASE_API_KEY; ?>"
 										data-seqret
 										data-seqret-id="<?php echo $row['Transcript']; ?>"
 										data-seqret-data-type="coding sequence"
@@ -504,7 +504,7 @@
 								</li>
 								<li>
 									<a
-										href="../api/v1/blast/<?php echo '20130521_Lj30_cDNA.fa/'.$row['Transcript']; ?>"
+										href="../api/v1/blast/<?php echo '20130521_Lj30_cDNA.fa/'.$row['Transcript'].'&access_token='.LOTUSBASE_API_KEY; ?>"
 										data-seqret
 										data-seqret-id="<?php echo $row['Transcript']; ?>"
 										data-seqret-data-type="mRNA"
@@ -516,7 +516,7 @@
 								</li>
 								<li>
 									<a
-										href="../api/v1/blast/<?php echo '20130521_Lj30_proteins.fa/'.$row['Transcript']; ?>"
+										href="../api/v1/blast/<?php echo '20130521_Lj30_proteins.fa/'.$row['Transcript'].'&access_token='.LOTUSBASE_API_KEY; ?>"
 										data-seqret
 										data-seqret-id="<?php echo $row['Transcript']; ?>"
 										data-seqret-data-type="amino acid"
