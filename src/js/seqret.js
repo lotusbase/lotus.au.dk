@@ -31,7 +31,7 @@ $(function() {
 	// Generate download URL
 	globalFun.seqret = {
 		downloadURL: function(id) {
-			return '../api/v1/blast/'+$('#seqret-db').val()+'/'+id.join(',')+'?strand='+$('#seqret-strand').val()+'&from='+$('#seqret-from').val()+'&to='+$('#seqret-to').val()+'&download';
+			return '../api/v1/blast/'+$('#seqret-db').val()+'/'+id.join(',')+'?strand='+$('#seqret-strand').val()+'&from='+$('#seqret-from').val()+'&to='+$('#seqret-to').val()+'&download'+'&access_token='+access_token;
 		}
 	};
 
