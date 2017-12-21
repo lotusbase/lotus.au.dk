@@ -2,9 +2,6 @@
 
 	// Use JWT
 	use \Firebase\JWT\JWT;
-
-	// Start session
-	session_start();
 	
 	// Decode JWT if present
 	if(isset($_COOKIE['auth_token']) && !empty($_COOKIE['auth_token'])) {
