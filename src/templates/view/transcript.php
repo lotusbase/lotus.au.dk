@@ -3,7 +3,7 @@
 
 	try {
 		if(!empty($_GET) && !empty($_GET['id'])) {
-			$id = $_GET['id'];
+			$id = escapeHTML($_GET['id']);
 			if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)$/', $id)) {
 				// If gene pattern is match, redirect to gene page
 				header('Location:'.WEB_ROOT.'/view/gene/'.$id);
