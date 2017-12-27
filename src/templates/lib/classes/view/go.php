@@ -62,7 +62,7 @@ class Metadata {
 			case 'isbn':
 				
 				// Get book data from Google Books API
-				$book = $this->get_request('https://www.googleapis.com/books/v1/volumes?q=isbn:'.$value)['items'][0];
+				$book = $this->get_request('https://www.googleapis.com/books/v1/volumes?q=isbn:'.$value.'&key='.GOOGLE_API_KEY)['items'][0];
 
 				// Variables
 				$title = $book['volumeInfo']['title'];
@@ -76,7 +76,7 @@ class Metadata {
 
 				// Generate HTML
 				$out = '<div class="media media__book">';
-				$out .= '<span class="media__title book__title">'.$title.'</span>';
+				$out .= '<span class="media__title book__title">'.$title.$value.'</span>';
 				$out .= '<img src="'.$img_src.'" alt="'.$title.'" title="'.$title.'" class="float--left" />';
 				$out .= '<p><span class="book__authors">'.$authors.'</span> &middot; <a href="'.$link.'" tilte="View more information on Google Books" class="button button--small"><span class="icon-link-ext">ISBN: <span class="media__id">'.$value.'</span></span></a></p>';
 				$out .= '<p><span class="book__publisher">'.$publisher.'</span>, <span class="book__date">'.$date.'</span> &middot; <span class="book__pages">'.$pages.' pages</span></p>';

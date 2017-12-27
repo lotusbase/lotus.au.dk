@@ -77,6 +77,7 @@ define('MAILCHIMP_API_KEY', $config['apikeys']['mailchimp']);
 define('GRECAPTCHA_API_KEY', $config['apikeys']['grecaptcha']);
 define('MAPBOX_API_KEY', $config['apikeys']['mapbox']);
 define('LOTUSBASE_API_KEY', $config['apikeys']['lotusbase']);
+define('GOOGLE_API_KEY', $config['apikeys']['google']);
 
 
 //=========//
