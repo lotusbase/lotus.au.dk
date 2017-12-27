@@ -186,7 +186,7 @@
 						}
 
 						// Get redirection url if any
-						if(isset($_POST['redir']) && !empty($_POST['redir'])) {
+						if(is_valid_request_uri($_POST['redir'])) {
 							header("location: ".urldecode($_POST['redir']));
 						} else {
 							if($row['Authority'] <= 3) {

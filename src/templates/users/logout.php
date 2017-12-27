@@ -1,4 +1,7 @@
 <?php
+
+	require_once('../lib/functions.php');
+
 	// Start session
 	session_start();
 
@@ -8,7 +11,7 @@
 	// Write session
 	$_SESSION['user_logged_out'] = true;
 	session_write_close();
-	if(!empty($_GET['redir'])) {
+	if(is_valid_request_uri($_GET['redir'])) {
 		header("location: ".urldecode($_GET['redir']));
 	} else {
 		header("location: ../");

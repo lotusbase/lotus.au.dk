@@ -4,7 +4,7 @@
 require_once('../config.php');
 
 // Get variables
-if(!isset($_POST['origin'])) {
+if(is_valid_request_uri($_POST['origin'])) {
 	$origin = 'search.php';
 } else {
 	$origin = $_POST['origin'];

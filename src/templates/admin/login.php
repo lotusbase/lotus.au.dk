@@ -75,7 +75,7 @@
 						$q2->execute();
 
 						// Get redirection url if any
-						if(!empty($_POST['redir'])) {
+						if(is_valid_request_uri($_POST['redir'])) {
 							header("location: ".urldecode($_POST['redir']));
 						} else {
 							header("location: index.php");

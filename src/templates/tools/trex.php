@@ -261,7 +261,7 @@
 			exit();
 
 		} catch(PDOException $e) {
-			if(isset($_POST['redir'])) {
+			if(is_valid_request_uri($_POST['redir'])) {
 				$url = $_POST['redir'];
 			} else {
 				$url = './';

@@ -225,4 +225,17 @@ function create_api_access_token($token_seed = null, $time_created = null, $user
 
 	return $jwt;
 }
+
+// Check request URI to prevent open redirects
+function is_valid_request_uri($url) {
+	if(
+		!empty($url) &&
+		!preg_match('/^\/[^\/]+/', $url)
+		) {
+		return true;
+	}
+
+	return false;
+}
+
 ?>
