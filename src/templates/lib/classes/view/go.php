@@ -74,6 +74,9 @@ class Metadata {
 				$pages = $book['volumeInfo']['pageCount'];
 				$description = $book['volumeInfo']['description'];
 
+				// Parse image source to force HTTPS
+				$img_src = preg_replace("/^http:/i", "https:", $img_src);
+
 				// Generate HTML
 				$out = '<div class="media media__book">';
 				$out .= '<span class="media__title book__title">'.$title.$value.'</span>';
