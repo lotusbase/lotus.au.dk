@@ -17,7 +17,7 @@ class Metadata {
 		$this->_vars['value'] = $value;
 	}
 
-	// Private function: JSON
+	// Private function: Get request
 	private function get_request($query, $source_format = 'json', $output_format = 'object') {
 
 		// Make GET request
@@ -33,9 +33,9 @@ class Metadata {
 			$_response = new \SimpleXMLElement(curl_exec($ch));
 		} else if($source_format === 'json') {
 			$_response = json_decode(curl_exec($ch), true);
+		} else {
+			throw new \Exception('Invalid format selected');
 		}
-
-		echo curl_error($ch);
 
 		// Close connection
 		curl_close($ch);
@@ -45,8 +45,6 @@ class Metadata {
 			$response = $_response;
 		} else if($output_format === 'json') {
 			$response = json_encode($_response);
-		} else {
-			throw new \Exception('Invalid format selected');
 		}
 
 		// Return
@@ -79,7 +77,7 @@ class Metadata {
 
 				// Generate HTML
 				$out = '<div class="media media__book">';
-				$out .= '<span class="media__title book__title">'.$title.$value.'</span>';
+				$out .= '<span class="media__title book__title">'.$title.'</span>';
 				$out .= '<img src="'.$img_src.'" alt="'.$title.'" title="'.$title.'" class="float--left" />';
 				$out .= '<p><span class="book__authors">'.$authors.'</span> &middot; <a href="'.$link.'" tilte="View more information on Google Books" class="button button--small"><span class="icon-link-ext">ISBN: <span class="media__id">'.$value.'</span></span></a></p>';
 				$out .= '<p><span class="book__publisher">'.$publisher.'</span>, <span class="book__date">'.$date.'</span> &middot; <span class="book__pages">'.$pages.' pages</span></p>';
