@@ -63,9 +63,9 @@ $(function() {
 					});
 
 				// Check if grecaptcha is required
-				if(grecaptcha !== void 0) {
+				if(globalVar.grecaptcha !== void 0) {
 					// Reset captcha
-					grecaptcha.reset();
+					globalVar.grecaptcha.reset();
 
 					// Disable submit button
 					$('#expat-form__submit').prop('disabled', true);
