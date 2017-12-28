@@ -128,6 +128,12 @@ $(function() {
 	// Use select2
 	$('#expat-dataset').css('width', '100%').select2();
 
+	// Allow injection of sample data
+	$('#sample-data').on('click', function(e) {
+		e.preventDefault();
+		$('#expat-row-input').val($(this).attr('data-ids')).trigger('blur');
+	});
+
 	// Global function
 	var globalFunExpat = {
 		expat: {
