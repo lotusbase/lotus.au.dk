@@ -194,18 +194,27 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-suzakit-2014';
 			$this->expat['rowType'] = 'Gene ID';
 			$this->expat['rowText'] = 'Gene(s)';
-		} else if ($dataset === 'rnaseq-kellys-2017-rootshoottotalreads') {
+		} else if ($dataset === 'rnaseq-davidm-2017-rootshoottotalreads') {
 			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_KellyS2017_RootShootTotalReads',
+				'table' => 'expat_RNAseq_DavidM2017_RootShootTotalReads',
 				'id' => $_POST['idtype']
 			);
 			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-kellys-2017';
+			$this->expat['experiment'] = 'rnaseq-davidm-2017';
 			$this->expat['rowType'] = 'Gene ID';
 			$this->expat['rowText'] = 'Gene(s)';
-		} else if ($dataset === 'rnaseq-kellys-2017-rootshootuniquereads') {
+		} else if ($dataset === 'rnaseq-davidm-2017-rootshootuniquereads') {
 			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_KellyS2017_RootShootUniqueReads',
+				'table' => 'expat_RNAseq_DavidM2017_RootShootUniqueReads',
+				'id' => $_POST['idtype']
+			);
+			$this->expat['mapped'] = false;
+			$this->expat['experiment'] = 'rnaseq-davidm-2017';
+			$this->expat['rowType'] = 'Gene ID';
+			$this->expat['rowText'] = 'Gene(s)';
+		} else if ($dataset === 'rnaseq-kellys-2017-microbialspectrum') {
+			$this->_expat['query'] = array(
+				'table' => 'expat_RNAseq_KellyS2017_MicrobialSpectrum',
 				'id' => $_POST['idtype']
 			);
 			$this->expat['mapped'] = false;
@@ -404,17 +413,38 @@ class Query {
 				'vag1_5dMAFF',
 				'vag1_mock'
 			),
-			'rnaseq-kellys-2017-rootshoottotalreads' => array(
+			'rnaseq-davidm-2017-rootshoottotalreads' => array(
 				'Root_H2O',
 				'Root_R7A',
 				'Shoot_H2O',
 				'Shoot_R7A'
 			),
-			'rnaseq-kellys-2017-rootshootuniquereads' => array(
+			'rnaseq-davidm-2017-rootshootuniquereads' => array(
 				'Root_H2O',
 				'Root_R7A',
 				'Shoot_H2O',
 				'Shoot_R7A'
+			),
+			'rnaseq-kellys-2017-microbialspectrum' => array(
+				'RootHair_H2O_1dpi',
+				'RootHair_nodC_1dpi',
+				'RootHair_R7A_1dpi',
+				'RootHair_R7A_3dpi',
+				'RootHair_NF_1dpi',
+				'NodulePrimordia_R7A_7dpi',
+				'Nodule_R7A_21dpi',
+				'Root_H2O_1dpi',
+				'Root_H2O_3dpi',
+				'Root_Ml_R7A_1dpi',
+				'Root_Ml_R7A_3dpi',
+				'Root_Sf_HH103_1dpi',
+				'Root_Sf_HH103_3dpi',
+				'Root_Be_1dpi',
+				'Root_Be_3dpi',
+				'Root_Pst_DC3000_1dpi',
+				'Root_Pst_DC3000_3dpi',
+				'Root_Rs_JS763_1dpi',
+				'Root_Rs_JS763_3dpi'
 			)
 		);
 
