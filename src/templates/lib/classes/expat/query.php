@@ -615,6 +615,7 @@ class Query {
 					$this->expat['experiment'] === 'rnaseq-sasakit-2014' ||
 					$this->expat['experiment'] === 'rnaseq-suzakit-2014' ||
 					$this->expat['experiment'] === 'rnaseq-kellys-2015' ||
+					$this->expat['experiment'] === 'rnaseq-davidm-2017' ||
 					$this->expat['experiment'] === 'rnaseq-kellys-2017'
 					) {
 					
