@@ -1390,7 +1390,7 @@ $(function() {
 								.html(function(d) {
 									var text = '<p class="align-center">' + (d.cluster ? 'Node is in <span style="background-color: '+globalFun.expat.dendrogram.computeFill(d.cluster, data.Mean.clustering.data[type].cluster)+'; display: inline-block; padding: 0 .5rem; border-radius: 4px; ">cluster &numero; '+d.cluster+'</span><br />' : '');
 									if(d.name.indexOf('-') > 0) {
-										text += 'Parent node containing <strong>'+d.name.split('-').length+' child nodes</strong>.';
+										text += 'Parent node containing <strong>'+d.name.split('-').length+' child nodes</strong>.<br />Click on node to show associated labels.';
 									} else {
 										text += '<strong>' + d.name + '</strong>';
 									}
@@ -1430,7 +1430,21 @@ $(function() {
 								})
 								.call(tip)
 								.on('mouseover', tip.show)
-								.on('mouseout', tip.hide);
+								.on('mouseout', tip.hide)
+								.on('click', function(d) {
+									globalFun.modal.open({
+										'title': 'Parent node metadata',
+										'content': [
+											(d.cluster ? '<p>Node is in <span style="background-color: '+globalFun.expat.dendrogram.computeFill(d.cluster, data.Mean.clustering.data[type].cluster)+'; display: inline-block; padding: 0 .5rem; border-radius: 4px; ">cluster &numero; '+d.cluster+'</span></p>' : ''),
+											'<p>The following leaf labels are associated with this parent node:</p>',
+											'<ul>',
+												'<li>',
+												d.name.split('-').join('</li><li>'),
+												'</li>',
+											'</ul>'
+										].join('')
+									});
+								});
 						}
 
 						// Remove nodes
