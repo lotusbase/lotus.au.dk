@@ -3,6 +3,10 @@
 // Get important files
 require_once('../config.php');
 
+// Use country list
+use SameerShelavale\PhpCountriesArray\CountriesArray;
+$countries = CountriesArray::get('alpha3', 'name');
+
 // Get variables
 if(isset($_GET['email']) && isset($_GET['key'])) {
 	$email = escapeHTML($_GET['email']);
@@ -86,12 +90,15 @@ try {
 
 					$mail = new PHPMailer(true);
 
+					// Get country name
+					$country_name = $countries[$result['Country']];
+
 					// Construct mail
 					$mail_generator = new \LotusBase\MailGenerator();
 					$mail_generator->set_title('<em>Lotus</em> Base: New <em>LORE1</em> Order');
 					$mail_generator->set_header_image('cid:mail_header_image');
 					$mail_generator->set_content(array(
-						'<strong>'.$result['FirstName'].' '.$result['LastName'].' from '.$result['Institution'].', '.$result['Country'].'</strong> has placed a new order for the following lines:
+						'<strong>'.$result['FirstName'].' '.$result['LastName'].' from '.$result['Institution'].', '.$country_name.'</strong> has placed a new order for the following lines:
 						<ul style="background-color: #eee; border: 1px solid #aaa; margin: 0; padding: 8px 8px 8px 32px;"><li>'.implode('</li><li>', $pids).'</li></ul>
 						<p>You can process this order by visiting the <a href="https://'.$_SERVER['HTTP_HOST'].'/admin/orders.php?salt='.$salt.'&view=unprocessed">administration page</a>.</p>
 						'));
