@@ -88,13 +88,36 @@ define('JWT_USER_LOGIN_SECRET', $config['secrets']['jwt_user_login']);
 define('JWT_CSRF_SECRET', $config['secrets']['jwt_csrf']);
 
 
+//==================//
+// Maintenance mode //
+//==================//
+// Put site into maintenance mode for 30 minutes when it is 12am of Sunday
+$maintenanceDuration = 45;
+$maintenanceStart = (new DateTime('00:00'))->modify('Sunday');
+$maintenanceEnd = (new DateTime('00:00'))->modify('Sunday')->modify('+'.$maintenanceDuration.' minutes');
+$currentTime = new DateTime();
+if ($currentTime <= $maintenanceEnd && $currentTime >= $maintenanceStart) {
+    $protocol = "HTTP/1.0";
+    if ("HTTP/1.1" == $_SERVER["SERVER_PROTOCOL"]) {
+        $protocol = "HTTP/1.1";
+    }
+    header("$protocol 503 Service Unavailable", true, 503);
+    header('Retry-After: '.($maintenanceDuration * 60));
+    require_once(DOC_ROOT.'/maintenance.php');
+    exit();
+}
+
+
 //==========//
 // Autoload //
 //==========//
 require_once(DOC_ROOT.'/vendor/autoload.php');
 require_once(DOC_ROOT.'/lib/autoload.php');
 
-// Setup CSRF token for all pages
+
+//================================//
+// Setup CSRF token for all pages //
+//================================//
 $csrf_protector = new \LotusBase\CSRFProtector();
 define('CSRF_TOKEN', $csrf_protector->get_token());
 
