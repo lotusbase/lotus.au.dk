@@ -96,6 +96,18 @@ $(function() {
 			{value: 'Tissue', text: 'Tissue', sort: 'string'},
 			{value: 'Reference', text: 'Reference', sort: 'string'}
 		],
+		'rnaseq-davidm-2017': [
+			{value: 'Treatment', text: 'Treatment', sort: 'string'},
+			{value: 'Inocula', text: 'Inocula', sort: 'string'},
+			{value: 'Strain', text: 'Strain', sort: 'string'},
+			{value: 'TimeUnit', text: 'Time unit', sort: 'string'},
+			{value: 'TimeDuration', text: 'Duration', sort: 'int'},
+			{value: 'PlantSpecies', text: 'Plant species', sort: 'string'},
+			{value: 'PlantEcotype', text: 'Plant ecotype', sort: 'string'},
+			{value: 'Tissue', text: 'Tissue', sort: 'string'},
+			{value: 'Age', text: 'Age (days)', sort: 'int'},
+			{value: 'Reference', text: 'Reference', sort: 'string'}
+		],
 		'rnaseq-kellys-2017': [
 			{value: 'Treatment', text: 'Treatment', sort: 'string'},
 			{value: 'Inocula', text: 'Inocula', sort: 'string'},
@@ -115,6 +127,12 @@ $(function() {
 
 	// Use select2
 	$('#expat-dataset').css('width', '100%').select2();
+
+	// Allow injection of sample data
+	$('#sample-data').on('click', function(e) {
+		e.preventDefault();
+		$('#expat-row-input').val($(this).attr('data-ids')).trigger('blur');
+	});
 
 	// Global function
 	var globalFunExpat = {

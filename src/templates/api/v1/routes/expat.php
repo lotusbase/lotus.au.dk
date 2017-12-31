@@ -117,8 +117,22 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 						'Tissue'
 					)
 				),
+			'rnaseq-davidm-2017' => array(
+				'table' => 'expat_RNAseq_DavidM2017_columns',
+				'columns' => array(
+						'Treatment',
+						'Inocula',
+						'Strain',
+						'TimeUnit',
+						'TimeDuration',
+						'PlantSpecies',
+						'PlantEcotype',
+						'Tissue',
+						'Age'
+					)
+				),
 			'rnaseq-kellys-2017' => array(
-				'table' => 'expat_RNAseq_KellyS2017_columns',
+				'table' => 'expat_RNAseq_KellyS2017_MicrobialSpectrum_columns',
 				'columns' => array(
 						'Treatment',
 						'Inocula',

@@ -129,6 +129,8 @@
 
 				// Redirect
 				if(!isset($job_data['job_hash_id']) || empty($job_data['job_hash_id'])) {
+					$errors[] = 'Empty response from the server received, indicating a possible misconfiguration. Please contact us.';
+					cornea_error_catch($errors);
 					header('Location: ./cornea/');
 				} else {
 					header('Location: ./cornea/job/'.$job_data['job_hash_id']);

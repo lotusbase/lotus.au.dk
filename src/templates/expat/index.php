@@ -68,6 +68,8 @@
 						<input class="input-hidden" type="hidden" name="ids" id="expat-row" value="<?php echo (isset($_GET['ids']) && !empty($_GET['ids'])) ? escapeHTML($_GET['ids']) : ''; ?>" readonly />
 					</div>
 					<small><strong>Separate each accession number of GI with a comma, space or tab.</strong></small>
+					<br />
+					<small><strong>Unsure what to do? <a href="#" id="sample-data" data-ids="Lj4g3v0281040 Lj4g3v2139970 Lj2g3v0205600 Lj1g3v0414750 Lj0g3v0249089 Lj4g3v2775550 Lj0g3v0245539 Lj3g3v2693010 Lj2g3v1105370 Lj4g3v1736080 Lj4g3v2573630 Lj1g3v2975920 Lj6g3v1052420">Try a sample data</a> from Mun et al., 2016.</strong></small>
 				</div>
 
 				<label for="expat-dataset" class="col-one">Dataset <a data-modal="wide" class="info" title="What are the available datasets?" href="<?php echo WEB_ROOT; ?>/lib/docs/expat-datasets">?</a></label>

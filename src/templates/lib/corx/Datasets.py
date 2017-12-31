@@ -68,7 +68,7 @@ ljgea_probe = Dataset("ljgea-probeid", "expat_ljgea_probeid", "ProbeID", [
     "Mean_sst1_nodule_3w_inocul21_1", "Mean_Nod21_1", "Mean_WT_root_nodule_3w_inocul21_1"
 ])
 
-simon_kelly_bacteria = Dataset("rnaseq-simonkelly-2015-bacteria", "expat_RNAseq_SimonKelly_bacteria", "TranscriptID", [
+simon_kelly_bacteria = Dataset("rnaseq-kellys-2015-bacteria", "expat_RNAseq_KellyS_bacteria", "TranscriptID", [
     #"TranscriptID",
     "Mean_277_exoU_24", "Mean_277_exoU_72", "Mean_277_exoYF_24", "Mean_277_exoYF_72", "Mean_277_H2O_24",
     "Mean_277_nodC_24", "Mean_277_R7A_24", "Mean_277_R7A_72", "Mean_311_exoU_24", "Mean_311_exoU_72",
@@ -77,7 +77,7 @@ simon_kelly_bacteria = Dataset("rnaseq-simonkelly-2015-bacteria", "expat_RNAseq_
     "Mean_G_nodC_24", "Mean_G_R7A_24", "Mean_G_R7A_72"
 ])
 
-simon_kelly_purified_compounds = Dataset("rnaseq-simonkelly-2015-purifiedcompounds", "expat_RNAseq_SimonKelly_purifiedcompounds", "TranscriptID", [
+simon_kelly_purified_compounds = Dataset("rnaseq-kellys-2015-purifiedcompounds", "expat_RNAseq_KellyS_purifiedcompounds", "TranscriptID", [
     #"TranscriptID",
     "Mean_G_H2O_24", "Mean_277_H2O_24", "Mean_311_H2O_24", "Mean_G_NF_24", "Mean_277_NF_24", "Mean_311_NF_24",
     "Mean_G_R7AEPS_24", "Mean_277_R7AEPS_24", "Mean_311_R7AEPS_24", "Mean_G_UEPS_24", "Mean_277_UEPS_24",
@@ -85,27 +85,33 @@ simon_kelly_purified_compounds = Dataset("rnaseq-simonkelly-2015-purifiedcompoun
     "Mean_277_NF_UEPS_24", "Mean_311_NF_UEPS_24"
 ])
 
-giovanetti_probe = Dataset("rnaseq-marcogiovanetti-2015-am", "expat_RNAseq_MarcoGiovanetti_AMGSE", "ProbeID", [
-    #"ProbeID",
-    "Mean_Control_H2O", "Mean_Treatment_AMGSE_24h", "Mean_Treatment_AMGSE_48h"
+simon_kelly_2017 = Dataset("rnaseq-kellys-2017-microbialspectrum", "expat_RNAseq_KellyS2017_MicrobialSpectrum", "GeneID", [
+    #"GeneID",
+    "Mean_RootHair_H2O_1dpi",
+    "Mean_RootHair_nodC_1dpi",
+    "Mean_RootHair_R7A_1dpi",
+    "Mean_RootHair_R7A_3dpi",
+    "Mean_RootHair_NF_1dpi",
+    "Mean_NodulePrimordia_R7A_7dpi",
+    "Mean_Nodule_R7A_21dpi",
+    "Mean_Root_H2O_1dpi",
+    "Mean_Root_H2O_3dpi",
+    "Mean_Root_Ml_R7A_1dpi",
+    "Mean_Root_Ml_R7A_3dpi",
+    "Mean_Root_Sf_HH103_1dpi",
+    "Mean_Root_Sf_HH103_3dpi",
+    "Mean_Root_Be_1dpi",
+    "Mean_Root_Be_3dpi",
+    "Mean_Root_Pst_DC3000_1dpi",
+    "Mean_Root_Pst_DC3000_3dpi",
+    "Mean_Root_Rs_JS763_1dpi",
+    "Mean_Root_Rs_JS763_3dpi"
 ])
-
-eiichi_murakami_2016 = Dataset("rnaseq-eiichimurakami-2016", "expat_RNAseq_EiichiMurakami", "TranscriptID", [
-    #"TranscriptID",
-    "Mean_G_H2O", "Mean_G_NF", "Mean_38534_H2O", "Mean_38534_NF", "Mean_4820_H2O", "Mean_4820_NF", "Mean_nfr1_H2O", "Mean_nfr1_NF"
-])
-
-handay_2015 = Dataset("rnaseq-handay-2015", "expat_RNAseq_HandaY2015", "GeneID", [
-	#"GeneID",
-	"Mean_MAFF3", "Mean_MAFF12", "Mean_AM15", "Mean_AM27", "Mean_rhnon", "Mean_AMnon"
-	])
 
 all_by_name = {
     u"ljgea-geneid": ljgea_gene,
     u"ljgea-probeid": ljgea_probe,
-    u"rnaseq-simonkelly-2015-bacteria": simon_kelly_bacteria,
-    u"rnaseq-simonkelly-2015-purifiedcompounds": simon_kelly_purified_compounds,
-    u"rnaseq-marcogiovanetti-2015-am": giovanetti_probe,
-    u"rnaseq-eiichimurakami-2016": eiichi_murakami_2016,
-    u"rnaseq-handay-2015": handay_2015
+    u"rnaseq-kellys-2015-bacteria": simon_kelly_bacteria,
+    u"rnaseq-kellys-2015-purifiedcompounds": simon_kelly_purified_compounds,
+    u"rnaseq-kellys-2017-microbialspectrum": simon_kelly_2017
 }
