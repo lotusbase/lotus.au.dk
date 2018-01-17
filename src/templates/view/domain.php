@@ -247,7 +247,7 @@
 					while($go = $q3->fetch(PDO::FETCH_ASSOC)) {
 				?>
 					<tr>
-						<td><?
+						<td><?php
 							// Generate GO dropdown
 							$go_links_handler = new \LotusBase\Component\GODropdown();
 							$go_links_handler->internal_link(true);
