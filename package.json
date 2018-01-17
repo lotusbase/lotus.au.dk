@@ -20,10 +20,11 @@
     "grunt-jekyll": "^0.4.4",
     "grunt-newer": "^1.1.1",
     "grunt-postcss": "^0.7.1",
+    "grunt-remove-html-comments": "^1.0.0",
     "grunt-sass": "^1.1.0",
+    "jshint-stylish": "^2.1.0",
     "load-grunt-config": "^0.17.2",
     "postcss": "^5.0.12",
-    "jshint-stylish": "^2.1.0",
     "time-grunt": "^1.2.2"
   },
   "dependencies": {

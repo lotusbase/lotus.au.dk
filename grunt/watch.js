@@ -42,7 +42,6 @@ module.exports = {
 
     templates: {
         files: [
-            'src/templates/**/*.php',
             'src/templates/**/*.ini',
             'src/templates/**/*.pl',
             'src/templates/**/*.py',
@@ -53,6 +52,17 @@ module.exports = {
         ],
         tasks: [
             'newer:copy'
+        ]
+    },
+
+    phpTemplates: {
+        files: [
+            'src/templates/**/*.php'
+        ],
+        tasks: [
+            'newer:copy',
+            'newer:removeHtmlComments',
+            'newer:cacheBust:prod'
         ]
     },
 

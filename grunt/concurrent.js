@@ -31,7 +31,8 @@ module.exports = {
         'uglify'
     ],
     prodThird: [
-        'postcss:prod'
+        'postcss:prod',
+        'removeHtmlComments'
     ],
 
     // Image tasks
