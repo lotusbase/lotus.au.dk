@@ -18,7 +18,6 @@
 			<script src="js/html5shiv.js"></script>
 	<![endif]-->
 
-	<!-- Stylesheets -->
 	<link rel="stylesheet" href="/dist/css/ggs.min.css" type="text/css" media="screen" />
 	<link rel="stylesheet" media="screen,print" type="text/css" href="/dist/css/styles.min.css"/>
 	<link rel="stylesheet" media="screen,print" type="text/css" href="/dist/css/blast.min.css" />
@@ -243,8 +242,8 @@
 		<section class="wrapper result" id="result" style="display: none;">
 		</section>
 
-	</div><!-- #container -->
-</div><!-- #wrap -->
+	</div>
+</div>
 
 <footer id="footer">
 	<span id="top"><a href="#wrap" title="Return to top"><span class="pictogram icon-up-open-big"></span>Top</a></span>
@@ -279,9 +278,8 @@
 		<p>All rights reserved. 2012&ndash;<%= Time.now.year %> &copy; <a href="http://carb.au.dk/" title="Centre for Carbohydrate Recognition and Signalling">Centre for Carbohydrate Recognition and Signalling</a>, Aarhus University, Denmark.<br />Brought to you by the <a href="/meta/team"><em>Lotus</em> Base Team</a>, powered by <a href="http://www.sequenceserver.com/" title="SequenceServer v<%= SequenceServer::VERSION %>">SequenceServer v<%= SequenceServer::VERSION %></a> &amp; coffee.</p>
 	</section>
 
-	<!-- JS -->
 	<% if settings.production? %>
-		<!-- <script src="js/sequenceserver.min.js"></script> -->
+		<%# <script src="js/sequenceserver.min.js"></script> %>
 		<script src="js/underscore.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha384-PtTRqvDhycIBU6x1wwIqnbDo8adeWIWP3AHmnrvccafo35E7oIvW7HPXn2YimvWu" crossorigin="anonymous"></script>
@@ -315,14 +313,12 @@
 		<script src="js/sequence.js"></script>
 	<% end %>
 
-	<!-- Load site functions -->
 	<script>
 		var access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NjM4NTY5MzUsImRhdGEiOnsidXNlciI6Ijg4NDM1MTNiZGEyMzgxZWQiLCJhY2Nlc3NfdG9rZW4iOiIxYTk0YTY3YTQ4NTJiMjQ4In19.GLV9d6pv8Ix2a8dunHT1AMFGnVVx9LLMHzSm7V2ijQo';
 	</script>
 	<script src="/dist/js/functions.min.js"></script>
 	<script src="/dist/js/plugins/modernizr-custom.min.js"></script>
 
-	<!-- Google Analyrics -->
 	<script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

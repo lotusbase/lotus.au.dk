@@ -16,7 +16,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js" integrity="sha384-2X//P+hP8e8Kia5lcEJAyW2vaaYxCuSphlrx9A6imNkRUADNZGUMbsf3eQs9E+XJ" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js" integrity="sha384-Rf9I5A2cLRyZ6x2mM86zxFJjG9avXrFAYAPa/9iXyNQxCy8CA3lWmA3VOfyCHA9z" crossorigin="anonymous"></script>
 	<script src="./includes/functions.min.js"></script>
-	<!--<script src="/js/ggs.js"></script>-->
 </footer>
 
 <div id="modal">
