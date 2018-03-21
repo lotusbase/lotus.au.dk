@@ -26,7 +26,7 @@
 			));
 		echo $document_header->get_document_header();
 	?>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" integrity="sha384-wCtV4+Y0Qc1RNg341xqADYvciqiG4lgd7Jf6Udp0EQ0PoEv83t+MLRtJyaO5vAEh" crossorigin="anonymous">
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/lore1.min.css" type="text/css" media="screen">
 </head>
 <body class="lore1 stats">
@@ -95,8 +95,8 @@
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" integrity="sha384-gOxMGMgqQH8iYyQE8rmgpaokSRE608gSIXXdC2a/yT+OywUqbNmTCQa3qNO4wvyc" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js" integrity="sha384-EXdY705BisDV53yySolbxB0gXs2bwh5nVosWEkMH05Gvxsvv2HmJA8l1A6WcLTWU" crossorigin="anonymous"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/lore1.min.js"></script>
 </body>
 </html>

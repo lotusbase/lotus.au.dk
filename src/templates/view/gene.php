@@ -234,10 +234,10 @@
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" integrity="sha384-gOxMGMgqQH8iYyQE8rmgpaokSRE608gSIXXdC2a/yT+OywUqbNmTCQa3qNO4wvyc" crossorigin="anonymous"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/colorbrewer.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/d3-tip.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.min.js" integrity="sha384-i1hs1xV885ynDTpLx248kPSNT7iUxg+8qxUH4P5Sm/5G8WDsvIHTh05JlnYudqPl" crossorigin="anonymous"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/view/gene.min.js"></script>
 </body>
 </html>

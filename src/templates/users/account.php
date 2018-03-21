@@ -43,7 +43,7 @@
 <head>
 	<title>User Account&mdash;Lotus Base</title>
 	<?php include(DOC_ROOT.'/head.php'); ?>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" integrity="sha384-wCtV4+Y0Qc1RNg341xqADYvciqiG4lgd7Jf6Udp0EQ0PoEv83t+MLRtJyaO5vAEh" crossorigin="anonymous">
 	<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>/dist/css/users.min.css" type="text/css" media="screen" />
 </head>
 <body class="users account theme--white init-scroll--disabled">
@@ -480,8 +480,8 @@
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js" integrity="sha384-iViGfLSGR6GiB7RsfWQjsxI2sFHdsBriAK+Ywvt4q8VV14jekjOoElXweWVrLg/m" crossorigin="anonymous"></script>
+	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js" integrity="sha384-89aj/hOsfOyfD0Ll+7f2dobA15hDyiNb8m1dJ+rJuqgrGR+PVqNU8pybx4pbF3Cc" crossorigin="anonymous"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/users/account.min.js"></script>
 	<script>
 		// Select2

@@ -208,9 +208,9 @@
 	<?php include('footer.php'); ?>
 
 	<!-- For d3.js -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" integrity="sha384-gOxMGMgqQH8iYyQE8rmgpaokSRE608gSIXXdC2a/yT+OywUqbNmTCQa3qNO4wvyc" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js" integrity="sha384-BUz7BfOv7l6jnNmNtX+Wwvp/+c/jxxOJORIxDbG03T0ZuFtcdvM3b95R3t7fygMU" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.min.js" integrity="sha384-EXdY705BisDV53yySolbxB0gXs2bwh5nVosWEkMH05Gvxsvv2HmJA8l1A6WcLTWU" crossorigin="anonymous"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/colorbrewer.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/odometer.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/plugins/worldmap.min.js"></script>

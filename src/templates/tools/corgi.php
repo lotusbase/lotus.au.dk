@@ -12,7 +12,7 @@
 			));
 		echo $document_header->get_document_header();
 	?>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" integrity="sha384-wCtV4+Y0Qc1RNg341xqADYvciqiG4lgd7Jf6Udp0EQ0PoEv83t+MLRtJyaO5vAEh" crossorigin="anonymous">
 	<link rel="stylesheet" href="/dist/css/tools.min.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="/dist/css/expat.min.css" type="text/css" media="screen" />
 </head>
@@ -137,9 +137,9 @@
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
 	<?php if(!is_logged_in()) { ?><script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&amp;render=explicit"></script><?php } ?>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/0.6.0/lunr.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.js" integrity="sha384-tyQDzLk1H8B12b2e+oqEqGNn6hRZsAjRPkPjGpu3cDWg/prmWVpCDNgfLDrPZEtw" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/0.6.0/lunr.min.js" integrity="sha384-uPz/M+hHXIBYS/cPEE4+ycdXOIpVuakCky8PLcjO1VTAn3RXaQAguOLfDZC3QQIX" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js" integrity="sha384-iViGfLSGR6GiB7RsfWQjsxI2sFHdsBriAK+Ywvt4q8VV14jekjOoElXweWVrLg/m" crossorigin="anonymous"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/expat-form.min.js"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/corgi.min.js"></script>
 	<script>
