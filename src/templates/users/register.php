@@ -1,4 +1,11 @@
 <?php
+
+	namespace LotusBase;
+	use \PDO;
+	use \PHPMailer;
+
+	class Exception	extends \Exception {};
+
 	// Load important files
 	require_once('../config.php');
 
@@ -73,6 +80,13 @@
 	if(isset($_POST) && !empty($_POST)) {
 
 		$inputs = $_POST;
+
+		// Verify CSRF token
+		try {
+			$csrf_protector->verify_token();
+		} catch(CSRFTokenVerificationException $e) {
+			$error[] = $e->getMessage();
+		}
 
 		// Check user input
 		if(!isset($_POST['firstname']) || !isset($_POST['lastname']) || empty($_POST['firstname']) || empty($_POST['lastname'])) {
@@ -226,7 +240,7 @@
 				header("location: ./");
 				exit();
 
-			} catch(PDOException $e) {
+			} catch(\PDOException $e) {
 				// PDO Exception
 				$_SESSION['reg_error'] = array(
 					'message' => 'We have encountered an issue with our backend. Should this problem persist, <a href="'.WEB_ROOT.'/issues">file a bug report with us</a>. The error we have encounetered: '.$e->getMessage(),
@@ -236,7 +250,7 @@
 				header("location: ".$_SERVER['PHP_SELF']);
 				exit();
 
-			} catch(phpmailerException $e) {
+			} catch(\phpmailerException $e) {
 				// Mail has failed to send
 				$_SESSION['reg_error'] = array(
 					'message' => 'We have encountered an error sending you a verification email: '.$e->getMessage().' . Please <a href="'.WEB_ROOT.'/meta/contact?key='.$verificationkey.'">contact us</a> with this code: <code>'.$verificationkey.'</code>.',
@@ -346,6 +360,8 @@
 
 						<label class="col-one">Human?</label>
 						<div class="col-two" id="google-recaptcha"></div>
+
+						<input type="hidden" name="CSRF_token" value="'.CSRF_TOKEN.'" />
 
 						<button type="submit" tabindex="8" disabled>Create new account</button>
 					</div>
