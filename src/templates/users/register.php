@@ -354,8 +354,8 @@
 
 						<div class="col-one"></div>
 						<div class="col-two">
-							<label for="mailing-list"><input type="checkbox" id="mailing-list" name="mailinglist" tabindex="7" checked /><span>Subscribe to the <em>Lotus</em> Base newsletter</span></label>
-							<label for="consent"><input type="checkbox" id="consent" name="consent" tabindex="8" /><span>I accept the <a href="'.WEB_ROOT.'/meta/legal">terms of service and privacy policy</a>.</span></label>
+							<label for="mailing-list"><input class="prettify" type="checkbox" id="mailing-list" name="mailinglist" tabindex="7" checked /><span>Subscribe to the <em>Lotus</em> Base newsletter</span></label>
+							<label for="consent"><input class="prettify" type="checkbox" id="consent" name="consent" tabindex="8" /><span>I accept the <a href="'.WEB_ROOT.'/meta/legal">terms of service and privacy policy</a>.</span></label>
 						</div>
 
 						<label class="col-one">Human?</label>
