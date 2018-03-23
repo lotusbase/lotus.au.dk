@@ -881,7 +881,7 @@ class Query {
 					}
 
 				} else {
-					throw new \Exception('No entires found in the expression atlas. Your ID might not be found in the dataset, or that you have mistakenly used an incorrect ID (e.g. a probe ID against a gene ID dataset).');
+					throw new \Exception('No entries found in the Expression Atlas. Your ID might not be found in the dataset, or that you have mistakenly used an incorrect ID (e.g. a probe ID against a gene ID dataset).');
 				}
 
 			} catch(PDOException $e) {
