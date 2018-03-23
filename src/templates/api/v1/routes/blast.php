@@ -135,8 +135,9 @@ $api->get('/blast/{db}/{id}', function($request, $response, $args) {
 						'message' => 'The script has failed to execute. Please contact system administrator.'
 						)));
 			} else {
+				// No sequence is found
 				if($output[0] === 'ERR') {
-					throw new Exception($output[1]);
+					throw new Exception($output[1], 404);
 				} else {
 					// Process data
 					// Construct array of headers, ids, and array of sequences
@@ -180,7 +181,7 @@ $api->get('/blast/{db}/{id}', function($request, $response, $args) {
 			->withHeader('Content-Type', 'application/json')
 			->write(json_encode(array(
 				'status' => $e->getCode(),
-				'data' => $e->getMessage()
+				'message' => $e->getMessage()
 				)));
 	}
 
