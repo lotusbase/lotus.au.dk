@@ -436,7 +436,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/stupidtable/0.0.1/stupidtable.js" integrity="sha384-tyQDzLk1H8B12b2e+oqEqGNn6hRZsAjRPkPjGpu3cDWg/prmWVpCDNgfLDrPZEtw" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/0.6.0/lunr.min.js" integrity="sha384-uPz/M+hHXIBYS/cPEE4+ycdXOIpVuakCky8PLcjO1VTAn3RXaQAguOLfDZC3QQIX" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js" integrity="sha384-iViGfLSGR6GiB7RsfWQjsxI2sFHdsBriAK+Ywvt4q8VV14jekjOoElXweWVrLg/m" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js" integrity="sha384-Rm+b3OZOOhRai9jb8sqdkld3+d4KVAYEmZpyc9DlOcSTZZEoL8PsdgUAegQWfSrX" crossorigin="anonymous"></script>
 	
 	<!-- File parsing -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/0.2.8/pako.min.js" integrity="sha384-siketlgK/Bh3eTOzZJEY4JgBWespVMDnYJWIZzk+M/wX1KVckI6PvOg2+cQNWyKT" crossorigin="anonymous"></script>

@@ -16,12 +16,12 @@
 	<link href="<?php echo WEB_ROOT; ?>/dist/css/meta.min.css" rel="stylesheet" />
 
 	<!-- Load Mapbox.js -->
-	<script src='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js'></script>
-	<link href='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css' rel='stylesheet' />
+	<script src="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js" integrity="sha384-GgNQAMOzWcL0fePJqogHh8dCjsGKZpkBNgm3einGr0aUb9kcXvr9JeU/PDf5knja" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css" integrity="sha384-ZDBUvY/seENyR1fE6u4p1oMFfsKVjIlkiB6TrCdXjeZVPlYanREcmZopTV8WFZ0q" crossorigin="anonymous">
 
 	<!-- Load Mapbox-gl-js -->
-	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.3/mapbox-gl.js'></script>
-	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.3/mapbox-gl.css' rel='stylesheet' />
+	<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.3/mapbox-gl.js" integrity="sha384-ysYaQWCeKitgucEqvtlTnoBgqnZ8wftopjrgZPB2K0dya7denvtr7Hsg7O0HCX9L" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.3/mapbox-gl.css" integrity="sha384-CS7AiMtZb5c/8weFoWn7/r2tRXJDwcTEdZudDXjRVNbwSJmKo8MGqDDQxYK7FjmX" crossorigin="anonymous">
 
 </head>
 <body class="meta team wide">
@@ -85,8 +85,8 @@
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js" integrity="sha384-uIyWmDKaY12istoLfjqxBAdgS+8VjuAobK7bkGglTK7QOPaeI9iHjvjelPqSmFPM" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.min.js" integrity="sha384-iyvLRA+ulj900F1LFHVzVHMTaIwZ0CTlyrk11v1HsxGtzXScaXytDzs3lVgOeXVJ" crossorigin="anonymous"></script>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/team.min.js"></script>
 </body>
 </html>
