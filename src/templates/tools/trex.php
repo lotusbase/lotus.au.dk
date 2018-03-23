@@ -100,6 +100,9 @@
 				LEFT JOIN domain_predictions AS dompred ON (
 					anno.Gene = dompred.Transcript
 				)
+				LEFT JOIN interpro_go_mapping AS ip_go ON (
+					dompred.InterProID = ip_go.Interpro_ID
+				)
 				WHERE anno.Version IN (".str_repeat("?,", count($version_str)-1)."?".")
 			";
 
