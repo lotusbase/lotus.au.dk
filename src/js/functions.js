@@ -34,7 +34,7 @@ var globalFun = {
 		$b.append('<div id="modal" class="modal--closed"><article id="modal__wrapper"><header id="modal__title"></header><section id="modal__content"></section><footer id="modal__action"></footer></article><a id="bg-close" href="#"></a></div>');
 
 		// Function: Smooth scrolling
-		$d.on('click', 'a[href*=#]:not([href=#]):not([data-smooth-scroll="false"]):not([data-custom-smooth-scroll])', function() {
+		$d.on('click', 'a[href*="#"]:not([href="#"]):not([data-smooth-scroll="false"]):not([data-custom-smooth-scroll])', function() {
 			if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') || location.hostname == this.hostname) {
 				globalFun.smoothScroll(this.hash);
 			}
