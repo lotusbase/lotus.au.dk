@@ -288,7 +288,7 @@
 		$registration_form .= '</div>';
 
 		foreach($orgs as $title => $value) {
-			$orgs_opts[] = '<option value="'.$value.'" '.(isset($inputs['organization']) && !empty($inputs['organization'] && $inputs['organization'] === $value) ? 'selected' : '').'>'.$title.'</option>';
+			$orgs_opts[] = '<option value="'.$value.'" '.(!empty($inputs['organization'] && $inputs['organization'] === $value) ? 'selected' : '').'>'.$title.'</option>';
 		}
 
 		$registration_form .= '<div id="registration-form--tabs" class="form--tabs">
@@ -311,20 +311,20 @@
 						<label class="col-one" for="firstname">Name</label>
 						<div class="col-two">
 							<div class="cols flex-wrap__nowrap">
-								<input type="text" name="firstname" id="firstname" placeholder="First name" style="margin-right: 1rem; " tabindex="1" value="'.(isset($inputs['firstname']) && !empty($inputs['firstname']) ? $inputs['firstname'] : '').'" />
-								<input type="text" name="lastname" id="lastname" placeholder="Last name" tabindex="2" value="'.(isset($inputs['lastname']) && !empty($inputs['lastname']) ? $inputs['lastname'] : '').'" />
+								<input type="text" name="firstname" id="firstname" placeholder="First name" style="margin-right: 1rem; " tabindex="1" value="'.(!empty($inputs['firstname']) ? escapeHTML($inputs['firstname']) : '').'" />
+								<input type="text" name="lastname" id="lastname" placeholder="Last name" tabindex="2" value="'.(!empty($inputs['lastname']) ? escapeHTML($inputs['lastname']) : '').'" />
 							</div>
 						</div>
 
 						<label class="col-one" for="username">Username</label>
 						<div class="col-two">
-							<input type="text" name="username" id="username" placeholder="Username (min. 2 characters)" tabindex="3" value="'.(isset($inputs['username']) && !empty($inputs['username']) ? $inputs['username'] : '').'" data-check />
+							<input type="text" name="username" id="username" placeholder="Username (min. 2 characters)" tabindex="3" value="'.(!empty($inputs['username']) ? escapeHTML($inputs['username']) : '').'" data-check />
 							<span class="input__ajax-indicator icon-ok"></span>
 						</div>
 
 						<label class="col-one" for="email">Email</label>
 						<div class="col-two">
-							<input type="text" name="email" id="email" placeholder="Email address" tabindex="4" value="'.(isset($inputs['email']) && !empty($inputs['email']) ? $inputs['email'] : '').'" data-check />
+							<input type="text" name="email" id="email" placeholder="Email address" tabindex="4" value="'.(!empty($inputs['email']) ? escapeHTML($inputs['email']) : '').'" data-check />
 							<span class="input__ajax-indicator icon-ok"></span>
 						</div>
 
