@@ -110,6 +110,10 @@ $api->post('/corgi/{id}', function ($request, $response, $args) {
 		$result = exec($exec_str);
 		$result_json = json_decode($result, true);
 
+		if (!$result || !$result_json) {
+			throw new Exception('We have encountered an issue with retrieving the correlation matrix.', 500);
+		}
+
 		// Parse result
 		if(array_key_exists('success', $result_json)) {
 
