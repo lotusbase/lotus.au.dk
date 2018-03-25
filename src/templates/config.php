@@ -88,6 +88,13 @@ define('JWT_USER_LOGIN_SECRET', $config['secrets']['jwt_user_login']);
 define('JWT_CSRF_SECRET', $config['secrets']['jwt_csrf']);
 
 
+//====================//
+// Miscellaneous info //
+//====================//
+define('INTERPRO_TO_GO_LAST_UPDATED', $config['misc']['interpro_to_go_last_updated']);
+define('GO_METADATA_LAST_UPDATED', $config['misc']['go_metadata_last_updated']);
+
+
 //==================//
 // Maintenance mode //
 //==================//
