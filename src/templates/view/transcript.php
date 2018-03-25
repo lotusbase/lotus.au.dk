@@ -467,7 +467,11 @@
 
 		<div id="view__function" class="view__facet">
 			<h3>Gene function (<abbr title="Gene Ontology">GO</abbr> predictions)</h3>
-			<p><abbr title="Gene Ontology">GO</abbr> predictions are based solely on the InterPro to GO mapping published by EMBL-EBI, which is in turn based on the <a href="#view__domain-prediction">predicted domains to InterPro domain mapping</a>. The <abbr title="Gene Ontology">GO</abbr> metadata was last updated on October 10, 2016.</p>
+			<p>
+				<abbr title="Gene Ontology">GO</abbr> predictions are based solely on the InterPro-to-<abbr title="Gene Ontology">GO</abbr> mappings published by EMBL-EBI, which are in turn based on the mapping of predicted domains to the InterPro dataset.
+				The InterPro-to-<abbr title="Gene Ontology">GO</abbr> mapping was last updated on <?php echo get_date_from_timestamp(INTERPRO_TO_GO_LAST_UPDATED, true); ?>, while
+				the <abbr title="Gene Ontology">GO</abbr> metadata was last updated on <?php echo get_date_from_timestamp(GO_METADATA_LAST_UPDATED, true); ?>.
+			</p>
 			<?php
 				try {
 					if(!empty($q3) && $q3->rowCount()) { ?>
