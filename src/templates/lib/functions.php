@@ -238,4 +238,25 @@ function is_valid_request_uri($url) {
 	return false;
 }
 
+function get_date_from_timestamp($timestamp = null, $html = false) {
+	$timestamp = $timestamp ?: time();
+	return get_formatted_timestamp($timestamp, 'F j, Y', $html);
+}
+
+function get_formatted_timestamp($timestamp = null, $format = DateTime::RFC850, $html = false) {
+	$timestamp = $timestamp ?: time();
+	$date = DateTime::createFromFormat('U', $timestamp);
+	$date->setTimezone(new DateTimeZone('Europe/Copenhagen'));
+
+	$formattedDate = $date->format($format);
+	$rfc850FormattedDate = $date->format(DateTime::RFC850);
+
+	$out = $formattedDate;
+	if ($html) {
+		$out = sprintf('<time datetime="%s">%s</time>', $rfc850FormattedDate, $formattedDate);
+	}
+
+	return $out;
+}
+
 ?>
