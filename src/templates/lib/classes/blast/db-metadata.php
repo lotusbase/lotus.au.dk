@@ -14,10 +14,15 @@ class DBMetadata {
 	// Database metadata
 	private $blast_db_metadata = array();
 	private $blast_db_metadata_extra = array(
-		'20170916_lj_m40.fa' => array(
-			'category' => '<em>Lotus japoncius</em> genome',
+		'20180407_Lj_Gifu_v1_genome.fa' => array(
+			'category' => '<em>Lotus japonicus</em> genome',
 			'type' => 'genome',
-			'description' => '<p>Version 4.0 of the <em>Lotus japonicus</em> Gifu genome, with assembled contigs merged with Canu and polished using Quiver.</p><p class="user-message warning">Contigs have not been scaffolded yet, so no chromosome numbers have been assigned thus far.</p>'
+			'description' => '<p>Version 1.0 of the <em>Lotus japonicus</em> Gifu genome.'
+			),
+		'20170916_lj_m40.fa' => array(
+			'category' => '<em>Lotus japonicus</em> genome',
+			'type' => 'genome',
+			'description' => '<p>Version 1.0 of the <em>Lotus japonicus</em> Gifu genome, with assembled contigs merged with Canu and polished using Quiver.</p><p class="user-message warning">Contigs have not been scaffolded yet, so no chromosome numbers have been assigned thus far.</p>'
 			),
 		'lj_r30.fa' => array(
 			'gi_dropdown' => true,
