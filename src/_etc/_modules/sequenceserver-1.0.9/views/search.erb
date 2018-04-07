@@ -216,16 +216,67 @@
 								<li><a href="#database-<%= type %>" title="<%= type.capitalize %> databases" data-smooth-scroll="false"><%= type.capitalize %></a></li>
 							<% end %>
 							</ul>
+							<%
+								def print_database_item(database)
+									%{<li>
+										<div class="checkbox">
+											<label>
+												<input
+													type="checkbox"
+													name="databases[]"
+													value="#{database.id}"
+													data-type="#{database.type}"
+													class="prettify" />
+												<span>
+													#{database.title or database.name}
+												</span>
+											</label>
+										</div>
+									</li>}
+								end
+							%>
 							<% databases.keys.sort.each do |type| %>
 								<div id="database-<%= type %>">
 									<p class="user-message reminder">You have selected databases from a different group. To select databases from this group, please uncheck databases in the other tab. <button type="button">Uncheck all other checkboxes</button></p>
+
+									<%
+										lj_gifu_databases = databases[type].select{ |e| e.title =~ /^<em>Lotus japonicus<\/em> Gifu/i }
+										if lj_gifu_databases.any?
+									%>
+									<h4 class="database__header"><em>Lotus japonicus</em> Gifu</h4>
 									<ul class="databases <%= type %>">
-										<% databases[type].sort_by(&:title).each do |database| %>
-											<li>
-												<div class="checkbox"><label><input type="checkbox" name="databases[]" value="<%=database.id%>" data-type="<%=database.type%>" class="prettify" /><span><%= database.title or database.name %></span></label></div>
-											</li>
+										<% lj_gifu_databases.sort_by(&:title).each do |database| %>
+											<%= print_database_item(database) %>
 										<% end %>
 									</ul>
+									<% end %>
+
+									<%
+										lj_mg20_databases = databases[type].select{ |e| e.title =~ /^<em>Lotus japonicus<\/em> MG20/i }
+										if lj_mg20_databases.any?
+									%>
+									<h4 class="database__header"><em>Lotus japonicus</em> MG20</h4>
+									<ul class="databases <%= type %>">
+										<% lj_mg20_databases.sort_by(&:title).each do |database| %>
+											<%= print_database_item(database) %>
+										<% end %>
+									</ul>
+									<% end %>
+									
+									<%
+										grouped_databases = lj_gifu_databases + lj_mg20_databases
+										misc_databases = databases[type] - grouped_databases
+										if misc_databases.any?
+											if grouped_databases.any?
+									%>
+									<h4 class="database__header">Miscellaneous</h4>
+									<% end %>
+									<ul class="databases <%= type %>">
+										<% misc_databases.sort_by(&:title).each do |database| %>
+											<%= print_database_item(database) %>
+										<% end %>
+									</ul>
+									<% end %>
 								</div>
 							<% end %>
 						</div>
