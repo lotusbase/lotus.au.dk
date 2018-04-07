@@ -171,6 +171,12 @@ target="#{target}">)
       if request.url == 'https://lotus.au.dk/blast-carb/'
         protected!
       end
+
+      # Forced authorized users to use blast-carb
+      if request.url == 'https://lotus.au.dk/blast/' and authorised?
+        redirect '/blast-carb/' 
+      end
+
       erb :search, :locals => { :databases => Database.group_by(&:type) }
     end
 
@@ -179,6 +185,12 @@ target="#{target}">)
       if request.url == 'https://lotus.au.dk/blast-carb/'
         protected!
       end
+
+      # Forced authorized users to use blast-carb
+      if request.url == 'https://lotus.au.dk/blast/' and authorised?
+        redirect '/blast-carb/' 
+      end
+      
       erb :result, :locals => { :report => BLAST.run(params) }
     end
 
