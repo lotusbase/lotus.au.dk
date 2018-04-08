@@ -1,0 +1,60 @@
+{
+   "tracks" : [
+      {
+         "showTranslation" : false,
+         "key" : "<em>L. japonicus</em> MG20 v2.5 DNA sequence",
+         "chunkSize" : 20000,
+         "storeClass" : "JBrowse/Store/Sequence/StaticChunked",
+         "urlTemplate" : "seq/{refseq_dirpath}/{refseq}-",
+         "category" : "<em>Lotus japonicus</em> reference sequence",
+         "type" : "SequenceTrack",
+         "label" : "DNA"
+      },
+      {
+         "style" : {
+            "className" : "generic_parent",
+            "subfeatureClasses" : {
+               "exon" : "feature_exon",
+               "CDS" : "feature_cds"
+            },
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "<em>Lotus japonicus</em> MG20 v2.5 gene models",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "JBrowse/View/Track/HTMLFeatures",
+         "urlTemplate" : "tracks/Lj2.5_gene_models/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "JBrowse/View/Track/HTMLFeatures",
+         "label" : "Lj2.5_gene_models"
+      },
+      {
+         "style" : {
+            "className" : "feature_lore1",
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "<em>LORE1</em> insertions",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "JBrowse/View/Track/HTMLFeatures",
+         "urlTemplate" : "tracks/20160818_v2.5_LORE1/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "JBrowse/View/Track/HTMLFeatures",
+         "label" : "20160818_v2.5_LORE1"
+      }
+   ],
+   "names" : {
+      "url" : "names/",
+      "type" : "Hash"
+   },
+   "dataset_id" : "lj_mg20_v25",
+   "formatVersion" : 1,
+   "defaultLocation" : "chr1:1..66776104",
+   "defaultTracks" : "DNA,Lj2.5_gene_models,20160818_v2.5_LORE1",
+   "alwaysOnTracks" : "DNA,Lj2.5_gene_models,20160818_v2.5_LORE1",
+   "trackSelector" : {
+      "type" : "Faceted"
+   },
+   "aboutThisBrowser" : {
+      "title" : "Lotus japonicus Genome Browser",
+      "description" : "Genome browser for the model legume <em>Lotus japonicus</em>, v2.5"
+   }
+}

@@ -2,7 +2,7 @@
    "tracks" : [
       {
          "showTranslation" : false,
-         "key" : "<em>L. japonicus</em> v3.0 DNA sequence",
+         "key" : "<em>L. japonicus</em> MG20 v3.0 DNA sequence",
          "storeClass" : "JBrowse/Store/Sequence/StaticChunked",
          "chunkSize" : 20000,
          "urlTemplate" : "seq/{refseq_dirpath}/{refseq}-",
@@ -230,7 +230,7 @@
             "className" : "feature_n-repeat",
             "arrowheadClass" : "transcript-arrowhead"
          },
-         "key" : "<em>L. japonicus</em> genome gaps",
+         "key" : "<em>L. japonicus</em> MG20 genome gaps",
          "storeClass" : "JBrowse/Store/SeqFeature/NCList",
          "trackType" : "JBrowse/View/Track/HTMLFeatures",
          "urlTemplate" : "tracks/20151108_ljv3genome_n_gaps/{refseq}/trackData.json",
@@ -243,7 +243,7 @@
       "url" : "names/",
       "type" : "Hash"
    },
-   "dataset_id" : "lj_v30",
+   "dataset_id" : "lj_mg20_v30",
    "alwaysOnTracks" : "DNA,20140314_Lj30,20161129_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
    "defaultTracks" : "DNA,20140314_Lj30,20161129_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
    "defaultLocation" : "chr1:1..62285374",
