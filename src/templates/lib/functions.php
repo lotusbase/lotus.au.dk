@@ -95,32 +95,6 @@ function get_ip() {
 	}
 	return $the_ip;
 }
-function is_intranet_client() {
-	// Check of IP is from localhost
-	if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'))) {
-		return array('HostName' => 'localhost', 'HostDescription' => null);
-	}
-
-	$clientIP = get_ip();
-	if($clientIP) {
-		try {
-			$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
-			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-			$q = $db->prepare('SELECT HostName, HostDescription FROM host_access WHERE IPstart <= INET_ATON(?) AND IPend >= INET_ATON(?) LIMIT 1');
-			$q->execute(array($clientIP, $clientIP));
-
-			$row = $q->fetch(PDO::FETCH_ASSOC);
-			return $row;
-
-		} catch(PDOException $e) {
-			return false;
-		}
-	} else {
-		return false;
-	}
-}
 
 // Check if user has access
 function is_allowed_access($resource = null) {

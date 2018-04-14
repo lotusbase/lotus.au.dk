@@ -1,19 +1,4 @@
 <?php
-// IP address
-$api->get('/ip', function ($request, $response) {
-	return $response
-		->withStatus(200)
-		->withHeader('Content-Type', 'application/json')
-		->write(json_encode(array(
-			'status' => 200,
-			'data' => array(
-				'ipAddress' => $_SERVER['REMOTE_ADDR'],
-				'isIntranet' => is_intranet_client(),
-				'ref' => $request->getHeaders()['Host'][0]
-				)
-			)));
-});
-
 // Contact form
 $api->post('/contact', function($request, $response) {
 

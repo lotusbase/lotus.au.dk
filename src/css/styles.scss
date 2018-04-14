@@ -595,11 +595,16 @@ body {
 
 /* Top notifications */
 #top-notifications {
-	color: #eee;
+	background-color: #ddd;
+	margin-bottom: 3rem;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+
 	& > div {
-		background-color: rgba(#eee,.25);
 		display: none;
-		margin: 0 0 2px 0;
+		margin: 0;
 		padding: 1rem 16.66667%;
 		&.notification__visible {
 			display: flex;
@@ -618,7 +623,6 @@ body {
 		width: 1em;
 	}
 	a {
-		color: #eee;
 		text-decoration: underline;
 		&.button {
 			background-color: rgba(#000,.25);
@@ -1046,6 +1050,7 @@ ul.post-list {
 
 /* Breadcrumbs */
 #breadcrumb {
+	margin-top: -3rem;
 	margin-bottom: 1rem;
 	padding: 1rem;
 	ul {
@@ -2270,11 +2275,6 @@ html, body, #lotusbase__wrap {
 	position: relative;
 	z-index: 3;
 }
-#lotusbase__container {
-	//overflow: hidden;
-	// For old sticky footer, but since footer got so big there is no need for it anymore
-	// padding-bottom: 5rem;
-}
 #footer {
 	box-sizing: border-box;
 	background-color: #ccc;
@@ -2283,24 +2283,6 @@ html, body, #lotusbase__wrap {
 	// margin-top: -5rem;
 	position: relative;
 	z-index: 2;
-
-	#top {
-		position: absolute;
-		top: -.5rem;
-		left: 0;
-		text-align: center;
-		width: 16.666666666666667%;
-		.pictogram { margin-right: .5rem; }
-		a {
-			background-color: #ccc;
-			color: #333;
-			display: inline-block;
-			padding: .75rem 1.5rem;
-			position: relative;
-		}
-	}
-
-	&:hover #top a { top: -1.5rem; }
 
 	h2 {
 		font-size: 2rem;
@@ -2410,27 +2392,19 @@ html, body, #lotusbase__wrap {
 	}
 }
 
-	/* Footer for 404 */
-	.http-error #footer {
-		background-color: rgba(#000,.5);
-		bottom: 0;
-		font-size: .875em;
-		padding: .75em 1.5em;
-		position: absolute;
-		width: 100%;
-	}
-	.http-error #footer a {
-		padding: .25em .4em;
-		font-weight: normal;
-	}
-
-	/* Extra wide pages */
-	.results #footer #top {
-		width: 10%;
-	}
-	.results #footer #top a {
-		width: 65%;
-	}
+/* Footer for 404 */
+.http-error #footer {
+	background-color: rgba(#000,.5);
+	bottom: 0;
+	font-size: .875em;
+	padding: .75em 1.5em;
+	position: absolute;
+	width: 100%;
+}
+.http-error #footer a {
+	padding: .25em .4em;
+	font-weight: normal;
+}
 
 /*----------------------------------------- 
 ------------------ MODAL ------------------
