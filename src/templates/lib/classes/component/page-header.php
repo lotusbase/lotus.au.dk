@@ -191,27 +191,24 @@ class PageHeader {
 					</li>
 				</ul>
 			</nav>
-
-			<div id="top-notifications">
-				<div id="cookie-consent" class="site-notification">
-					<span class="pictogram icon-attention"></span>
-					<p><em>Lotus</em> Base uses cookies to allow user preferences to be stored. By continuing to browse the site you are agreeing to our use of cookies.<br /><a href="'.WEB_ROOT.'/meta/legal" class="icon button button--small" data-action="read">Read more</a> <a href="#" class="icon button" data-action="accept">Accept cookie use and dismiss message</a></p>
-				</div>
-
-				<div id="browser-features-warning" class="site-notification">
-					<span class="pictogram icon-attention"></span>
-					<p>Your browser is unable to support new features implemented in HTML5 and CSS3 to render this site as intended. Your experience may suffer from functionality degradation but the site should remain usable. We strongly recommend the latest version of <a href="http://google.com/chrome/" title="Google Chrome">Google Chrome</a>, <a href="https://support.apple.com/en-us/HT204416" title="OS X Safari">OS X Safari</a> or <a href="http://mozilla.org/firefox/" title="Mozilla Firefox">Mozilla Firefox</a>. As Safari is bundled with OS X, if you are unable to upgrade to a newer version of OS X, we recommend using an open source browser. <a href="#" class="icon button button--small" title="I understand" data-action="dismiss">Dismiss message</a></p>
-				</div>
-
-				'.($user && intval($user['Verified']) === 0 && strtotime($user['VerificationKeyTimestamp']) >= strtotime('-24 hours') ? '
-				<div id="user-verification" class="site-notification">
-					<p>Thank you for registering with <em>Lotus</em> Base. We noticed that you have not verified your account&mdash;please do so <span class="countdown" data-duration="'.(strtotime($user['VerificationKeyTimestamp'])+24*60*60-strtotime('now')).'"></span>, or the account will be inactivated and the email recycled. A link has been sent to your registered email, at <strong>'.$user['Email'].'</strong>.</p>
-				</div>
-				' : '').'
-
+		</header>
+		<div id="top-notifications">
+			<div id="cookie-consent" class="site-notification">
+				<span class="pictogram icon-attention"></span>
+				<p><em>Lotus</em> Base uses cookies to allow user preferences to be stored. By continuing to browse the site you are agreeing to our use of cookies.<br /><a href="'.WEB_ROOT.'/meta/legal" class="icon button button--small" data-action="read">Read more</a> <a href="#" class="icon button" data-action="accept">Accept cookie use and dismiss message</a></p>
 			</div>
 
-		</header>';
+			<div id="browser-features-warning" class="site-notification">
+				<span class="pictogram icon-attention"></span>
+				<p>Your browser is unable to support new features implemented in HTML5 and CSS3 to render this site as intended. Your experience may suffer from functionality degradation but the site should remain usable. We strongly recommend the latest version of <a href="http://google.com/chrome/" title="Google Chrome">Google Chrome</a>, <a href="https://support.apple.com/en-us/HT204416" title="OS X Safari">OS X Safari</a> or <a href="http://mozilla.org/firefox/" title="Mozilla Firefox">Mozilla Firefox</a>. As Safari is bundled with OS X, if you are unable to upgrade to a newer version of OS X, we recommend using an open source browser. <a href="#" class="icon button button--small" title="I understand" data-action="dismiss">Dismiss message</a></p>
+			</div>
+
+			'.($user && intval($user['Verified']) === 0 && strtotime($user['VerificationKeyTimestamp']) >= strtotime('-24 hours') ? '
+			<div id="user-verification" class="site-notification">
+				<p>Thank you for registering with <em>Lotus</em> Base. We noticed that you have not verified your account&mdash;please do so <span class="countdown" data-duration="'.(strtotime($user['VerificationKeyTimestamp'])+24*60*60-strtotime('now')).'"></span>, or the account will be inactivated and the email recycled. A link has been sent to your registered email, at <strong>'.$user['Email'].'</strong>.</p>
+			</div>
+			' : '').'
+		</div>';
 	}
 }
 ?>
