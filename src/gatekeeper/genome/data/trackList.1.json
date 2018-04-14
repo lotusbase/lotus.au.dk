@@ -1,9 +1,8 @@
 {
-   "dataset_id" : "lj_v30",
    "tracks" : [
       {
          "showTranslation" : false,
-         "key" : "<em>L. japonicus</em> v3.0 DNA sequence",
+         "key" : "<em>L. japonicus</em> MG20 v3.0 DNA sequence",
          "storeClass" : "JBrowse/Store/Sequence/StaticChunked",
          "chunkSize" : 20000,
          "urlTemplate" : "seq/{refseq_dirpath}/{refseq}-",
@@ -176,7 +175,7 @@
          },
          "type" : "JBrowse/View/Track/Wiggle/XYPlot",
          "label" : "20140822_Gifu_mRNAseq",
-         "key" : "<em>L.japonicus</em> Gifu RNA-seq coverage"
+         "key" : "<em>L. japonicus</em> Gifu RNA-seq coverage"
       },
       {
          "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
@@ -191,8 +190,53 @@
          },
          "type" : "JBrowse/View/Track/Wiggle/XYPlot",
          "label" : "20140822_MG20_mRNAseq",
-         "key" : "<em>L.japonicus</em> MG20 RNA-seq coverage"
+         "key" : "<em>L. japonicus</em> MG20 RNA-seq coverage"
       },
+      {
+        "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
+        "urlTemplate" : "./raw/Gifu_methylation/20180408_Gifu_CG.bw",
+        "scale" : "log",
+        "style" : {
+           "clip_marker_color" : "#f6ae2d",
+           "pos_color" : "#33658a",
+           "neg_color" : "#b13131",
+           "variance_band_color" : "rgba(55,55,55,0.15)",
+           "height" : 100
+        },
+        "type" : "JBrowse/View/Track/Wiggle/XYPlot",
+        "label" : "20180408_Gifu_CpG",
+        "key" : "<em>L. japonicus</em> Gifu CpG methylation"
+     },
+     {
+        "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
+        "urlTemplate" : "./raw/Gifu_methylation/20180408_Gifu_CHG.bw",
+        "scale" : "log",
+        "style" : {
+           "clip_marker_color" : "#f6ae2d",
+           "pos_color" : "#33658a",
+           "neg_color" : "#b13131",
+           "variance_band_color" : "rgba(55,55,55,0.15)",
+           "height" : 100
+        },
+        "type" : "JBrowse/View/Track/Wiggle/XYPlot",
+        "label" : "20180408_Gifu_CHG",
+        "key" : "<em>L. japonicus</em> Gifu CHG methylation"
+     },
+     {
+        "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
+        "urlTemplate" : "./raw/Gifu_methylation/20180408_Gifu_CHH.bw",
+        "scale" : "log",
+        "style" : {
+           "clip_marker_color" : "#f6ae2d",
+           "pos_color" : "#33658a",
+           "neg_color" : "#b13131",
+           "variance_band_color" : "rgba(55,55,55,0.15)",
+           "height" : 100
+        },
+        "type" : "JBrowse/View/Track/Wiggle/XYPlot",
+        "label" : "20180408_Gifu_CHH",
+        "key" : "<em>L. japonicus</em> Gifu CHH methylation"
+     },
       {
          "style" : {
             "className" : "generic_parent",
@@ -242,7 +286,7 @@
             "className" : "feature_n-repeat",
             "arrowheadClass" : "transcript-arrowhead"
          },
-         "key" : "<em>L. japonicus</em> genome gaps",
+         "key" : "<em>L. japonicus</em> MG20 genome gaps",
          "storeClass" : "JBrowse/Store/SeqFeature/NCList",
          "trackType" : "JBrowse/View/Track/HTMLFeatures",
          "urlTemplate" : "tracks/20151108_ljv3genome_n_gaps/{refseq}/trackData.json",
@@ -255,7 +299,7 @@
       "url" : "names/",
       "type" : "Hash"
    },
-   "dataset_id" : "lj_v30",
+   "dataset_id" : "lj_mg20_v30",
    "alwaysOnTracks" : "DNA,20140314_Lj30,20161129_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
    "defaultTracks" : "DNA,20140314_Lj30,20161129_LORE1,20121123_RepeatMasker,20151108_ljv3genome_n_gaps",
    "defaultLocation" : "chr1:1..62285374",
@@ -272,6 +316,7 @@
          "description",
          "category",
          "organism",
+         "ecotype",
          "date_created",
          "date_added",
          "principal_investigator",
