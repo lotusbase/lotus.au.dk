@@ -73,6 +73,15 @@ class DocumentHeader {
 			<!--[if IE]>
 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 			<![endif]-->
+
+			<!-- Google Analytics -->
+			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-37291877-2"></script>
+			<script>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag("js", new Date());
+				gtag("config", "UA-37291877-2");
+			</script>
 		';
 	}
 }
