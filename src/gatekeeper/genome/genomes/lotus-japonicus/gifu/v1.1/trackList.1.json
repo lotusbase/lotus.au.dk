@@ -1,0 +1,43 @@
+{
+   "tracks" : [
+      {
+         "storeClass" : "JBrowse/Store/Sequence/StaticChunked",
+         "chunkSize" : 20000,
+         "urlTemplate" : "seq/{refseq_dirpath}/{refseq}-",
+         "label" : "DNA",
+         "type" : "SequenceTrack",
+         "category" : "Reference sequence",
+         "key" : "Reference sequence"
+      },
+      {
+         "style" : {
+            "className" : "feature_n-repeat",
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "Genome gaps",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "JBrowse/View/Track/HTMLFeatures",
+         "urlTemplate" : "tracks/20180416_genome_gaps/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "JBrowse/View/Track/HTMLFeatures",
+         "label" : "20180416_genome_gaps"
+      }
+   ],
+   "names" : {
+      "url" : "names/",
+      "type" : "Hash"
+   },
+   "dataset_id" : "lj_gifu_v11",
+   "alwaysOnTracks" : "DNA,20180416_genome_gaps",
+   "defaultTracks" : "DNA,20180416_genome_gaps",
+   "formatVersion" : 1,
+   "defaultLocation" : "chr1",
+   "highResolutionMode" : "auto",
+   "trackSelector" : {
+      "type" : "Faceted"
+   },
+   "aboutThisBrowser" : {
+      "title" : "Lotus japonicus Genome Browser",
+      "description" : "Genome browser for the model legume <em>Lotus japonicus</em>, with data such as protein predictions, RNA-seq data, LORE1 insertions and more, developed by the Centre for Carbohygrade Recognition and Signalling, Aarhus University, Denmark."
+   }
+}

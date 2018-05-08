@@ -14,10 +14,11 @@ class DBMetadata {
 	// Database metadata
 	private $blast_db_metadata = array();
 	private $blast_db_metadata_extra = array(
-		'20180407_Lj_Gifu_v1_genome.fa' => array(
+		'20180416_Lj_Gifu_v1.1_genome.fa' => array(
+			'gi_dropdown' => true,
 			'category' => '<em>Lotus japonicus</em> Gifu genome',
 			'type' => 'genome',
-			'description' => '<p>Version 1.0 of the <em>Lotus japonicus</em> Gifu genome.'
+			'description' => '<p>Version 1.1 of the <em>Lotus japonicus</em> Gifu genome.'
 			),
 		'20170916_lj_m40.fa' => array(
 			'category' => '<em>Lotus japonicus</em> Gifu genome',

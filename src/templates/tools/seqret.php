@@ -81,6 +81,7 @@
 
 					<?php
 						$gi_dropdowns = array(
+							'20180416_Lj_Gifu_v1_1_genome' => array('chr0','chr1','chr2','chr3','chr4','chr5','chr6','chloro','mito'),
 							'lj_r30' => array('chr0','chr1','chr2','chr3','chr4','chr5','chr6','chloro','mito'),
 							'lj_pr28' => array('Ljchr1_pseudomol_2011025','Ljchr2_pseudomol_2011025','Ljchr3_pseudomol_2011025','Ljchr4_pseudomol_2011025','Ljchr5_pseudomol_2011025','Ljchr6_pseudomol_2011025'),
 							'lj_r25' => array('chr0','chr1','chr2','chr3','chr4','chr5','chr6','chr7'),

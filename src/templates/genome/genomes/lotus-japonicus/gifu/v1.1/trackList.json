@@ -1,0 +1,31 @@
+{
+   "tracks" : [
+      {
+         "showTranslation" : false,
+         "key" : "<em>L. japonicus</em> Gifu v1.1 DNA sequence",
+         "storeClass" : "JBrowse/Store/Sequence/StaticChunked",
+         "chunkSize" : 20000,
+         "urlTemplate" : "seq/{refseq_dirpath}/{refseq}-",
+         "label" : "DNA",
+         "type" : "JBrowse/View/Track/Sequence",
+         "category" : "Lotus japonicus reference sequence"
+      }
+   ],
+   "names" : {
+      "url" : "names/",
+      "type" : "Hash"
+   },
+   "dataset_id" : "lj_gifu_v11",
+   "alwaysOnTracks" : "DNA",
+   "defaultTracks" : "DNA",
+   "formatVersion" : 1,
+   "defaultLocation" : "chr1",
+   "highResolutionMode" : "auto",
+   "trackSelector" : {
+      "type" : "Faceted"
+   },
+   "aboutThisBrowser" : {
+      "title" : "Lotus japonicus Genome Browser",
+      "description" : "Genome browser for the model legume <em>Lotus japonicus</em>, with data such as protein predictions, RNA-seq data, LORE1 insertions and more, developed by the Centre for Carbohygrade Recognition and Signalling, Aarhus University, Denmark."
+   }
+}
