@@ -14,6 +14,11 @@ class DBMetadata {
 	// Database metadata
 	private $blast_db_metadata = array();
 	private $blast_db_metadata_extra = array(
+		'20180514_Vfa_transcriptome.fa' => array(
+			'category' => 'Miscellaneous',
+			'type' => 'transcript',
+			'description' => '<em>Vicia faba</em> (faba bean) transcriptome.'
+			),
 		'20180416_Lj_Gifu_v1.1_genome.fa' => array(
 			'gi_dropdown' => true,
 			'category' => '<em>Lotus japonicus</em> Gifu genome',
@@ -90,7 +95,7 @@ class DBMetadata {
 			'description' => 'Protein library of Lotus japonicus MG20 v3.0.'
 			),
 		'Gifu_mRNA_illumina_denovo.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 transcripts',
+			'category' => '<em>Lotus japonicus</em> Gifu transcripts',
 			'type' => 'transcript',
 			'description' => 'De novo assembled transcript contigs from Illumina non-directional mRNA-seq data.'
 			),
