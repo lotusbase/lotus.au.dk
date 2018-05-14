@@ -46,7 +46,7 @@
 								echo (count($db_group) > 1 ? '</optgroup>' : '').'<optgroup label="'.strip_tags($db['category']).'">';
 							}
 							echo '<option
-								data-gi-dropdown="'.(isset($db['gi_dropdown']) ? '1' : '0').'"
+								data-gi-dropdown="'.((isset($db['gi_dropdown']) && $db['gi_dropdown']) ? '1' : '0').'"
 								data-gi-dropdown-target="'.substr(str_replace('.', '_', $db_basename), 0, -3).'"
 								data-gi-db-category="'.$db['category'].'"
 								data-gi-db-type="'.(isset($db['type']) ? $db['type'] : '').'"

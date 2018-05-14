@@ -1,166 +1,52 @@
 <?php
 
 namespace LotusBase\BLAST;
+use \PDO;
 
 /* BLAST\DBMetadata */
 class DBMetadata {
+
+	// Database metadata
+	private $blast_db_metadata = array();
+	private $blast_db_metadata_extra = array();
+
+	// Constructor
+	function __construct() {
+		try {
+			$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
+			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+			$q = $db->prepare('SELECT
+				`Name`,
+				`Description`,
+				`Category`,
+				`Type`,
+				`HasDropdownGI`
+				FROM blast_db
+				ORDER BY IDKey DESC
+			');
+			$q->execute();
+			if($q->rowCount()) {
+				while($row = $q->fetch(PDO::FETCH_ASSOC)) {
+					$this->blast_db_metadata_extra[$row['Name']] = array(
+						'description' => $row['Description'],
+						'category' => $row['Category'],
+						'type' => $row['Type'],
+						'gi_dropdown' => $row['HasDropdownGI']
+					);
+				}
+			}
+	
+		} catch(\PDOException $e) {
+			throw new \Exception('Unable to fetch BLAST database metadata.');
+		}
+	}
 
 	// Vars
 	private $_vars = array(
 		'blacklist' => array(),
 		'whitelist' => array()
 		);
-
-	// Database metadata
-	private $blast_db_metadata = array();
-	private $blast_db_metadata_extra = array(
-		'20180416_Lj_Gifu_v1.1_genome.fa' => array(
-			'gi_dropdown' => true,
-			'category' => '<em>Lotus japonicus</em> Gifu genome',
-			'type' => 'genome',
-			'description' => '<p>Version 1.1 of the <em>Lotus japonicus</em> Gifu genome.'
-			),
-		'20170916_lj_m40.fa' => array(
-			'category' => '<em>Lotus japonicus</em> Gifu genome',
-			'type' => 'genome',
-			'description' => '<p>Version 1.0 of the <em>Lotus japonicus</em> Gifu genome, with assembled contigs merged with Canu and polished using Quiver.</p><p class="user-message warning">Contigs have not been scaffolded yet, so no chromosome numbers have been assigned thus far.</p>'
-			),
-		'lj_r30.fa' => array(
-			'gi_dropdown' => true,
-			'category' => '<em>Lotus japonicus</em> MG20 genome',
-			'type' => 'genome',
-			'description' => 'Version 3.0 of the <em>Lotus japonicus</em> MG20 genome including chr0 with unanchored contigs, chr1&ndash;6, chloroplast and mitochondrion sequences.'
-			),
-		'lj_pr28.fa' => array(
-			'gi_dropdown' => true,
-			'category' => '<em>Lotus japonicus</em> MG20 genome',
-			'type' => 'genome',
-			'description' => '<em>Lotus japonicus</em> MG20 genome pre-release 2.8. This is not an official release but the current state of the new Lotus genome assembly. Overlaps between contigs still need to be checked, and the coordinates will not match the version to be published. Contains only sequences anchored on the six Lotus chromosomes.'
-			),
-		'lj_r25.fa' => array(
-			'gi_dropdown' => true,
-			'category' => '<em>Lotus japonicus</em> MG20 genome',
-			'type' => 'genome',
-			'description' => '<em>Lotus japonicus</em> MG20 genome release 2.5, only sequences anchored on chromosomes, including chr0 long contigs with unknown position and the chloroplast sequence.'
-			),
-		'lj_r24.fa' => array(
-			'gi_dropdown' => true,
-			'category' => '<em>Lotus japonicus</em> MG20 genome',
-			'type' => 'genome',
-			'description' => '<em>Lotus japonicus</em> MG20 genome release 2.4. This is the genome version that matches the Apollo browser GFF files in the folder "-Apollo favourite genes/2010_09_06_GFF" on the commom server. According to Shusei Sato, there should only be minor changes to the coordinates on a part of chr5 between version 2.4 and 2.5. There are large differences with respect to the annotation between the two versions due to removal of a lot of retro-element-related sequence annotation in v2.5.'
-			),
-		'lj_r25_incl_SGA.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 genome',
-			'type' => 'genome',
-			'description' => 'As lj_r25 but including also all the short sanger shotgun contigs (LjSGAs), which are not anchored on chromosomes.'
-			),
-		'LotusK31ver2GC_illumina_contigs.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 genome',
-			'type' => 'genome',
-			'description' => 'Genomic MG20 contigs assembled using SOAP de novo based on four Illumina libraries with different insert sizes. Raw and uncurated assembly. '
-			),
-		'PCAPrep_Illumina_LjSGA_assembly.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 genome',
-			'type' => 'genome',
-			'description' => 'The program PCAP.rep was used to assemble Illumina contigs (LotusK31ver2GC_illumina_contigs) with the Sanger shotgun data (LjSGA).'
-			),
-		'20130828_PacBio.ctg.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 genome',
-			'type' => 'genome',
-			'description' => '.ctg are the high confidence contigs. PacBio is a sequencing technology that generates long (up to 10 kb) but error-prone (up to 20%) reads. The PacBio reads have been corrected using Illumina data prior to contig assembly.'
-			),
-		'20130828_PacBio.utg.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 genome',
-			'type' => 'genome',
-			'description' => '.utg are all the assembled PacBio contigs (unitigs). PacBio is a sequencing technology that generates long (up to 10 kb) but error-prone (up to 20%) reads. The PacBio reads have been corrected using Illumina data prior to contig assembly.'
-			),
-		'lj_probes.fa' => array(
-			'category' => '<em>Lotus japonicus</em> probes',
-			'type' => 'probes',
-			'description' => 'Probes for <em>Lotus japonicus</em> used in LjGEA.'
-			),
-		'20150304_Lj2.5_proteins.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 proteins',
-			'type' => 'protein',
-			'description' => 'Protein library of Lotus japonicus MG20 v2.5.'
-			),
-		'20130521_Lj30_proteins.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 proteins',
-			'type' => 'protein',
-			'description' => 'Protein library of Lotus japonicus MG20 v3.0.'
-			),
-		'Gifu_mRNA_illumina_denovo.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 transcripts',
-			'type' => 'transcript',
-			'description' => 'De novo assembled transcript contigs from Illumina non-directional mRNA-seq data.'
-			),
-		'MG20_mRNA_illumina_denovo.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 transcripts',
-			'type' => 'transcript',
-			'description' => 'De novo assembled transcript contigs from Illumina non-directional mRNA-seq data.'
-			),
-		'20130521_Lj30_cDNA.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 transcripts',
-			'type' => 'transcript',
-			'description' => 'cDNA library of <em>Lotus japonicus</em> MG20 v3.0.'
-			),
-		'20150304_Lj2.5_CDS.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 transcripts',
-			'type' => 'transcript',
-			'description' => 'CDS library of <em>Lotus japonicus MG20</em> v2.5. '
-			),
-		'20130521_Lj30_CDS.fa' => array(
-			'category' => '<em>Lotus japonicus</em> MG20 transcripts',
-			'type' => 'transcript',
-			'description' => 'CDS library of <em>Lotus japonicus MG20</em> v3.0. '
-			),
-		'deepSAGE_TCs.fa' => array(
-			'category' => '<em>Lotus japonicus</em>&mdash;miscellaneous',
-			'type' => 'transcript',
-			'description' => 'Transcript contigs from <em>L. japonicus</em> gene index 6.0. These TCs were used for annotation of tags from the DeepSAGE experiment.'
-			),
-		'KAW_Scaffolds.fa' => array(
-			'gi_dropdown' => true,
-			'category' => 'Miscellaneous',
-			'type' => 'genome',
-			'description' => 'Genome sequence of the KAW endophyte worked on by Simona Radutoiu and Rafał Zgadzaj.'
-			),
-		'kaw12_translations.fa' => array(
-			'category' => 'Miscellaneous',
-			'type' => 'protein',
-			'description' => 'Amino acid sequence of the endophyte Rhizobium KAW12 genome. '
-			),
-		'201512008_barley_harunanijo_contigs.fa' => array(
-			'category' => 'Miscellaneous',
-			'type' => 'genome',
-			'description' => 'Barley (<em>Hordeum vulgare</em> cv. Haruna Nijo ) genome contigs.'
-			),
-		'Rcc_DK05_contigs_221014.fa' => array(
-			'category' => 'Miscellaneous',
-			'type' => 'genome',
-			'description' => 'Contig library of <em>Ramularia collo-cygni</em> from batch DK05.'
-			),
-		'20160305_MesorhizobiumLoti_MAFF303099_genome.fa' => array(
-			'category' => '<em>Mesorhizoium loti</em>',
-			'type' => 'genome',
-			'description' => '<em>Mesorhizoium loti</em> MAFF303099 genome'
-			),
-		'20160305_MesorhizobiumLoti_MAFF303099_proteins.fa' => array(
-			'category' => '<em>Mesorhizoium loti</em>',
-			'type' => 'protein',
-			'description' => '<em>Mesorhizoium loti</em> MAFF303099 proteins'
-			),
-		'20160305_MesorhizobiumLoti_R7A_genome.fa' => array(
-			'category' => '<em>Mesorhizoium loti</em>',
-			'type' => 'genome',
-			'description' => '<em>Mesorhizoium loti</em> R7A genome'
-			),
-		'20160305_MesorhizobiumLoti_R7A_proteins.fa' => array(
-			'category' => '<em>Mesorhizoium loti</em>',
-			'type' => 'protein',
-			'description' => '<em>Mesorhizoium loti</em> R7A proteins'
-			)
-	);
 
 	// Filter database by blacklist
 	public function set_db_blacklist($filter) {
