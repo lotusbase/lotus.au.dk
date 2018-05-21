@@ -44,16 +44,16 @@
 			}
 		}
 	} catch(Firebase\JWT\SignatureInvalidException $e) {
-		setcookie('auth_token', '', time()-60, '/');
+		setcookie('auth_token', '', time()-60, '/', '', true, false);
 		$_SESSION['user_login_error'] = array('message' => $e->getMessage().'. There is a possibility that your user token has been tempered with.');
 		header("location: login.php");
 		exit();
 	} catch(ComponentPathException $e) {
-		setcookie('auth_token', '', time()-60, '/');
+		setcookie('auth_token', '', time()-60, '/', '', true, false);
 		header("location: login.php");
 		exit();
 	} catch(Exception $e) {
-		setcookie('auth_token', '', time()-60, '/');
+		setcookie('auth_token', '', time()-60, '/', '', true, false);
 		$_SESSION['user_login_error'] = array('message' => $e->getMessage().'. We have encountered a server side error that prevents us from authenticating your login attempt.');
 		header("location: login.php");
 		exit();

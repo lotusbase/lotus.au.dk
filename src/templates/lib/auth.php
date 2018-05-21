@@ -51,7 +51,7 @@
 			$_SESSION['user_login_error'] = array('message' => $e->getMessage());
 
 			// If signature is invalid, force delete JWT cookie
-			setcookie('auth_token', '', time()-60, '/');
+			setcookie('auth_token', '', time()-60, '/', '', true, false);
 			header("Refresh:0");
 			exit();
 		} catch(Exception $e) {
@@ -59,7 +59,7 @@
 			$_SESSION['user_login_error'] = array('message' => $e->getMessage());
 
 			// If there is something wrong with authentication, force delete JWT cookie
-			setcookie('auth_token', '', time()-60, '/');
+			setcookie('auth_token', '', time()-60, '/', '', true, false);
 			header("Refresh:0");
 			exit();
 		}

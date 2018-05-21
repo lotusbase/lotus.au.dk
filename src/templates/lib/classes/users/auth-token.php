@@ -61,7 +61,7 @@ class AuthToken {
 
 	// Set cookie
 	public function setCookie() {
-		setcookie('auth_token', $this->_generateToken(), $this->_vars['expire'], '/');
+		setcookie('auth_token', $this->_generateToken(), $this->_vars['expire'], '/', '', true, false);
 	}
 
 	// Get token

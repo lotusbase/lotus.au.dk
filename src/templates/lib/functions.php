@@ -149,7 +149,7 @@ function auth_verify($jwt) {
 
 		// Check if token has expired
 		if($jwt_decoded['exp'] < time()) {
-			setcookie('auth_token', '', time()-60, '/');
+			setcookie('auth_token', '', time()-60, '/', '', true, false);
 			return false;
 		}
 
@@ -157,7 +157,7 @@ function auth_verify($jwt) {
 
 	} catch(\Firebase\JWT\SignatureInvalidException $e) {
 		// If signature is invalid, force delete JWT cookie
-		setcookie('auth_token', '', time()-60, '/');
+		setcookie('auth_token', '', time()-60, '/', '', true, false);
 		return false;
 	} catch(Exception $e) {
 		return false;
