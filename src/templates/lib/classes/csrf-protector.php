@@ -45,7 +45,7 @@ class CSRFProtector {
 		$this->_token = bin2hex(openssl_random_pseudo_bytes(16));
 
 		// Store token in cookie at the same time, allow it to expire after one hour
-		setcookie('CSRF_token', $this->_token, time() + 60 * 60);
+		setcookie('CSRF_token', $this->_token, time() + 60 * 60, '/', '', true, true);
 	}
 
 }
