@@ -140,7 +140,7 @@ $api->delete('/users/{salt}', function($request, $response, $args) {
 		$MailChimp_member = $MailChimp->delete("lists/c469e14ec3/members/".md5($auth_token['Email']));
 
 		// Unset cookie used to store JWT
-		setcookie('auth_token', '', time()-60, '/');
+		setcookie('auth_token', '', time()-60, '/', '', true, false);
 
 		return $response
 			->withStatus(200)
