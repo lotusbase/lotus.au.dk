@@ -111,7 +111,7 @@ $(function() {
 			});
 
 		// Push history state
-		if(expat.status.pushState) window.history.pushState({lotusbase: true}, '', '?'+$t.serialize());
+		if(expat.status.pushState) window.history.pushState({lotusbase: true}, '', '?'+$('input[name!="CSRF_token"]', this).serialize());
 		expat.status.pushState = true;
 
 		// Collapse form, only if search has not been triggered before
