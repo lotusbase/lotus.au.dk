@@ -240,6 +240,7 @@ $(function() {
 					'</form>'
 					].join(''));
 
+				var csrf_token = $('#expat-form input[name="CSRF_token"]').val();
 				$dataDownload = $('<div class="toggle hide-first"></div>');
 				$dataDownload.append([
 					'<h3><a href="#" title="Export options">Export options</a></h3>',
@@ -263,6 +264,7 @@ $(function() {
 							'<button type="button" class="svg-download" data-target="expat-heatmap" data-chart-type="heatmap">',
 								'<span class="icon-file-image">Download heatmap (<code>.svg</code>)</span>',
 							'</button>',
+							'<input type="hidden" name="CSRF_token" value="'+csrf_token+'" />',
 						'</div>',
 					'</form>'
 					].join(''));
