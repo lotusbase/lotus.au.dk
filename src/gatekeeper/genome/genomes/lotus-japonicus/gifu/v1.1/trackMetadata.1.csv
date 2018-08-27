@@ -1,0 +1,5 @@
+label,description,category,key,organism,ecotype,date_created,date_added,pick,public,principal_investigator,file_curator,file_creator,publication_reference
+DNA,<em>Lotus japonicus</em> Gifu v1.1 genome sequence,Genome,<em>L. japonicus</em> Gifu 1.1 DNA sequence,<em>Lotus japonicus</em>,Gifu,2018.04.16,2018.04.16,Compulsory,Yes,Stig U. Andersen,Stig U. Andersen,Terry Mun,
+20180827_Lj_Gifu_v1.1_predictedGenes,<em>Lotus japonicus</em> Gifu v1.1 predicted gene models,Gene model,<em>L. japonicus</em> Gifu v1.1 predicted gene models,<em>Lotus japonicus</em>,Gifu,2018.08.27,2018.08.27,Yes,Yes,Stig U. Andersen,Nadia Kamal,Terry Mun,
+20180827_Lj_Gifu_v1.1_predictedORFs,<em>Lotus japonicus</em> Gifu v1.1 predicted ORFs,Gene model,<em>L. japonicus</em> Gifu v1.1 predicted open reading frames,<em>Lotus japonicus</em>,Gifu,2018.08.27,2018.08.27,Yes,Yes,Stig U. Andersen,Terry Mun,Terry Mun,
+20180416_genome_gaps,"Sequencing gaps (defined as ambiguous nucleotide, N) in version 1.1 of <em>L. japonicus</em> Gifu genome",Miscellaneous,<em>L. japonicus</em> genome gaps,<em>Lotus japonicus</em>,Gifu,2018.04.16,2018.04.16,Yes,Yes,Stig U. Andersen,Terry Mun,Terry Mun,
