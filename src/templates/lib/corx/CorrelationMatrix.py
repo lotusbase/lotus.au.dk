@@ -4,6 +4,8 @@ import numpy as np
 
 __author__ = 'Asger Bachmann (agb@birc.au.dk)'
 
+np.seterr(divide='ignore', invalid='ignore')
+
 # Parse config
 config = configparser.ConfigParser()
 #config.read('../../config.ini')
@@ -111,6 +113,9 @@ def get_correlation_matrix_in_memory(print_debug, database, columns, gene_limit=
     # Note that this also means that we do not have to do np.abs(P).
     P **= 2
 
+    # Replace NaNs with numbers
+    P = np.nan_to_num(P)
+
     time_calculating_p = time.perf_counter() - time_start
     time_elapsed.append({ 'step': 'calculating_p', 'label': 'Calculating Pearson\'s correlation coefficient matrix', 'time_elapsed': time_calculating_p })
     if print_debug:
@@ -145,6 +150,9 @@ def get_correlation_matrix_on_disk(print_debug, database, columns, gene_limit=No
             sqrt_sum_diff_from_mean_sq[i:idx_end, np.newaxis] * sqrt_sum_diff_from_mean_sq[np.newaxis, ...])
         P[i:idx_end, :] **= 2
 
+    # Replace NaNs with numbers
+    P = np.nan_to_num(P)
+
     time_calculating_p = time.perf_counter() - time_start
     time_elapsed.append({ 'step': 'calculating_p', 'label': 'Calculating Pearson\'s correlation coefficient matrix', 'time_elapsed': time_calculating_p })
     if print_debug:
@@ -172,6 +180,9 @@ def get_correlated_pairs(print_debug, database, columns, threshold, gene_limit=N
         partial_P = diff_from_mean[i:idx_end, :].dot(diff_from_mean[:, :].T)
         partial_P /= (sqrt_sum_diff_from_mean_sq[i:idx_end, np.newaxis] * sqrt_sum_diff_from_mean_sq[np.newaxis, ...])
         partial_P **= 2
+
+        # Replace NaNs with numbers
+        partial_P = np.nan_to_num(partial_P)
 
         # Zero-out all values below the given threshold.
         partial_P[partial_P < threshold] = 0
@@ -210,6 +221,9 @@ def get_correlation_matrix_row(print_debug, database, columns, query, gene_limit
     P_row = diff_from_mean[query_row_idx, :].dot(diff_from_mean[:, :].T)
     P_row /= (sqrt_sum_diff_from_mean_sq[query_row_idx, np.newaxis] * sqrt_sum_diff_from_mean_sq[np.newaxis, ...])
     P_row **= 2
+
+    # Replace NaNs with numbers
+    P_row = np.nan_to_num(P_row)
 
     time_calculating_p = time.perf_counter() - time_start
     time_elapsed.append({ 'step': 'calculating_p', 'label': 'Calculating Pearson\'s correlation coefficient matrix', 'time_elapsed': time_calculating_p })
