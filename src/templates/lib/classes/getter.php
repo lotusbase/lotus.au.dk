@@ -46,7 +46,7 @@ class PMID extends Base {
 }
 
 /* Getter\DOI */
-class DOI extends Base{
+class DOI extends Base {
 
 	// Public function: set_doi
 	public function set_doi($doi) {
@@ -64,7 +64,7 @@ class DOI extends Base{
 			$ref = $this->get_request('https://api.crossref.org/works/'.$doi.'?mailto=hello@lotus.au.dk');
 			$output[$doi] = $ref['message'];
 		}
-
+		
 		return $output;
 	}
 }
