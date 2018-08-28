@@ -1,5 +1,7 @@
 <?php
 
+use \Firebase\JWT\JWT;
+
 // Get annotation from genes
 $api->get('/gene/annotation/{genomeEcotype}/{genomeVersion}/{id}[/{strict}]', function($request, $response, $args) {
 	
@@ -13,8 +15,22 @@ $api->get('/gene/annotation/{genomeEcotype}/{genomeVersion}/{id}[/{strict}]', fu
 		$exArr	= str_repeat('?,', count($ex)-1).'?';
 		$strict	= isset($args['strict']) ? !!$args['strict'] : false;
 
+		// Genome information 
+		$genome_ecotype = $args['genomeEcotype'];
+		$genome_version = $args['genomeVersion'];
+		$genome_id = implode('_', [$genome_ecotype, $genome_version]);
+
+		// Permission check for genome assembly access
+		$auth_token = $request->getCookieParams()['auth_token'];
+		if ($auth_token) {
+			$user = json_decode(json_encode(JWT::decode($auth_token, JWT_USER_LOGIN_SECRET, array('HS256'))), true);
+			$componentPaths = $user['data']['ComponentPath'];
+			if ($genome_ecotype === 'Gifu' && $genome_version === '1.1' && !in_array($genome_id, $componentPaths)) {
+				throw new Exception("You do not have sufficient permission to access the genome assembly of $genome_ecotype v$genome_version", 401);
+			}
+		}
+
 		// Sanity check for Lotus genome assembly
-		$genome_id = $args['genomeEcotype'].'_'.$args['genomeVersion'];
 		$v = new \LotusBase\LjGenomeVersion(array('genome' => $genome_id));
 		if(!$v->check()) {
 			return $response
@@ -91,6 +107,15 @@ $api->get('/gene/annotation/{genomeEcotype}/{genomeVersion}/{id}[/{strict}]', fu
 				'code' => $e->getCode(),
 				'data' => $e->getMessage(),
 				'more_info' => DOMAIN_NAME . '/' . WEB_ROOT . '/docs/errors/pdo-exception'
+				),JSON_UNESCAPED_SLASHES));
+	} catch(Exception $e) {
+		return $response
+			->withStatus(401)
+			->withHeader('Content-Type', 'application/json')
+			->write(json_encode(array(
+				'status' => 401,
+				'code' => $e->getCode(),
+				'data' => $e->getMessage()
 				),JSON_UNESCAPED_SLASHES));
 	}
 });

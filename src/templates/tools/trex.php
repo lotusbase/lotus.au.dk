@@ -35,7 +35,15 @@
 		} else {
 			$version = (is_array($_GET['v']) ? $_GET['v'] : explode(',', escapeHTML($_GET['v'])));
 		}
+
+		$ecotypes = array();
+		$versions = array();
 		foreach($version as $v) {
+			if ($v === 'Gifu_1.1' && (!$userComps || !in_array($v, $userComps))) {
+				unset($version[$v]);
+				continue;
+			}
+
 			$version_pieces = explode('_', $v);
 			$ecotypes[] = $version_pieces[0];
 			$versions[] = $version_pieces[1];
@@ -43,7 +51,13 @@
 		$exec_vars = array_merge($exec_vars, $ecotypes, $versions);
 
 		// If an ID is used in a search
-		if(isset($_GET['ids']) && !empty($_GET['ids'])) {
+		if (!count($versions)) {
+			$error = array(
+				'error' => true,
+				'message' => 'No valid genome assembly version was provided. This could happen if you have used an outdated link, or when you have attempt to access a genome assembly that you do not have permission to.'
+			);
+		}
+		else if(isset($_GET['ids']) && !empty($_GET['ids'])) {
 			// Construct query
 			if(is_array($_GET['ids'])) {
 				$trx = $_GET['ids'];
@@ -160,6 +174,10 @@
 		}
 
 		try {
+			if ($error) {
+				throw new Exception($error['message']);
+			}
+
 			// Prequery
 			$q1 = $db->prepare("SELECT
 				anno.ID AS ID,
@@ -318,6 +336,7 @@
 		<p>The <strong>Transcript Explorer</strong> tool can be used to search for candidate <em>Lotus</em> genes using user-defined keywords, or to comb a specific genomic interval&mdash;a combination of chromosome and position range&mdash;for genes/transcripts of interest.</p>
 
 		<?php 
+			print_r($_SESSION['trex_error']);
 			// Display error if any
 			if(!empty($error)) {
 				echo '<div class="user-message warning align-center"><h3>Houston, we have a problem!</h3>'.$error['message'].'</div>';
@@ -388,9 +407,15 @@
 					<div class="col-two cols justify-content__flex-start versions">
 						<?php
 							foreach($lj_genome_versions as $label => $lj_genome) {
+								// Only display Gifu v1.1 if user is authorized access
+								if ($label === 'Gifu v1.1' && (!$userComps || !in_array($lj_genome['ecotype'].'_'.$lj_genome['version'], $userComps))) {
+									continue;
+								}
+								
 								$lj_genome_id = implode('_', [$lj_genome['ecotype'], $lj_genome['version']]);
 								$lj_genome_version = $lj_genome['version'];
-								echo '<input type="checkbox" value="'.$lj_genome_id.'" class="prettify" name="v[]" id="'.$lj_genome_id.'" '.(isset($version) ? (in_array($lj_genome_id, $version) ? 'checked' : '') : (version_compare($lj_genome_version, '3.0') >= 0 ? 'checked' : '')).'/><label for="version-'.$lj_genome_id.'">'.$label.'</label>';
+								$checked = (isset($version) && (in_array($lj_genome_id, $version))) || ((!isset($version) || $error) && version_compare($lj_genome_version, '3.0') >= 0);
+								echo '<input type="checkbox" value="'.$lj_genome_id.'" class="prettify" name="v[]" id="'.$lj_genome_id.'" '.($checked ? 'checked' : '').'/><label for="version-'.$lj_genome_id.'">'.$label.'</label>';
 							}
 						?>
 					</div>
@@ -472,6 +497,7 @@
 			while($row = $q2->fetch(PDO::FETCH_ASSOC)) {
 				// Get version
 				$v = floatval($row['Version']);
+				$ecotype = $row['Ecotype'];
 
 				// Determine start and end positions
 				if($row['Strand'] == '+') {
@@ -489,7 +515,7 @@
 						data-to="<?php echo $end; ?>"
 					>
 						<td class="trx">
-							<?php if($v >= 3.0) { ?>
+							<?php if($v >= 3.0 && ecotype === 'MG20') { ?>
 							<div class="dropdown button"><span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>"><?php echo $row['Transcript']; ?></a></span><ul class="dropdown--list">
 								<li><a href="<?php echo WEB_ROOT.'/view/gene/'.preg_replace('/\.\d+?$/', '', $row['Transcript']); ?>" title="View gene"><span class="icon-eye">View gene</span></a></li>
 								<li><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>" title="View transcript"><span class="icon-eye">View transcript</span></a></li>
@@ -549,6 +575,49 @@
 								<?php if(is_logged_in()) { ?>
 									<li><a class="manual-gene-anno" href="<?php echo WEB_ROOT; ?>/lib/docs/gene-annotation" title="Manual gene name suggestion for <?php echo $row['Transcript']; ?>" data-gene="<?php echo $row['Transcript']; ?>"><span class="pictogram icon-bookmark">Suggest <?php echo ((isset($row['LjAnnotation']) && !empty($row['LjAnnotation'])) ? 'another ' : ''); ?><em>Lj</em> gene name</span></a></li>
 								<?php } ?>
+							</ul>
+							</div>
+							<?php } else if($v == 1.1 && $ecotype === 'Gifu') { ?>
+								<div class="dropdown button"><span class="dropdown--title"><?php echo $row['Transcript']; ?></span><ul class="dropdown--list">
+								<li>
+									<a
+										href="../api/v1/blast/<?php echo '20180418_Lj_Gifu_v1.1_genome.fa/'.$row['Chromosome'].'?from='.$start.'&to='.$end.'&access_token='.LOTUSBASE_API_KEY; ?>"
+										data-seqret
+										data-seqret-id="<?php echo $row['Chromosome']; ?>"
+										data-seqret-data-type="genomic"
+										data-seqret-db="20180418_Lj_Gifu_v1.1_genome.fa"
+										data-seqret-from="<?php echo $start; ?>"
+										data-seqret-to="<?php echo $end; ?>"
+										title="Retrieve genomic sequence"
+										>
+										<span class="icon-switch">Genomic sequence</span>
+									</a>
+								</li>
+								<li>
+									<a
+										href="../api/v1/blast/<?php echo '20180827_Lj_Gifu_v1.1_ORF.fa/'.$row['Transcript'].'&access_token='.LOTUSBASE_API_KEY; ?>"
+										data-seqret
+										data-seqret-id="<?php echo $row['Transcript']; ?>"
+										data-seqret-data-type="coding sequence"
+										data-seqret-db="20180827_Lj_Gifu_v1.1_ORF.fa"
+										title="Retrieve coding sequence (ORFs only)"
+										>
+										<span class="icon-switch">Coding sequence</span>
+									</a>
+								</li>
+								<li>
+									<a
+										href="../api/v1/blast/<?php echo '20180827_Lj_Gifu_v1.1_ORF_proteins.fa/'.$row['Transcript'].'&access_token='.LOTUSBASE_API_KEY; ?>"
+										data-seqret
+										data-seqret-id="<?php echo $row['Transcript']; ?>"
+										data-seqret-data-type="amino acid"
+										data-seqret-db="20180827_Lj_Gifu_v1.1_ORF_proteins.fa"
+										title="Retrieve amino acid sequence (from ORFs only)"
+										>
+										<span class="icon-switch">Protein sequence</span>
+									</a>
+								</li>
+								<li><a href="../genome?data=genomes%2Flotus-japonicus%2Fgifu%2Fv1.1&loc=<?php echo $row['Transcript']; ?>" title="View in genome browser"><span class="icon-book">Genome browser</span></a></li>
 							</ul>
 							</div>
 							<?php } else {
