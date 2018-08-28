@@ -40,7 +40,6 @@
 			$DOIRefHandler->set_doi(array_unique($dois));
 			$DOIRefs = $DOIRefHandler->get_data();
 		}
-		
 
 		// Query 2: Get actual data
 		$q2 = $db->prepare('SELECT `Text`, IDtype, Description, CORx, PMID, DOI, IntranetOnly, Curators FROM expat_datasets');
@@ -79,22 +78,36 @@
 
 					// Get reference
 					$ref = $DOIRefs[$row['DOI']];
+					$title = '';
 
-					// Publication year
-					$year = $ref['posted']['date-parts'][0][0];
-
-					// Authors
-					$_authors = $ref['author'];
-					if(count($_authors) !== 2) {
-						$authors = $_authors[0]['family'].' et al.';
+					if (!$ref) {
+						$referenceText = 'Go to publication';
 					} else {
-						$authors = implode(' and ', array_map(function($a) {
-							return $a['family'];
-						}, $_authors));
+						// Publication title
+						$title = $ref['title'];
+						if (is_array($title)) {
+							$title = $title[0];
+						}
+
+						// Publication year
+						$year = $ref['posted']['date-parts'][0][0];
+
+						// Authors
+						$_authors = $ref['author'];
+						if(count($_authors) !== 2) {
+							$authors = $_authors[0]['family'].' et al.';
+						} else {
+							$authors = implode(' and ', array_map(function($a) {
+								return $a['family'];
+							}, $_authors));
+						}
+
+						// Reference text
+						$referenceText = $authors.', '.$year;
 					}
 
 					// Reference
-					$referenceHTML = '<a href="https://dx.doi.org/'.$doi.'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a>';
+					$referenceHTML = '<a href="https://dx.doi.org/'.$row['DOI'].'" title="'.$title.'">'.$referenceText.'</a>';
 
 				} elseif(!empty($row['PMID'])) {
 
@@ -113,10 +126,10 @@
 					// Reference authors
 					$_authors = $ref['authors'];
 					if(count($_authors) !== 2) {
-						$authors = $_authors[0]['name'].' et al.';
+						$authors = explode(' ', $_authors[0]['name'])[0].' et al.';
 					} else {
 						$authors = implode(' and ', array_map(function($a) {
-							return $a['name'];
+							return explode(' ', $a['name'])[0];
 						}, $_authors));
 					}
 
