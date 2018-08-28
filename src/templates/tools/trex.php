@@ -201,7 +201,10 @@
 					$q1_rows['Ecotype'][] = $r['Ecotype'];
 					$q1_rows['Version'][] = $r['Version'];
 
-					if(floatVal($r['Version']) >= 3 && $r['Ecotype'] === 'MG20') {
+					if (
+						(floatVal($r['Version']) >= 3 && $r['Ecotype'] === 'MG20') ||
+						($r['Version'] === '1.1' && $r['Ecotype'] === 'Gifu')
+					) {
 						$q1_filtered_rows['ID'][] = $r['ID'];
 						$q1_filtered_rows['Transcript'][] = $r['Transcript'];
 					}
@@ -426,34 +429,49 @@
 
 				<button type="submit"><span class="pictogram icon-search">Search for gene of interest</span></button>
 			</form>
-		<?php
-			echo (empty($error) && $searched) ? '</div>
-			<div class="toggle">
-				<h3><a href="#" data-toggled="on" class="open">Export options</a></h3>
-				<p>Download the entire search result as a CSV file.</p>
-				<div class="cols justify-content__space-around">
-					<form action="'.$_SERVER['PHP_SELF'].'" method="post" class="form--no-spacing">
-						<button type="submit">Download tabular results</button>
-						<input type="hidden" name="ids" value="'.implode(',', $q1_rows['ID']).'" />
-						<input type="hidden" name="redir" value="'.$_SERVER['REQUEST_URI'].'" />
-					</form>'.
-					(count($q1_filtered_rows) ? '
-					<div class="dropdown button">
-						<span class="dropdown--title">Download all sequences</span>
-						<ul class="dropdown--list">
-							<li><a href="../api/v1/blast/20130521_Lj30_CDS.fa/'.implode(',', $q1_filtered_rows['Transcript']).'?download&access_token='.LOTUSBASE_API_KEY.'"><span class="pictogram icon-switch">Download all coding sequences</span></a></li>
-							<li><a href="../api/v1/blast/20130521_Lj30_cDNA.fa/'.implode(',', $q1_filtered_rows['Transcript']).'?download&access_token='.LOTUSBASE_API_KEY.'"><span class="pictogram icon-switch">Download all mRNA sequences</span></a></li>
-							<li><a href="../api/v1/blast/20130521_Lj30_proteins.fa/'.implode(',', $q1_filtered_rows['Transcript']).'?download&access_token='.LOTUSBASE_API_KEY.'"><span class="pictogram icon-switch">Download all amino acid sequences</span></a></li>
-						</ul>
+			<?php if (empty($error) && $searched) { ?>
+			</div><div class="toggle">
+					<h3><a href="#" data-toggled="on" class="open">Export options</a></h3>
+					<p>Download the entire search result as a CSV file.</p>
+					<div class="cols justify-content__space-around">
+						<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="form--no-spacing">
+							<button type="submit">Download tabular results</button>
+							<input type="hidden" name="ids" value="<?php echo implode(',', $q1_rows['ID']); ?>" />
+							<input type="hidden" name="redir" value="<?php echo $_SERVER['REQUEST_URI']; ?>" />
+						</form>
+						<?php
+							// Only allow bulk download if genome assembly is monolithic
+							if (count($q1_filtered_rows) && count($versions) === 1 && count($ecotypes) === 1) {
+								$genome_ecotype = $ecotypes[0];
+								$genome_version = $versions[0];
+						?>
+							<?php if ($genome_ecotype === 'MG20' && $genome_version === '3.0') { ?>
+								<div class="dropdown button">
+									<span class="dropdown--title">Download all sequences</span>
+									<ul class="dropdown--list">
+										<li><a href="../api/v1/blast/20130521_Lj30_CDS.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all coding sequences</span></a></li>
+										<li><a href="../api/v1/blast/20130521_Lj30_cDNA.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all mRNA sequences</span></a></li>
+										<li><a href="../api/v1/blast/20130521_Lj30_proteins.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all amino acid sequences</span></a></li>
+									</ul>
+								</div>
+							<?php } else if ($genome_ecotype === 'Gifu' && $genome_version === '1.1') {?>
+								<div class="dropdown button">
+									<span class="dropdown--title">Download all sequences</span>
+									<ul class="dropdown--list">
+										<li><a href="../api/v1/blast/20180827_Lj_Gifu_v1.1_ORF.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all coding sequences (ORFs only)</span></a></li>
+										<li><a href="../api/v1/blast/20180827_Lj_Gifu_v1.1_ORF_proteins.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all amino acid sequences (from ORFs only)</span></a></li>
+									</ul>
+								</div>
+							<?php } ?>
+						<?php } ?>
 					</div>
-					' : '').
-				'</div>
-			</div>' : '';
-
-			// Display search results
-			if(empty($error) && $searched && $q2->rowCount() > 0) {
-
-		?>
+				</div>
+			<?php	
+				}
+				
+				// Display search results
+				if(empty($error) && $searched && $q2->rowCount() > 0) {
+			?>
 			<p>We have found <?php echo "<strong>".$rows."</strong> ".pl($rows,'result','results'); ?>. Now displaying <?php echo $page." of ".$last." with ".$num." ".pl($num,'row','rows');?> per page. This search has taken <strong><?php echo number_format((microtime(true) - $start_time), 3); ?>s</strong> to perform.</p>
 
 			<?php
@@ -515,7 +533,7 @@
 						data-to="<?php echo $end; ?>"
 					>
 						<td class="trx">
-							<?php if($v >= 3.0 && ecotype === 'MG20') { ?>
+							<?php if($v >= 3.0 && $ecotype === 'MG20') { ?>
 							<div class="dropdown button"><span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>"><?php echo $row['Transcript']; ?></a></span><ul class="dropdown--list">
 								<li><a href="<?php echo WEB_ROOT.'/view/gene/'.preg_replace('/\.\d+?$/', '', $row['Transcript']); ?>" title="View gene"><span class="icon-eye">View gene</span></a></li>
 								<li><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>" title="View transcript"><span class="icon-eye">View transcript</span></a></li>
@@ -577,15 +595,15 @@
 								<?php } ?>
 							</ul>
 							</div>
-							<?php } else if($v == 1.1 && $ecotype === 'Gifu') { ?>
+							<?php } else if($v === 1.1 && $ecotype === 'Gifu') { ?>
 								<div class="dropdown button"><span class="dropdown--title"><?php echo $row['Transcript']; ?></span><ul class="dropdown--list">
 								<li>
 									<a
-										href="../api/v1/blast/<?php echo '20180418_Lj_Gifu_v1.1_genome.fa/'.$row['Chromosome'].'?from='.$start.'&to='.$end.'&access_token='.LOTUSBASE_API_KEY; ?>"
+										href="../api/v1/blast/<?php echo '20180416_Lj_Gifu_v1.1_genome.fa/'.$row['Chromosome'].'?from='.$start.'&to='.$end.'&access_token='.LOTUSBASE_API_KEY; ?>"
 										data-seqret
 										data-seqret-id="<?php echo $row['Chromosome']; ?>"
 										data-seqret-data-type="genomic"
-										data-seqret-db="20180418_Lj_Gifu_v1.1_genome.fa"
+										data-seqret-db="20180416_Lj_Gifu_v1.1_genome.fa"
 										data-seqret-from="<?php echo $start; ?>"
 										data-seqret-to="<?php echo $end; ?>"
 										title="Retrieve genomic sequence"
