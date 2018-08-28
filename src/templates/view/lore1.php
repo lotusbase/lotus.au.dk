@@ -156,7 +156,7 @@
 			?>
 			<p>You are currently viewing the insertion at <strong><span id="current-insertion"><?php echo $ins_coord; ?></span></strong>.</p>
 			<p>The dispersed location of <em>LORE1</em> inserts mean that only one insertion is typically present in the genomic interval shown in JBrowse. To navigate between the different insertions, please select an insertion using the dropdown menu under the JBrowse window.</p>
-			<iframe name="jbrowse-embed" class="jbrowse-embed" src="<?php echo WEB_ROOT.'/genome/?data=genomes%2Flotus-japonicus%2Fv3.0&amp;loc='.urlencode($ins_coord).'&amp;embed=true'; ?>"></iframe>
+			<iframe name="jbrowse-embed" class="jbrowse-embed" src="<?php echo WEB_ROOT.'/genome/?data=genomes%2Flotus-japonicus%2Fmg20%2Fv3.0&amp;loc='.urlencode($ins_coord).'&amp;embed=true'; ?>"></iframe>
 			<ul class="list--reset cols flex-wrap__nowrap justify-content__flex-start jbrowse__action">
 				<li><div><label for="insertion-dropdown">Select insertion:</label><select id="insertion-dropdown"><?php
 					// Generate dropdown options for all insertion positions
