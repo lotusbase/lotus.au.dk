@@ -29,15 +29,18 @@
 		$exec_vars = array();
 
 		// What version are we filtering for?
+		$lj_genome_versions_class = new \LotusBase\LjGenomeVersion();
 		if(!isset($_GET['v']) || empty($_GET['v'])) {
-			$version = $lj_genome_versions;
+			$version = $lj_genome_versions_class->get_genome_ids();
 		} else {
 			$version = (is_array($_GET['v']) ? $_GET['v'] : explode(',', escapeHTML($_GET['v'])));
 		}
 		foreach($version as $v) {
-			$version_str[] = strval($v);
+			$version_pieces = explode('_', $v);
+			$ecotypes[] = $version_pieces[0];
+			$versions[] = $version_pieces[1];
 		}
-		$exec_vars = array_merge($exec_vars, $version_str);
+		$exec_vars = array_merge($exec_vars, $ecotypes, $versions);
 
 		// If an ID is used in a search
 		if(isset($_GET['ids']) && !empty($_GET['ids'])) {
@@ -56,6 +59,7 @@
 				FROM annotations AS anno
 				LEFT JOIN transcriptcoord AS tc ON (
 					anno.Gene = tc.Transcript AND
+					anno.Ecotype = tc.Ecotype AND
 					anno.Version = tc.Version
 				)
 				LEFT JOIN domain_predictions AS dompred ON (
@@ -64,7 +68,10 @@
 				LEFT JOIN interpro_go_mapping AS ip_go ON (
 					dompred.InterProID = ip_go.Interpro_ID
 				)
-				WHERE anno.Version IN (".str_repeat("?,", count($version_str)-1)."?".") AND (";
+				WHERE
+					anno.Ecotype IN (".str_repeat("?,", count($ecotypes)-1)."?".") AND
+					anno.Version IN (".str_repeat("?,", count($versions)-1)."?".") AND
+					(";
 			foreach ($vars as $trx_item) {
 				if(preg_match('/^chr\d+/', $trx_item)) {
 					$dbq .= "anno.Gene LIKE ? OR ";
@@ -95,6 +102,7 @@
 					transcriptcoord AS tc
 				LEFT JOIN annotations AS anno ON (
 					tc.Transcript = anno.Gene AND
+					tc.Ecotype = anno.Ecotype AND
 					tc.Version = anno.Version
 				)
 				LEFT JOIN domain_predictions AS dompred ON (
@@ -103,7 +111,9 @@
 				LEFT JOIN interpro_go_mapping AS ip_go ON (
 					dompred.InterProID = ip_go.Interpro_ID
 				)
-				WHERE anno.Version IN (".str_repeat("?,", count($version_str)-1)."?".")
+				WHERE
+					anno.Ecotype IN (".str_repeat("?,", count($ecotypes)-1)."?".") AND
+					anno.Version IN (".str_repeat("?,", count($versions)-1)."?".")
 			";
 
 			// Assign variables
@@ -154,6 +164,7 @@
 			$q1 = $db->prepare("SELECT
 				anno.ID AS ID,
 				anno.Gene AS Transcript,
+				anno.Ecotype AS Ecotype,
 				anno.Version AS Version
 				".$dbq." ORDER BY tc.Transcript ASC");
 			$q1->execute($exec_vars);
@@ -169,9 +180,10 @@
 				while($r = $q1->fetch(PDO::FETCH_ASSOC)) {
 					$q1_rows['ID'][] = $r['ID'];
 					$q1_rows['Transcript'][] = $r['Transcript'];
+					$q1_rows['Ecotype'][] = $r['Ecotype'];
 					$q1_rows['Version'][] = $r['Version'];
 
-					if(floatVal($r['Version']) >= 3) {
+					if(floatVal($r['Version']) >= 3 && $r['Ecotype'] === 'MG20') {
 						$q1_filtered_rows['ID'][] = $r['ID'];
 						$q1_filtered_rows['Transcript'][] = $r['Transcript'];
 					}
@@ -193,6 +205,7 @@
 			// Perform actual query
 			$q2 = $db->prepare("SELECT
 				anno.Gene AS Transcript,
+				anno.Ecotype AS Ecotype,
 				anno.Version AS Version,
 				tc.StartPos AS Start,
 				tc.EndPos AS End,
@@ -374,8 +387,10 @@
 					<div class="col-one"><label>Genome version(s) <a href="<?php echo WEB_ROOT; ?>/lib/docs/version-filtering" class="info" title="Filtering for versions" data-modal>?</a></label></div>
 					<div class="col-two cols justify-content__flex-start versions">
 						<?php
-							foreach($lj_genome_versions as $v) {
-								echo '<input type="checkbox" value="'.$v.'" class="prettify" name="v[]" id="version-'.$v.'" '.(isset($version) ? (in_array($v, $version) ? 'checked' : '') : (version_compare($v, '3.0') >= 0 ? 'checked' : '')).'/><label for="version-'.$v.'">'.$v.'</label>';
+							foreach($lj_genome_versions as $label => $lj_genome) {
+								$lj_genome_id = implode('_', [$lj_genome['ecotype'], $lj_genome['version']]);
+								$lj_genome_version = $lj_genome['version'];
+								echo '<input type="checkbox" value="'.$lj_genome_id.'" class="prettify" name="v[]" id="'.$lj_genome_id.'" '.(isset($version) ? (in_array($lj_genome_id, $version) ? 'checked' : '') : (version_compare($lj_genome_version, '3.0') >= 0 ? 'checked' : '')).'/><label for="version-'.$lj_genome_id.'">'.$label.'</label>';
 							}
 						?>
 					</div>
@@ -529,7 +544,7 @@
 										<span class="icon-switch">Protein sequence</span>
 									</a>
 								</li>
-								<li><a href="../genome?loc=<?php echo $row['Transcript']; ?>" title="View in genome browser"><span class="icon-book">Genome browser</span></a></li>
+								<li><a href="../genome?data=genomes%2Flotus-japonicus%2Fmg20%2Fv3.0&loc=<?php echo $row['Transcript']; ?>" title="View in genome browser"><span class="icon-book">Genome browser</span></a></li>
 								<li><a href="../expat/?ids=<?php echo $row['Transcript']; ?>&amp;t=6" title="Access expression data from the Expression Atlas"><span class="icon-map">Expression Atlas (ExpAt)</span></a></li>
 								<?php if(is_logged_in()) { ?>
 									<li><a class="manual-gene-anno" href="<?php echo WEB_ROOT; ?>/lib/docs/gene-annotation" title="Manual gene name suggestion for <?php echo $row['Transcript']; ?>" data-gene="<?php echo $row['Transcript']; ?>"><span class="pictogram icon-bookmark">Suggest <?php echo ((isset($row['LjAnnotation']) && !empty($row['LjAnnotation'])) ? 'another ' : ''); ?><em>Lj</em> gene name</span></a></li>

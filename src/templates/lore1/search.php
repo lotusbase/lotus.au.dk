@@ -18,21 +18,23 @@
 
 		// Fetch all search parameters. Declare empty if not found, and clean them
 		if(!isset($_GET['blast'])) {	$blast = '';		} else { 	$blast =	trim($_GET['blast']);	}	// Sanitized later
-		if(!isset($_GET['pid'])) {		$pid = '';			} else {	$pid =		$_GET['pid'];		}
-		if(!isset($_GET['pos1'])) {		$pos1 = '';			} else {	$pos1 =		$_GET['pos1'];	}
-		if(!isset($_GET['pos2'])) {		$pos2 = '';			} else {	$pos2 =		$_GET['pos2'];	}	
-		if(!isset($_GET['chr'])) {		$chr = '';			} else {	$chr =		$_GET['chr'];		}
-		if(!isset($_GET['gene'])) { 	$gene = '';			} else {	$gene =		$_GET['gene'];	}
-		if(!isset($_GET['anno'])) { 	$anno = '';			} else {	$anno =		$_GET['anno'];	}
-		if(!isset($_GET['ord'])) { 		$ord = 'Position'; 	} else { 	$ord =		$_GET['ord'];		}
-		if(!isset($_GET['n'])) {		$num = '100';		} else {	$num =		$_GET['n'];		}			// Default to 100 rows per page
+		if(!isset($_GET['pid'])) {		$pid = '';			} else {	$pid =		$_GET['pid'];			}
+		if(!isset($_GET['pos1'])) {		$pos1 = '';			} else {	$pos1 =		$_GET['pos1'];			}
+		if(!isset($_GET['pos2'])) {		$pos2 = '';			} else {	$pos2 =		$_GET['pos2'];			}	
+		if(!isset($_GET['chr'])) {		$chr = '';			} else {	$chr =		$_GET['chr'];			}
+		if(!isset($_GET['gene'])) { 	$gene = '';			} else {	$gene =		$_GET['gene'];			}
+		if(!isset($_GET['anno'])) { 	$anno = '';			} else {	$anno =		$_GET['anno'];			}
+		if(!isset($_GET['ord'])) { 		$ord = 'Position'; 	} else { 	$ord =		$_GET['ord'];			}
+		if(!isset($_GET['n'])) {		$num = '100';		} else {	$num =		$_GET['n'];				}	// Default to 100 rows per page
 		if(!isset($_GET['p'])) {		$page = '1';		} else {	$page =		$_GET['p'];				}	// Redirect to page 1
-		if(!isset($_GET['v'])) {		$version = '';		} else {	$version =	$_GET['v'];			}
+		if(!isset($_GET['v'])) {		$genome = '';		} else {	$genome =	$_GET['v'];				}
 
 		// Convert to integers
 		$page = intval($page);
 		$num = intval($num);
-		$version = strval($version);
+		$genome_parts = explode('_', $genome);
+		$ecotype = $genome_parts[0];
+		$version = $genome_parts[1];
 
 		// Parse plant IDs of alternative format
 		$pid = preg_replace('/^DK\d{2}\-0(3\d{7})$/', '$1', $pid);
@@ -41,10 +43,11 @@
 		$gene = preg_replace('/^(Lj.*)\.\d+$/', '$1', $gene);
 
 		// Check if database version is specified
-		if(empty($version) || !in_array($version, $lj_genome_versions)) {
+		$lj_genome_labels = array_map(function($genome) { return implode('_', [$genome['ecotype'], $genome['version']]); }, $lj_genome_versions);
+		if(empty($genome) || !in_array($genome, $lj_genome_labels)) {
 			$ea = array(
-				"title" => "Database version not specified",
-				"message" => "You have not specified a <em>LORE1</em> database version to search against."
+				"title" => "Genome assembly version not specified",
+				"message" => "You have not specified a genome assembly version to search against."
 			);
 			$error_flag = true;
 			
@@ -91,17 +94,35 @@
 		if(!$error_flag) {
 
 			// Construct general MySQL query based on seach type
-			$dbq = "FROM lore1ins AS lore LEFT JOIN geneins AS gene ON (lore.Chromosome = gene.Chromosome AND lore.Position = gene.Position AND lore.Orientation = gene.Orientation AND lore.version = gene.Version) LEFT JOIN exonins AS exon ON (lore.Chromosome = exon.Chromosome AND lore.Position = exon.Position AND lore.Orientation = exon.Orientation AND lore.Version = exon.Version) LEFT JOIN annotations AS anno ON (exon.Gene = anno.Gene AND exon.Version = anno.Version) LEFT JOIN lore1seeds AS seeds ON lore.PlantID = seeds.PlantID";
-			if($search_type == 1 || $search_type == 2) {
+			$dbq = "FROM lore1ins AS lore
+				LEFT JOIN geneins AS gene ON (
+					lore.Chromosome = gene.Chromosome AND
+					lore.Position = gene.Position AND
+					lore.Orientation = gene.Orientation AND
+					lore.Ecotype = gene.Ecotype AND
+					lore.version = gene.Version)
+				LEFT JOIN exonins AS exon ON (
+					lore.Chromosome = exon.Chromosome AND
+					lore.Position = exon.Position AND
+					lore.Orientation = exon.Orientation AND
+					lore.Ecotype = exon.Ecotype AND
+					lore.Version = exon.Version)
+				LEFT JOIN annotations AS anno ON (
+					exon.Gene = anno.Gene AND
+					exon.Ecotype = anno.Ecotype AND
+					exon.Version = anno.Version)
+				LEFT JOIN lore1seeds AS seeds ON
+					lore.PlantID = seeds.PlantID";
+			if($search_type === 1 || $search_type === 2) {
 				// Only allow normal users to search for lines with seed stock available
-				$dbq .= " WHERE lore.Version = ? AND seeds.SeedStock = 1";
+				$dbq .= " WHERE lore.Ecotype = ? AND lore.Version = ? AND seeds.SeedStock = 1";
 			}
 
 			// Construct placeholder array
-			$placeholder_array = array($version);
+			$placeholder_array = array($ecotype, $version);
 
 			// Perform specific validation and advanced query construction based on search types
-			if($search_type == 1) {
+			if($search_type === 1) {
 
 				// Format input such that each value is separated by ", "
 				$blast_pattern = array(
@@ -155,7 +176,7 @@
 				$dbq = substr($dbq, 0 ,-4).")";
 				$ord = 'Chromosome';
 
-			} elseif($search_type == 2) {
+			} elseif($search_type === 2) {
 				// Search type: General search
 				// "\n\t" are for formatting purpose when displaying the query later
 				if($pos1 > $pos2) {
@@ -387,7 +408,7 @@
 					<button type="button" id="dla">Download Entire Search (<span><?php echo $rows; ?></span>)</button>
 					<input type="hidden" value="" name="d" id="dlt" />
 					<input type="hidden" value='<?php echo $ak; ?>' name="ak" />
-					<input type="hidden" value="<?php echo $version; ?>" name="v" />
+					<input type="hidden" value="<?php echo $genome; ?>" name="genome" />
 					<input type="hidden" value="<?php echo $_SERVER['REQUEST_URI']; ?>" name="origin" />
 					<input type="hidden" name="CSRF_token" value="<?php echo CSRF_TOKEN; ?>" />
 				</div>				
@@ -474,7 +495,7 @@
 								if(!empty($pid)) {
 									echo $results['PlantID'];
 								} else {
-									echo '<div class="dropdown button"><span class="dropdown--title">'.$results['PlantID'].'</span><ul class="dropdown--list"><li><a href="'.$_SERVER['PHP_SELF'].'?v='.$version.'&pid='.$results['PlantID'].'" title="Search database for this LORE1 line: '.$results['PlantID'].'"><span class="pictogram icon-search">Get all entries for this line</span></a></li></ul></div>';							
+									echo '<div class="dropdown button"><span class="dropdown--title">'.$results['PlantID'].'</span><ul class="dropdown--list"><li><a href="'.$_SERVER['PHP_SELF'].'?v='.$genome.'&pid='.$results['PlantID'].'" title="Search database for this LORE1 line: '.$results['PlantID'].'"><span class="pictogram icon-search">Get all entries for this line</span></a></li></ul></div>';							
 								}
 							?>
 						</td>
@@ -497,12 +518,12 @@
 									foreach($genes as $gene) {
 										echo '<div class="dropdown button"><span class="dropdown--title"><a href="'.WEB_ROOT.'/view/gene/'.$gene.'" title="View gene details for '.$gene.'">'.$gene.'</a></span><ul class="dropdown--list">';
 
-										echo '<li><a href="'.$_SERVER['PHP_SELF'].'?v='.$version.'&gene='.$gene.'" title="Search database for this gene: '.$gene.'"><span class="pictogram icon-search"><em>LORE1</em> search</span></a></li>';
+										echo '<li><a href="'.$_SERVER['PHP_SELF'].'?v='.$genome.'&gene='.$gene.'" title="Search database for this gene: '.$gene.'"><span class="pictogram icon-search"><em>LORE1</em> search</span></a></li>';
 
 										if(version_compare($version, '3.0') >= 0) {
 											echo '<li><a href="'.WEB_ROOT.'/view/gene/'.$gene.'" title="View gene details for '.$gene.'"><span class="icon-eye">View gene info</span></a></li>';
-											echo '<li><a href="/tools/trex.php?ids='.$gene.'&v='.$version.'" title="Get advanced transcript information for this gene: '.$gene.'"><span class="pictogram icon-search">Send to Transcript Explorer</span></a></li>';
-											echo '<li><a href="/expat/?ids='.$gene.'&v='.$version.'&t=6&dataset=ljgea-geneid" title="Access expression data from the Lotus japonicus expression atlas tool"><span class="pictogram icon-map">Send to Expression Atlas</span></a></li>';
+											echo '<li><a href="/tools/trex.php?ids='.$gene.'&v='.$genome.'" title="Get advanced transcript information for this gene: '.$gene.'"><span class="pictogram icon-search">Send to Transcript Explorer</span></a></li>';
+											echo '<li><a href="/expat/?ids='.$gene.'&v='.$genome.'&t=6&dataset=ljgea-geneid" title="Access expression data from the Lotus japonicus expression atlas tool"><span class="pictogram icon-map">Send to Expression Atlas</span></a></li>';
 											echo '<li><a href="/genome/?loc='.$gene.'" title="View in genome browser"><span class="pictogram icon-map">View in genome browser</span></a></li>';
 										}
 
@@ -523,9 +544,9 @@
 										foreach($exons as $exon) {
 											echo '<div class="dropdown button"><span class="dropdown--title"><a href="'.WEB_ROOT.'/view/transcript/'.$exon.'" title="View transcript details for '.$exon.'">'.$exon.'</a></span><ul class="dropdown--list">';
 
-											echo '<li><a data-gene="'.$exon.'" data-version="'.$version.'" class="api-gene-annotation" title="Fetching gene annotation&hellip;"><span class="pictogram icon-cog">Fetching gene annotation&hellip;</a></span></li>';
+											echo '<li><a data-gene="'.$exon.'" data-genome-ecotype="'.$ecotype.'" data-genome-version="'.$version.'" class="api-gene-annotation" title="Fetching gene annotation&hellip;"><span class="pictogram icon-cog">Fetching gene annotation&hellip;</a></span></li>';
 
-											if(version_compare($version, '3.0') >= 0) {
+											if(version_compare($version, '3.0') >= 0 && $ecotype === 'MG20') {
 												echo '<li><a href="'.WEB_ROOT.'/view/transcript/'.$exon.'" title="View transcript details for '.$exon.'"><span class="icon-eye">View transcript info</span></a></li>';
 											}
 
@@ -543,7 +564,7 @@
 							<!--<td class="pcr" data-type="numeric"><?php echo $results['PCRInsPos']; ?></td>-->
 							<!--<td class="pcr" data-type="numeric"><?php echo $results['PCRWT']; ?></td>-->
 							<td class="flk">
-								<a class="api-insertion-flank button" data-key="<?php echo $results['Salt']; ?>" data-version="<?php echo $version; ?>"><span class="pictogram icon-reply"></span>View</a>
+								<a class="api-insertion-flank button" data-key="<?php echo $results['Salt']; ?>" data-genome-ecotype="<?php echo $ecotype; ?>" data-genome-version="<?php echo $version; ?>"><span class="pictogram icon-reply"></span>View</a>
 							</td>
 					</tr>
 					<?php

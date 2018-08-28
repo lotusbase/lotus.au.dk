@@ -974,12 +974,13 @@ $(function() {
 
 	// AJAX to fetch gene annotation
 	$d.on('click', '.api-gene-annotation', function(e) {
-		var q = $(this).data('gene'),
-			v = $(this).data('version'),
-			strict = 0;
+		var q = $(this).data('gene');
+		var genomeEcotype = $(this).data('genome-ecotype');
+		var genomeVersion = $(this).data('genome-version');
+		var strict = 0;
 
 		$.get(
-			root + '/api/v1/gene/annotation/v' + encodeURIComponent(v) + '/' + encodeURIComponent(q),
+			root + '/api/v1/gene/annotation/' + encodeURIComponent(genomeEcotype) + '/' + encodeURIComponent(genomeVersion) + '/' + encodeURIComponent(q),
 			'strict=' + encodeURIComponent(strict),
 			function(data) {
 				if(!data.error) {
@@ -989,8 +990,8 @@ $(function() {
 					});
 				} else {
 					msg = 'The annotation of the gene <code>' + q + '</code> is unavailable, i.e. it is yet to be annotated.';
-					if(parseFloat(v) < parseFloat(3.0)) {
-						msg += ' You are searching using an older version of the LORE1 database &mdash; you might want to repeat your search with the latest database.';
+					if(parseFloat(genomeVersion) < parseFloat(3.0) && genomeEcotype === 'MG20') {
+						msg += ' You are searching using an older version of the <em>LORE1</em> database &mdash; you might want to repeat your search with the latest database.';
 					}
 					globalFun.modal.open({
 						'title': 'Gene annotation unavailable',
@@ -1013,8 +1014,9 @@ $(function() {
 
 	// AJAX to fetch insertion flank
 	$('.results .api-insertion-flank').click(function(e) {
-		var q = $(this).data('key'),
-			v = $(this).data('version');
+		var q = $(this).data('key');
+		var genomeEcotype = $(this).data('genome-ecotype');
+		var genomeVersion = $(this).data('genome-version');
 
 		globalFun.modal.open({
 			'title': 'Fetching flanking sequence&hellip;',
@@ -1022,7 +1024,7 @@ $(function() {
 		});
 
 		$.get(
-			root + '/api/v1/lore1/flanking-sequence/v' + encodeURIComponent(v) + '/' + encodeURIComponent(q),
+			root + '/api/v1/lore1/flanking-sequence/' + encodeURIComponent(genomeEcotype) + '/' + encodeURIComponent(genomeVersion) + '/' + encodeURIComponent(q),
 			'',
 			function(data) {
 				var d = data.data;
@@ -1305,9 +1307,11 @@ $(function() {
 	if(exonArray.length > 0) {
 		// Retrieve annotations from server by AJAX
 		var exons = exonArray.join(',');
+		var genomeId = $("#dl").find("input[name='genome']").val();
+		var genomeParts = genomeId.split('_');
 
 		$.get(
-			root + '/api/v1/gene/annotation/v' + $("#dl").find("input[name='v']").val() + '/' + exons,
+			root + '/api/v1/gene/annotation/' + genomeParts[0] + '/' + genomeParts[1] + '/' + exons,
 			'strict=0',
 			function(data) {
 				// Log error if any

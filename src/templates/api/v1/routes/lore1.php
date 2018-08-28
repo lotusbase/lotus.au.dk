@@ -274,13 +274,14 @@ $api->get('/lore1/{pids}/verify', function ($request, $response, $args) {
 });
 
 // LORE1 flanking sequence
-$api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($request, $response, $args) {
+$api->get('/lore1/flanking-sequence/{genomeEcotype}/{genomeVersion}/{id}[/{cutoff}]', function ($request, $response, $args) {
 
 	try {
 		$db = $this->get('db');
 
-		// Sanity check for Lotus genome version
-		$ver = new \LotusBase\LjGenomeVersion(array('version' => $args['version']));
+		// Sanity check for Lotus genome assembly
+		$genome_id = $args['genomeEcotype'].'_'.$args['genomeVersion'];
+		$ver = new \LotusBase\LjGenomeVersion(array('genome' => $genome_id));
 		if(!$ver->check()) {
 			return $response
 				->withStatus(400)
@@ -297,12 +298,14 @@ $api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($requ
 			FROM lore1ins
 			WHERE
 				Salt = :salt AND
+				Ecotype = :ecotype AND
 				Version = :version
 				");
 
 		// Bind params and execute
 		$q->bindParam(":salt", hex2bin($args['id']));
-		$q->bindParam(":version", $ver->check());
+		$q->bindParam(":ecotype", $args['genomeEcotype']);
+		$q->bindParam(":version", $args['genomeVersion']);
 		$q->execute();
 
 		// Get results

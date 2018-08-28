@@ -140,7 +140,7 @@
 
 	<section class="wrapper">
 		<h2><?php echo $id; ?></h2>
-		<span class="byline">View in <a href="<?php echo WEB_ROOT.'/lore1/search?pid='.$id.'&v=3.0'; ?>"><em>LORE1</em> search tool</a></span>
+		<span class="byline">View in <a href="<?php echo WEB_ROOT.'/lore1/search?pid='.$id.'&v=MG20_3.0'; ?>"><em>LORE1</em> search tool</a></span>
 
 		<div id="view__card" class="view__facet">
 			<h3>Overview</h3>

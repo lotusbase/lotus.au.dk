@@ -7,8 +7,18 @@
 		<div class="col-two field__version">
 			<select name="v" id="genome-version">
 				<option value="" <?php echo (isset($input['v']) && empty($input['v'])) ? "selected" : ""; ?>>Select genome version</option>
-				<?php foreach($lj_genome_versions as $v) {
-					echo '<option value="'.$v.'" '.(isset($input['v']) && !empty($input['v']) && strval($input['v']) === $v ? 'selected' : '').'>v'.$v.'</option>';
+				<?php foreach($lj_genome_versions as $label => $lj_genome) {
+					$lj_genome_id = implode('_', [$lj_genome['ecotype'], $lj_genome['version']]);
+					$lj_genome_version = $lj_genome['version'];
+
+					// NOTE: We disable LORE1 search for Gifu v1.1 for now, because data is not yet available
+					$disabled = false;
+					if ($label === 'Gifu v1.1') {
+						$disabled = true;
+						$label .= ' (coming soon)';
+					}
+
+					echo '<option value="'.$lj_genome_id.'" '.(isset($input['v']) && !empty($input['v']) && strval($input['v']) === $lj_genome_id ? 'selected' : '').' '.($disabled ? 'disabled' : '').'>'.$label.'</option>';
 				} ?>
 			</select>
 		</div>

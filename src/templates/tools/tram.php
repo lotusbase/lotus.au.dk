@@ -270,16 +270,29 @@
 					<div class="col-one col-half-width"><label>Source version</label></div>
 					<select class="col-two col-half-width" name="source_version" id="source-version">
 						<?php
-							foreach($lj_genome_versions as $v) {
-								echo '<option value="'.$v.'" '.(isset($_GET['source_version']) && $_GET['source_version'] === $v ? 'selected' : '').'>'.$v.'</option>';
+							foreach($lj_genome_versions as $label => $lj_genome) {
+								// Ignore if is Gifu
+								if ($lj_genome['ecotype'] === 'Gifu') {
+									continue;
+								}
+
+								$v = $lj_genome['version'];
+
+								echo '<option value="'.$v.'" '.(isset($_GET['source_version']) && $_GET['source_version'] === $v ? 'selected' : '').'>'.$label.'</option>';
 							}
 						?>
 					</select>
 					<div class="col-one col-half-width align-right"><label>Target version</label></div>
-					<select class="col-two col-half-width" name="target_version" id="target-version">
+					<select class="col-two col-half-width" name="target_version" id="target-version" class="disabled">
 						<?php
-							foreach($lj_genome_versions as $v) {
-								echo ((isset($_GET['source_version']) && $_GET['source_version'] === $v) || (!isset($_GET['source_version']) && $v === '2.5') ? '' : '<option value="'.$v.'">'.$v.'</option>');
+							foreach($lj_genome_versions as $label => $lj_genome) {
+								// Ignore if is Gifu
+								if ($lj_genome['ecotype'] === 'Gifu') {
+									continue;
+								}
+
+								$v = $lj_genome['version'];
+								echo ((isset($_GET['source_version']) && $_GET['source_version'] === $v) || (!isset($_GET['source_version']) && $v === '2.5') ? '' : '<option value="'.$v.'">'.$label.'</option>');
 							}
 						?>
 					</select>
@@ -334,11 +347,11 @@
 				function dropdown($transcript, $version) {
 					$out = '<div class="dropdown button"><span class="dropdown--title"><a href="'.WEB_ROOT.'/gene/'.$transcript.'">'.$transcript.'</a></span><ul class="dropdown--list">';
 					if(version_compare($version, '3.0', '>=')) {
-						$out .= '<li><a href="'.WEB_ROOT.'/gene/'.$transcript.'"><span class="icon-search">View gene</span></a></li>';
+						$out .= '<li><a href="'.WEB_ROOT.'/view/gene/'.$transcript.'"><span class="icon-search">View gene</span></a></li>';
 					}
-					$out .= '<li><a href="'.WEB_ROOT.'/lore1/search?v='.$version.'&gene='.$transcript.'"><span class="icon-leaf"><em>LORE1</em> v'.$version.'</span></a></li>';
+					$out .= '<li><a href="'.WEB_ROOT.'/lore1/search?v=MG20_'.$version.'&gene='.$transcript.'"><span class="icon-leaf"><em>LORE1</em> v'.$version.'</span></a></li>';
 					if(version_compare($version, '3.0', '>=')) {
-						$out .= '<li><a href="'.WEB_ROOT.'/genome?loc='.$transcript.'" title="View in genome browser"><span class="icon-book">Genome browser</span></a></li>';
+						$out .= '<li><a href="'.WEB_ROOT.'/genome?data=genomes%2Flotus-japonicus%2Fmg20%2Fv3.0&loc='.$transcript.'" title="View in genome browser"><span class="icon-book">Genome browser</span></a></li>';
 					}
 					$out .= '</ul>';
 					return $out;
@@ -352,8 +365,8 @@
 				<colgroup></colgroup>
 				<thead>
 					<tr>
-						<th scope="col">Query (v<?php echo escapeHTML($_GET['source_version']); ?>)</th>
-						<th scope="col">Mapped transcript (v<?php echo escapeHTML($_GET['target_version']); ?>)</th>
+						<th scope="col">Query (MG20 v<?php echo escapeHTML($_GET['source_version']); ?>)</th>
+						<th scope="col">Mapped transcript (MG20 v<?php echo escapeHTML($_GET['target_version']); ?>)</th>
 						<th scope="col" data-type="numeric">Identity score (%)</th>
 						<th scope="col" data-type="numeric">E-value</th>
 					</tr>

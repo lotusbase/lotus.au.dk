@@ -191,9 +191,9 @@ $(function() {
 				});
 				$.each(data.Mean.row, function(i,rowID) {
 					var accessionLinks = [
-						'<li><a href="#" title="" class="api-gene-annotation" data-gene="'+rowID+'" data-version="3.0"><span class="pictogram icon-book">Gene annotation</span></a></li>',
+						'<li><a href="#" title="" class="api-gene-annotation" data-gene="'+rowID+'" data-genome-ecotype="MG20" data-genome-version="3.0"><span class="pictogram icon-book">Gene annotation</span></a></li>',
 						'<li><a href="/tools/trex.php?ids='+rowID+'" title="Get advanced transcript information for this gene: '+rowID+'"><span class="pictogram icon-direction">Send to Transcript Explorer (TREX)</span></a></li>',
-						'<li><a href="/lore1/search-exec.php?v=3.0&gene='+rowID+'" title="Search for LORE1 lines with insertion in this gene: '+rowID+'"><span class="pictogram icon-search">Search for <em>LORE1</em> mutants</span></a></li>'
+						'<li><a href="/lore1/search-exec.php?v=MG20_3.0&gene='+rowID+'" title="Search for LORE1 lines with insertion in this gene: '+rowID+'"><span class="pictogram icon-search">Search for <em>LORE1</em> mutants</span></a></li>'
 						].join(''),
 						tableRow = '<tr data-row="'+rowID+'"><th><input type="checkbox" class="'+data.dataset+'" value="'+rowID+'" /> ';
 					if(data.rowType === 'Gene ID') {
@@ -1002,7 +1002,7 @@ $(function() {
 						// Perform AJAX call
 						expatGeneAnnoAJAX = $.ajax({
 							method: 'get',
-							url: root + '/api/v1/gene/annotation/v3.0/'+d,
+							url: root + '/api/v1/gene/annotation/MG20/3.0/'+d,
 							dataType: 'json'
 						});
 

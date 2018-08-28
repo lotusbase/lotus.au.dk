@@ -1247,7 +1247,7 @@ $(function() {
 						// Perform AJAX call
 						expatGeneAnnoAJAX = $.ajax({
 							method: 'get',
-							url: root + '/api/v1/gene/annotation/v3.0/'+d,
+							url: root + '/api/v1/gene/annotation/MG20/3.0/'+d,
 							dataType: 'json'
 						});
 
@@ -1424,8 +1424,8 @@ $(function() {
 								'<span class="dropdown--title">'+g.id+'</span>',
 								'<ul class="dropdown--list">',
 									'<li><a href="'+root+'/view/gene/'+gene+'" title="View gene"><span class="icon-eye">View gene</span></a></li>',
-									'<li><a href="'+root+'/tools/trex?ids='+gene+'"><span class="icon-search">Send gene to Transcript Explorer (TREX)</span></a></li>',
-									'<li><a href="'+root+'/lore1/search-exec?gene='+gene+'&amp;v=3.0" title="Search for LORE1 insertions in this gene"><span class="pictogram icon-leaf"><em>LORE1</em> v3.0</span></a></li>',
+									'<li><a href="'+root+'/tools/trex?ids='+gene+'&amp;v=MG20_3.0"><span class="icon-search">Send gene to Transcript Explorer (TREX)</span></a></li>',
+									'<li><a href="'+root+'/lore1/search-exec?gene='+gene+'&amp;v=MG20_3.0" title="Search for LORE1 insertions in this gene"><span class="pictogram icon-leaf"><em>LORE1</em> v3.0</span></a></li>',
 								'</ul>',
 							'</div>'
 					].join(''),
