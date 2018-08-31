@@ -377,7 +377,7 @@ form {
 		position: relative;
 		&.error {
 			background: transparent;
-			color: darken($lotusPrimary2, 15%);
+			color: darken($lotusPrimary2, 15%) !important;
 			clear: both;
 			font-size: .75rem;
 			line-height: 2rem;

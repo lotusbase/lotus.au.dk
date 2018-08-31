@@ -103,7 +103,7 @@
 				} else {
 					$resp = $recaptcha->verify($_POST['g-recaptcha-response'], get_ip());
 					if(!$resp->isSuccess()) {
-						throw new Exception('You have failed to captcha check.');
+						throw new Exception('You have failed the captcha check. Please try again.');
 					}
 				}
 			}
@@ -277,10 +277,12 @@
 			</ul>
 
 			<div id="login__normal">
-				<form id="login-form login__normal" method="post" action="#">
+				<form id="login-form" method="post" action="#">
 					<div class="cols">
 						<label class="col-one" for="login">Username / email</label>
-						<input class="col-two" type="text" name="login" id="login" placeholder="Username or email" autofocus tabindex="1" />
+						<div class="col-two">
+							<input type="text" name="login" id="login" placeholder="Username or email" autofocus tabindex="1" />
+						</div>
 
 						<label class="col-one" for="password">Password</label>
 						<div class="col-two">
@@ -297,7 +299,7 @@
 							<label for="remember-login"><input type="checkbox" id="remember-login" name="remember_login" tabindex="'.($captcha ? 4 : 3).'" class="prettify" /><span>Remember me for one week</span></label>
 						</div>
 
-						<button type="submit" tabindex="3">Login</button>
+						<button id="login-form__submit" type="submit" tabindex="3" '.($captcha ? 'disabled' : '').'>Login</button>
 
 						<input type="hidden" name="CSRF_token" value="'.CSRF_TOKEN.'" />
 
@@ -325,25 +327,39 @@
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
 	<script src="<?php echo WEB_ROOT; ?>/dist/js/users.min.js"></script>
-	<?php if($captcha) { ?>
-		<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&amp;render=explicit" async defer></script>
-		<script>
-			// Google ReCaptcha
-			var onloadCallback = function() {
-					grecaptcha.render('google-recaptcha', {
-						'sitekey' : '6Ld3VQ8TAAAAAO7VZkD4zFAvqUxUuox5VN7ztwM5',
-						'callback': verifyCallback,
-						'expired-callback': expiredCallback,
-						'tabindex': 3
-					});
-				},
-				verifyCallback = function(response) {
-					globalFun.users.registration.validate();
-				},
-				expiredCallback = function() {
-					grecaptcha.reset();
-				};
-		</script>
-	<?php } ?>
+	<?php if($captcha) { ?><script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&amp;render=explicit" async defer></script><?php } ?>
+	<script>
+
+		<?php if(!$captcha) { ?>
+
+		// Manual recaptcha override
+		globalVar.recaptcha = true;
+
+		<?php } else { ?>
+
+		// Google ReCaptcha
+		var onloadCallback = function() {
+				grecaptcha.render('google-recaptcha', {
+					'sitekey' : '6Ld3VQ8TAAAAAO7VZkD4zFAvqUxUuox5VN7ztwM5',
+					'callback': verifyCallback,
+					'expired-callback': expiredCallback
+				});
+			},
+			verifyCallback = function(response) {
+				globalVar.recaptcha = true;
+				if(globalVar.recaptcha) {
+					$('#login-form__submit').prop('disabled', false);
+				} else {
+					$('#login-form__submit').prop('disabled', true);
+				}
+			},
+			expiredCallback = function() {
+				grecaptcha.reset();
+				$('#login-form__submit').prop('disabled', true);
+			};
+
+		<?php } ?>
+
+	</script>
 </body>
 </html>
