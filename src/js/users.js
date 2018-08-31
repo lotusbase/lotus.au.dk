@@ -128,7 +128,26 @@ $(function() {
 		}
 	});
 
+	// Login form validation
+	globalVar.login.form = {
+		validator: $('#login-form').validate({
+			ignore: [],
+			rules: {
+				login: { required: true },
+				password: { required: true },
+			}
+		})
+	};
+	$('#login-form').on('submit', function(e) {
+		// Check if grecaptcha is required
+		if($('#login-form').valid() && globalVar.grecaptcha !== void 0) {
+			// Reset captcha
+			globalVar.grecaptcha.reset();
 
+			// Disable submit button
+			$('#expat-form__submit').prop('disabled', true);
+		}
+	});
 
 	//======//
 	// Data //
