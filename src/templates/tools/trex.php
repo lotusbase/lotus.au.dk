@@ -268,22 +268,49 @@
 			$ids = explode(',', $_POST['ids']);
 			$q3 = $db->prepare("SELECT
 				anno.Gene AS Transcript,
-				anno.Version AS Version,
+				CONCAT(anno.Ecotype, ' v', anno.Version) AS GenomeAssembly,
 				tc.StartPos AS Start,
 				tc.EndPos AS End,
 				tc.Strand AS Strand,
 				tc.Chromosome AS Chromosome,
 				anno.Annotation AS Annotation,
-				anno.LjAnnotation AS LjAnnotation
+				anno.LjAnnotation AS LjAnnotation,
+				GROUP_CONCAT(DISTINCT gi.PlantID) AS LORE1_Insertions,
+				GROUP_CONCAT(DISTINCT dompred.InterproID) AS Interpro_ID,
+				GROUP_CONCAT(DISTINCT ip_go.GO_ID) AS GO_ID
 				FROM annotations AS anno
-				LEFT JOIN transcriptcoord AS tc ON (anno.Gene = tc.Transcript AND anno.Version = tc.Version)
+				LEFT JOIN transcriptcoord AS tc ON (
+					anno.Gene = tc.Transcript AND
+					anno.Ecotype = tc.Ecotype AND
+					anno.Version = tc.Version
+				)
+				LEFT JOIN domain_predictions AS dompred ON (
+					anno.Gene = dompred.Transcript
+				)
+				LEFT JOIN interpro_go_mapping AS ip_go ON (
+					dompred.InterProID = ip_go.Interpro_ID
+				)
+				LEFT JOIN geneins AS gi ON (
+					tc.Gene = gi.Gene
+				)
 				WHERE
 					anno.ID IN (".str_repeat("?,", count($ids)-1)."?".")
 				GROUP BY tc.Transcript ORDER BY tc.Transcript ASC");
 			$q3->execute($ids);
 
 			// Generate download file
-			$header = array("Transcript", "Start", "End", "Strand", "Chromosome", "Function", "Gene Name", "All PlantID(s)", "PlantID(s) with Exonic Insertions");
+			$header = array(
+				"Transcript",
+				"Genome assembly",
+				"Start",
+				"End",
+				"Strand",
+				"Chromosome",
+				"Annotation",
+				"Gene name",
+				"LORE1 genic insertions",
+				"Domain predictions",
+				"GO terms");
 			$out = implode("\t", $header)."\n";
 			while($r = $q3->fetch(PDO::FETCH_ASSOC)) {
 				$out .= implode("\t", $r)."\n";
@@ -339,7 +366,6 @@
 		<p>The <strong>Transcript Explorer</strong> tool can be used to search for candidate <em>Lotus</em> genes using user-defined keywords, or to comb a specific genomic interval&mdash;a combination of chromosome and position range&mdash;for genes/transcripts of interest.</p>
 
 		<?php 
-			print_r($_SESSION['trex_error']);
 			// Display error if any
 			if(!empty($error)) {
 				echo '<div class="user-message warning align-center"><h3>Houston, we have a problem!</h3>'.$error['message'].'</div>';
