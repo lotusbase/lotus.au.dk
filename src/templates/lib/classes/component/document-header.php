@@ -75,7 +75,7 @@ class DocumentHeader {
 			<![endif]-->
 
 			<!-- Google Analytics -->
-			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-37291877-2" integrity="sha384-w4h2ETrs/m8pO8KiodV/Dsn3WCtempuuhpRaLdrUarxug9dFMnbrqnT8rWKG6F2W" crossorigin="anonymous"></script>
+			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-37291877-2"></script>
 			<script>
 				window.dataLayer = window.dataLayer || [];
 				function gtag(){dataLayer.push(arguments);}
