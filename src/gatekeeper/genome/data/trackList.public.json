@@ -34,7 +34,7 @@
                "label": "Search for <em>LORE1</em> line",
                "iconClass": "dijitIconSearch",
                "action": "newWindow",
-               "url": "https://lotus.au.dk/lore1/search?v=MG20_3.0&chr={chromosome}&pos1={start}"
+               "url": "function(track, feature) { return 'https://lotus.au.dk/lore1/search?v=MG20_3.0&chr=' + feature.get('chromosome') + '&pos1=' + (feature.get('start') + 1); }"
             }
          ]
       },
