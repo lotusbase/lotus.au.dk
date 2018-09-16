@@ -845,7 +845,7 @@ $(function() {
 		.end()
 	.find('input[type="search"]')
 		.on('keydown paste', $.throttle(250, function() {
-			if(/^(Lj|chr\d\.CM\d{4})/gi.test($(this).val())) {
+			if(/^(Lj|chr\d\.CM\d{4}|PGSB_(mRNA|gene)_\d+)/gi.test($(this).val())) {
 				$(this).siblings('select.qtype').find('option[value="gene"]').prop('selected', true).trigger('manualchange');
 			} else if (/^(3|DK\d{2}\-03)\d{7}$/gi.test($(this).val())) {
 				$(this).siblings('select.qtype').find('option[value="lore1"]').prop('selected', true).trigger('manualchange');
