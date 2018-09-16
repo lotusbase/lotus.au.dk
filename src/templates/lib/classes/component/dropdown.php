@@ -103,13 +103,13 @@ class TranscriptDropdown extends Dropdown {
 				),
 			array(
 				'class' => 'icon-leaf',
-				'link' => WEB_ROOT.'/lore1/search-exec?gene='.$this->transcript.'&amp;v=3.0',
+				'link' => WEB_ROOT.'/lore1/search-exec?gene='.$this->transcript.'&amp;v=MG20_3.0',
 				'title' => 'Search for LORE1 insertions in this transcript',
-				'text' => '<em>LORE1</em> v3.0'
+				'text' => '<em>LORE1</em> insertions in MG20 v3.0'
 				),
 			array(
 				'class' => 'icon-book',
-				'link' => WEB_ROOT.'/genome?loc='.$this->transcript,
+				'link' => WEB_ROOT.'/genome?data=genomes%2Flotus-japonicus%2Fmg20%2Fv3.0&loc='.$this->transcript,
 				'title' => 'View transcript in genome browser',
 				'text' => 'Genome browser'
 				),

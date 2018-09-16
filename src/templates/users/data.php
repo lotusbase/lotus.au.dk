@@ -153,7 +153,7 @@
 								echo '</div>';
 								echo '<ul class="list--floated">';
 								foreach ($pid_list as $pid) {
-									echo '<li><a href="'.WEB_ROOT.'/lore1/search?v=3.0&pid='.$pid.'">'.$pid.'</a></li>';
+									echo '<li><a href="'.WEB_ROOT.'/lore1/search?v=MG20_3.0&pid='.$pid.'">'.$pid.'</a></li>';
 								}
 								echo '</ul>';
 								echo '</li>';

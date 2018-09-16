@@ -21,6 +21,51 @@
          "compress" : 0,
          "type" : "JBrowse/View/Track/HTMLFeatures",
          "label" : "20180416_genome_gaps"
+      },
+      {
+         "style" : {
+            "className" : "generic_parent",
+            "subfeatureClasses" : {
+               "mRNA" : "feature_mrna",
+               "exon" : "feature_exon",
+               "CDS" : "feature_cds"
+            },
+            "arrowheadClass" : "transcript-arrowhead",
+            "connectorThickness": 2,
+            "connectorColor": "#777777",
+            "color": "#35978f",
+            "utrColor": "#bf812d",
+            "borderWidth": 0
+         },
+         "key" : "<em>L. japonicus</em> Gifu v1.1 predicted genes",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "CanvasFeatures",
+         "urlTemplate" : "tracks/20180827_Lj_Gifu_v1.1_predictedGenes/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "CanvasFeatures",
+         "label" : "20180827_Lj_Gifu_v1.1_predictedGenes"
+      },
+      {
+         "style" : {
+            "className" : "generic_parent",
+            "subfeatureClasses" : {
+               "exon" : "feature_exon",
+               "CDS" : "feature_cds"
+            },
+            "arrowheadClass" : "transcript-arrowhead",
+            "connectorThickness": 2,
+            "connectorColor": "#777777",
+            "color": "#35978f",
+            "utrColor": "#bf812d",
+            "borderWidth": 0
+         },
+         "key" : "<em>L. japonicus</em> Gifu v1.1 predicted ORFs",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "CanvasFeatures",
+         "urlTemplate" : "tracks/20180827_Lj_Gifu_v1.1_predictedORFs/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "CanvasFeatures",
+         "label" : "20180827_Lj_Gifu_v1.1_predictedORFs"
       }
    ],
    "names" : {
@@ -28,8 +73,8 @@
       "type" : "Hash"
    },
    "dataset_id" : "lj_gifu_v11",
-   "alwaysOnTracks" : "DNA,20180416_genome_gaps",
-   "defaultTracks" : "DNA,20180416_genome_gaps",
+   "alwaysOnTracks" : "DNA,20180827_Lj_Gifu_v1.1_predictedGenes,20180827_Lj_Gifu_v1.1_predictedmRNA,20180827_Lj_Gifu_v1.1_predictedORFs,20180416_genome_gaps",
+   "defaultTracks" : "DNA,20180827_Lj_Gifu_v1.1_predictedGenes,20180827_Lj_Gifu_v1.1_predictedmRNA,20180827_Lj_Gifu_v1.1_predictedORFs,20180416_genome_gaps",
    "formatVersion" : 1,
    "defaultLocation" : "chr1",
    "highResolutionMode" : "auto",
@@ -39,5 +84,13 @@
    "aboutThisBrowser" : {
       "title" : "Lotus japonicus Genome Browser",
       "description" : "Genome browser for the model legume <em>Lotus japonicus</em>, with data such as protein predictions, RNA-seq data, LORE1 insertions and more, developed by the Centre for Carbohygrade Recognition and Signalling, Aarhus University, Denmark."
+   },
+   "trackMetadata" : {
+      "sources" : [
+         {
+            "url" : "genomes/lotus-japonicus/gifu/v1.1/trackMetadata.csv",
+            "type" : "csv"
+         }
+      ]
    }
 }

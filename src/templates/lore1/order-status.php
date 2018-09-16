@@ -282,7 +282,7 @@
 							<td><div class="dropdown button">
 								<span class="dropdown--title"><?php echo $line; ?></span>
 								<ul class="dropdown--list">
-									<li><a href="<?php echo WEB_ROOT.'/lore1/search?v=3.0&pid='.$line; ?>" title="Search database for this LORE1 line: <?php echo $line; ?>"><span class="icon-search">Search the <em>LORE1</em> v3.0 database</span></a></li>
+									<li><a href="<?php echo WEB_ROOT.'/lore1/search?v=MG20_3.0&pid='.$line; ?>" title="Search database for this LORE1 line: <?php echo $line; ?>"><span class="icon-search">Search the <em>LORE1</em> v3.0 database</span></a></li>
 									<li><a href="<?php echo WEB_ROOT.'/lore1/order-search?pid='.$line; ?>"><span class="icon-clock">Check order history</span></a></li>
 								</ul>
 							</div></td>

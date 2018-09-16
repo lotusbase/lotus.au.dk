@@ -197,8 +197,8 @@ $(function() {
 					dropdown = '<div class="dropdown button"><span class="dropdown--title">'+v.id+'</span><ul class="dropdown--list">';
 
 				// Dropdown actions
-				dropdown += '<li><a target="_blank" href="../tools/trex?ids='+gene+'"><span class="icon-direction">Send gene to Transcript Explorer (TREX)</span></a></li>';
-				dropdown += '<li><a target="_blank" href="../lore1/search-exec?gene='+gene+'&amp;v=3.0" title="Search for LORE1 insertions in this gene"><span class="pictogram icon-search">LORE1 v3.0</span></a></li>';
+				dropdown += '<li><a target="_blank" href="../tools/trex?ids='+gene+'&v=MG20_3.0"><span class="icon-direction">Send gene to Transcript Explorer (TREX)</span></a></li>';
+				dropdown += '<li><a target="_blank" href="../lore1/search-exec?gene='+gene+'&v=MG20_3.0" title="Search for LORE1 insertions in this gene"><span class="pictogram icon-search">LORE1 v3.0</span></a></li>';
 				dropdown += '</ul></div>';
 
 				$table.find('tbody').append('<tr><td class="chk"><input type="checkbox" value="'+v.id+'" name="ids[]" /></td><td>'+dropdown+'</td><td class="anno">'+out+'</td><td data-type="numeric">'+v.score.toFixed(5)+'</td></tr>');

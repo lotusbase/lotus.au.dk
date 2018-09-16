@@ -135,7 +135,7 @@
 				$firstname		= $_POST['firstname'];
 				$lastname		= $_POST['lastname'];
 				$captcha		= $_POST['g-recaptcha-response'];
-				$organization	= $_POST['organization'];
+				$organization	= (empty($_POST['organization']) ? null : $_POST['organization']);
 				$mailinglist	= (isset($_POST['mailinglist']) ? 1 : 0);
 
 				// Check for duplicate users

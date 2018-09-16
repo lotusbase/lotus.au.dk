@@ -29,18 +29,35 @@
 		$exec_vars = array();
 
 		// What version are we filtering for?
+		$lj_genome_versions_class = new \LotusBase\LjGenomeVersion();
 		if(!isset($_GET['v']) || empty($_GET['v'])) {
-			$version = $lj_genome_versions;
+			$version = $lj_genome_versions_class->get_genome_ids();
 		} else {
 			$version = (is_array($_GET['v']) ? $_GET['v'] : explode(',', escapeHTML($_GET['v'])));
 		}
+
+		$ecotypes = array();
+		$versions = array();
 		foreach($version as $v) {
-			$version_str[] = strval($v);
+			if ($v === 'Gifu_1.1' && (!$userComps || !in_array($v, $userComps))) {
+				unset($version[$v]);
+				continue;
+			}
+
+			$version_pieces = explode('_', $v);
+			$ecotypes[] = $version_pieces[0];
+			$versions[] = $version_pieces[1];
 		}
-		$exec_vars = array_merge($exec_vars, $version_str);
+		$exec_vars = array_merge($exec_vars, $ecotypes, $versions);
 
 		// If an ID is used in a search
-		if(isset($_GET['ids']) && !empty($_GET['ids'])) {
+		if (!count($versions)) {
+			$error = array(
+				'error' => true,
+				'message' => 'No valid genome assembly version was provided. This could happen if you have used an outdated link, or when you have attempt to access a genome assembly that you do not have permission to.'
+			);
+		}
+		else if(isset($_GET['ids']) && !empty($_GET['ids'])) {
 			// Construct query
 			if(is_array($_GET['ids'])) {
 				$trx = $_GET['ids'];
@@ -56,6 +73,7 @@
 				FROM annotations AS anno
 				LEFT JOIN transcriptcoord AS tc ON (
 					anno.Gene = tc.Transcript AND
+					anno.Ecotype = tc.Ecotype AND
 					anno.Version = tc.Version
 				)
 				LEFT JOIN domain_predictions AS dompred ON (
@@ -64,7 +82,10 @@
 				LEFT JOIN interpro_go_mapping AS ip_go ON (
 					dompred.InterProID = ip_go.Interpro_ID
 				)
-				WHERE anno.Version IN (".str_repeat("?,", count($version_str)-1)."?".") AND (";
+				WHERE
+					anno.Ecotype IN (".str_repeat("?,", count($ecotypes)-1)."?".") AND
+					anno.Version IN (".str_repeat("?,", count($versions)-1)."?".") AND
+					(";
 			foreach ($vars as $trx_item) {
 				if(preg_match('/^chr\d+/', $trx_item)) {
 					$dbq .= "anno.Gene LIKE ? OR ";
@@ -95,6 +116,7 @@
 					transcriptcoord AS tc
 				LEFT JOIN annotations AS anno ON (
 					tc.Transcript = anno.Gene AND
+					tc.Ecotype = anno.Ecotype AND
 					tc.Version = anno.Version
 				)
 				LEFT JOIN domain_predictions AS dompred ON (
@@ -103,7 +125,9 @@
 				LEFT JOIN interpro_go_mapping AS ip_go ON (
 					dompred.InterProID = ip_go.Interpro_ID
 				)
-				WHERE anno.Version IN (".str_repeat("?,", count($version_str)-1)."?".")
+				WHERE
+					anno.Ecotype IN (".str_repeat("?,", count($ecotypes)-1)."?".") AND
+					anno.Version IN (".str_repeat("?,", count($versions)-1)."?".")
 			";
 
 			// Assign variables
@@ -150,10 +174,15 @@
 		}
 
 		try {
+			if ($error) {
+				throw new Exception($error['message']);
+			}
+
 			// Prequery
 			$q1 = $db->prepare("SELECT
 				anno.ID AS ID,
 				anno.Gene AS Transcript,
+				anno.Ecotype AS Ecotype,
 				anno.Version AS Version
 				".$dbq." ORDER BY tc.Transcript ASC");
 			$q1->execute($exec_vars);
@@ -169,9 +198,13 @@
 				while($r = $q1->fetch(PDO::FETCH_ASSOC)) {
 					$q1_rows['ID'][] = $r['ID'];
 					$q1_rows['Transcript'][] = $r['Transcript'];
+					$q1_rows['Ecotype'][] = $r['Ecotype'];
 					$q1_rows['Version'][] = $r['Version'];
 
-					if(floatVal($r['Version']) >= 3) {
+					if (
+						(floatVal($r['Version']) >= 3 && $r['Ecotype'] === 'MG20') ||
+						($r['Version'] === '1.1' && $r['Ecotype'] === 'Gifu')
+					) {
 						$q1_filtered_rows['ID'][] = $r['ID'];
 						$q1_filtered_rows['Transcript'][] = $r['Transcript'];
 					}
@@ -193,6 +226,7 @@
 			// Perform actual query
 			$q2 = $db->prepare("SELECT
 				anno.Gene AS Transcript,
+				anno.Ecotype AS Ecotype,
 				anno.Version AS Version,
 				tc.StartPos AS Start,
 				tc.EndPos AS End,
@@ -234,22 +268,49 @@
 			$ids = explode(',', $_POST['ids']);
 			$q3 = $db->prepare("SELECT
 				anno.Gene AS Transcript,
-				anno.Version AS Version,
+				CONCAT(anno.Ecotype, ' v', anno.Version) AS GenomeAssembly,
 				tc.StartPos AS Start,
 				tc.EndPos AS End,
 				tc.Strand AS Strand,
 				tc.Chromosome AS Chromosome,
 				anno.Annotation AS Annotation,
-				anno.LjAnnotation AS LjAnnotation
+				anno.LjAnnotation AS LjAnnotation,
+				GROUP_CONCAT(DISTINCT gi.PlantID) AS LORE1_Insertions,
+				GROUP_CONCAT(DISTINCT dompred.InterproID) AS Interpro_ID,
+				GROUP_CONCAT(DISTINCT ip_go.GO_ID) AS GO_ID
 				FROM annotations AS anno
-				LEFT JOIN transcriptcoord AS tc ON (anno.Gene = tc.Transcript AND anno.Version = tc.Version)
+				LEFT JOIN transcriptcoord AS tc ON (
+					anno.Gene = tc.Transcript AND
+					anno.Ecotype = tc.Ecotype AND
+					anno.Version = tc.Version
+				)
+				LEFT JOIN domain_predictions AS dompred ON (
+					anno.Gene = dompred.Transcript
+				)
+				LEFT JOIN interpro_go_mapping AS ip_go ON (
+					dompred.InterProID = ip_go.Interpro_ID
+				)
+				LEFT JOIN geneins AS gi ON (
+					tc.Gene = gi.Gene
+				)
 				WHERE
 					anno.ID IN (".str_repeat("?,", count($ids)-1)."?".")
 				GROUP BY tc.Transcript ORDER BY tc.Transcript ASC");
 			$q3->execute($ids);
 
 			// Generate download file
-			$header = array("Transcript", "Start", "End", "Strand", "Chromosome", "Function", "Gene Name", "All PlantID(s)", "PlantID(s) with Exonic Insertions");
+			$header = array(
+				"Transcript",
+				"Genome assembly",
+				"Start",
+				"End",
+				"Strand",
+				"Chromosome",
+				"Annotation",
+				"Gene name",
+				"LORE1 genic insertions",
+				"Domain predictions",
+				"GO terms");
 			$out = implode("\t", $header)."\n";
 			while($r = $q3->fetch(PDO::FETCH_ASSOC)) {
 				$out .= implode("\t", $r)."\n";
@@ -374,8 +435,16 @@
 					<div class="col-one"><label>Genome version(s) <a href="<?php echo WEB_ROOT; ?>/lib/docs/version-filtering" class="info" title="Filtering for versions" data-modal>?</a></label></div>
 					<div class="col-two cols justify-content__flex-start versions">
 						<?php
-							foreach($lj_genome_versions as $v) {
-								echo '<input type="checkbox" value="'.$v.'" class="prettify" name="v[]" id="version-'.$v.'" '.(isset($version) ? (in_array($v, $version) ? 'checked' : '') : (version_compare($v, '3.0') >= 0 ? 'checked' : '')).'/><label for="version-'.$v.'">'.$v.'</label>';
+							foreach($lj_genome_versions as $label => $lj_genome) {
+								// Only display Gifu v1.1 if user is authorized access
+								if ($label === 'Gifu v1.1' && (!$userComps || !in_array($lj_genome['ecotype'].'_'.$lj_genome['version'], $userComps))) {
+									continue;
+								}
+								
+								$lj_genome_id = implode('_', [$lj_genome['ecotype'], $lj_genome['version']]);
+								$lj_genome_version = $lj_genome['version'];
+								$checked = (isset($version) && (in_array($lj_genome_id, $version))) || ((!isset($version) || $error) && version_compare($lj_genome_version, '3.0') >= 0);
+								echo '<input type="checkbox" value="'.$lj_genome_id.'" class="prettify" name="v[]" id="'.$lj_genome_id.'" '.($checked ? 'checked' : '').'/><label for="version-'.$lj_genome_id.'">'.$label.'</label>';
 							}
 						?>
 					</div>
@@ -386,34 +455,49 @@
 
 				<button type="submit"><span class="pictogram icon-search">Search for gene of interest</span></button>
 			</form>
-		<?php
-			echo (empty($error) && $searched) ? '</div>
-			<div class="toggle">
-				<h3><a href="#" data-toggled="on" class="open">Export options</a></h3>
-				<p>Download the entire search result as a CSV file.</p>
-				<div class="cols justify-content__space-around">
-					<form action="'.$_SERVER['PHP_SELF'].'" method="post" class="form--no-spacing">
-						<button type="submit">Download tabular results</button>
-						<input type="hidden" name="ids" value="'.implode(',', $q1_rows['ID']).'" />
-						<input type="hidden" name="redir" value="'.$_SERVER['REQUEST_URI'].'" />
-					</form>'.
-					(count($q1_filtered_rows) ? '
-					<div class="dropdown button">
-						<span class="dropdown--title">Download all sequences</span>
-						<ul class="dropdown--list">
-							<li><a href="../api/v1/blast/20130521_Lj30_CDS.fa/'.implode(',', $q1_filtered_rows['Transcript']).'?download&access_token='.LOTUSBASE_API_KEY.'"><span class="pictogram icon-switch">Download all coding sequences</span></a></li>
-							<li><a href="../api/v1/blast/20130521_Lj30_cDNA.fa/'.implode(',', $q1_filtered_rows['Transcript']).'?download&access_token='.LOTUSBASE_API_KEY.'"><span class="pictogram icon-switch">Download all mRNA sequences</span></a></li>
-							<li><a href="../api/v1/blast/20130521_Lj30_proteins.fa/'.implode(',', $q1_filtered_rows['Transcript']).'?download&access_token='.LOTUSBASE_API_KEY.'"><span class="pictogram icon-switch">Download all amino acid sequences</span></a></li>
-						</ul>
+			<?php if (empty($error) && $searched) { ?>
+			</div><div class="toggle">
+					<h3><a href="#" data-toggled="on" class="open">Export options</a></h3>
+					<p>Download the entire search result as a CSV file.</p>
+					<div class="cols justify-content__space-around">
+						<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="form--no-spacing">
+							<button type="submit">Download tabular results</button>
+							<input type="hidden" name="ids" value="<?php echo implode(',', $q1_rows['ID']); ?>" />
+							<input type="hidden" name="redir" value="<?php echo $_SERVER['REQUEST_URI']; ?>" />
+						</form>
+						<?php
+							// Only allow bulk download if genome assembly is monolithic
+							if (count($q1_filtered_rows) && count($versions) === 1 && count($ecotypes) === 1) {
+								$genome_ecotype = $ecotypes[0];
+								$genome_version = $versions[0];
+						?>
+							<?php if ($genome_ecotype === 'MG20' && $genome_version === '3.0') { ?>
+								<div class="dropdown button">
+									<span class="dropdown--title">Download all sequences</span>
+									<ul class="dropdown--list">
+										<li><a href="../api/v1/blast/20130521_Lj30_CDS.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all coding sequences</span></a></li>
+										<li><a href="../api/v1/blast/20130521_Lj30_cDNA.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all mRNA sequences</span></a></li>
+										<li><a href="../api/v1/blast/20130521_Lj30_proteins.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all amino acid sequences</span></a></li>
+									</ul>
+								</div>
+							<?php } else if ($genome_ecotype === 'Gifu' && $genome_version === '1.1') {?>
+								<div class="dropdown button">
+									<span class="dropdown--title">Download all sequences</span>
+									<ul class="dropdown--list">
+										<li><a href="../api/v1/blast/20180827_Lj_Gifu_v1.1_ORF.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all coding sequences (ORFs only)</span></a></li>
+										<li><a href="../api/v1/blast/20180827_Lj_Gifu_v1.1_ORF_proteins.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all amino acid sequences (from ORFs only)</span></a></li>
+									</ul>
+								</div>
+							<?php } ?>
+						<?php } ?>
 					</div>
-					' : '').
-				'</div>
-			</div>' : '';
-
-			// Display search results
-			if(empty($error) && $searched && $q2->rowCount() > 0) {
-
-		?>
+				</div>
+			<?php	
+				}
+				
+				// Display search results
+				if(empty($error) && $searched && $q2->rowCount() > 0) {
+			?>
 			<p>We have found <?php echo "<strong>".$rows."</strong> ".pl($rows,'result','results'); ?>. Now displaying <?php echo $page." of ".$last." with ".$num." ".pl($num,'row','rows');?> per page. This search has taken <strong><?php echo number_format((microtime(true) - $start_time), 3); ?>s</strong> to perform.</p>
 
 			<?php
@@ -457,6 +541,7 @@
 			while($row = $q2->fetch(PDO::FETCH_ASSOC)) {
 				// Get version
 				$v = floatval($row['Version']);
+				$ecotype = $row['Ecotype'];
 
 				// Determine start and end positions
 				if($row['Strand'] == '+') {
@@ -474,7 +559,7 @@
 						data-to="<?php echo $end; ?>"
 					>
 						<td class="trx">
-							<?php if($v >= 3.0) { ?>
+							<?php if($v >= 3.0 && $ecotype === 'MG20') { ?>
 							<div class="dropdown button"><span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>"><?php echo $row['Transcript']; ?></a></span><ul class="dropdown--list">
 								<li><a href="<?php echo WEB_ROOT.'/view/gene/'.preg_replace('/\.\d+?$/', '', $row['Transcript']); ?>" title="View gene"><span class="icon-eye">View gene</span></a></li>
 								<li><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>" title="View transcript"><span class="icon-eye">View transcript</span></a></li>
@@ -529,11 +614,54 @@
 										<span class="icon-switch">Protein sequence</span>
 									</a>
 								</li>
-								<li><a href="../genome?loc=<?php echo $row['Transcript']; ?>" title="View in genome browser"><span class="icon-book">Genome browser</span></a></li>
+								<li><a href="../genome?data=genomes%2Flotus-japonicus%2Fmg20%2Fv3.0&loc=<?php echo $row['Transcript']; ?>" title="View in genome browser"><span class="icon-book">Genome browser</span></a></li>
 								<li><a href="../expat/?ids=<?php echo $row['Transcript']; ?>&amp;t=6" title="Access expression data from the Expression Atlas"><span class="icon-map">Expression Atlas (ExpAt)</span></a></li>
 								<?php if(is_logged_in()) { ?>
 									<li><a class="manual-gene-anno" href="<?php echo WEB_ROOT; ?>/lib/docs/gene-annotation" title="Manual gene name suggestion for <?php echo $row['Transcript']; ?>" data-gene="<?php echo $row['Transcript']; ?>"><span class="pictogram icon-bookmark">Suggest <?php echo ((isset($row['LjAnnotation']) && !empty($row['LjAnnotation'])) ? 'another ' : ''); ?><em>Lj</em> gene name</span></a></li>
 								<?php } ?>
+							</ul>
+							</div>
+							<?php } else if($v === 1.1 && $ecotype === 'Gifu') { ?>
+								<div class="dropdown button"><span class="dropdown--title"><?php echo $row['Transcript']; ?></span><ul class="dropdown--list">
+								<li>
+									<a
+										href="../api/v1/blast/<?php echo '20180416_Lj_Gifu_v1.1_genome.fa/'.$row['Chromosome'].'?from='.$start.'&to='.$end.'&access_token='.LOTUSBASE_API_KEY; ?>"
+										data-seqret
+										data-seqret-id="<?php echo $row['Chromosome']; ?>"
+										data-seqret-data-type="genomic"
+										data-seqret-db="20180416_Lj_Gifu_v1.1_genome.fa"
+										data-seqret-from="<?php echo $start; ?>"
+										data-seqret-to="<?php echo $end; ?>"
+										title="Retrieve genomic sequence"
+										>
+										<span class="icon-switch">Genomic sequence</span>
+									</a>
+								</li>
+								<li>
+									<a
+										href="../api/v1/blast/<?php echo '20180827_Lj_Gifu_v1.1_ORF.fa/'.$row['Transcript'].'&access_token='.LOTUSBASE_API_KEY; ?>"
+										data-seqret
+										data-seqret-id="<?php echo $row['Transcript']; ?>"
+										data-seqret-data-type="coding sequence"
+										data-seqret-db="20180827_Lj_Gifu_v1.1_ORF.fa"
+										title="Retrieve coding sequence (ORFs only)"
+										>
+										<span class="icon-switch">Coding sequence</span>
+									</a>
+								</li>
+								<li>
+									<a
+										href="../api/v1/blast/<?php echo '20180827_Lj_Gifu_v1.1_ORF_proteins.fa/'.$row['Transcript'].'&access_token='.LOTUSBASE_API_KEY; ?>"
+										data-seqret
+										data-seqret-id="<?php echo $row['Transcript']; ?>"
+										data-seqret-data-type="amino acid"
+										data-seqret-db="20180827_Lj_Gifu_v1.1_ORF_proteins.fa"
+										title="Retrieve amino acid sequence (from ORFs only)"
+										>
+										<span class="icon-switch">Protein sequence</span>
+									</a>
+								</li>
+								<li><a href="../genome?data=genomes%2Flotus-japonicus%2Fgifu%2Fv1.1&loc=<?php echo $row['Transcript']; ?>" title="View in genome browser"><span class="icon-book">Genome browser</span></a></li>
 							</ul>
 							</div>
 							<?php } else {

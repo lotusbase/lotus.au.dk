@@ -38,7 +38,7 @@ class PageHeader {
 		$this->search_form->update_options(array(
 			'general' => array('placeholder' => 'Search term'),
 			'lore1' => array('placeholder' => 'Search term'),
-			'gene' => array('placeholder' => 'Search term', 'text' => 'Gene')
+			'gene' => array('placeholder' => 'Search term', 'text' => 'Gene/Transcript/Protein')
 			));
 	}
 

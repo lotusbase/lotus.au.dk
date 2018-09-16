@@ -7,7 +7,7 @@ class GeneOntology {
 
 	private $_vars = array(
 		'format' => 'json',
-		'fields' => array('namespace','description')
+		'fields' => array('type','description')
 		);
 
 	// Public function: Set fields

@@ -70,22 +70,26 @@
 						FROM transcriptcoord AS tc
 						LEFT JOIN exonins AS exon ON (
 							tc.Transcript = exon.Gene AND
+							tc.Ecotype = exon.Ecotype AND
 							tc.Version = exon.Version
 						)
 						LEFT JOIN geneins AS genic ON (
 							tc.Gene = genic.Gene AND
+							tc.Ecotype = genic.Ecotype AND
 							tc.Version = genic.Version
 						)
 						LEFT JOIN lore1ins AS geniclore1 ON (
 							genic.Chromosome = geniclore1.Chromosome AND
 							genic.Position = geniclore1.Position AND
 							genic.Orientation = geniclore1.Orientation AND
+							genic.Ecotype = geniclore1.Ecotype AND
 							genic.Version = geniclore1.Version
 						)
 						LEFT JOIN lore1ins AS exoniclore1 ON (
 							exon.Chromosome = exoniclore1.Chromosome AND
 							exon.Position = exoniclore1.Position AND
 							exon.Orientation = exoniclore1.Orientation AND
+							exon.Ecotype = exoniclore1.Ecotype AND
 							exon.Version = exoniclore1.Version
 						)
 						WHERE tc.Gene = ?
@@ -174,7 +178,7 @@
 				<ul class="list--floated" id="lore1-list">
 				<?php
 					foreach($genic_lore1 as $pid) {
-						echo '<li class="'.(in_array($pid, $exonic_lore1) ? 'lore1--exonic' : 'lore1--intronic').'"><a class="link--reset" href="'.WEB_ROOT.'/lore1/search?v=3.0&pid='.$pid.'" title="View details for this line">'.$pid.'</a></li>';
+						echo '<li class="'.(in_array($pid, $exonic_lore1) ? 'lore1--exonic' : 'lore1--intronic').'"><a class="link--reset" href="'.WEB_ROOT.'/lore1/search?v=MG20_3.0&pid='.$pid.'" title="View details for this line">'.$pid.'</a></li>';
 					}
 				?>
 				</ul>

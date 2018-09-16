@@ -1,4 +1,7 @@
 <?php
+
+use \Firebase\JWT\JWT;
+
 // All LORE1 lines
 $api->get('/lore1', function($request, $response, $args) {
 	
@@ -274,13 +277,28 @@ $api->get('/lore1/{pids}/verify', function ($request, $response, $args) {
 });
 
 // LORE1 flanking sequence
-$api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($request, $response, $args) {
+$api->get('/lore1/flanking-sequence/{genomeEcotype}/{genomeVersion}/{id}[/{cutoff}]', function ($request, $response, $args) {
 
 	try {
 		$db = $this->get('db');
 
-		// Sanity check for Lotus genome version
-		$ver = new \LotusBase\LjGenomeVersion(array('version' => $args['version']));
+		// Genome information 
+		$genome_ecotype = $args['genomeEcotype'];
+		$genome_version = $args['genomeVersion'];
+		$genome_id = implode('_', [$genome_ecotype, $genome_version]);
+
+		// Permission check for genome assembly access
+		$auth_token = $request->getCookieParams()['auth_token'];
+		if ($auth_token) {
+			$user = json_decode(json_encode(JWT::decode($auth_token, JWT_USER_LOGIN_SECRET, array('HS256'))), true);
+			$componentPaths = $user['data']['ComponentPath'];
+			if ($genome_ecotype === 'Gifu' && $genome_version === '1.1' && !in_array($genome_id, $componentPaths)) {
+				throw new Exception("You do not have sufficient permission to access the genome assembly of $genome_ecotype v$genome_version", 401);
+			}
+		}
+
+		// Sanity check for Lotus genome assembly
+		$ver = new \LotusBase\LjGenomeVersion(array('genome' => $genome_id));
 		if(!$ver->check()) {
 			return $response
 				->withStatus(400)
@@ -297,12 +315,14 @@ $api->get('/lore1/flanking-sequence/v{version}/{id}[/{cutoff}]', function ($requ
 			FROM lore1ins
 			WHERE
 				Salt = :salt AND
+				Ecotype = :ecotype AND
 				Version = :version
 				");
 
 		// Bind params and execute
 		$q->bindParam(":salt", hex2bin($args['id']));
-		$q->bindParam(":version", $ver->check());
+		$q->bindParam(":ecotype", $args['genomeEcotype']);
+		$q->bindParam(":version", $args['genomeVersion']);
 		$q->execute();
 
 		// Get results

@@ -1,7 +1,9 @@
 <?php
 
+use \Firebase\JWT\JWT;
+
 // Get annotation from genes
-$api->get('/gene/annotation/v{version}/{id}[/{strict}]', function($request, $response, $args) {
+$api->get('/gene/annotation/{genomeEcotype}/{genomeVersion}/{id}[/{strict}]', function($request, $response, $args) {
 	
 	try {
 
@@ -13,8 +15,23 @@ $api->get('/gene/annotation/v{version}/{id}[/{strict}]', function($request, $res
 		$exArr	= str_repeat('?,', count($ex)-1).'?';
 		$strict	= isset($args['strict']) ? !!$args['strict'] : false;
 
-		// Sanity check for Lotus genome version
-		$v = new \LotusBase\LjGenomeVersion(array('version' => $args['version']));
+		// Genome information 
+		$genome_ecotype = $args['genomeEcotype'];
+		$genome_version = $args['genomeVersion'];
+		$genome_id = implode('_', [$genome_ecotype, $genome_version]);
+
+		// Permission check for genome assembly access
+		$auth_token = $request->getCookieParams()['auth_token'];
+		if ($auth_token) {
+			$user = json_decode(json_encode(JWT::decode($auth_token, JWT_USER_LOGIN_SECRET, array('HS256'))), true);
+			$componentPaths = $user['data']['ComponentPath'];
+			if ($genome_ecotype === 'Gifu' && $genome_version === '1.1' && !in_array($genome_id, $componentPaths)) {
+				throw new Exception("You do not have sufficient permission to access the genome assembly of $genome_ecotype v$genome_version", 401);
+			}
+		}
+
+		// Sanity check for Lotus genome assembly
+		$v = new \LotusBase\LjGenomeVersion(array('genome' => $genome_id));
 		if(!$v->check()) {
 			return $response
 				->withStatus(400)
@@ -28,15 +45,17 @@ $api->get('/gene/annotation/v{version}/{id}[/{strict}]', function($request, $res
 			$ver = $v->check();
 		}
 
+		$genome_parts = explode('_', $ver);
+
 		if($strict) {
 			// Prepare query
-			$q = $db->prepare("SELECT Gene, Annotation FROM annotations WHERE Version = ? AND Annotation IS NOT NULL AND Gene IN ($exArr)");
+			$q = $db->prepare("SELECT Gene, Annotation FROM annotations WHERE Ecotype = ? AND Version = ? AND Annotation IS NOT NULL AND Gene IN ($exArr)");
 
 			// Execute query with array of values
-			$q->execute(array_merge([$ver], $ex));
+			$q->execute(array_merge($genome_parts, $ex));
 		} else {
 			// Define statement
-			$sql = "SELECT Gene, CASE WHEN Annotation IS NULL THEN NULL ELSE Annotation END AS Annotation FROM annotations WHERE Version = ? AND (";
+			$sql = "SELECT Gene, CASE WHEN Annotation IS NULL THEN NULL ELSE Annotation END AS Annotation FROM annotations WHERE Ecotype = ? AND Version = ? AND (";
 
 			// Construct OR query
 			foreach($ex as $key => $gene) {
@@ -48,7 +67,7 @@ $api->get('/gene/annotation/v{version}/{id}[/{strict}]', function($request, $res
 			
 			// Prepare and execute
 			$q = $db->prepare($sql);
-			$q->execute(array_merge([$ver], $ex));
+			$q->execute(array_merge($genome_parts, $ex));
 		}
 
 		// Get results
@@ -88,6 +107,15 @@ $api->get('/gene/annotation/v{version}/{id}[/{strict}]', function($request, $res
 				'code' => $e->getCode(),
 				'data' => $e->getMessage(),
 				'more_info' => DOMAIN_NAME . '/' . WEB_ROOT . '/docs/errors/pdo-exception'
+				),JSON_UNESCAPED_SLASHES));
+	} catch(Exception $e) {
+		return $response
+			->withStatus(401)
+			->withHeader('Content-Type', 'application/json')
+			->write(json_encode(array(
+				'status' => 401,
+				'code' => $e->getCode(),
+				'data' => $e->getMessage()
 				),JSON_UNESCAPED_SLASHES));
 	}
 });
