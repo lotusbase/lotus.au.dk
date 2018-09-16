@@ -58,10 +58,20 @@
 					<div class="full-width">
 						<ul class="list--floated input-suggestions">
 							<li>Examples:</li>
-							<li><a href="#" data-value="Lj4g3v0281040">Lj4g3v0281040</a><span class="term-type"><em>LjFls2</em> (Gene)</span></li>
-							<li><a href="#" data-value="Lj4g3v0281040.1">Lj4g3v0281040.1</a><span class="term-type">LjFls2 (Transcript/Protein)</span></li>
-							<li><a href="#" data-value="Lj2g3v3373110">Lj2g3v3373110</a><span class="term-type"><em>LjNin</em> (Gene)</span></li>
-							<li><a href="#" data-value="Lj2g3v3373110.1">Lj2g3v3373110.1</a><span class="term-type">LjNin (Transcript/Protein)</span></li>
+							<?php if (!($userComps && in_array('Gifu_1.1', $userComps))) { ?>
+							<li><a href="#" data-value="Lj4g3v0281040">Lj4g3v0281040</a><span class="tag term-type"><em>LjFls2</em> (Gene)</span><span class="tag genome-assembly">MG20 v3.0</span></li>
+							<li><a href="#" data-value="Lj4g3v0281040.1">Lj4g3v0281040.1</a><span class="tag term-type">LjFls2 (Transcript/Protein)</span><span class="tag genome-assembly">MG20 v3.0</span></li>
+							<?php } ?>
+							<li><a href="#" data-value="Lj2g3v3373110">Lj2g3v3373110</a><span class="tag term-type"><em>LjNin</em> (Gene)</span><span class="tag genome-assembly">MG20 v3.0</span></li>
+							<li><a href="#" data-value="Lj2g3v3373110.1">Lj2g3v3373110.1</a><span class="tag term-type">LjNin (Transcript/Protein)</span><span class="tag genome-assembly">MG20 v3.0</span></li>
+							<?php if ($userComps && in_array('Gifu_1.1', $userComps)) { ?>
+								<!--
+								<li><a href="#" data-value="PGSB_gene_73000">PGSB_gene_73000</a><span class="tag term-type"><em>LjFls2</em> (Gene)</span><span class="tag genome-assembly">Gifu v1.1</span></li>
+								<li><a href="#" data-value="PGSB_mRNA_123440">PGSB_mRNA_123440</a><span class="tag term-type">LjFls2 (Transcript/Protein)</span><span class="tag genome-assembly">Gifu v1.1</span></li>
+								-->
+								<li><a href="#" data-value="PGSB_gene_1157">PGSB_gene_1157</a><span class="tag term-type"><em>LjNin</em> (Gene)</span><span class="tag genome-assembly">Gifu v1.1</span></li>
+								<li><a href="#" data-value="PGSB_mRNA_2162">PGSB_mRNA_2162</a><span class="tag term-type">LjNin (Transcript/Protein)</span><span class="tag genome-assembly">Gifu v1.1</span></li>
+							<?php } ?>
 						</ul>
 					</div>
 					</form>
@@ -75,26 +85,26 @@
 					<div class="full-width">
 						<ul class="list--floated input-suggestions">
 							<li>Examples:</li>
-							<li><a href="#" data-value="GO:0004672">GO:0004672</a><span class="term-type">GO term</span></li>
-							<li><a href="#" data-value="IPR000719">IPR000719</a><span class="term-type">InterPro</span></li>
-							<li><a href="#" data-value="cd14066">cd14066</a><span class="term-type">CDD</span></li>
-							<li><a href="#" data-value="G3DSA:3.90.550.10">G3DSA:3.90.550.10</a><span class="term-type">Gene3D</span></li>
-							<li><a href="#" data-value="MF_01928">MF_01928</a><span class="term-type">Hamap</span></li>
-							<li><a href="#" data-value="PTHR24420">PTHR24420</a><span class="term-type">PANTHER</span></li>
-							<li><a href="#" data-value="PS50011">PS50011</a><span class="term-type">PatternScan</span></li>
-							<li><a href="#" data-value="PF00069">PF00069</a><span class="term-type">Pfam</span></li>
-							<li><a href="#" data-value="SIGNAL_PEPTIDE_N_REGION">SIGNAL_PEPTIDE_N_REGION</a><span class="term-type">Phobius</span></li>
-							<li><a href="#" data-value="PIRSF030250">PIRSF030250</a><span class="term-type">PIRSF</span></li>
-							<li><a href="#" data-value="PR00019">PR00019</a><span class="term-type">PRINTS</span></li>
-							<li><a href="#" data-value="PD005521">PD005521</a><span class="term-type">ProDom</span></li>
-							<li><a href="#" data-value="PS00108">PS00108</a><span class="term-type">ProSite Patterns</span></li>
-							<li><a href="#" data-value="PS50011">PS50011</a><span class="term-type">ProSite Profiles</span></li>
-							<li><a href="#" data-value="SFLDF00063">SFLDF00063</a><span class="term-type">SFLD</span></li>
-							<li><a href="#" data-value="SignalP-TM_EUK">SignalP-TM_EUK</a><span class="term-type">SignalP</span></li>
-							<li><a href="#" data-value="SM00369">SM00369</a><span class="term-type">SMART</span></li>
-							<li><a href="#" data-value="SSF52047">SSF52047</a><span class="term-type">SUPERFAMILY</span></li>
-							<li><a href="#" data-value="TIGR01151">TIGR01151</a><span class="term-type">TIGRFAM</span></li>
-							<li><a href="#" data-value="TMHelix">TMHelix</a><span class="term-type">TMHMM</span></li>
+							<li><a href="#" data-value="GO:0004672">GO:0004672</a><span class="tag term-type">GO term</span></li>
+							<li><a href="#" data-value="IPR000719">IPR000719</a><span class="tag term-type">InterPro</span></li>
+							<li><a href="#" data-value="cd14066">cd14066</a><span class="tag term-type">CDD</span></li>
+							<li><a href="#" data-value="G3DSA:3.90.550.10">G3DSA:3.90.550.10</a><span class="tag term-type">Gene3D</span></li>
+							<li><a href="#" data-value="MF_01928">MF_01928</a><span class="tag term-type">Hamap</span></li>
+							<li><a href="#" data-value="PTHR24420">PTHR24420</a><span class="tag term-type">PANTHER</span></li>
+							<li><a href="#" data-value="PS50011">PS50011</a><span class="tag term-type">PatternScan</span></li>
+							<li><a href="#" data-value="PF00069">PF00069</a><span class="tag term-type">Pfam</span></li>
+							<li><a href="#" data-value="SIGNAL_PEPTIDE_N_REGION">SIGNAL_PEPTIDE_N_REGION</a><span class="tag term-type">Phobius</span></li>
+							<li><a href="#" data-value="PIRSF030250">PIRSF030250</a><span class="tag term-type">PIRSF</span></li>
+							<li><a href="#" data-value="PR00019">PR00019</a><span class="tag term-type">PRINTS</span></li>
+							<li><a href="#" data-value="PD005521">PD005521</a><span class="tag term-type">ProDom</span></li>
+							<li><a href="#" data-value="PS00108">PS00108</a><span class="tag term-type">ProSite Patterns</span></li>
+							<li><a href="#" data-value="PS50011">PS50011</a><span class="tag term-type">ProSite Profiles</span></li>
+							<li><a href="#" data-value="SFLDF00063">SFLDF00063</a><span class="tag term-type">SFLD</span></li>
+							<li><a href="#" data-value="SignalP-TM_EUK">SignalP-TM_EUK</a><span class="tag term-type">SignalP</span></li>
+							<li><a href="#" data-value="SM00369">SM00369</a><span class="tag term-type">SMART</span></li>
+							<li><a href="#" data-value="SSF52047">SSF52047</a><span class="tag term-type">SUPERFAMILY</span></li>
+							<li><a href="#" data-value="TIGR01151">TIGR01151</a><span class="tag term-type">TIGRFAM</span></li>
+							<li><a href="#" data-value="TMHelix">TMHelix</a><span class="tag term-type">TMHMM</span></li>
 						</ul>
 					</div>
 					</form>
@@ -108,8 +118,8 @@
 					<div class="full-width">
 						<ul class="list--floated input-suggestions">
 							<li>Examples:</li>
-							<li><a href="#" data-value="30010101">30010101</a><span class="term-type">Danish line</span></li>
-							<li><a href="#" data-value="A00005">A00005</a><span class="term-type">Japanese line</span></li>
+							<li><a href="#" data-value="30010101">30010101</a><span class="tag term-type">Danish line</span></li>
+							<li><a href="#" data-value="A00005">A00005</a><span class="tag term-type">Japanese line</span></li>
 						</ul>
 					</div>
 					</form>

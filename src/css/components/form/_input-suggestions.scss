@@ -9,13 +9,18 @@ ul.input-suggestions {
 			padding: 0;
 			margin: 0 .5rem 0 0;
 		}
-		span.term-type {
+		span.tag {
 			border-left: 1px solid rgba(#000,.1);
 			color: #777;
 			display: inline-block;
+			font-weight: normal;
 			font-size: .75rem;
 			margin-left: .5rem;
 			padding-left: .5rem;
+
+			&.term-type {
+				font-weight: bold;
+			}
 		}
 	}
 }
