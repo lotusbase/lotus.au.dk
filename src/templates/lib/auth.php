@@ -2,6 +2,8 @@
 
 	// Use JWT
 	use \Firebase\JWT\JWT;
+
+	$userComps = array();
 	
 	// Decode JWT if present
 	if(isset($_COOKIE['auth_token']) && !empty($_COOKIE['auth_token'])) {

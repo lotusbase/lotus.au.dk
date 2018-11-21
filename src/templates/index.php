@@ -23,7 +23,6 @@
 </head>
 <body class="home">
 	<?php
-
 		$header = new \LotusBase\Component\PageHeader();
 		$header->add_header_class('alt');
 		$header->set_header_content('<div class="align-center"><h1>'.file_get_contents(DOC_ROOT."/dist/images/branding/logo.svg").'<em>Lotus</em> Base</h1><span class="byline">Genomic, proteomic &amp; expression resources for <em>Lotus japonicus</em>.</span></div>');
@@ -58,13 +57,13 @@
 					<div class="full-width">
 						<ul class="list--floated input-suggestions">
 							<li>Examples:</li>
-							<?php if (!($userComps && in_array('Gifu_1.1', $userComps))) { ?>
+							<?php if (!(isset($userComps) && in_array('Gifu_1.1', $userComps))) { ?>
 							<li><a href="#" data-value="Lj4g3v0281040">Lj4g3v0281040</a><span class="tag term-type"><em>LjFls2</em> (Gene)</span><span class="tag genome-assembly">MG20 v3.0</span></li>
 							<li><a href="#" data-value="Lj4g3v0281040.1">Lj4g3v0281040.1</a><span class="tag term-type">LjFls2 (Transcript/Protein)</span><span class="tag genome-assembly">MG20 v3.0</span></li>
 							<?php } ?>
 							<li><a href="#" data-value="Lj2g3v3373110">Lj2g3v3373110</a><span class="tag term-type"><em>LjNin</em> (Gene)</span><span class="tag genome-assembly">MG20 v3.0</span></li>
 							<li><a href="#" data-value="Lj2g3v3373110.1">Lj2g3v3373110.1</a><span class="tag term-type">LjNin (Transcript/Protein)</span><span class="tag genome-assembly">MG20 v3.0</span></li>
-							<?php if ($userComps && in_array('Gifu_1.1', $userComps)) { ?>
+							<?php if (isset($userComps) && in_array('Gifu_1.1', $userComps)) { ?>
 								<!--
 								<li><a href="#" data-value="PGSB_gene_73000">PGSB_gene_73000</a><span class="tag term-type"><em>LjFls2</em> (Gene)</span><span class="tag genome-assembly">Gifu v1.1</span></li>
 								<li><a href="#" data-value="PGSB_mRNA_123440">PGSB_mRNA_123440</a><span class="tag term-type">LjFls2 (Transcript/Protein)</span><span class="tag genome-assembly">Gifu v1.1</span></li>

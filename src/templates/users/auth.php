@@ -3,6 +3,8 @@
 	// Use JWT
 	use \Firebase\JWT\JWT;
 
+	$userComps = array();
+
 	// Custom error class
 	class ComponentPathException extends \Exception {};
 
