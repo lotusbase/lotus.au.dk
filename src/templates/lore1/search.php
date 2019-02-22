@@ -407,6 +407,7 @@
 					<button type="button" id="dlc">Download Selected Rows (<span>0</span>)</button>
 					<button type="button" id="dla">Download Entire Search (<span><?php echo $rows; ?></span>)</button>
 					<input type="hidden" value="" name="d" id="dlt" />
+					<input type="hidden" value='<?php echo $genome; ?>' name="v" />
 					<input type="hidden" value='<?php echo $ak; ?>' name="ak" />
 					<input type="hidden" value="<?php echo $genome; ?>" name="genome" />
 					<input type="hidden" value="<?php echo $_SERVER['REQUEST_URI']; ?>" name="origin" />
