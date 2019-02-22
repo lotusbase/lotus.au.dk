@@ -81,7 +81,7 @@
 						}
 
 						// Show file when AuthGroup is null, or when is not null, is found in the user
-						$user_auth = auth_verify($_COOKIE['auth_token']);
+						$user_auth = is_logged_in();
 						$user_groups = explode(',', $row['AuthGroups']);
 						if ($row['AuthGroups'] !== null && !in_array($user_auth['UserGroup'], $user_groups)) {
 							continue;
