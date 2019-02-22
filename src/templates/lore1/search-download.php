@@ -34,11 +34,14 @@ try {
 }
 
 // Is version specified?
-if(!isset($_POST['v']) || !in_array($_POST['v'], $lj_genome_versions)) {
+$genome_version_checker = new \LotusBase\LjGenomeVersion(array('genome' => $_POST['v']));
+$genome_version = $genome_version_checker->check();
+if(!isset($_POST['v']) || !$genome_version) {
 	error_function('You have not specified a version number.', $origin);
-} else {
-	$version = $_POST['v'];
 }
+$genome_parts = explode('_', $genome_version);
+$ecotype = $genome_parts[0];
+$version = $genome_parts[1];
 
 // Coerce values
 if(isset($_POST['k'])) 	{	$k = $_POST['k'];			} else { $k = ''; }				// Get selected keys for checked rows
@@ -91,6 +94,7 @@ try {
 		lore.PCRInsPos AS PCRInsPos,
 		lore.PCRWT AS PCRWT,
 		lore.InsFlank AS InsFlank,
+		lore.Ecotype AS Ecotype,
 		lore.Version AS Version,
 		GROUP_CONCAT(DISTINCT gene.Gene ORDER BY gene.Gene) AS Gene,
 		GROUP_CONCAT(DISTINCT exon.Gene ORDER BY exon.Gene) AS Exon,
@@ -107,6 +111,7 @@ try {
 			lore.Chromosome = gene.Chromosome AND
 			lore.Position = gene.Position AND
 			lore.Orientation = gene.Orientation AND
+			lore.Ecotype = gene.Ecotype AND
 			lore.Version = gene.Version
 		)
 
@@ -114,6 +119,7 @@ try {
 			lore.Chromosome = exon.Chromosome AND
 			lore.Position = exon.Position AND
 			lore.Orientation = exon.Orientation AND
+			lore.Ecotype = exon.Ecotype AND
 			lore.Version = exon.Version
 		)
 
@@ -121,14 +127,14 @@ try {
 			lore.PlantID = seeds.PlantID
 		)
 
-		WHERE lore.Salt IN ($downloadkeys_placeholder) AND seeds.SeedStock = 1 AND lore.Version = ?
+		WHERE lore.Salt IN ($downloadkeys_placeholder) AND seeds.SeedStock = 1 AND lore.Ecotype = ? AND lore.Version = ?
 
 		GROUP BY lore.Salt
 		ORDER BY lore.PlantID
 		");
 
 	// Execute query with array of values
-	$q->execute(array_merge($downloadkeys, [$version]));
+	$q->execute(array_merge($downloadkeys, [$ecotype, $version]));
 
 	// Parse output
 	if($q->rowCount() > 0) {
@@ -140,7 +146,7 @@ try {
 		}
 
 		// Write header
-		$headerData = array("Plant ID","Batch","Chromosome","Position","Orientation","Gene","Exon","Exon Annotation","Total Coverage","Forward Primer","Reverse Primer","PCR Product Size with Insertion","PCR Product Size in Wild Type","+/-1000bp Insertion Flank","Seed Availability","OrderingAllowed","Column Coordinate","Row Coordinate","Coordinate List","Coordinate Counts");
+		$headerData = array("Genome","Plant ID","Batch","Chromosome","Position","Orientation","Gene","Exon","Exon Annotation","Total Coverage","Forward Primer","Reverse Primer","PCR Product Size with Insertion","PCR Product Size in Wild Type","+/-1000bp Insertion Flank","Seed Availability","OrderingAllowed","Column Coordinate","Row Coordinate","Coordinate List","Coordinate Counts");
 		$out = "\"".implode($sep, $headerData)."\""."\n";
 
 		while($row = $q->fetch(PDO::FETCH_ASSOC)) {
@@ -153,11 +159,12 @@ try {
 				FROM exonins AS exon
 				LEFT JOIN annotations AS anno ON
 					exon.Gene = anno.Gene AND
+					exon.Ecotype = anno.Ecotype AND
 					exon.Version = anno.Version
-				WHERE exon.Gene IN ($exons_placeholder) AND exon.Version = ?
+				WHERE exon.Gene IN ($exons_placeholder) AND exon.Ecotype = ? AND exon.Version = ?
 				GROUP BY exon.Gene
 				");
-			$subq->execute(array_merge($exons, [$row['Version']]));
+			$subq->execute(array_merge($exons, [$row['Ecotype'], $row['Version']]));
 			$exon_arr = array();
 			$anno_arr = array();
 			while($annos = $subq->fetch(PDO::FETCH_ASSOC)) {
@@ -174,6 +181,7 @@ try {
 
 			// Row data
 			$rowData = array(
+				$row['Ecotype'].' '.$row['Version'],
 				$row['PlantID'],
 				$row['Batch'],
 				$row['Chromosome'],
@@ -200,7 +208,7 @@ try {
 			$out .= "\"".implode($sep, $rowData)."\""."\n";
 		}
 
-		$file = "lore1_search_db" . $version . "_" . date("Y-m-d_H-i-s") . "." . $t;
+		$file = "lore1_search_" . $ecotype . '-v' . $version . "_" . date("Y-m-d_H-i-s") . "." . $t;
 		header("Content-disposition: csv; filename=\"".$file."\"");
 		header("Content-type: application/vnd.ms-excel");
 		header("Cache-Control: no-cache, must-revalidate");
