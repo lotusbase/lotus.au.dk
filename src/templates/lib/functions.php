@@ -111,10 +111,10 @@ function is_allowed_access_by_path($path = null) {
 }
 
 // Check if user has access by user group
-function is_allowed_access_by_user_group($userGroup) {
-	if(!empty($userGroup) && isset($_COOKIE['auth_token']) && !empty($_COOKIE['auth_token'])) {
+function is_allowed_access_by_user_group($userGroups) {
+	if(isset($_COOKIE['auth_token']) && !empty($_COOKIE['auth_token'])) {
 		$userData = auth_verify($_COOKIE['auth_token']);
-		return $userData['UserGroup'] === $userGroup;
+		return !empty(array_intersect($userData['UserGroups'], $userGroups));
 	} else {
 		return false;
 	}

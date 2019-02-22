@@ -9,7 +9,14 @@
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 		// Query 1: Collect all PMID
-		$q1 = $db->prepare('SELECT PMID, DOI, UserGroup FROM expat_datasets');
+		$q1 = $db->prepare('SELECT
+			t1.PMID AS PMID,
+			t1.DOI AS DOI,
+			GROUP_CONCAT(t2.UserGroup) AS UserGroups
+		FROM expat_datasets AS t1
+		LEFT JOIN expat_datasets_usergroup AS t2 ON
+			t1.IDKey = t2.DatasetIDKey
+		GROUP BY t1.IDKey');
 		$q1->execute();
 
 		if(!$q1->rowCount()) {
@@ -21,7 +28,8 @@
 			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
 
 				// For rows that has UserGroup defined, check if user is allowed to view it
-				if($row['UserGroup'] !== null && !is_allowed_access_by_user_group($row['UserGroup'])) {
+				$userGroups = array_filter(explode(',', $row['UserGroups']));
+				if(!empty($userGroups) && !is_allowed_access_by_user_group($userGroups)) {
 					continue;
 				}
 
@@ -44,7 +52,19 @@
 		}
 
 		// Query 2: Get actual data
-		$q2 = $db->prepare('SELECT `Text`, IDtype, Description, CORx, PMID, DOI, UserGroup, Curators FROM expat_datasets');
+		$q2 = $db->prepare('SELECT
+			t1.Text AS `Text`,
+			t1.IDtype AS IDtype,
+			t1.Description AS Description,
+			t1.CORx AS CORx,
+			t1.PMID AS PMID,
+			t1.DOI AS DOI,
+			GROUP_CONCAT(t2.UserGroup) AS UserGroups,
+			t1.Curators AS Curators
+		FROM expat_datasets AS t1
+		LEFT JOIN expat_datasets_usergroup AS t2 ON
+			t1.IDKey = t2.DatasetIDKey
+		GROUP BY t1.IDKey');
 		$q2->execute();
 
 		// Check results
@@ -67,7 +87,8 @@
 			while($row = $q2->fetch(PDO::FETCH_ASSOC)) {
 
 				// For rows that has UserGroup defined, check if user is allowed to view it
-				if($row['UserGroup'] !== null && !is_allowed_access_by_user_group($row['UserGroup'])) {
+				$userGroups = array_filter(explode(',', $row['UserGroups']));
+				if(!empty($userGroups) && !is_allowed_access_by_user_group($userGroups)) {
 					continue;
 				}
 

@@ -46,9 +46,12 @@ class AuthToken {
 				'Verified',
 				'VerificationKeyTimestamp',
 				'UserGroup',
+				'UserGroups',
 				'ComponentPath'
 				)))
 		];
+
+		$jwtData['data']['UserGroups'] = array_filter(explode(',', $jwtData['data']['UserGroups']));
 
 		$secretKey = JWT_USER_LOGIN_SECRET;
 		$jwt = JWT::encode(

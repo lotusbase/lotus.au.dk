@@ -448,7 +448,8 @@ class Query {
 			)
 		);
 
-		if(is_allowed_access_by_user_group(is_logged_in()['UserGroup'])) {
+		$userGroups = array_filter(explode(',', is_logged_in()['UserGroup']));
+		if(is_allowed_access_by_user_group($userGroups)) {
 			$private_datasets = array(
 				'rnaseq-kellys-2015-bacteria' => array(
 					'277_exoU_24',
