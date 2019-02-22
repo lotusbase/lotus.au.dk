@@ -148,7 +148,7 @@ try {
 		}
 
 		// Write header
-		$headerData = array("Plant ID","Batch","Chromosome","Position","Orientation","Gene","Exon","Exon Annotation","Total Coverage","Forward Primer","Reverse Primer","PCR Product Size with Insertion","PCR Product Size in Wild Type","+/-1000bp Insertion Flank","Seed Availability","OrderingAllowed","Column Coordinate","Row Coordinate","Coordinate List","Coordinate Counts");
+		$headerData = array("Genome","Plant ID","Batch","Chromosome","Position","Orientation","Gene","Exon","Exon Annotation","Total Coverage","Forward Primer","Reverse Primer","PCR Product Size with Insertion","PCR Product Size in Wild Type","+/-1000bp Insertion Flank","Seed Availability","OrderingAllowed","Column Coordinate","Row Coordinate","Coordinate List","Coordinate Counts");
 		$out = "\"".implode($sep, $headerData)."\""."\n";
 
 		while($row = $q->fetch(PDO::FETCH_ASSOC)) {
@@ -183,6 +183,7 @@ try {
 
 			// Row data
 			$rowData = array(
+				$row['Ecotype'].' '.$row['Version'],
 				$row['PlantID'],
 				$row['Batch'],
 				$row['Chromosome'],
