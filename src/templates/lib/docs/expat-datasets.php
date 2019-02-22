@@ -9,7 +9,7 @@
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 		// Query 1: Collect all PMID
-		$q1 = $db->prepare('SELECT PMID, DOI, IntranetOnly FROM expat_datasets');
+		$q1 = $db->prepare('SELECT PMID, DOI, UserGroup FROM expat_datasets');
 		$q1->execute();
 
 		if(!$q1->rowCount()) {
@@ -19,7 +19,9 @@
 			$pmids = array();
 			$dois = array();
 			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
-				if(!!$row['IntranetOnly'] === true && !is_allowed_access('/expat/')) {
+
+				// For rows that has UserGroup defined, check if user is allowed to view it
+				if($row['UserGroup'] !== null && !is_allowed_access_by_user_group($row['UserGroup'])) {
 					continue;
 				}
 
@@ -42,7 +44,7 @@
 		}
 
 		// Query 2: Get actual data
-		$q2 = $db->prepare('SELECT `Text`, IDtype, Description, CORx, PMID, DOI, IntranetOnly, Curators FROM expat_datasets');
+		$q2 = $db->prepare('SELECT `Text`, IDtype, Description, CORx, PMID, DOI, UserGroup, Curators FROM expat_datasets');
 		$q2->execute();
 
 		// Check results
@@ -64,8 +66,8 @@
 			// Iterate through each row
 			while($row = $q2->fetch(PDO::FETCH_ASSOC)) {
 
-				// For rows that are marked for intranet only, check if user is allowed to view it
-				if(!!$row['IntranetOnly'] === true && !is_allowed_access('/expat/')) {
+				// For rows that has UserGroup defined, check if user is allowed to view it
+				if($row['UserGroup'] !== null && !is_allowed_access_by_user_group($row['UserGroup'])) {
 					continue;
 				}
 

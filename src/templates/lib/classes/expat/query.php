@@ -448,7 +448,7 @@ class Query {
 			)
 		);
 
-		if(is_allowed_access('/expat/')) {
+		if(is_allowed_access_by_user_group(is_logged_in()['UserGroup'])) {
 			$private_datasets = array(
 				'rnaseq-kellys-2015-bacteria' => array(
 					'277_exoU_24',
