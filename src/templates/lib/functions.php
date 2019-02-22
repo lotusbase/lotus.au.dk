@@ -96,15 +96,25 @@ function get_ip() {
 	return $the_ip;
 }
 
-// Check if user has access
-function is_allowed_access($resource = null) {
-	if($resource && isset($_COOKIE['auth_token']) && !empty($_COOKIE['auth_token'])) {
+// Check if user has access by path
+function is_allowed_access_by_path($path = null) {
+	if($path && isset($_COOKIE['auth_token']) && !empty($_COOKIE['auth_token'])) {
 		$userData = auth_verify($_COOKIE['auth_token']);
-		if(in_array($resource, $userData['ComponentPath'])) {
+		if(in_array($path, $userData['ComponentPath'])) {
 			return true;
 		} else {
 			return false;
 		}
+	} else {
+		return false;
+	}
+}
+
+// Check if user has access by user group
+function is_allowed_access_by_user_group($userGroup) {
+	if(!empty($userGroup) && isset($_COOKIE['auth_token']) && !empty($_COOKIE['auth_token'])) {
+		$userData = auth_verify($_COOKIE['auth_token']);
+		return $userData['UserGroup'] === $userGroup;
 	} else {
 		return false;
 	}

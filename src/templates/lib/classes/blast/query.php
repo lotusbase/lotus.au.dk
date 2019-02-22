@@ -72,7 +72,7 @@ class Query {
 	public function execute($download = false) {
 
 		// Define alternative BLAST db location if user is from intranet
-		if(is_allowed_access('/blast/')) {
+		if(is_allowed_access_by_path('/blast/')) {
 			$this->_vars['db_directory'] = '/var/blast-carb/db';
 		}
 

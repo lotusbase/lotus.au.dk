@@ -44,7 +44,7 @@
 					<div class="tool-icon"><span class="pictogram icon--no-spacing icon-book"></span></div>
 					<div class="tool-desc"><h3><em>Lotus</em> genome browser</h3><p>Browse through the latest version of the <em>Lotus japonicus</em> genome through a user-friendly web interface.</p></div>
 				</a>
-			</li>'.(is_allowed_access('/tools/primers') ? '
+			</li>'.(is_allowed_access_by_path('/tools/primers') ? '
 			<li class="tool-primers">
 				<a href="'.WEB_ROOT.'/tools/primers" title="Genotyping primer order generator">
 					<div class="tool-icon"><span class="pictogram icon--no-spacing icon-basket"></span></div>

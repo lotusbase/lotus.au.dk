@@ -88,7 +88,7 @@ $api->get('/blast/{db}/{id}', function($request, $response, $args) {
 		}
 
 		// Define BLAST db location
-		if(is_allowed_access('/blast/')) {
+		if(is_allowed_access_by_path('/blast/')) {
 			$db_directory = '/var/blast-carb/db';
 		} else {
 			$db_directory = '/var/blast/db';

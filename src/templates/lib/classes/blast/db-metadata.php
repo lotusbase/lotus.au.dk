@@ -60,7 +60,7 @@ class DBMetadata {
 
 	// Get blast directory
 	private function get_blast_db_dir() {
-		if(is_allowed_access('/blast/')) {
+		if(is_allowed_access_by_path('/blast/')) {
 			return BLAST_DB_DIR_INTERNAL;
 		} else {
 			return BLAST_DB_DIR_PUBLIC;
