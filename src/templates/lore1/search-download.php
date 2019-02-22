@@ -34,14 +34,12 @@ try {
 }
 
 // Is version specified?
-$genome = $_POST['v'];
-$lj_genome_labels = array_map(function($genome) { return implode('_', [$genome['ecotype'], $genome['version']]); }, $lj_genome_versions);
-if(!isset($_POST['v']) || !in_array($_POST['v'], $lj_genome_labels)) {
+$genome_version_checker = new \LotusBase\LjGenomeVersion(array('genome' => $_POST['v']));
+$genome_version = $genome_version_checker->check();
+if(!isset($_POST['v']) || !$genome_version) {
 	error_function('You have not specified a version number.', $origin);
-} else {
-	$version = $_POST['v'];
 }
-$genome_parts = explode('_', $genome);
+$genome_parts = explode('_', $genome_version);
 $ecotype = $genome_parts[0];
 $version = $genome_parts[1];
 
@@ -210,7 +208,7 @@ try {
 			$out .= "\"".implode($sep, $rowData)."\""."\n";
 		}
 
-		$file = "lore1_search_db" . $version . "_" . date("Y-m-d_H-i-s") . "." . $t;
+		$file = "lore1_search_" . $ecotype . '-v' . $version . "_" . date("Y-m-d_H-i-s") . "." . $t;
 		header("Content-disposition: csv; filename=\"".$file."\"");
 		header("Content-type: application/vnd.ms-excel");
 		header("Cache-Control: no-cache, must-revalidate");
