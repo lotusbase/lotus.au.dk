@@ -45,7 +45,7 @@ class Dataset {
 		if($q1->rowCount()) {
 			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
 				$this->_opts[$row['Dataset']] = array(
-					'idType' => $row['IDtype'],
+					'idType' => $row['IDType'],
 					'column_share' => $row['ColumnShare'],
 					'experiment' => $row['Experiment'],
 					'value' => $row['Dataset'],
