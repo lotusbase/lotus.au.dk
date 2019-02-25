@@ -185,8 +185,14 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 		if($q2->rowCount() > 0) {
 			while($row = $q2->fetch(PDO::FETCH_ASSOC)) {
 
+				// Check if a reference map is available first
+				if(empty($refs)) {
+					$row['Reference'] = 'N.A.';
+					$row['ReferenceURL'] = null;
+				}
+
 				// Construct reference
-				if(!empty($row['PMID'])) {
+				else if(!empty($row['PMID'])) {
 					$ref = $refs[$row['PMID']];
 
 					// Reference link
@@ -217,7 +223,9 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 						$row['ReferenceTitle'] = $ref['title'];
 						$row['ReferenceURL'] = 'https://doi.org/'.$doi;
 					}
-				} else {
+				}
+				
+				else {
 					$row['Reference'] = 'Unpublished data';
 					$row['ReferenceURL'] = null;
 				}

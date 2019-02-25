@@ -294,7 +294,10 @@ $(function() {
 										row += (k==='ConditionName'?'<td class="chk"><input type="checkbox" data-condition="'+c+'" name="column[]" value="'+c+'" id="dataset-condition__'+c+'" '+(datasetColumns.indexOf(c) > -1 ? 'checked': '')+'/></td>':'')+'<td class="'+k+'">'+(k==='PlantGenotype'&&c!=='Wildtype'?'<em>':'')+(k==='Standard'?(c==='1'?'Standard':'&ndash;'):(c===null?'&ndash;':String(c).replace(/((Gigaspora margarita)|(Mesorhizobium loti))/gi,'<em>$1</em>')))+(k==='PlantGenotype'&&c!=='Wildtype'?'</em>':'')+'</td>';
 									} else if(k==='Reference') {
 										// Note: Cast c to string if you are using .replace(). The method doesn't want to work with integers
-										row += '<td class="'+k+'"><a href="'+r.ReferenceURL+'" title="'+r.ReferenceTitle+'">'+c.replace(/(et al\.)/gi,'<em>$1</em>')+'</a></td>';
+										if (r.ReferenceURL)
+											row += '<td class="'+k+'"><a href="'+r.ReferenceURL+'" title="'+r.ReferenceTitle+'">'+c.replace(/(et al\.)/gi,'<em>$1</em>')+'</a></td>';
+										else
+											row += '<td class="'+k+'">'+c.replace(/(et al\.)/gi,'<em>$1</em>')+'</td>';
 									}
 
 									// Append to content, which we will add to lunr.js index
