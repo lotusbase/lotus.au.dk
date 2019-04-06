@@ -323,6 +323,8 @@ $(function() {
 						} else {
 							$.each(data, function(i,r) {
 								var row = '<tr>';
+								var content = '';
+								
 								$.each(r, function(k,c) {
 									if(k.indexOf('Reference') === -1) {
 										// Note: Cast c to string if you are using .replace(). The method doesn't want to work with integers
@@ -345,6 +347,12 @@ $(function() {
 
 								// Append to row
 								$('#expat-dataset-subset table tbody').append(row);
+
+								// Add to index
+								globalVar.expat.index.add({
+									'content': content,
+									'id': i
+								});
 							});
 						}
 
