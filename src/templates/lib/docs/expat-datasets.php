@@ -140,28 +140,31 @@
 					// Reference link
 					$_articleids = $ref['articleids'];
 					$doi = false;
-					foreach ($_articleids as $ai) {
-						if($ai['idtype'] === 'doi') {
-							$doi = $ai['value'];
+
+					// Only proceed if article ID retrieval is successful
+					if(count($_articleids)) {
+						foreach ($_articleids as $ai) {
+							if($ai['idtype'] === 'doi') {
+								$doi = $ai['value'];
+							}
 						}
+
+						// Reference authors
+						$_authors = $ref['authors'];
+						if(count($_authors) !== 2) {
+							$authors = explode(' ', $_authors[0]['name'])[0].' et al.';
+						} else {
+							$authors = implode(' and ', array_map(function($a) {
+								return explode(' ', $a['name'])[0];
+							}, $_authors));
+						}
+
+						// Publication year
+						$year = DateTime::createFromFormat('Y/m/d G:i', $ref['sortpubdate'])->format('Y');
+
+						// Reference
+						$referenceHTML = '<a href="'.(!empty($doi) ? 'https://doi.org/'.$doi : 'https://www.ncbi.nlm.nih.gov/pubmed/'.$row['PMID']).'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a>';
 					}
-
-					// Reference authors
-					$_authors = $ref['authors'];
-					if(count($_authors) !== 2) {
-						$authors = explode(' ', $_authors[0]['name'])[0].' et al.';
-					} else {
-						$authors = implode(' and ', array_map(function($a) {
-							return explode(' ', $a['name'])[0];
-						}, $_authors));
-					}
-
-					// Publication year
-					$year = DateTime::createFromFormat('Y/m/d G:i', $ref['sortpubdate'])->format('Y');
-
-					// Reference
-					$referenceHTML = '<a href="'.(!empty($doi) ? 'https://doi.org/'.$doi : 'https://www.ncbi.nlm.nih.gov/pubmed/'.$row['PMID']).'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a>';
-
 				}
 
 				echo '<tr>

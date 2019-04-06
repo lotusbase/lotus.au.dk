@@ -590,7 +590,7 @@ class Query {
 				if($this->expat['experiment'] === 'ljgea') {
 					// LjGEA dataset requires joining of two different tables, one by gene ID and the other by probe ID
 					$sqlQuery = "SELECT
-						t1.".$query['id']." AS RowID, GROUP_CONCAT(t2.".$query['mappedid'].") AS MappedToID, t3.".$query['mappedid']." AS MappedID, ".implode($columns,',')."
+						t1.".$query['id']." AS RowID, GROUP_CONCAT(t2.".$query['mappedid'].") AS MappedToID, t3.".$query['mappedid']." AS MappedID, `".implode($columns,'`,`')."`
 					FROM
 						".$query['table']." AS t1
 					LEFT JOIN expat_mapping AS t2 ON t1.".$query['id']." = t2.".$query['id']."
@@ -627,7 +627,7 @@ class Query {
 					}
 
 					$sqlQuery = "SELECT
-						t1.".$query['id']." AS RowID, ".implode($columns,',')."
+						t1.".$query['id']." AS RowID, `".implode($columns,'`,`')."`
 					FROM
 						".$query['table']." AS t1
 					WHERE ".substr($likeQuery, 0, -4)."

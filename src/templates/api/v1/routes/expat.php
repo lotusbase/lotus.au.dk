@@ -74,75 +74,75 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 			'rnaseq-handay-2015' => array(
 				'table' => 'expat_RNAseq_HandaY2015_columns',
 				'columns' => array(
-						'Treatment',
-						'Inocula',
-						'Strain',
-						'InoculationPressure',
-						'SoilNutrientStatus',
-						'TimeUnit',
-						'TimeDuration',
-						'PlantSpecies',
-						'PlantEcotype',
-						'PlantGenotype',
-						'GrowthMedium',
-						'GrowthTemperature',
-						'DayNightRegime'
-					)
-				),
+					'Treatment',
+					'Inocula',
+					'Strain',
+					'InoculationPressure',
+					'SoilNutrientStatus',
+					'TimeUnit',
+					'TimeDuration',
+					'PlantSpecies',
+					'PlantEcotype',
+					'PlantGenotype',
+					'GrowthMedium',
+					'GrowthTemperature',
+					'DayNightRegime'
+				)
+			),
 			'rnaseq-sasakit-2014' => array(
 				'table' => 'expat_RNAseq_SasakiT2014_columns',
 				'columns' => array(
-						'Treatment',
-						'Inocula',
-						'Strain',
-						'TimeUnit',
-						'TimeDuration',
-						'PlantSpecies',
-						'PlantEcotype',
-						'PlantGenotype',
-						'Tissue'
-					)
-				),
+					'Treatment',
+					'Inocula',
+					'Strain',
+					'TimeUnit',
+					'TimeDuration',
+					'PlantSpecies',
+					'PlantEcotype',
+					'PlantGenotype',
+					'Tissue'
+				)
+			),
 			'rnaseq-suzakit-2014' => array(
 				'table' => 'expat_RNAseq_SuzakiT2014_columns',
 				'columns' => array(
-						'Treatment',
-						'Inocula',
-						'Strain',
-						'TimeUnit',
-						'TimeDuration',
-						'PlantSpecies',
-						'PlantEcotype',
-						'PlantGenotype',
-						'Tissue'
-					)
-				),
+					'Treatment',
+					'Inocula',
+					'Strain',
+					'TimeUnit',
+					'TimeDuration',
+					'PlantSpecies',
+					'PlantEcotype',
+					'PlantGenotype',
+					'Tissue'
+				)
+			),
 			'rnaseq-davidm-2017' => array(
 				'table' => 'expat_RNAseq_DavidM2017_columns',
 				'columns' => array(
-						'Treatment',
-						'Inocula',
-						'Strain',
-						'TimeUnit',
-						'TimeDuration',
-						'PlantSpecies',
-						'PlantEcotype',
-						'Tissue',
-						'Age'
-					)
-				),
+					'Treatment',
+					'Inocula',
+					'Strain',
+					'TimeUnit',
+					'TimeDuration',
+					'PlantSpecies',
+					'PlantEcotype',
+					'Tissue',
+					'Age'
+				)
+			),
 			'rnaseq-kellys-2017' => array(
 				'table' => 'expat_RNAseq_KellyS2017_MicrobialSpectrum_columns',
 				'columns' => array(
-						'Treatment',
-						'Inocula',
-						'Strain',
-						'TimeUnit',
-						'TimeDuration',
-						'PlantSpecies',
-						'PlantEcotype',
-						'Tissue',
-						'Age'
+					'Treatment',
+					'Inocula',
+					'Strain',
+					'TimeUnit',
+					'TimeDuration',
+					'PlantSpecies',
+					'PlantEcotype',
+					'Tissue',
+					'Age'
 					)
 				)
 			);
