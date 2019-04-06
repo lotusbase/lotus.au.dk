@@ -203,6 +203,7 @@
 								'geneid'
 								));
 							$expat_dataset->set_selected_dataset('ljgea-geneid');
+							$expat_dataset->set_species('Lotus');
 							echo $expat_dataset->render();
 						?>
 					</div>

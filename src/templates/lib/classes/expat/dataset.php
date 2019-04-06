@@ -29,6 +29,7 @@ class Dataset {
 
 		// Query 1: Collect all PMID
 		$q1 = $db->prepare('SELECT
+			t1.Species AS Species,
 			t1.IDType AS IDType,
 			t1.ColumnShare AS ColumnShare,
 			t1.Experiment AS Experiment,
@@ -45,6 +46,7 @@ class Dataset {
 		if($q1->rowCount()) {
 			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
 				$this->_opts[$row['Dataset']] = array(
+					'species' => $row['Species'],
 					'idType' => $row['IDType'],
 					'column_share' => $row['ColumnShare'],
 					'experiment' => $row['Experiment'],
@@ -84,6 +86,13 @@ class Dataset {
 	public function set_selected_dataset($selected_dataset) {
 		if(!empty($selected_dataset)) {
 			$this->_vars['selected_dataset'] = $selected_dataset;
+		}
+	}
+
+	// Set species
+	public function set_species($species) {
+		if(!empty($species)) {
+			$this->_vars['species'] = $species;
 		}
 	}
 
@@ -128,6 +137,9 @@ class Dataset {
 						) &&
 						(
 							!in_array($dataset, $this->_vars['blacklist'])
+						) &&
+						(
+							empty($this->_vars['species']) || $this->_vars['species'] === $d['species']
 						)
 					) {
 						$opts[] = '<option
