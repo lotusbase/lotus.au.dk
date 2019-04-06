@@ -221,6 +221,15 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-kellys-2017';
 			$this->expat['rowType'] = 'Gene ID';
 			$this->expat['rowText'] = 'Gene(s)';
+		} else if ($dataset === 'reidd-2019-barleynutrient') {
+			$this->_expat['query'] = array(
+				'table' => 'expat_ReidD2019_BarleyNutrients',
+				'id' => $_POST['idtype']
+			);
+			$this->expat['mapped'] = false;
+			$this->expat['experiment'] = 'reidd-2019';
+			$this->expat['rowType'] = 'Gene ID';
+			$this->expat['rowText'] = 'Gene(s)';
 		} else {
 			$this->error->set_status(404);
 			$this->error->set_message('The dataset you have selected: ' + $dataset + ' is not available. Please try again.');
@@ -506,6 +515,19 @@ class Query {
 					'4820_NF',
 					'nfr1_H2O',
 					'nfr1_NF'
+				),
+				'reidd-2019-barleynutrient' => array(
+					'N-P-_Mainroot',
+					'N-P-_Lateralroot',
+					'N-P-_Shoot',
+					'N-P+_Mainroot',
+					'N-P+_Lateralroot',
+					'N-P+_Shoot',
+					'N+P-_Mainroot',
+					'N+P-_Lateralroot',
+					'N+P-_Shoot',
+					'N+P+_Mainroot',
+					'N+P+_Lateralroot'
 				)
 			);
 
@@ -617,7 +639,8 @@ class Query {
 					$this->expat['experiment'] === 'rnaseq-suzakit-2014' ||
 					$this->expat['experiment'] === 'rnaseq-kellys-2015' ||
 					$this->expat['experiment'] === 'rnaseq-davidm-2017' ||
-					$this->expat['experiment'] === 'rnaseq-kellys-2017'
+					$this->expat['experiment'] === 'rnaseq-kellys-2017' ||
+					$this->expat['experiment'] === 'reidd-2019'
 					) {
 					
 					// Construct LIKE query

@@ -143,6 +143,19 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 					'PlantEcotype',
 					'Tissue',
 					'Age'
+				)
+			),
+			'reidd-2019' => array(
+				'table' => 'expat_ReidD2019_BarleyNutrients_columns',
+				'columns' => array(
+					'Treatment',
+					'Tissue',
+					'Nitrate',
+					'Phosphate',
+					'PlantSpecies',
+					'PlantEcotype',
+					'Organ',
+					'Age',
 					)
 				)
 			);
