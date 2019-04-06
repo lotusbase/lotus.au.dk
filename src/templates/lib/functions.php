@@ -114,7 +114,7 @@ function is_allowed_access_by_path($path = null) {
 function is_allowed_access_by_user_group($userGroups) {
 	if(isset($_COOKIE['auth_token']) && !empty($_COOKIE['auth_token'])) {
 		$userData = auth_verify($_COOKIE['auth_token']);
-		return !empty(array_intersect($userData['UserGroups'], $userGroups));
+		return $userData['Authority'] === 1 || !empty(array_intersect($userData['UserGroups'], $userGroups));
 	} else {
 		return false;
 	}
