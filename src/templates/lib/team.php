@@ -17,7 +17,7 @@ $team = array(
 		'name' => 'Stig U. Andersen',
 		'role' => 'Principal investigator',
 		'mail' => array('au' => 'sua@mbg.au.dk'),
-		'description' => '<p>Assistant professor at Department of Molecular Biology and Genetics, Aarhus University.</p>',
+		'description' => '<p>Associate professor at Department of Molecular Biology and Genetics, Aarhus University.</p>',
 		'social' => array(
 			'linkedin' => array(
 				'url' => 'https://www.linkedin.com/in/stig-uggerhøj-andersen-7591364'
