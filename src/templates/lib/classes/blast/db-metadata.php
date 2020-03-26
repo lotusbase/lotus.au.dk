@@ -128,6 +128,10 @@ class DBMetadata {
 			$this->blast_db_metadata = array_filter($this->blast_db_metadata, array(__CLASS__, "remove_database"))[$db_file_name];
 		}
 
+		uasort($this->blast_db_metadata, function($a, $b) {
+			return strcmp($a['category'], $b['category']);
+		});
+
 		return $this->blast_db_metadata;
 
 	}
