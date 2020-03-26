@@ -9,7 +9,14 @@
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 		// Query 1: Collect all PMID
-		$q1 = $db->prepare('SELECT PMID, DOI, IntranetOnly FROM expat_datasets');
+		$q1 = $db->prepare('SELECT
+			t1.PMID AS PMID,
+			t1.DOI AS DOI,
+			GROUP_CONCAT(t2.UserGroup) AS UserGroups
+		FROM expat_datasets AS t1
+		LEFT JOIN expat_datasets_usergroup AS t2 ON
+			t1.IDKey = t2.DatasetIDKey
+		GROUP BY t1.IDKey');
 		$q1->execute();
 
 		if(!$q1->rowCount()) {
@@ -19,7 +26,10 @@
 			$pmids = array();
 			$dois = array();
 			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
-				if(!!$row['IntranetOnly'] === true && !is_allowed_access('/expat/')) {
+
+				// For rows that has UserGroup defined, check if user is allowed to view it
+				$userGroups = array_filter(explode(',', $row['UserGroups']));
+				if(!empty($userGroups) && !is_allowed_access_by_user_group($userGroups)) {
 					continue;
 				}
 
@@ -42,7 +52,19 @@
 		}
 
 		// Query 2: Get actual data
-		$q2 = $db->prepare('SELECT `Text`, IDtype, Description, CORx, PMID, DOI, IntranetOnly, Curators FROM expat_datasets');
+		$q2 = $db->prepare('SELECT
+			t1.Text AS `Text`,
+			t1.IDtype AS IDtype,
+			t1.Description AS Description,
+			t1.CORx AS CORx,
+			t1.PMID AS PMID,
+			t1.DOI AS DOI,
+			GROUP_CONCAT(t2.UserGroup) AS UserGroups,
+			t1.Curators AS Curators
+		FROM expat_datasets AS t1
+		LEFT JOIN expat_datasets_usergroup AS t2 ON
+			t1.IDKey = t2.DatasetIDKey
+		GROUP BY t1.IDKey');
 		$q2->execute();
 
 		// Check results
@@ -64,8 +86,9 @@
 			// Iterate through each row
 			while($row = $q2->fetch(PDO::FETCH_ASSOC)) {
 
-				// For rows that are marked for intranet only, check if user is allowed to view it
-				if(!!$row['IntranetOnly'] === true && !is_allowed_access('/expat/')) {
+				// For rows that has UserGroup defined, check if user is allowed to view it
+				$userGroups = array_filter(explode(',', $row['UserGroups']));
+				if(!empty($userGroups) && !is_allowed_access_by_user_group($userGroups)) {
 					continue;
 				}
 
@@ -117,28 +140,31 @@
 					// Reference link
 					$_articleids = $ref['articleids'];
 					$doi = false;
-					foreach ($_articleids as $ai) {
-						if($ai['idtype'] === 'doi') {
-							$doi = $ai['value'];
+
+					// Only proceed if article ID retrieval is successful
+					if(count($_articleids)) {
+						foreach ($_articleids as $ai) {
+							if($ai['idtype'] === 'doi') {
+								$doi = $ai['value'];
+							}
 						}
+
+						// Reference authors
+						$_authors = $ref['authors'];
+						if(count($_authors) !== 2) {
+							$authors = explode(' ', $_authors[0]['name'])[0].' et al.';
+						} else {
+							$authors = implode(' and ', array_map(function($a) {
+								return explode(' ', $a['name'])[0];
+							}, $_authors));
+						}
+
+						// Publication year
+						$year = DateTime::createFromFormat('Y/m/d G:i', $ref['sortpubdate'])->format('Y');
+
+						// Reference
+						$referenceHTML = '<a href="'.(!empty($doi) ? 'https://doi.org/'.$doi : 'https://www.ncbi.nlm.nih.gov/pubmed/'.$row['PMID']).'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a>';
 					}
-
-					// Reference authors
-					$_authors = $ref['authors'];
-					if(count($_authors) !== 2) {
-						$authors = explode(' ', $_authors[0]['name'])[0].' et al.';
-					} else {
-						$authors = implode(' and ', array_map(function($a) {
-							return explode(' ', $a['name'])[0];
-						}, $_authors));
-					}
-
-					// Publication year
-					$year = DateTime::createFromFormat('Y/m/d G:i', $ref['sortpubdate'])->format('Y');
-
-					// Reference
-					$referenceHTML = '<a href="'.(!empty($doi) ? 'https://doi.org/'.$doi : 'https://www.ncbi.nlm.nih.gov/pubmed/'.$row['PMID']).'" title="'.$ref['title'].'">'.$authors.', '.$year.'</a>';
-
 				}
 
 				echo '<tr>

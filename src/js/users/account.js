@@ -396,16 +396,16 @@ $(function() {
 		});
 	});
 
-	// DataTable for transcripts
+	// DataTable for user group members
 	var $userGroupMembersTable = $('#user-group__members').DataTable({
 		'pagingType': 'full_numbers',
 		'dom': 'lftipr'
 	});
-	$userGroupMembersTable.on('search.dt', function() {
-		var info = $transcriptTable.page.info(),
+	$userGroupMembersTable.on('search.dt', function(e, settings) {
+		var info = $userGroupMembersTable.page.info(),
 			totalRows = info.recordsTotal,
 			filteredRows = info.recordsDisplay,
-			$badge = $('#user-group__members').prev('h3').find('span.badge');
+			$badge = $('#user-group__members-count');
 
 		// Update counts
 		$badge.text(filteredRows);
@@ -415,5 +415,8 @@ $(function() {
 		} else {
 			$badge.removeClass('subset');
 		}
+	});
+	$('#group-member__group').on('input', function() {
+		$userGroupMembersTable.column(0).search(this.value).draw();
 	});
 });

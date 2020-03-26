@@ -28,19 +28,32 @@ class Dataset {
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 		// Query 1: Collect all PMID
-		$q1 = $db->prepare('SELECT * FROM expat_datasets');
+		$q1 = $db->prepare('SELECT
+			t1.Species AS Species,
+			t1.IDType AS IDType,
+			t1.ColumnShare AS ColumnShare,
+			t1.Experiment AS Experiment,
+			t1.Dataset AS Dataset,
+			t1.Text AS Text,
+			t1.Label AS Label,
+			GROUP_CONCAT(t2.UserGroup) AS UserGroups
+		FROM expat_datasets AS t1
+		LEFT JOIN expat_datasets_usergroup AS t2 ON
+			t1.IDKey = t2.DatasetIDKey
+		GROUP BY t1.IDKey');
 		$q1->execute();
 
 		if($q1->rowCount()) {
 			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
 				$this->_opts[$row['Dataset']] = array(
-					'idType' => $row['IDtype'],
+					'species' => $row['Species'],
+					'idType' => $row['IDType'],
 					'column_share' => $row['ColumnShare'],
 					'experiment' => $row['Experiment'],
 					'value' => $row['Dataset'],
 					'text' => $row['Text'],
 					'label' => $row['Label'],
-					'intranet_only' => !!$row['IntranetOnly']
+					'user_groups' => array_filter(explode(',', $row['UserGroups']))
 					);
 			}
 		}
@@ -76,6 +89,13 @@ class Dataset {
 		}
 	}
 
+	// Set species
+	public function set_species($species) {
+		if(!empty($species)) {
+			$this->_vars['species'] = $species;
+		}
+	}
+
 	// Set ID
 	public function set_id($id) {
 		$this->_vars['id'] = $id;
@@ -103,13 +123,10 @@ class Dataset {
 			$opts = array();
 			foreach ($this->_opts as $dataset => $d) {
 				if($d['label'] === $og) {
+					$userGroups = $d['user_groups'];
 					if(
 						(
-							!$d['intranet_only'] ||
-							(
-								$d['intranet_only'] &&
-								$d['intranet_only'] === !!is_allowed_access('/expat/')
-							)
+							empty($userGroups) || is_allowed_access_by_user_group($userGroups)
 						) &&
 						(
 							(
@@ -120,6 +137,9 @@ class Dataset {
 						) &&
 						(
 							!in_array($dataset, $this->_vars['blacklist'])
+						) &&
+						(
+							empty($this->_vars['species']) || $this->_vars['species'] === $d['species']
 						)
 					) {
 						$opts[] = '<option

@@ -15,7 +15,7 @@ $(function() {
 				top: 5,
 				right: 5,
 				bottom: 280,
-				left: 90
+				left: 120
 			},
 			outerWidth: 960
 		},
@@ -184,7 +184,8 @@ $(function() {
 					$userCustom;
 
 				// Table creation
-				$table.append('<colgroup></colgroup><thead><tr><td>'+data.rowType+'</td>'+(data.mapped?'<td>'+data.mapped.text+' mapped to*</td>':'')+'</tr></thead><tbody></tbody><tfoot><th class="'+data.dataset+'"><button type="button" class="button--small" disabled><span class="pictogram icon-search">Search selected</span></button></th>'+(data.mapped?'<th class="'+data.mapped.dataset+'"><button type="button" class="button--small" disabled><span class="pictogram icon-search">Search selected</span></button></th>':'')+'<td colspan="999"></td></tfoot>');
+				var tableFooter = data.species !== 'Lotus' ? '' : '<tfoot><th class="'+data.dataset+'"><button type="button" class="button--small" disabled><span class="pictogram icon-search">Search selected</span></button></th>'+(data.mapped?'<th class="'+data.mapped.dataset+'"><button type="button" class="button--small" disabled><span class="pictogram icon-search">Search selected</span></button></th>':'')+'<td colspan="999"></td></tfoot>';
+				$table.append('<colgroup></colgroup><thead><tr><td>'+data.rowType+'</td>'+(data.mapped?'<td>'+data.mapped.text+' mapped to*</td>':'')+'</tr></thead><tbody></tbody>' + tableFooter);
 				$.each(data.Mean.condition, function(i,conditions) {
 					$table.find('thead tr').append('<td data-condition="'+conditions+'"><div><span>'+conditions+'</span></div></td>');
 					$table.prepend('<colgroup></colgroup>');
@@ -195,9 +196,15 @@ $(function() {
 						'<li><a href="/tools/trex.php?ids='+rowID+'" title="Get advanced transcript information for this gene: '+rowID+'"><span class="pictogram icon-direction">Send to Transcript Explorer (TREX)</span></a></li>',
 						'<li><a href="/lore1/search-exec.php?v=MG20_3.0&gene='+rowID+'" title="Search for LORE1 lines with insertion in this gene: '+rowID+'"><span class="pictogram icon-search">Search for <em>LORE1</em> mutants</span></a></li>'
 						].join(''),
-						tableRow = '<tr data-row="'+rowID+'"><th><input type="checkbox" class="'+data.dataset+'" value="'+rowID+'" /> ';
-					if(data.rowType === 'Gene ID') {
+						tableRow = '<tr data-row="'+rowID+'"><th>';
+						if (data.species === 'Lotus') {
+							tableRow += '<input type="checkbox" class="'+data.dataset+'" value="'+rowID+'" /> ';
+						}
+
+					if (data.rowType === 'Gene ID' && data.species === 'Lotus') {
 						tableRow += '<div class="dropdown button"><span class="dropdown--title">'+rowID+'</span><ul class="dropdown--list">'+accessionLinks+'</ul></div>';
+					} else if (data.species !== 'Lotus' && data.externalUrl) {
+						tableRow += '<a href="' + data.externalUrl + rowID + '" target="_blank">' + rowID + '</a>';	
 					} else {
 						tableRow += rowID;
 					}
@@ -988,7 +995,7 @@ $(function() {
 				// Call tip for gene ID search cases only
 				var expatGeneAnnoAJAX,
 					expatGeneAnnoAJAXTimer = null;
-				if(data.rowType === 'Gene ID') {
+				if(data.rowType === 'Gene ID' && data.species === 'Lotus') {
 					expatHeatmap.selectAll('g.y.axis text')
 					.call(geneIDtip)
 					.on('mouseover', function(d) {

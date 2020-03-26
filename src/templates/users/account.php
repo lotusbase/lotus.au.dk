@@ -91,12 +91,18 @@
 					// Get user data
 					$qu = $db->prepare('SELECT
 							auth.*,
-							authGroupMeta.Name AS UserGroupName
+							GROUP_CONCAT(DISTINCT authUserGroup.UserGroup) as UserGroups,
+							authGroupMeta.Name AS UserGroupName,
+							GROUP_CONCAT(DISTINCT authGroupMetaSecondary.Name) AS UserGroupNames
 						FROM auth
+						LEFT JOIN auth_usergroup AS authUserGroup ON
+							auth.UserID = authUserGroup.UserID
 						LEFT JOIN auth_group AS authGroup ON
 							auth.UserGroup = authGroup.UserGroup
 						LEFT JOIN auth_group_metadata AS authGroupMeta ON
 							auth.UserGroup = authGroupMeta.UserGroup
+						LEFT JOIN auth_group_metadata AS authGroupMetaSecondary ON
+							authUserGroup.UserGroup = authGroupMetaSecondary.UserGroup
 						WHERE auth.Salt = ?
 						GROUP BY auth.Salt');
 					$qu->execute(array($user['Salt']));
@@ -234,6 +240,10 @@
 					if($userData['UserGroup']) {
 
 						try {
+							$allUserGroups = explode(',', $userData['UserGroups']);
+							$allUserGroupNames = explode(',', $userData['UserGroupNames']);
+							$secondaryUserGroupNames = array_diff($allUserGroupNames, [$userData['UserGroupName']]);
+
 							// Get components user has access to
 							$comps = $db->prepare('SELECT
 								components.Name AS Name,
@@ -242,44 +252,76 @@
 								FROM auth_group AS authGroup
 								LEFT JOIN components ON
 									authGroup.ComponentID = components.IDKey
-								WHERE authGroup.UserGroup = ?');
-							$comps->execute(array($userData['UserGroup']));
+								WHERE authGroup.UserGroup IN ('.str_repeat('?,', count($allUserGroups)-1).'?'.')
+								GROUP BY components.IDKey');
+							$comps->execute($allUserGroups);
 
 							// Get users in the same group
 							$groupUsers = $db->prepare('SELECT
-								auth.FirstName AS FirstName,
-								auth.LastName AS LastName,
-								auth.Email AS Email,
-								auth.Organization AS Organization
+									auth.FirstName AS FirstName,
+									auth.LastName AS LastName,
+									auth.Email AS Email,
+									auth.Organization AS Organization,
+									GROUP_CONCAT(DISTINCT authUserGroupMetadata.Name ORDER BY authUserGroupMetadata.Name) AS UserGroupNames
 								FROM auth
-								WHERE auth.UserGroup = ?
+								LEFT JOIN auth_usergroup AS authUserGroup ON
+									auth.UserID = authUserGroup.UserID
+								LEFT JOIN auth_group_metadata AS authUserGroupMetadata ON
+									authUserGroup.UserGroup = authUserGroupMetadata.UserGroup
+								WHERE authUserGroup.UserGroup IN ('.str_repeat('?,', count($allUserGroups)-1).'?'.')
+								GROUP BY auth.UserID
 								ORDER BY auth.FirstName');
-							$groupUsers->execute(array($userData['UserGroup']));
-
+							$groupUsers->execute($allUserGroups);
 							?>
 
 							<h3>Expanded access</h3>
-							<p>You are a member of the user group: <strong><?php echo $userData['UserGroupName']; ?></strong>. You have access to expanded versions of the following tools:</p>
+							<p>
+								You are a member of the primary user group: <strong><?php echo $userData['UserGroupName']; ?></strong>.
+								<?php if (count(secondaryUserGroupNames)) { ?>
+									In addition, you are also a member of the following secondary groups:
+								<?php } ?>
+							<p>
+							<ul>
+								<?php foreach($secondaryUserGroupNames as $secondaryUserGroupName) { ?>
+									<li><strong><?php echo $secondaryUserGroupName; ?></strong></li>
+								<?php } ?>
+							</ul>
+							<p>You have access to expanded versions of the following tools:</p>
 							<table>
 								<thead>
 									<tr>
 										<th>Component name</th>
 										<th>Description</th>
-										<th>Path</th>
 									</tr>
 								</thead>
 								<tbody>
 
 							<?php
 								while($c = $comps->fetch(PDO::FETCH_ASSOC)) {
-									echo '<tr><th>'.$c['Name'].'</th><td>'.$c['Description'].'</td><td><a href="'.WEB_ROOT.$c['Path'].'" title="'.$c['Name'].'">'.$c['Path'].'</a></td></tr>';
+									echo '<tr><th>'.$c['Name'].'</th><td>'.$c['Description'].'</td></tr>';
 								}
 							?>
 
 							</tbody></table>
 
-							<h3>Group members <span class="badge"><?php echo $groupUsers->rowCount(); ?></span></h3>
-							<p>Basic data of all the members in the same group:</p>
+							<h3>Group members <span class="badge" id="user-group__members-count"><?php echo $groupUsers->rowCount(); ?></span></h3>
+							<?php if (count(secondaryUserGroupNames)) { ?>
+							<form id="group-member-filter__form" action="#" method="get" class="has-group">
+							<p>As you are a member of multiple user groups, the list below shows <em>all</em> users that are present in any group that you are part of. You can filter users by groups using the dropdown below:</p>
+								<div class="cols" role="group">
+									<label class="col-one" for="lore1-type">Filter by user group</label>
+									<div class="col-two">
+										<select id="group-member__group">
+											<option value="all" selected="">All</option>
+											<?php foreach($allUserGroupNames as $allUserGroupNames) {
+												echo '<option value="'.$allUserGroupNames.'">'.$allUserGroupNames.'</option>';
+											} ?>
+										</select>
+									</div>
+								</div>
+							</form>
+							<?php } ?>
+
 							<table id="user-group__members">
 								<thead>
 									<tr>
@@ -291,7 +333,7 @@
 								<tbody>
 								<?php
 									while($u = $groupUsers->fetch(PDO::FETCH_ASSOC)) {
-										echo '<tr><td>'.$u['FirstName'].' '.$u['LastName'].'</td><td>'.$u['Email'].'</td><td>'.$u['Organization'].'</td></tr>';
+										echo '<tr><td data-search="'.$u['UserGroupNames'].'">'.$u['FirstName'].' '.$u['LastName'].'</td><td>'.$u['Email'].'</td><td>'.$u['Organization'].'</td></tr>';
 									}
 								?>
 								</tbody>

@@ -63,7 +63,7 @@
 									}
 								}
 							?>
-							<li class="input-wrapper"><input type="text" name="ids-input" id="expat-row-input" placeholder="Enter accession number or GI here" autocomplete="off" /></li>
+							<li class="input-wrapper"><input type="text" name="ids-input" id="expat-row-input" placeholder="Enter identifier here" autocomplete="off" /></li>
 						</ul>
 						<input class="input-hidden" type="hidden" name="ids" id="expat-row" value="<?php echo (isset($_GET['ids']) && !empty($_GET['ids'])) ? escapeHTML($_GET['ids']) : ''; ?>" readonly />
 					</div>

@@ -27,8 +27,12 @@
 			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 			$q = $db->prepare("SELECT
-					GROUP_CONCAT(components.Path) as ComponentPath
+					auth.UserGroup AS PrimaryUserGroup,
+					GROUP_CONCAT(DISTINCT authUserGroup.UserGroup) as UserGroups,
+					GROUP_CONCAT(DISTINCT components.Path) as ComponentPath
 				FROM auth
+				LEFT JOIN auth_usergroup AS authUserGroup ON
+					auth.UserID = authUserGroup.UserID
 				LEFT JOIN auth_group AS authGroup ON
 					auth.UserGroup = authGroup.UserGroup
 				LEFT JOIN components ON
@@ -38,10 +42,11 @@
 				");
 			$q->execute(array($user['Salt']));
 			$userData = $q->fetch(PDO::FETCH_ASSOC);
-			$userComps = explode(',', $userData['ComponentPath']);
+			$userComps = array_filter(explode(',', $userData['ComponentPath']));
 			$tokenComps = $user['ComponentPath'];
 			$diffComps = array_diff($userComps, $tokenComps);
-			if(count($diffComps)) {
+			$diffUserGroups = array_diff(array_filter(explode(',', $userData['UserGroups'])), $user['UserGroups']);
+			if(count($diffComps) || count($diffUserGroups) || $userData['PrimaryUserGroup'] !== $user['UserGroup']) {
 				throw new ComponentPathException('User group access privileges have been updated while you\'re logged in. Please reauthenticate.');
 			}
 		}

@@ -107,12 +107,12 @@ class PageHeader {
 							<li><a href="'.WEB_ROOT.'/lore1/order" title="Order LORE1 lines">Order lines</a></li>
 							<li><a href="'.WEB_ROOT.'/lore1/order-search" title="Search for ordered LORE1 lines">Order history</a></li>
 							<li><a href="'.WEB_ROOT.'/lore1/order-status" title="Check the status of a LORE1 order">Order status</a></li>
-							'.(is_allowed_access('/tools/primers') ? '<li><a href="'.WEB_ROOT.'/tools/primers" title="Genotyping Primer Order Sheet">Genotyping Primers</a></li>' : '').'
+							'.(is_allowed_access_by_path('/tools/primers') ? '<li><a href="'.WEB_ROOT.'/tools/primers" title="Genotyping Primer Order Sheet">Genotyping Primers</a></li>' : '').'
 						</ul>
 					</li>
 					<li class="h-tools" data-group="tools"><a href="'.WEB_ROOT.'/tools" title="Tools">Tools</a>
 						<ul>
-							'.(is_allowed_access('/blast/') ? '<li><a href="'.WEB_ROOT.'/blast-carb/" title="BLAST">BLAST</a></li>' : '<li><a href="'.WEB_ROOT.'/blast/" title="BLAST">BLAST</a></li>').'
+							'.(is_allowed_access_by_path('/blast/') ? '<li><a href="'.WEB_ROOT.'/blast-carb/" title="BLAST">BLAST</a></li>' : '<li><a href="'.WEB_ROOT.'/blast/" title="BLAST">BLAST</a></li>').'
 							<li>
 								<a>Co-expression Toolkit  (<strong>CORx</strong>)</a>
 								<ul>
@@ -128,7 +128,7 @@ class PageHeader {
 								</ul>
 							</li>
 							<li><a href="'.WEB_ROOT.'/genome" title="Genome Browser">Genome Browser</a></li>
-							'.(is_allowed_access('/go/') ? '
+							'.(is_allowed_access_by_path('/go/') ? '
 							<li>
 								<a>Gene Ontology</a>
 								<ul>
@@ -137,7 +137,7 @@ class PageHeader {
 								</ul>
 							</li>
 							' : '').'
-							'.(is_allowed_access('/tools/phyalign') ? '<li><a href="'.WEB_ROOT.'/tools/phyalign" title="PhyAlign">PhyAlign (<abbr title="Multiple Sequence Alignment">MSA</abbr> + Phylogeny) <span class="badge">BETA</span></a></li>' : '').'
+							'.(is_allowed_access_by_path('/tools/phyalign') ? '<li><a href="'.WEB_ROOT.'/tools/phyalign" title="PhyAlign">PhyAlign (<abbr title="Multiple Sequence Alignment">MSA</abbr> + Phylogeny) <span class="badge">BETA</span></a></li>' : '').'
 							<li>
 								<a>Sequence Toolkit</a>
 								<ul>

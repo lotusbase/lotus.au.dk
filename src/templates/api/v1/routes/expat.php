@@ -74,75 +74,88 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 			'rnaseq-handay-2015' => array(
 				'table' => 'expat_RNAseq_HandaY2015_columns',
 				'columns' => array(
-						'Treatment',
-						'Inocula',
-						'Strain',
-						'InoculationPressure',
-						'SoilNutrientStatus',
-						'TimeUnit',
-						'TimeDuration',
-						'PlantSpecies',
-						'PlantEcotype',
-						'PlantGenotype',
-						'GrowthMedium',
-						'GrowthTemperature',
-						'DayNightRegime'
-					)
-				),
+					'Treatment',
+					'Inocula',
+					'Strain',
+					'InoculationPressure',
+					'SoilNutrientStatus',
+					'TimeUnit',
+					'TimeDuration',
+					'PlantSpecies',
+					'PlantEcotype',
+					'PlantGenotype',
+					'GrowthMedium',
+					'GrowthTemperature',
+					'DayNightRegime'
+				)
+			),
 			'rnaseq-sasakit-2014' => array(
 				'table' => 'expat_RNAseq_SasakiT2014_columns',
 				'columns' => array(
-						'Treatment',
-						'Inocula',
-						'Strain',
-						'TimeUnit',
-						'TimeDuration',
-						'PlantSpecies',
-						'PlantEcotype',
-						'PlantGenotype',
-						'Tissue'
-					)
-				),
+					'Treatment',
+					'Inocula',
+					'Strain',
+					'TimeUnit',
+					'TimeDuration',
+					'PlantSpecies',
+					'PlantEcotype',
+					'PlantGenotype',
+					'Tissue'
+				)
+			),
 			'rnaseq-suzakit-2014' => array(
 				'table' => 'expat_RNAseq_SuzakiT2014_columns',
 				'columns' => array(
-						'Treatment',
-						'Inocula',
-						'Strain',
-						'TimeUnit',
-						'TimeDuration',
-						'PlantSpecies',
-						'PlantEcotype',
-						'PlantGenotype',
-						'Tissue'
-					)
-				),
+					'Treatment',
+					'Inocula',
+					'Strain',
+					'TimeUnit',
+					'TimeDuration',
+					'PlantSpecies',
+					'PlantEcotype',
+					'PlantGenotype',
+					'Tissue'
+				)
+			),
 			'rnaseq-davidm-2017' => array(
 				'table' => 'expat_RNAseq_DavidM2017_columns',
 				'columns' => array(
-						'Treatment',
-						'Inocula',
-						'Strain',
-						'TimeUnit',
-						'TimeDuration',
-						'PlantSpecies',
-						'PlantEcotype',
-						'Tissue',
-						'Age'
-					)
-				),
+					'Treatment',
+					'Inocula',
+					'Strain',
+					'TimeUnit',
+					'TimeDuration',
+					'PlantSpecies',
+					'PlantEcotype',
+					'Tissue',
+					'Age'
+				)
+			),
 			'rnaseq-kellys-2017' => array(
 				'table' => 'expat_RNAseq_KellyS2017_MicrobialSpectrum_columns',
 				'columns' => array(
-						'Treatment',
-						'Inocula',
-						'Strain',
-						'TimeUnit',
-						'TimeDuration',
-						'PlantSpecies',
-						'PlantEcotype',
-						'Tissue',
-						'Age'
+					'Treatment',
+					'Inocula',
+					'Strain',
+					'TimeUnit',
+					'TimeDuration',
+					'PlantSpecies',
+					'PlantEcotype',
+					'Tissue',
+					'Age'
+				)
+			),
+			'reidd-2019' => array(
+				'table' => 'expat_ReidD2019_BarleyNutrients_columns',
+				'columns' => array(
+					'Treatment',
+					'Tissue',
+					'Nitrate',
+					'Phosphate',
+					'PlantSpecies',
+					'PlantEcotype',
+					'Organ',
+					'Age',
 					)
 				)
 			);
@@ -185,8 +198,14 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 		if($q2->rowCount() > 0) {
 			while($row = $q2->fetch(PDO::FETCH_ASSOC)) {
 
+				// Check if a reference map is available first
+				if(empty($refs)) {
+					$row['Reference'] = 'N.A.';
+					$row['ReferenceURL'] = null;
+				}
+
 				// Construct reference
-				if(!empty($row['PMID'])) {
+				else if(!empty($row['PMID'])) {
 					$ref = $refs[$row['PMID']];
 
 					// Reference link
@@ -217,7 +236,9 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 						$row['ReferenceTitle'] = $ref['title'];
 						$row['ReferenceURL'] = 'https://doi.org/'.$doi;
 					}
-				} else {
+				}
+				
+				else {
 					$row['Reference'] = 'Unpublished data';
 					$row['ReferenceURL'] = null;
 				}

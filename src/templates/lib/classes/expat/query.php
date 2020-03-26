@@ -117,6 +117,7 @@ class Query {
 				'rowType' => 'Probe ID',
 				'text' => 'Probe(s)'
 			);
+			$this->expat['species'] = 'Lotus';
 		} else if ($dataset === 'ljgea-probeid') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_ljgea_probeid',
@@ -131,6 +132,7 @@ class Query {
 				'rowType' => 'Gene ID',
 				'text' => 'Gene(s)'
 			);
+			$this->expat['species'] = 'Lotus';
 		} else if ($dataset === 'rnaseq-kellys-2015-bacteria') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_KellyS_bacteria',
@@ -140,6 +142,7 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-kellys-2015';
 			$this->expat['rowType'] = 'Transcript ID';
 			$this->expat['rowText'] = 'Transcript(s)';
+			$this->expat['species'] = 'Lotus';
 		} else if ($dataset === 'rnaseq-kellys-2015-purifiedcompounds') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_KellyS_purifiedcompounds',
@@ -149,6 +152,7 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-kellys-2015';
 			$this->expat['rowType'] = 'Transcript ID';
 			$this->expat['rowText'] = 'Transcript(s)';
+			$this->expat['species'] = 'Lotus';
 		} else if ($dataset === 'rnaseq-giovanettim-2015-am') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_GiovanettiM_AMGSE',
@@ -158,6 +162,7 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-giovanettim-2015';
 			$this->expat['rowType'] = 'Probe ID';
 			$this->expat['rowText'] = 'Probe(s)';
+			$this->expat['species'] = 'Lotus';
 		} else if ($dataset === 'rnaseq-murakamie-2016') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_MurakamiE',
@@ -167,6 +172,7 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-murakamie-2016';
 			$this->expat['rowType'] = 'Transcript ID';
 			$this->expat['rowText'] = 'Transcript(s)';
+			$this->expat['species'] = 'Lotus';
 		} else if ($dataset === 'rnaseq-handay-2015') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_HandaY2015',
@@ -176,6 +182,7 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-handay-2015';
 			$this->expat['rowType'] = 'Gene ID';
 			$this->expat['rowText'] = 'Gene(s)';
+			$this->expat['species'] = 'Lotus';
 		} else if ($dataset === 'rnaseq-sasakit-2014') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_SasakiT2014',
@@ -185,6 +192,7 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-sasakit-2014';
 			$this->expat['rowType'] = 'Gene ID';
 			$this->expat['rowText'] = 'Gene(s)';
+			$this->expat['species'] = 'Lotus';
 		} else if ($dataset === 'rnaseq-suzakit-2014') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_SuzakiT2014',
@@ -194,6 +202,7 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-suzakit-2014';
 			$this->expat['rowType'] = 'Gene ID';
 			$this->expat['rowText'] = 'Gene(s)';
+			$this->expat['species'] = 'Lotus';
 		} else if ($dataset === 'rnaseq-davidm-2017-rootshoottotalreads') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_DavidM2017_RootShootTotalReads',
@@ -203,6 +212,7 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-davidm-2017';
 			$this->expat['rowType'] = 'Gene ID';
 			$this->expat['rowText'] = 'Gene(s)';
+			$this->expat['species'] = 'Lotus';
 		} else if ($dataset === 'rnaseq-davidm-2017-rootshootuniquereads') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_DavidM2017_RootShootUniqueReads',
@@ -212,6 +222,7 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-davidm-2017';
 			$this->expat['rowType'] = 'Gene ID';
 			$this->expat['rowText'] = 'Gene(s)';
+			$this->expat['species'] = 'Lotus';
 		} else if ($dataset === 'rnaseq-kellys-2017-microbialspectrum') {
 			$this->_expat['query'] = array(
 				'table' => 'expat_RNAseq_KellyS2017_MicrobialSpectrum',
@@ -221,6 +232,18 @@ class Query {
 			$this->expat['experiment'] = 'rnaseq-kellys-2017';
 			$this->expat['rowType'] = 'Gene ID';
 			$this->expat['rowText'] = 'Gene(s)';
+			$this->expat['species'] = 'Lotus';
+		} else if ($dataset === 'reidd-2019-barleynutrient') {
+			$this->_expat['query'] = array(
+				'table' => 'expat_ReidD2019_BarleyNutrients',
+				'id' => $_POST['idtype']
+			);
+			$this->expat['mapped'] = false;
+			$this->expat['experiment'] = 'reidd-2019';
+			$this->expat['rowType'] = 'Gene ID';
+			$this->expat['rowText'] = 'Gene(s)';
+			$this->expat['species'] = 'Hordeum';
+			$this->expat['externalUrl'] = 'https://plants.ensembl.org/Hordeum_vulgare/Gene/Summary?g=';
 		} else {
 			$this->error->set_status(404);
 			$this->error->set_message('The dataset you have selected: ' + $dataset + ' is not available. Please try again.');
@@ -448,7 +471,8 @@ class Query {
 			)
 		);
 
-		if(is_allowed_access('/expat/')) {
+		$userGroups = array_filter(explode(',', is_logged_in()['UserGroup']));
+		if(is_allowed_access_by_user_group($userGroups)) {
 			$private_datasets = array(
 				'rnaseq-kellys-2015-bacteria' => array(
 					'277_exoU_24',
@@ -505,6 +529,19 @@ class Query {
 					'4820_NF',
 					'nfr1_H2O',
 					'nfr1_NF'
+				),
+				'reidd-2019-barleynutrient' => array(
+					'N-P-_Mainroot',
+					'N-P-_Lateralroot',
+					'N-P-_Shoot',
+					'N-P+_Mainroot',
+					'N-P+_Lateralroot',
+					'N-P+_Shoot',
+					'N+P-_Mainroot',
+					'N+P-_Lateralroot',
+					'N+P-_Shoot',
+					'N+P+_Mainroot',
+					'N+P+_Lateralroot'
 				)
 			);
 
@@ -589,7 +626,7 @@ class Query {
 				if($this->expat['experiment'] === 'ljgea') {
 					// LjGEA dataset requires joining of two different tables, one by gene ID and the other by probe ID
 					$sqlQuery = "SELECT
-						t1.".$query['id']." AS RowID, GROUP_CONCAT(t2.".$query['mappedid'].") AS MappedToID, t3.".$query['mappedid']." AS MappedID, ".implode($columns,',')."
+						t1.".$query['id']." AS RowID, GROUP_CONCAT(t2.".$query['mappedid'].") AS MappedToID, t3.".$query['mappedid']." AS MappedID, `".implode($columns,'`,`')."`
 					FROM
 						".$query['table']." AS t1
 					LEFT JOIN expat_mapping AS t2 ON t1.".$query['id']." = t2.".$query['id']."
@@ -616,7 +653,8 @@ class Query {
 					$this->expat['experiment'] === 'rnaseq-suzakit-2014' ||
 					$this->expat['experiment'] === 'rnaseq-kellys-2015' ||
 					$this->expat['experiment'] === 'rnaseq-davidm-2017' ||
-					$this->expat['experiment'] === 'rnaseq-kellys-2017'
+					$this->expat['experiment'] === 'rnaseq-kellys-2017' ||
+					$this->expat['experiment'] === 'reidd-2019'
 					) {
 					
 					// Construct LIKE query
@@ -626,7 +664,7 @@ class Query {
 					}
 
 					$sqlQuery = "SELECT
-						t1.".$query['id']." AS RowID, ".implode($columns,',')."
+						t1.".$query['id']." AS RowID, `".implode($columns,'`,`')."`
 					FROM
 						".$query['table']." AS t1
 					WHERE ".substr($likeQuery, 0, -4)."
