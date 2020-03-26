@@ -94,7 +94,7 @@
       "url" : "names/",
       "type" : "Hash"
    },
-   "dataset_id" : "lj_gifu_v11",
+   "dataset_id" : "lj_gifu_v12",
    "alwaysOnTracks" : "DNA,20190809_Lj_Gifu_v1.2_predictedGenes,20180416_genome_gaps",
    "defaultTracks" : "DNA,20190809_Lj_Gifu_v1.2_predictedGenes,20180416_genome_gaps",
    "formatVersion" : 1,
@@ -110,7 +110,7 @@
    "trackMetadata" : {
       "sources" : [
          {
-            "url" : "genomes/lotus-japonicus/gifu/v1.1/trackMetadata.csv",
+            "url" : "genomes/lotus-japonicus/gifu/v1.2/trackMetadata.csv",
             "type" : "csv"
          }
       ]

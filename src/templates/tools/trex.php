@@ -39,7 +39,7 @@
 		$ecotypes = array();
 		$versions = array();
 		foreach($version as $v) {
-			if ($v === 'Gifu_1.1' && (!isset($userComps) || !in_array($v, $userComps))) {
+			if ($v === 'Gifu_1.2' && (!isset($userComps) || !in_array($v, $userComps))) {
 				unset($version[$v]);
 				continue;
 			}
@@ -203,7 +203,7 @@
 
 					if (
 						(floatVal($r['Version']) >= 3 && $r['Ecotype'] === 'MG20') ||
-						($r['Version'] === '1.1' && $r['Ecotype'] === 'Gifu')
+						($r['Version'] === '1.2' && $r['Ecotype'] === 'Gifu')
 					) {
 						$q1_filtered_rows['ID'][] = $r['ID'];
 						$q1_filtered_rows['Transcript'][] = $r['Transcript'];
@@ -436,8 +436,8 @@
 					<div class="col-two cols justify-content__flex-start versions">
 						<?php
 							foreach($lj_genome_versions as $label => $lj_genome) {
-								// Only display Gifu v1.1 if user is authorized access
-								if ($label === 'Gifu v1.1' && (!isset($userComps) || !in_array($lj_genome['ecotype'].'_'.$lj_genome['version'], $userComps))) {
+								// Only display Gifu v1.2 if user is authorized access
+								if ($label === 'Gifu v1.2' && (!isset($userComps) || !in_array($lj_genome['ecotype'].'_'.$lj_genome['version'], $userComps))) {
 									continue;
 								}
 								
@@ -480,12 +480,12 @@
 										<li><a href="../api/v1/blast/20130521_Lj30_proteins.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all amino acid sequences</span></a></li>
 									</ul>
 								</div>
-							<?php } else if ($genome_ecotype === 'Gifu' && $genome_version === '1.1') {?>
+							<?php } else if ($genome_ecotype === 'Gifu' && $genome_version === '1.2') {?>
 								<div class="dropdown button">
 									<span class="dropdown--title">Download all sequences</span>
 									<ul class="dropdown--list">
-										<li><a href="../api/v1/blast/20180827_Lj_Gifu_v1.1_ORF.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all coding sequences (ORFs only)</span></a></li>
-										<li><a href="../api/v1/blast/20180827_Lj_Gifu_v1.1_ORF_proteins.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all amino acid sequences (from ORFs only)</span></a></li>
+										<li><a href="../api/v1/blast/20190809_Lj_Gifu_v1.2_CDS.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all coding sequences</span></a></li>
+										<li><a href="../api/v1/blast/20190809_Lj_Gifu_v1.2_proteins.fa/<?php echo implode(',', $q1_filtered_rows['Transcript']); ?>?download&access_token=<?php echo LOTUSBASE_API_KEY; ?>"><span class="pictogram icon-switch">Download all amino acid sequences</span></a></li>
 									</ul>
 								</div>
 							<?php } ?>
@@ -621,15 +621,15 @@
 								<?php } ?>
 							</ul>
 							</div>
-							<?php } else if($v === 1.1 && $ecotype === 'Gifu') { ?>
+							<?php } else if($v === 1.2 && $ecotype === 'Gifu') { ?>
 								<div class="dropdown button"><span class="dropdown--title"><?php echo $row['Transcript']; ?></span><ul class="dropdown--list">
 								<li>
 									<a
-										href="../api/v1/blast/<?php echo '20180416_Lj_Gifu_v1.1_genome.fa/'.$row['Chromosome'].'?from='.$start.'&to='.$end.'&access_token='.LOTUSBASE_API_KEY; ?>"
+										href="../api/v1/blast/<?php echo '20190809_Lj_Gifu_v1.2_genome.fa/'.$row['Chromosome'].'?from='.$start.'&to='.$end.'&access_token='.LOTUSBASE_API_KEY; ?>"
 										data-seqret
 										data-seqret-id="<?php echo $row['Chromosome']; ?>"
 										data-seqret-data-type="genomic"
-										data-seqret-db="20180416_Lj_Gifu_v1.1_genome.fa"
+										data-seqret-db="20190809_Lj_Gifu_v1.2_genome.fa"
 										data-seqret-from="<?php echo $start; ?>"
 										data-seqret-to="<?php echo $end; ?>"
 										title="Retrieve genomic sequence"
@@ -639,11 +639,11 @@
 								</li>
 								<li>
 									<a
-										href="../api/v1/blast/<?php echo '20180827_Lj_Gifu_v1.1_ORF.fa/'.$row['Transcript'].'&access_token='.LOTUSBASE_API_KEY; ?>"
+										href="../api/v1/blast/<?php echo '20190809_Lj_Gifu_v1.2_CDS.fa/'.$row['Transcript'].'&access_token='.LOTUSBASE_API_KEY; ?>"
 										data-seqret
 										data-seqret-id="<?php echo $row['Transcript']; ?>"
 										data-seqret-data-type="coding sequence"
-										data-seqret-db="20180827_Lj_Gifu_v1.1_ORF.fa"
+										data-seqret-db="20190809_Lj_Gifu_v1.2_CDS.fa"
 										title="Retrieve coding sequence (ORFs only)"
 										>
 										<span class="icon-switch">Coding sequence</span>
@@ -651,12 +651,12 @@
 								</li>
 								<li>
 									<a
-										href="../api/v1/blast/<?php echo '20180827_Lj_Gifu_v1.1_ORF_proteins.fa/'.$row['Transcript'].'&access_token='.LOTUSBASE_API_KEY; ?>"
+										href="../api/v1/blast/<?php echo '20190809_Lj_Gifu_v1.2_proteins.fa/'.$row['Transcript'].'&access_token='.LOTUSBASE_API_KEY; ?>"
 										data-seqret
 										data-seqret-id="<?php echo $row['Transcript']; ?>"
 										data-seqret-data-type="amino acid"
-										data-seqret-db="20180827_Lj_Gifu_v1.1_ORF_proteins.fa"
-										title="Retrieve amino acid sequence (from ORFs only)"
+										data-seqret-db="20190809_Lj_Gifu_v1.2_proteins.fa"
+										title="Retrieve amino acid sequence"
 										>
 										<span class="icon-switch">Protein sequence</span>
 									</a>

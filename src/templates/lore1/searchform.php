@@ -11,9 +11,9 @@
 					$lj_genome_id = implode('_', [$lj_genome['ecotype'], $lj_genome['version']]);
 					$lj_genome_version = $lj_genome['version'];
 
-					// NOTE: We disable LORE1 search for Gifu v1.1 for now, because data is not yet available
+					// NOTE: We disable LORE1 search for Gifu v1.2 for now, because data is not yet available
 					$disabled = false;
-					if ($label === 'Gifu v1.1') {
+					if ($label === 'Gifu v1.2') {
 						$disabled = true;
 						$label .= ' (coming soon)';
 					}

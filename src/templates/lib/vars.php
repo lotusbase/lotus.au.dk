@@ -10,9 +10,9 @@
 			'ecotype' => 'MG20',
 			'version' => '3.0'
 		),
-		'Gifu v1.1' => array(
+		'Gifu v1.2' => array(
 			'ecotype' => 'Gifu',
-			'version' => '1.1'
+			'version' => '1.2'
 		)
 	);
 
