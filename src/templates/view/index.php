@@ -8,9 +8,21 @@
 		$id = escapeHTML($_GET['id']);
 
 		// Determine ID type
-		if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)$/i', $id)) {
+		if(
+			// MG20 v3.0
+			preg_match('/^Lj(\d|chloro}mito)g3v(\d+)$/i', $id) ||
+
+			//Gifu v1.2
+			preg_match('/^LotjaGi\dg\dv\d+?$/', $id)
+		) {
 			$id_type = 'gene';
-		} else if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/i', $id)) {
+		} else if(
+			// MG20 v3.0
+			preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/i', $id) ||
+
+			// Gifu v1.2
+			preg_match('/^LotjaGi\dg\dv\d+?\.\d+?$/', $id)	
+		) {
 			$id_type = 'transcript';
 		} else if(preg_match('/^((DK\d+\-0)?3\d{7}|[apl]\d{4,})$/i', $id)) {
 			$id_type = 'lore1';
