@@ -500,7 +500,7 @@
 									<td data-type="numeric"><?php echo $item['DomainStart']; ?></td>
 									<td data-type="numeric"><?php echo $item['DomainEnd']; ?></td>
 									<td data-type="numeric"><?php echo $item['DomainEnd'] - $item['DomainStart'] + 1; ?></td>
-									<td data-type="numeric"><?php echo $item['Evalue']; ?></td>
+									<td data-type="numeric" data-order="<?php echo 0 + $item['Evalue']; ?>"><?php echo $item['Evalue'] !== null ? $item['Evalue'] : '&ndash;'; ?></td>
 									<td><?php if($item['InterProID'] !== 'Unassigned') { ?>
 										<div class="dropdown button">
 											<span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/domain/'.$item['InterProID']; ?>"><?php echo $item['InterProID']; ?></a></span>

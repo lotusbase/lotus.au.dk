@@ -4,6 +4,7 @@
 	position: relative;
 	left: 0;
 	transition: all .5s ease-in-out;
+	min-height: 0vh;
 
 	// Stage
 	.facet__stage {
@@ -58,6 +59,7 @@
 	}
 	&.controls--visible {
 		left: calc(-25% - .75rem);
+		min-height: 50vh;
 
 		// Controls
 		.facet__controls {

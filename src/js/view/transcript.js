@@ -1,5 +1,20 @@
 $(function() {
 
+	// Scientific sorting
+	jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    'scientific-pre': function (a) {
+        return parseFloat(a);
+    },
+ 
+    'scientific-asc': function (a, b) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+ 
+    'scientific-desc': function (a, b) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+	});
+
 	// Global variables
 	globalVar.view = {};
 	globalVar.tables = {};
@@ -281,6 +296,9 @@ $(function() {
 							}
 						}
 					}
+				],
+				'columnDefs': [
+					{ type: 'scientific', targets: [5] }
 				]
 			});
 
@@ -408,6 +426,7 @@ $(function() {
 
 			// Hide loader
 			$('#domain-prediction__loader').slideUp(500);
+			$('#view__domain-prediction .facet').removeClass('floating-controls__hide');
 
 			// Data
 			p = d.data;
