@@ -180,10 +180,10 @@
 					)
 				);
 			?>
-			<iframe name="jbrowse-embed" class="jbrowse-embed" src="<?php echo WEB_ROOT.'/genome/?data='.$jbrowse[$genome]['data'].'&loc='.$jbrowse[$genome]['gene'].'&amp;embed=true'; ?>"></iframe>
+			<iframe name="jbrowse-embed" class="jbrowse-embed" src="<?php echo WEB_ROOT.'/genome/?data='.$jbrowse[$genome]['data'].'&loc='.$jbrowse[$genome]['id'].'&amp;embed=true'; ?>"></iframe>
 			<ul class="list--reset cols flex-wrap__nowrap justify-content__flex-start jbrowse__action">
-				<li><a href="<?php echo WEB_ROOT.'/genome/?data='.$jbrowse[$genome]['data'].'&loc='.$jbrowse[$genome]['gene'].'&amp;embed=true'; ?>" target="jbrowse-embed"><span class="icon-eye">Center view on <strong><?php echo $id; ?></strong></span></a></li>
-				<li><a href="<?php echo WEB_ROOT.'/genome/?data='.$jbrowse[$genome]['data'].'&loc='.$jbrowse[$genome]['gene']; ?>"><span class="icon-resize-full">View larger version</span></a></li>
+				<li><a href="<?php echo WEB_ROOT.'/genome/?data='.$jbrowse[$genome]['data'].'&loc='.$jbrowse[$genome]['id'].'&amp;embed=true'; ?>" target="jbrowse-embed"><span class="icon-eye">Center view on <strong><?php echo $id; ?></strong></span></a></li>
+				<li><a href="<?php echo WEB_ROOT.'/genome/?data='.$jbrowse[$genome]['data'].'&loc='.$jbrowse[$genome]['id']; ?>"><span class="icon-resize-full">View larger version</span></a></li>
 				<li><a href="https://jbrowse.org" title="JBrowse">Powered by JBrowse <span class="icon-link-ext-alt icon--no-spacing"></span></a></li>
 			</ul>
 		</div>
