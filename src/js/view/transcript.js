@@ -737,6 +737,10 @@ $(function() {
 
 	// Get Expression Atlas data
 	globalFun.view.expat = function(dataset, idtype) {
+		if (!$('#view__expat').length) {
+			return;
+		}
+
 		var _dataset 	= dataset || 'ljgea-geneid',
 			_idtype		= idtype || 'geneid';
 
@@ -1382,6 +1386,10 @@ $(function() {
 
 	// Get CORGI data
 	globalFun.view.corgi = function(dataset, idtype) {
+		if (!$('#coexpression__table').length) {
+			return;
+		}
+
 		var _dataset 	= dataset || 'ljgea-geneid',
 			_idtype		= idtype || 'geneid';
 

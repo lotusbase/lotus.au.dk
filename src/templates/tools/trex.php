@@ -622,7 +622,9 @@
 							</ul>
 							</div>
 							<?php } else if($v === 1.2 && $ecotype === 'Gifu') { ?>
-								<div class="dropdown button"><span class="dropdown--title"><?php echo $row['Transcript']; ?></span><ul class="dropdown--list">
+								<div class="dropdown button"><span class="dropdown--title"><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>"><?php echo $row['Transcript']; ?></a></span><ul class="dropdown--list">
+								<li><a href="<?php echo WEB_ROOT.'/view/gene/'.preg_replace('/\.\d+?$/', '', $row['Transcript']); ?>" title="View gene"><span class="icon-eye">View gene</span></a></li>
+								<li><a href="<?php echo WEB_ROOT.'/view/transcript/'.$row['Transcript']; ?>" title="View transcript"><span class="icon-eye">View transcript</span></a></li>
 								<li>
 									<a
 										href="../api/v1/blast/<?php echo '20190809_Lj_Gifu_v1.2_genome.fa/'.$row['Chromosome'].'?from='.$start.'&to='.$end.'&access_token='.LOTUSBASE_API_KEY; ?>"

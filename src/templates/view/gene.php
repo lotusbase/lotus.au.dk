@@ -4,10 +4,42 @@
 	try {
 		if(!empty($_GET) && !empty($_GET['id'])) {
 			$id = escapeHTML($_GET['id']);
-			if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/', $id)) {
+
+			if(
+				// MG20 v3.0
+				preg_match('/^Lj(\d|chloro}mito)g3v(\d+)\.\d+$/', $id) ||
+
+				// Gifu v1.2
+				preg_match('/^LotjaGi\dg\dv\d+?\.\d+?$/', $id)
+			) {
 				// If gene pattern is match, redirect to gene page
 				header('Location:'.WEB_ROOT.'/view/transcript/'.$id);
 				exit();
+			}
+
+			// Doesn't match any known gene patterns
+			else if(
+				// MG20 v3.0
+				!preg_match('/^Lj(\d|chloro}mito)g3v(\d+)$/', $id) &&
+
+				// Gifu v1.2
+				!preg_match('/^LotjaGi\dg\dv\d+?$/', $id)
+			) {
+				// If ID fails pattern check
+				$_SESSION['view_error'] = 'Invalid gene ID format detected. Please ensure that your gene ID follows the formats:
+					<ul>
+						<li><strong>MG20 v3.0</strong>: <code>Lj{chr}g{version}v{id}</code>, e.g. Lj4g3v0281040</li>
+						<li><strong>Gifu v1.2</strong>: <code>LotjaGi{chr}g{version}v{id}</code>, e.g. LotjaGi4g1v0024900</li>
+					</ul>';
+				throw new Exception;
+			}
+
+			else if(preg_match('/^Lj(\d|chloro}mito)g3v(\d+)$/', $id)) {
+				$genome = 'MG20_3.0';
+			}
+
+			else if(preg_match('/^LotjaGi\dg\dv\d+?$/', $id)) {
+				$genome = 'Gifu_1.2';
 			}
 		} else {
 			// If ID is not available
@@ -136,106 +168,118 @@
 
 		<div id="view__jbrowse" class="view__facet">
 			<h3>Genome browser</h3>
-			<p class="user-message note">Structures showed in JBrowse are predicted transcripts. Each gene may contain more than one predicted transcript.</p>
-			<iframe name="jbrowse-embed" class="jbrowse-embed" src="<?php echo WEB_ROOT.'/genome/?loc='.$id.'.1&amp;embed=true'; ?>"></iframe>
+			<?php
+				$jbrowse = array(
+					'MG20_3.0' => array(
+						'id' => $id,
+						'data' => 'genomes%2Flotus-japonicus%2Fmg20%2Fv3.0'
+					),
+					'Gifu_1.2' => array(
+						'id' => preg_replace('/^(.*?)\.\d+$/', '$1', $id),
+						'data' => 'genomes%2Flotus-japonicus%2Fgifu%2Fv1.2'
+					)
+				);
+			?>
+			<iframe name="jbrowse-embed" class="jbrowse-embed" src="<?php echo WEB_ROOT.'/genome/?data='.$jbrowse[$genome]['data'].'&loc='.$jbrowse[$genome]['gene'].'&amp;embed=true'; ?>"></iframe>
 			<ul class="list--reset cols flex-wrap__nowrap justify-content__flex-start jbrowse__action">
-				<li><a href="<?php echo WEB_ROOT.'/genome/?loc='.$id.'.1&amp;embed=true'; ?>" target="jbrowse-embed"><span class="icon-eye">Center view on <strong><?php echo $id; ?></strong></span></a></li>
-				<li><a href="<?php echo WEB_ROOT.'/genome/?loc='.$id.'.1'; ?>"><span class="icon-resize-full">View larger version</span></a></li>
+				<li><a href="<?php echo WEB_ROOT.'/genome/?data='.$jbrowse[$genome]['data'].'&loc='.$jbrowse[$genome]['gene'].'&amp;embed=true'; ?>" target="jbrowse-embed"><span class="icon-eye">Center view on <strong><?php echo $id; ?></strong></span></a></li>
+				<li><a href="<?php echo WEB_ROOT.'/genome/?data='.$jbrowse[$genome]['data'].'&loc='.$jbrowse[$genome]['gene']; ?>"><span class="icon-resize-full">View larger version</span></a></li>
 				<li><a href="https://jbrowse.org" title="JBrowse">Powered by JBrowse <span class="icon-link-ext-alt icon--no-spacing"></span></a></li>
 			</ul>
 		</div>
 
-		<?php if($q2->rowCount()) {
-			$g = $q2->fetch(PDO::FETCH_ASSOC);
+		<?php if ($genome === 'MG20_3.0') { ?>
+			<?php if($q2->rowCount()) {
+				$g = $q2->fetch(PDO::FETCH_ASSOC);
 
-			// Generate LORE1 list
-			$genic_lore1 = array_filter(explode(',', $g['GenicPlantID']));
-			$exonic_lore1 = array_filter(explode(',', $g['ExonicPlantID']));
-			$intronic_lore1 = array_diff($genic_lore1, $exonic_lore1);
+				// Generate LORE1 list
+				$genic_lore1 = array_filter(explode(',', $g['GenicPlantID']));
+				$exonic_lore1 = array_filter(explode(',', $g['ExonicPlantID']));
+				$intronic_lore1 = array_diff($genic_lore1, $exonic_lore1);
 
-		?>
-		<div id="view__lore1-inserts">
-			<h3>LORE1 insertions <?php
+			?>
+			<div id="view__lore1-inserts">
+				<h3>LORE1 insertions <?php
 
-				// Display count
-				if(count($genic_lore1)) {
-					echo '<span class="badge">'.count($genic_lore1).'</span>';
-				}
-			?></h3>
-			<?php if(count($genic_lore1)) {?>
-				<form id="lore1-filter__form" action="#" method="get" class="has-group">
+					// Display count
+					if(count($genic_lore1)) {
+						echo '<span class="badge">'.count($genic_lore1).'</span>';
+					}
+				?></h3>
+				<?php if(count($genic_lore1)) {?>
+					<form id="lore1-filter__form" action="#" method="get" class="has-group">
+						<div class="cols" role="group">
+							<label class="col-one" for="lore1-type">Insertion filter</label>
+							<div class="col-two">
+								<select id="lore1-type" name="lore1_type">
+									<option value="genic" selected>Genic (all)</option>
+									<option value="intronic">Intronic (only in introns)</option>
+									<option value="exonic">Exonic (only in exons)</option>
+								</select>
+							</div>
+						</div>
+					</form>
+					<ul class="list--floated" id="lore1-list">
+					<?php
+						foreach($genic_lore1 as $pid) {
+							echo '<li class="'.(in_array($pid, $exonic_lore1) ? 'lore1--exonic' : 'lore1--intronic').'"><a class="link--reset" href="'.WEB_ROOT.'/lore1/search?v=MG20_3.0&pid='.$pid.'" title="View details for this line">'.$pid.'</a></li>';
+						}
+					?>
+					</ul>
+				<?php } else { ?>
+				<p class="user-message">No <em>LORE1</em> insertions have been found in the genomic region that overlaps with this gene.</p>
+				<?php } ?>
+			</div>
+			<?php } ?>
+
+			<div id="view__expression" data-gene="<?php echo $id; ?>" class="view__facet">
+				<h3>Expression data</h3>
+				<form id="corgi__form" class="has-group">
 					<div class="cols" role="group">
-						<label class="col-one" for="lore1-type">Insertion filter</label>
+						<label for="expat-dataset" class="col-one">Dataset <a data-modal="wide" class="info" title="What are the available datasets?" href="<?php echo WEB_ROOT; ?>/lib/docs/expat-datasets">?</a></label>
 						<div class="col-two">
-							<select id="lore1-type" name="lore1_type">
-								<option value="genic" selected>Genic (all)</option>
-								<option value="intronic">Intronic (only in introns)</option>
-								<option value="exonic">Exonic (only in exons)</option>
-							</select>
+							<?php
+								$expat_dataset = new \Lotusbase\ExpAt\Dataset();
+								if(!empty($_GET['dataset'])) {
+									$expat_dataset->set_dataset($_GET['dataset']);
+								}
+								$expat_dataset->set_idType(array(
+									'geneid'
+									));
+								$expat_dataset->set_selected_dataset('ljgea-geneid');
+								$expat_dataset->set_species('Lotus');
+								echo $expat_dataset->render();
+							?>
 						</div>
 					</div>
 				</form>
-				<ul class="list--floated" id="lore1-list">
-				<?php
-					foreach($genic_lore1 as $pid) {
-						echo '<li class="'.(in_array($pid, $exonic_lore1) ? 'lore1--exonic' : 'lore1--intronic').'"><a class="link--reset" href="'.WEB_ROOT.'/lore1/search?v=MG20_3.0&pid='.$pid.'" title="View details for this line">'.$pid.'</a></li>';
-					}
-				?>
-				</ul>
-			<?php } else { ?>
-			<p class="user-message">No <em>LORE1</em> insertions have been found in the genomic region that overlaps with this gene.</p>
-			<?php } ?>
-		</div>
-		<?php } ?>
 
-		<div id="view__expression" data-gene="<?php echo $id; ?>" class="view__facet">
-			<h3>Expression data</h3>
-			<form id="corgi__form" class="has-group">
-				<div class="cols" role="group">
-					<label for="expat-dataset" class="col-one">Dataset <a data-modal="wide" class="info" title="What are the available datasets?" href="<?php echo WEB_ROOT; ?>/lib/docs/expat-datasets">?</a></label>
-					<div class="col-two">
-						<?php
-							$expat_dataset = new \Lotusbase\ExpAt\Dataset();
-							if(!empty($_GET['dataset'])) {
-								$expat_dataset->set_dataset($_GET['dataset']);
-							}
-							$expat_dataset->set_idType(array(
-								'geneid'
-								));
-							$expat_dataset->set_selected_dataset('ljgea-geneid');
-							$expat_dataset->set_species('Lotus');
-							echo $expat_dataset->render();
-						?>
-					</div>
+				<h4>Expression pattern</h4>
+				<p>Expression pattern of <strong><?php echo $id; ?></strong>, powered by <a href="<?php echo WEB_ROOT; ?>/expat" title="Expression Atlas">ExpAt</a>. For advanced configuration, data transformation and export options, <a id="view__expat__link" href="<?php echo WEB_ROOT; ?>/expat?ids=<?php echo $id; ?>&amp;dataset=ljgea-geneid&amp;idtype=geneid" title="" data-root="<?php echo WEB_ROOT; ?>">view expression data in the ExpAt application</a>.</p>
+				<div id="expat__loader" class="align-center loader__wrapper">
+					<div class="loader"><svg class="loader"><circle class="path" cx="40" cy="40" r="30" /></svg></div>
+					<p>Loading expression data from <span id="expat__loader__dataset">ljgea-geneid</span>. Please wait&hellip;</p>
 				</div>
-			</form>
-
-			<h4>Expression pattern</h4>
-			<p>Expression pattern of <strong><?php echo $id; ?></strong>, powered by <a href="<?php echo WEB_ROOT; ?>/expat" title="Expression Atlas">ExpAt</a>. For advanced configuration, data transformation and export options, <a id="view__expat__link" href="<?php echo WEB_ROOT; ?>/expat?ids=<?php echo $id; ?>&amp;dataset=ljgea-geneid&amp;idtype=geneid" title="" data-root="<?php echo WEB_ROOT; ?>">view expression data in the ExpAt application</a>.</p>
-			<div id="expat__loader" class="align-center loader__wrapper">
-				<div class="loader"><svg class="loader"><circle class="path" cx="40" cy="40" r="30" /></svg></div>
-				<p>Loading expression data from <span id="expat__loader__dataset">ljgea-geneid</span>. Please wait&hellip;</p>
+				<div id="view__expat" class="hidden"></div>
+				
+				<h4>Co-expressed genes</h4>
+				<p>A list of the top 25 highly co-expressed genes of <strong><?php echo $id; ?></strong>, powered by <a href="<?php echo WEB_ROOT; ?>/tools/corgi" title="Co-expressed Genes Identifier (CORGI)">CORGI</a>.</p>
+				<div id="coexpression__loader" class="align-center loader__wrapper">
+					<div class="loader"><svg class="loader"><circle class="path" cx="40" cy="40" r="30" /></svg></div>
+					<p>Loading co-expressed genes from the dataset <span id="coexpression__loader__dataset">ljgea-geneid</span>. This will take 20&ndash;30 seconds to construct.</p>
+				</div>
+				<table id="coexpression__table" class="table--dense hidden">
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Score</th>
+							<th scope="col">Description</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
 			</div>
-			<div id="view__expat" class="hidden"></div>
-			
-			<h4>Co-expressed genes</h4>
-			<p>A list of the top 25 highly co-expressed genes of <strong><?php echo $id; ?></strong>, powered by <a href="<?php echo WEB_ROOT; ?>/tools/corgi" title="Co-expressed Genes Identifier (CORGI)">CORGI</a>.</p>
-			<div id="coexpression__loader" class="align-center loader__wrapper">
-				<div class="loader"><svg class="loader"><circle class="path" cx="40" cy="40" r="30" /></svg></div>
-				<p>Loading co-expressed genes from the dataset <span id="coexpression__loader__dataset">ljgea-geneid</span>. This will take 20&ndash;30 seconds to construct.</p>
-			</div>
-			<table id="coexpression__table" class="table--dense hidden">
-				<thead>
-					<tr>
-						<th scope="col">ID</th>
-						<th scope="col">Score</th>
-						<th scope="col">Description</th>
-					</tr>
-				</thead>
-				<tbody></tbody>
-			</table>
-		</div>
-
+		<?php } ?>
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>

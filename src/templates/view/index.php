@@ -79,7 +79,7 @@
 		<p class="align-center">For a more full-fledged search, please use the <a href="<?php echo WEB_ROOT.'/tools/trex'; ?>">TREX tool</a>.</p>
 		<?php
 			if($error) {
-				echo '<p class="user-message warning"><span class="icon-attention"></span>'.$error_message.'</p>';
+				echo '<div class="user-message warning"><span class="icon-attention"></span>'.$error_message.'</div>';
 			}
 		?>
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get" class="has-group">
@@ -104,10 +104,13 @@
 				<div class="view-tabs__content" id="view-example__gene-transcript">
 					<ul class="list--floated input-suggestions">
 						<li>Examples:</li>
-						<li><a href="#" data-value="Lj4g3v0281040">Lj4g3v0281040</a><span class="tag term-type"><em>LjFls2</em> (Gene)</span></li>
-						<li><a href="#" data-value="Lj4g3v0281040.1">Lj4g3v0281040.1</a><span class="tag term-type">LjFls2 (Transcript/Protein)</span></li>
 						<li><a href="#" data-value="Lj2g3v3373110">Lj2g3v3373110</a><span class="tag term-type"><em>LjNin</em> (Gene)</span></li>
 						<li><a href="#" data-value="Lj2g3v3373110.1">Lj2g3v3373110.1</a><span class="tag term-type">LjNin (Transcript/Protein)</span></li>
+
+						<?php if (isset($userComps) && in_array('Gifu_1.2', $userComps)) { ?>
+								<li><a href="#" data-value="LotjaGi1g1v0001500">LotjaGi1g1v0001500</a><span class="tag term-type"><em>LjNin</em> (Gene)</span><span class="tag genome-assembly">Gifu v1.2</span></li>
+								<li><a href="#" data-value="LotjaGi1g1v0001500.1">LotjaGi1g1v0001500.1</a><span class="tag term-type">LjNin (Transcript/Protein)</span><span class="tag genome-assembly">Gifu v1.2</span></li>
+							<?php } ?>
 					</ul>
 				</div>
 
