@@ -54,6 +54,7 @@
 		// Query 2: Get actual data
 		$q2 = $db->prepare('SELECT
 			t1.Text AS `Text`,
+			t1.Genome AS Genome,
 			t1.IDtype AS IDtype,
 			t1.Description AS Description,
 			t1.CORx AS CORx,
@@ -64,7 +65,8 @@
 		FROM expat_datasets AS t1
 		LEFT JOIN expat_datasets_usergroup AS t2 ON
 			t1.IDKey = t2.DatasetIDKey
-		GROUP BY t1.IDKey');
+		GROUP BY t1.IDKey
+		ORDER BY t1.LabelSort');
 		$q2->execute();
 
 		// Check results
@@ -74,6 +76,7 @@
 	<thead>
 		<tr>
 			<th>Dataset</th>
+			<th><em>Lotus japonicus</em> Genome</th>
 			<th>ID type</th>
 			<th>Description</th>
 			<th>CORx support</th>
@@ -169,6 +172,7 @@
 
 				echo '<tr>
 					<th>'.$row['Text'].'</th>
+					<td>'.str_replace('_', ' v', $row['Genome']).'</td>
 					<td>'.preg_replace(
 						array(
 							'/geneid/',

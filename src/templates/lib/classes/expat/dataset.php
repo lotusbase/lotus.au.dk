@@ -40,13 +40,15 @@ class Dataset {
 		FROM expat_datasets AS t1
 		LEFT JOIN expat_datasets_usergroup AS t2 ON
 			t1.IDKey = t2.DatasetIDKey
-		GROUP BY t1.IDKey');
+		GROUP BY t1.IDKey
+		ORDER BY t1.LabelSort');
 		$q1->execute();
 
 		if($q1->rowCount()) {
 			while($row = $q1->fetch(PDO::FETCH_ASSOC)) {
 				$this->_opts[$row['Dataset']] = array(
 					'species' => $row['Species'],
+					'genome' => $row['Genome'],
 					'idType' => $row['IDType'],
 					'column_share' => $row['ColumnShare'],
 					'experiment' => $row['Experiment'],
