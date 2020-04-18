@@ -1029,7 +1029,7 @@ $(function() {
 			function(data) {
 				var d = data.data;
 				globalFun.modal.update({
-					'title': 'Flanking sequence (&#177;1000bp) for the insertion <a href="/genome/?loc='+d.chromosome+'%3A'+(parseInt(d.position)-5000)+'..'+(parseInt(d.position)+5000)+'">'+d.chromosome+'_'+d.position+'_'+d.orientation+'</a>',
+					'title': 'Flanking sequence (&#177;1000bp) for the insertion <a href="/genome/?data=genomes%2Flotus-japonicus%2Fmg20%2Fv3.0&loc='+d.chromosome+'%3A'+(parseInt(d.position)-5000)+'..'+(parseInt(d.position)+5000)+'">'+d.chromosome+'_'+d.position+'_'+d.orientation+'</a>',
 					'content': '<pre class="insertion-flank">' + d.insFlank + '</pre>'
 				});
 			},

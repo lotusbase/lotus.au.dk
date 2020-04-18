@@ -504,7 +504,7 @@
 							<?php
 								$blast_header = $results['Chromosome']."_".$results['Position']."_".$results['Orientation'];
 								if(version_compare($version, '3.0') >= 0) {
-									echo '<div class="dropdown button"><span class="dropdown--title">'.$blast_header.'</span><ul class="dropdown--list"><li><a href="/genome/?loc='.$results['Chromosome'].'%3A'.($results['Position']-5000).'..'.($results['Position']+5000).'" title="View in genome browser"><span class="pictogram icon-map">View in genome browser</span></a></li></ul></div>';
+									echo '<div class="dropdown button"><span class="dropdown--title">'.$blast_header.'</span><ul class="dropdown--list"><li><a href="/genome/?data=genomes%2Flotus-japonicus%2Fmg20%2Fv3.0&loc='.$results['Chromosome'].'%3A'.($results['Position']-5000).'..'.($results['Position']+5000).'" title="View in genome browser"><span class="pictogram icon-map">View in genome browser</span></a></li></ul></div>';
 								} else {
 									echo $blast_header;
 								}
@@ -525,7 +525,7 @@
 											echo '<li><a href="'.WEB_ROOT.'/view/gene/'.$gene.'" title="View gene details for '.$gene.'"><span class="icon-eye">View gene info</span></a></li>';
 											echo '<li><a href="/tools/trex.php?ids='.$gene.'&v='.$genome.'" title="Get advanced transcript information for this gene: '.$gene.'"><span class="pictogram icon-search">Send to Transcript Explorer</span></a></li>';
 											echo '<li><a href="/expat/?ids='.$gene.'&v='.$genome.'&t=6&dataset=ljgea-geneid" title="Access expression data from the Lotus japonicus expression atlas tool"><span class="pictogram icon-map">Send to Expression Atlas</span></a></li>';
-											echo '<li><a href="/genome/?loc='.$gene.'" title="View in genome browser"><span class="pictogram icon-map">View in genome browser</span></a></li>';
+											echo '<li><a href="/genome/?data=genomes%2Flotus-japonicus%2Fmg20%2Fv3.0&loc='.$gene.'" title="View in genome browser"><span class="pictogram icon-map">View in genome browser</span></a></li>';
 										}
 
 										echo '</ul></div>';

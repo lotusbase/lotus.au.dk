@@ -185,7 +185,7 @@
 						echo '</optgroup>';
 					}
 				?></select></div></li>
-				<li><a href="<?php echo WEB_ROOT.'/genome/?loc='.urlencode($ins_coord); ?>"><span class="icon-resize-full">View larger version</span></a></li>
+				<li><a href="<?php echo WEB_ROOT.'/genome/?data=genomes%2Flotus-japonicus%2Fmg20%2Fv3.0&loc='.urlencode($ins_coord); ?>"><span class="icon-resize-full">View larger version</span></a></li>
 				<li><a href="https://jbrowse.org" title="JBrowse">Powered by JBrowse <span class="icon-link-ext-alt icon--no-spacing"></span></a></li>
 			</ul>
 		</div>
