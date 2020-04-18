@@ -76,8 +76,8 @@
 				<div class="col-two">
 					<?php
 						$expat_dataset = new \Lotusbase\ExpAt\Dataset();
-						if(!empty($_GET['dataset'])) {
-							$expat_dataset->set_dataset($_GET['dataset']);
+						if(isset($_GET['dataset'])) {
+							$expat_dataset->set_selected_dataset($_GET['dataset']);
 						}
 						echo $expat_dataset->render();
 					?>
