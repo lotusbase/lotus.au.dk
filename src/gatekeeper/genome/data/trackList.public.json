@@ -174,7 +174,7 @@
             "height" : 100
          },
          "variance_band" : true,
-         "key" : "<em>L.japonicus</em> MG20 RNA-seq coverage",
+         "key" : "<em>L.japonicus</em> MG20 v3.0 RNA-seq coverage",
          "storeClass" : "JBrowse/Store/SeqFeature/BigWig",
          "urlTemplate" : "./raw/MG20_accepted_hits.refined.bw",
          "scale" : "log",
@@ -190,7 +190,7 @@
             },
             "arrowheadClass" : "transcript-arrowhead"
          },
-         "key" : "Lotus japonicus predicted proteins",
+         "key" : "<em>L. japonicus</em> MG20 v3.0 predicted proteins",
          "storeClass" : "JBrowse/Store/SeqFeature/NCList",
          "trackType" : "JBrowse/View/Track/HTMLFeatures",
          "urlTemplate" : "tracks/20140314_Lj30/{refseq}/trackData.json",
@@ -230,7 +230,7 @@
             "className" : "feature_n-repeat",
             "arrowheadClass" : "transcript-arrowhead"
          },
-         "key" : "<em>L. japonicus</em> MG20 genome gaps",
+         "key" : "<em>L. japonicus</em> MG20 v3.0 genome gaps",
          "storeClass" : "JBrowse/Store/SeqFeature/NCList",
          "trackType" : "JBrowse/View/Track/HTMLFeatures",
          "urlTemplate" : "tracks/20151108_ljv3genome_n_gaps/{refseq}/trackData.json",
