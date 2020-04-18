@@ -30,6 +30,7 @@ class Dataset {
 		// Query 1: Collect all PMID
 		$q1 = $db->prepare('SELECT
 			t1.Species AS Species,
+			t1.Genome AS Genome,
 			t1.IDType AS IDType,
 			t1.ColumnShare AS ColumnShare,
 			t1.Experiment AS Experiment,
@@ -98,6 +99,13 @@ class Dataset {
 		}
 	}
 
+	// Set genome
+	public function set_genome($genome) {
+		if(!empty($genome)) {
+			$this->_vars['genome'] = $genome;
+		}
+	}
+
 	// Set ID
 	public function set_id($id) {
 		$this->_vars['id'] = $id;
@@ -120,7 +128,7 @@ class Dataset {
 
 		// Generate HTML output
 		$select_html = '<select id="'.$this->_vars['id'].'" name="'.$this->_vars['name'].'">';
-		$select_html .= '<option value="" '.(empty($d['column_share']) && empty($this->_vars['selected_dataset']) ? 'selected' : '').'>Select an experiment dataset</option>';
+		$select_html .= '<option value="" '.(empty($this->_vars['selected_dataset']) ? 'selected' : '').'>Select an experiment dataset</option>';
 		foreach ($this->_optgroups as $og) {
 			$opts = array();
 			foreach ($this->_opts as $dataset => $d) {
@@ -142,13 +150,17 @@ class Dataset {
 						) &&
 						(
 							empty($this->_vars['species']) || $this->_vars['species'] === $d['species']
+						) &&
+						(
+							empty($this->_vars['genome']) || $this->_vars['genome'] === $d['genome']
 						)
 					) {
 						$opts[] = '<option
 							data-idtype="'.$d['idType'].'"
 							data-column-share="'.(!empty($d['column_share']) ? $d['column_share'] : '').'"
 							data-experiment="'.$d['experiment'].'"
-							value="'.$d['value'].'" '.((isset($this->_vars['dataset']) && $this->_vars['dataset'] === $d['value']) || (isset($this->_vars['selected_dataset']) && $this->_vars['selected_dataset'] === $d['value']) ? 'selected' : '').'>'.$d['text'].'</option>';
+							value="'.$d['value'].'"
+							'.(isset($this->_vars['selected_dataset']) && $this->_vars['selected_dataset'] === $d['value'] ? 'selected' : '').'>'.$d['text'].'</option>';
 					}
 				}
 			}

@@ -102,162 +102,75 @@ class Query {
 		// Set data transform
 		$this->expat['dataTransform'] = $this->_expat['dataTransform'];
 
+		// Retrieve dataset metadata
+		$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+		$q = $db->prepare("SELECT
+			Genome,
+			Species,
+			Experiment,
+			IDtype,
+			MySQLTable
+		FROM expat_datasets
+		WHERE Dataset = ?");
+
+		// Execute query with array of values
+		$q->execute(array($dataset));
+
+		// Get results
+		if($q->rowCount() > 0) {
+			while($row = $q->fetch(PDO::FETCH_ASSOC)) {
+				$this->expat['genome'] = $row['Genome'];
+				$this->expat['species'] = $row['Species'];
+				$this->expat['experiment'] = $row['Experiment'];
+				$this->expat['queryId'] = $row['IDtype'];
+				$this->expat['queryTable'] = $row['MySQLTable'];
+
+				switch ($row['IDtype']) {
+					case 'geneid':
+						$this->expat['rowType'] = 'Gene ID';
+						$this->expat['rowText'] = 'Gene(s)'; 
+						break;
+
+					case 'probeid':
+						$this->expat['rowType'] = 'Probe ID';
+						$this->expat['rowText'] = 'Probe(s)'; 
+						break;
+
+					case 'transcriptid':
+						$this->expat['rowType'] = 'Transcript ID';
+						$this->expat['rowText'] = 'Transcript(s)'; 
+						break;
+				}
+			}
+		} else {
+			$this->error->set_status(404);
+			$this->error->set_message('The dataset you have selected: ' + $dataset + ' is not available. Please try again.');
+			$this->error->execute();
+		}
+
+		// Mapping is only applicable for ljgea experiment
+		$this->expat['mapped'] = false;
+
 		// Perform sanity check on selected dataset
 		if ($dataset === 'ljgea-geneid') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_ljgea_geneid',
-				'id' => $_POST['idtype'],
-				'mappedid' => 'ProbeID'
-			);
-			$this->expat['experiment'] = 'ljgea';
-			$this->expat['rowType'] = 'Gene ID';
-			$this->expat['rowText'] = 'Gene(s)';
+			$this->expat['queryMappedId'] = 'ProbeID';
 			$this->expat['mapped'] = array(
 				'dataset' => 'ljgea-probeid',
 				'rowType' => 'Probe ID',
 				'text' => 'Probe(s)'
 			);
-			$this->expat['species'] = 'Lotus';
 		} else if ($dataset === 'ljgea-probeid') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_ljgea_probeid',
-				'id' => $_POST['idtype'],
-				'mappedid' => ' GeneID'
-			);
-			$this->expat['experiment'] = 'ljgea';
-			$this->expat['rowType'] = 'Probe ID';
-			$this->expat['rowText'] = 'Probe(s)';
+			$this->expat['queryMappedId'] = 'ProbeID';
 			$this->expat['mapped'] = array(
 				'dataset' => 'ljgea-geneid',
 				'rowType' => 'Gene ID',
 				'text' => 'Gene(s)'
 			);
-			$this->expat['species'] = 'Lotus';
-		} else if ($dataset === 'rnaseq-kellys-2015-bacteria') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_KellyS_bacteria',
-				'id' => $_POST['idtype']
-			);
-			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-kellys-2015';
-			$this->expat['rowType'] = 'Transcript ID';
-			$this->expat['rowText'] = 'Transcript(s)';
-			$this->expat['species'] = 'Lotus';
-		} else if ($dataset === 'rnaseq-kellys-2015-purifiedcompounds') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_KellyS_purifiedcompounds',
-				'id' => $_POST['idtype']
-			);
-			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-kellys-2015';
-			$this->expat['rowType'] = 'Transcript ID';
-			$this->expat['rowText'] = 'Transcript(s)';
-			$this->expat['species'] = 'Lotus';
-		} else if ($dataset === 'rnaseq-giovanettim-2015-am') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_GiovanettiM_AMGSE',
-				'id' => $_POST['idtype']
-			);
-			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-giovanettim-2015';
-			$this->expat['rowType'] = 'Probe ID';
-			$this->expat['rowText'] = 'Probe(s)';
-			$this->expat['species'] = 'Lotus';
-		} else if ($dataset === 'rnaseq-murakamie-2016') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_MurakamiE',
-				'id' => $_POST['idtype']
-			);
-			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-murakamie-2016';
-			$this->expat['rowType'] = 'Transcript ID';
-			$this->expat['rowText'] = 'Transcript(s)';
-			$this->expat['species'] = 'Lotus';
-		} else if ($dataset === 'rnaseq-handay-2015') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_HandaY2015',
-				'id' => $_POST['idtype']
-			);
-			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-handay-2015';
-			$this->expat['rowType'] = 'Gene ID';
-			$this->expat['rowText'] = 'Gene(s)';
-			$this->expat['species'] = 'Lotus';
-		} else if ($dataset === 'rnaseq-sasakit-2014') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_SasakiT2014',
-				'id' => $_POST['idtype']
-			);
-			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-sasakit-2014';
-			$this->expat['rowType'] = 'Gene ID';
-			$this->expat['rowText'] = 'Gene(s)';
-			$this->expat['species'] = 'Lotus';
-		} else if ($dataset === 'rnaseq-suzakit-2014') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_SuzakiT2014',
-				'id' => $_POST['idtype']
-			);
-			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-suzakit-2014';
-			$this->expat['rowType'] = 'Gene ID';
-			$this->expat['rowText'] = 'Gene(s)';
-			$this->expat['species'] = 'Lotus';
-		} else if ($dataset === 'rnaseq-davidm-2017-rootshoottotalreads') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_DavidM2017_RootShootTotalReads',
-				'id' => $_POST['idtype']
-			);
-			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-davidm-2017';
-			$this->expat['rowType'] = 'Gene ID';
-			$this->expat['rowText'] = 'Gene(s)';
-			$this->expat['species'] = 'Lotus';
-		} else if ($dataset === 'rnaseq-davidm-2017-rootshootuniquereads') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_DavidM2017_RootShootUniqueReads',
-				'id' => $_POST['idtype']
-			);
-			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-davidm-2017';
-			$this->expat['rowType'] = 'Gene ID';
-			$this->expat['rowText'] = 'Gene(s)';
-			$this->expat['species'] = 'Lotus';
-		} else if ($dataset === 'rnaseq-kellys-2017-microbialspectrum') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_RNAseq_KellyS2017_MicrobialSpectrum',
-				'id' => $_POST['idtype']
-			);
-			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'rnaseq-kellys-2017';
-			$this->expat['rowType'] = 'Gene ID';
-			$this->expat['rowText'] = 'Gene(s)';
-			$this->expat['species'] = 'Lotus';
-		} else if ($dataset === 'reidd-2019-barleynutrient') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_ReidD2019_BarleyNutrients',
-				'id' => $_POST['idtype']
-			);
-			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'reidd-2019';
-			$this->expat['rowType'] = 'Gene ID';
-			$this->expat['rowText'] = 'Gene(s)';
-			$this->expat['species'] = 'Hordeum';
+		}
+		else if ($dataset === 'reidd-2019-barleynutrient') {
 			$this->expat['externalUrl'] = 'https://plants.ensembl.org/Hordeum_vulgare/Gene/Summary?g=';
-		} else if ($dataset === 'reidd-2020-gifuatlas') {
-			$this->_expat['query'] = array(
-				'table' => 'expat_ReidD2020_GifuAtlas',
-				'id' => $_POST['idtype']
-			);
-			$this->expat['mapped'] = false;
-			$this->expat['experiment'] = 'reidd-2020';
-			$this->expat['rowType'] = 'Gene ID';
-			$this->expat['rowText'] = 'Gene(s)';
-			$this->expat['species'] = 'Lotus';
-		} else {
-			$this->error->set_status(404);
-			$this->error->set_message('The dataset you have selected: ' + $dataset + ' is not available. Please try again.');
-			$this->error->execute();
 		}
 
 		// Define datasets
@@ -658,7 +571,9 @@ class Query {
 			}
 
 			// Shorthand
-			$query = $this->_expat['query'];
+			$queryId = $this->expat['queryId'];
+			$queryTable = $this->expat['queryTable'];
+			$queryMappedId = $this->expat['queryMappedId'];
 			$ids = $this->_expat['ids'];
 
 			// Perform database query
@@ -673,21 +588,21 @@ class Query {
 				if($this->expat['experiment'] === 'ljgea') {
 					// LjGEA dataset requires joining of two different tables, one by gene ID and the other by probe ID
 					$sqlQuery = "SELECT
-						t1.".$query['id']." AS RowID, GROUP_CONCAT(t2.".$query['mappedid'].") AS MappedToID, t3.".$query['mappedid']." AS MappedID, `".implode($columns,'`,`')."`
+						t1.".$queryId." AS RowID, GROUP_CONCAT(t2.".$queryMappedId.") AS MappedToID, t3.".$queryMappedId." AS MappedID, `".implode($columns,'`,`')."`
 					FROM
-						".$query['table']." AS t1
-					LEFT JOIN expat_mapping AS t2 ON t1.".$query['id']." = t2.".$query['id']."
-					LEFT JOIN expat_ljgea_geneprobebesthit AS t3 ON t1.".$query['id']." = t3.".$query['id']."
+						".$queryTable." AS t1
+					LEFT JOIN expat_mapping AS t2 ON t1.".$queryId." = t2.".$queryId."
+					LEFT JOIN expat_ljgea_geneprobebesthit AS t3 ON t1.".$queryId." = t3.".$queryId."
 					WHERE
-						t1.".$query['id']." IN (".str_repeat('?,', count($ids)-1).'?'.")
-					GROUP BY t1.".$query['id']."
-					ORDER BY FIELD(t1.".$query['id'].", '".implode($ids,"','")."')";
+						t1.".$queryId." IN (".str_repeat('?,', count($ids)-1).'?'.")
+					GROUP BY t1.".$queryId."
+					ORDER BY FIELD(t1.".$queryId.", '".implode($ids,"','")."')";
 
 					// Skip first three columns
 					$colSkip = 3;
 
 					// Define output header (only for download)
-					$outHeader = "\"".$query['id']."\",\"Mapped ".$query['mappedid']."\",\"Best ".$query['mappedid']." hit\",\"".implode($columns,'","')."\"\n";
+					$outHeader = "\"".$queryId."\",\"Mapped ".$queryMappedId."\",\"Best ".$queryMappedId." hit\",\"".implode($columns,'","')."\"\n";
 
 					// Set query array of $ids
 					$ids_query = $ids;
@@ -708,16 +623,16 @@ class Query {
 					// Construct LIKE query
 					$likeQuery = '';
 					foreach($ids as $id) {
-						$likeQuery .= "t1.".$query['id']." LIKE ? OR ";
+						$likeQuery .= "t1.".$queryId." LIKE ? OR ";
 					}
 
 					$sqlQuery = "SELECT
-						t1.".$query['id']." AS RowID, `".implode($columns,'`,`')."`
+						t1.".$queryId." AS RowID, `".implode($columns,'`,`')."`
 					FROM
-						".$query['table']." AS t1
+						".$queryTable." AS t1
 					WHERE ".substr($likeQuery, 0, -4)."
-					GROUP BY t1.".$query['id']."
-					ORDER BY FIELD(t1.".$query['id'].", '".implode($ids,"','")."')";
+					GROUP BY t1.".$queryId."
+					ORDER BY FIELD(t1.".$queryId.", '".implode($ids,"','")."')";
 
 					// Allow for wildcard search
 					$ids_query = array();
@@ -729,7 +644,7 @@ class Query {
 					$colSkip = 1;
 
 					// Define output header (only for download)
-					$outHeader = "\"".$query['id']."\",\"".implode($columns,'","')."\"\n";
+					$outHeader = "\"".$queryId."\",\"".implode($columns,'","')."\"\n";
 
 				} else {
 					
@@ -858,14 +773,14 @@ class Query {
 					// Return query IDs that are not found in search result //
 					//======================================================//
 					if($this->_expat['purpose'] == 'vis') {
-						if($query['id'] == 'GeneID') {
+						if($queryId == 'GeneID') {
 							// If gene ID is being queried, remove isoforms from query ids
 							foreach($ids as $id) {
 								$queryRowIDs[] = preg_replace('/^(.*)\.\d+$/', '$1', $id);
 							}
 							$this->expat['notFound'] = array_diff($expat['row'], $queryRowIDs);
 
-						} elseif($query['id'] == 'TranscriptID') {
+						} elseif($queryId == 'TranscriptID') {
 							// If transcript ID is being queried, check if query ids are gene or transcripts
 							foreach($expat['row'] as $r) {
 								$rowGenes[] = preg_replace('/^(.*)\.\d+$/', '$1', $r);
