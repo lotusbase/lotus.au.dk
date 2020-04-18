@@ -99,7 +99,7 @@ define('GO_METADATA_LAST_UPDATED', $config['misc']['go_metadata_last_updated']);
 // Maintenance mode //
 //==================//
 // Put site into maintenance mode for 30 minutes when it is 12am of Sunday
-$maintenanceDuration = 45;
+$maintenanceDuration = 30;
 $maintenanceStart = (new DateTime('00:00'))->modify('Sunday');
 $maintenanceEnd = (new DateTime('00:00'))->modify('Sunday')->modify('+'.$maintenanceDuration.' minutes');
 $currentTime = new DateTime();
