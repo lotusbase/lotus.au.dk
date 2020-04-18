@@ -156,9 +156,22 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 					'PlantEcotype',
 					'Organ',
 					'Age',
-					)
 				)
-			);
+			),
+			'reidd-2020' => array(
+				'table' => 'expat_ReidD2020_GifuAtlas_columns',
+				'columns' => array(
+					'Treatment',
+					'Inocula',
+					'Strain',
+					'TimeUnit',
+					'TimeDuration',
+					'PlantSpecies',
+					'PlantEcotype',
+					'Tissue',
+				)
+			)
+		);
 
 		// Check if experiment exists
 		if (!isset($dataset_metadata[$experiment])) {

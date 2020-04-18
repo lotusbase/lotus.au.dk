@@ -131,6 +131,17 @@ $(function() {
 			{value: 'Age', text: 'Age (days)', sort: 'int'},
 			{value: 'Reference', text: 'Reference', sort: 'string'}
 		],
+		'reidd-2020': [
+			{value: 'Treatment', text: 'Treatment', sort: 'string'},
+			{value: 'Inocula', text: 'Inocula', sort: 'string'},
+			{value: 'Strain', text: 'Strain', sort: 'string'},
+			{value: 'TimeUnit', text: 'Time unit', sort: 'string'},
+			{value: 'TimeDuration', text: 'Time duration', sort: 'int'},
+			{value: 'PlantSpecies', text: 'Plant species', sort: 'string'},
+			{value: 'PlantEcotype', text: 'Plant ecotype', sort: 'string'},
+			{value: 'Tissue', text: 'Tissue', sort: 'string'},
+			{value: 'Reference', text: 'Reference', sort: 'string'}
+		],
 	};
 
 	// Display subset options
@@ -172,7 +183,7 @@ $(function() {
 					var idVals = $('#expat-row').val(),
 						idPattern = {
 							'transcriptid': /^Lj([0-6]|chloro|mito|1_4_FUCT|XYLT)g\dv\d+(\.(mrna)?\d+)?$/i,
-							'geneid': /^(Lj([0-6]|chloro|mito|1_4_FUCT|XYLT)g\dv\d+(\.(mrna)?\d+)?|HORVU[0-9a-z]+?|AGP\d+?)$/i,
+							'geneid': /^(Lj([0-6]|chloro|mito|1_4_FUCT|XYLT)g\dv\d+(\.(mrna)?\d+)?|HORVU[0-9a-z]+?|AGP\d+?|LotjaGi\dg\dv\d+?(_LC)?)$/i,
 							'probeid': /^(Ljwgs\_|LjU|Lj\_|chr[0-6]\.|gi|m[a-z]{2}|tc|tm|y4|rngr|cm).+\_at$/i
 						},
 						idExample = {
@@ -401,7 +412,6 @@ $(function() {
 					$('#expat-dataset-subset table thead').html('<tr><th class="chk"><input type="checkbox" id="expat-dataset-subset-ca" class="ca" /></th><th data-sort="string-int">Column</th></tr>');
 
 					// Fill table header
-					console.log(datasetSubset[experiment], experiment);
 					$.each(datasetSubset[experiment], function(i,c) {
 						$('#expat-dataset-subset table thead tr').append('<th data-sort="'+c.sort+'">'+c.text+'</th>');
 					});

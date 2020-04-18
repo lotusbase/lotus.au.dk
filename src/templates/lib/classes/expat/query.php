@@ -244,6 +244,16 @@ class Query {
 			$this->expat['rowText'] = 'Gene(s)';
 			$this->expat['species'] = 'Hordeum';
 			$this->expat['externalUrl'] = 'https://plants.ensembl.org/Hordeum_vulgare/Gene/Summary?g=';
+		} else if ($dataset === 'reidd-2020-gifuatlas') {
+			$this->_expat['query'] = array(
+				'table' => 'expat_ReidD2020_GifuAtlas',
+				'id' => $_POST['idtype']
+			);
+			$this->expat['mapped'] = false;
+			$this->expat['experiment'] = 'reidd-2020';
+			$this->expat['rowType'] = 'Gene ID';
+			$this->expat['rowText'] = 'Gene(s)';
+			$this->expat['species'] = 'Lotus';
 		} else {
 			$this->error->set_status(404);
 			$this->error->set_message('The dataset you have selected: ' + $dataset + ' is not available. Please try again.');
@@ -542,6 +552,43 @@ class Query {
 					'N+P-_Shoot',
 					'N+P+_Mainroot',
 					'N+P+_Lateralroot'
+				),
+				'reidd-2020-gifuatlas' => array(
+					'ZON_1hr_mock',
+					'ZON_1hr_BA',
+					'ZON_24hr_mock',
+					'ZON_24hr_BA',
+					'ZON_24hr_R7A',
+					'Nodules_10dpi',
+					'3dpi_root_mock',
+					'3dpi_root_R7A',
+					'3dpi_shoot_mock',
+					'3dpi_shoot_R7A',
+					'AM_15dpi',
+					'AM_27dpi',
+					'AM_mock_15d',
+					'Mature_flower',
+					'Immature_flower',
+					'Pod',
+					'Seed',
+					'Root',
+					'Leaf',
+					'AM_mock_27d_P',
+					'AM_mock_27d',
+					'Root_hair_mock_rhizobia',
+					'Root_hair_nodC_24hr',
+					'Root_hair_R7A_24hr',
+					'Root_hair_R7A_72hr',
+					'Root_hair_mock_NF',
+					'Root_hair_NF_24hr',
+					'Nodule_primordia_7dpi',
+					'Nodules_21dpi',
+					'Root_mock_microbialspectrum',
+					'M_loti_R7A_3dpi',
+					'Bradyrhizobium_elkanii_USDA61_3dpi',
+					'Sinorhizobium_fredii_HH103_3dpi',
+					'Pseudomonas_syringae_pv_tomato_DC3000_3dpi',
+					'Ralstonia_solanacearum_JS763_3dpi'
 				)
 			);
 
@@ -654,7 +701,8 @@ class Query {
 					$this->expat['experiment'] === 'rnaseq-kellys-2015' ||
 					$this->expat['experiment'] === 'rnaseq-davidm-2017' ||
 					$this->expat['experiment'] === 'rnaseq-kellys-2017' ||
-					$this->expat['experiment'] === 'reidd-2019'
+					$this->expat['experiment'] === 'reidd-2019' ||
+					$this->expat['experiment'] === 'reidd-2020'
 					) {
 					
 					// Construct LIKE query
@@ -832,7 +880,6 @@ class Query {
 							}
 						}
 					}
-					
 
 					//====================//
 					// Perform clustering //
