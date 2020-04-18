@@ -88,6 +88,40 @@
          "compress" : 0,
          "type" : "CanvasFeatures",
          "label" : "20190809_Lj_Gifu_v1.2_predictedGenes"
+      },
+      {
+         "style" : {
+            "className" : "feature",
+            "connectorThickness" : 2,
+            "color" : "#33658a",
+            "borderWidth" : 0,
+            "connectorColor" : "#aaa",
+            "utrColor" : "#bf812d"
+         },
+         "key" : "<em>L. japonicus</em> Gifu v1.2 non-coding RNA",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "CanvasFeatures",
+         "urlTemplate" : "tracks/20201804_Lj_Gifu_v1.2_ncrna/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "CanvasFeatures",
+         "label" : "20201804_Lj_Gifu_v1.2_ncrna"
+      },
+      {
+         "style" : {
+            "className" : "feature",
+            "borderWidth" : 0,
+            "color" : "#33658a",
+            "connectorThickness" : 2,
+            "connectorColor" : "#aaa",
+            "utrColor" : "#bf812d"
+         },
+         "key" : "<em>L. japonicus</em> Gifu v1.2 repeats",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "CanvasFeatures",
+         "urlTemplate" : "tracks/20201804_Lj_Gifu_v1.2_repeats/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "CanvasFeatures",
+         "label" : "20201804_Lj_Gifu_v1.2_repeats"
       }
    ],
    "names" : {
@@ -95,8 +129,8 @@
       "type" : "Hash"
    },
    "dataset_id" : "lj_gifu_v12",
-   "alwaysOnTracks" : "DNA,20190809_Lj_Gifu_v1.2_predictedGenes,20180416_genome_gaps",
-   "defaultTracks" : "DNA,20190809_Lj_Gifu_v1.2_predictedGenes,20180416_genome_gaps",
+   "alwaysOnTracks" : "DNA,20190809_Lj_Gifu_v1.2_predictedGenes,20201804_Lj_Gifu_v1.2_ncrna,20201804_Lj_Gifu_v1.2_repeats,20180416_genome_gaps",
+   "defaultTracks" : "DNA,20190809_Lj_Gifu_v1.2_predictedGenes,20201804_Lj_Gifu_v1.2_ncrna,20201804_Lj_Gifu_v1.2_repeats,20180416_genome_gaps",
    "formatVersion" : 1,
    "defaultLocation" : "chr1",
    "highResolutionMode" : "auto",
