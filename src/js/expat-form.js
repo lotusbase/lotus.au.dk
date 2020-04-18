@@ -182,12 +182,12 @@ $(function() {
 				if($('#expat-row').length) {
 					var idVals = $('#expat-row').val(),
 						idPattern = {
-							'transcriptid': /^Lj([0-6]|chloro|mito|1_4_FUCT|XYLT)g\dv\d+(\.(mrna)?\d+)?$/i,
-							'geneid': /^(Lj([0-6]|chloro|mito|1_4_FUCT|XYLT)g\dv\d+(\.(mrna)?\d+)?|HORVU[0-9a-z]+?|AGP\d+?|LotjaGi\dg\dv\d+?(_LC)?)$/i,
+							'transcriptid': /^(Lj([0-6]|chloro|mito|1_4_FUCT|XYLT)g\dv\d+(\.(mrna)?\d+)?|LotjaGi\dg\dv\d+?(_LC)?(\.\d))$/i,
+							'geneid': /^(Lj([0-6]|chloro|mito|1_4_FUCT|XYLT)g\dv\d+(\.(mrna)?\d+)?|HORVU[0-9a-z]+?|AGP\d+?|LotjaGi\dg\dv\d+?(_LC)?(\.\d)?)$/i,
 							'probeid': /^(Ljwgs\_|LjU|Lj\_|chr[0-6]\.|gi|m[a-z]{2}|tc|tm|y4|rngr|cm).+\_at$/i
 						},
 						idExample = {
-							'transcriptid': 'Lj4g3v0281040.1',
+							'transcriptid': 'Lj4g3v0281040.1, LotjaGi4g1v0024900.1',
 							'geneid': 'Lj4g3v0281040',
 							'probeid': 'Ljwgs_036669.1_at'
 						},
