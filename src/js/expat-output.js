@@ -111,7 +111,9 @@ $(function() {
 			});
 
 		// Push history state
-		if(expat.status.pushState) window.history.pushState({lotusbase: true}, '', '?'+$('input[name!="CSRF_token"]', this).serialize());
+		if(expat.status.pushState) {
+			window.history.pushState({lotusbase: true}, '', '?'+ $(':input', this).not('[name="CSRF_token"]').serialize());
+		}
 		expat.status.pushState = true;
 
 		// Collapse form, only if search has not been triggered before
@@ -388,7 +390,14 @@ $(function() {
 				// Append everything
 				$('#expat-results')
 				.empty()
-				.append($dataDownload, $userCustom, $userMessage, '<div class="d3-chart" id="expat-linegraph"></div><div class="d3-chart" id="expat-heatmap"></div>', $svgDownload, $('<div class="table-overflow" />').append($table), '<small><strong>* Bolded '+data.rowType.toLowerCase()+' represents best match based on BLAST results.</strong></small>')
+				.append(
+					$dataDownload,
+					$userCustom,
+					$userMessage,
+					'<div class="d3-chart" id="expat-linegraph"></div><div class="d3-chart" id="expat-heatmap"></div>',
+					$svgDownload,
+					$('<div class="table-overflow" />').append($table),
+					data.experiment === 'ljgea' ? '<small><strong>* Bolded '+data.rowType.toLowerCase()+' represents best match based on BLAST results.</strong></small>' : '')
 				.find('.toggle.hide-first').children().not('h3').hide();
 				$('#expat-results').show();
 
