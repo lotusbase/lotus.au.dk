@@ -65,7 +65,7 @@
 					LEFT JOIN download_auth AS t2 ON
 						t1.FileKey = t2.FileKey
 					GROUP BY t1.FileKey
-					ORDER BY t1.Category, t1.FileName");
+					ORDER BY t1.SortOrder, t1.Category, t1.FileName");
 				$q->execute();
 
 				// Retrieve results
