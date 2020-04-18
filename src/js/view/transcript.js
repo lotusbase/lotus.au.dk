@@ -760,8 +760,8 @@ $(function() {
 			return;
 		}
 
-		var _dataset 	= dataset || 'ljgea-geneid',
-			_idtype		= idtype || 'geneid';
+		var _dataset 	= dataset || $('#expat-dataset').val(),
+			_idtype		= idtype || $('#expat-dataset').find('option:selected').attr('data-idtype');
 
 		// Update gene link
 		$('#view__expat__link').attr('href', function() {
@@ -1270,7 +1270,7 @@ $(function() {
 						// Perform AJAX call
 						expatGeneAnnoAJAX = $.ajax({
 							method: 'get',
-							url: root + '/api/v1/gene/annotation/MG20/3.0/'+d,
+							url: root + '/api/v1/gene/annotation/' + window.lotusbase.genome.split('_').join('/') + '/' + d,
 							dataType: 'json'
 						});
 

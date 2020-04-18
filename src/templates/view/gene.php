@@ -55,6 +55,11 @@
 <html lang="en">
 <head>
 	<title>Gene &mdash; View &mdash; Lotus Base</title>
+	<script>
+		window.lotusbase = {
+			genome: '<?php echo $genome; ?>'
+		};
+	</script>
 	<?php
 		$document_header = new \LotusBase\Component\DocumentHeader();
 		$document_header->set_meta_tags(array(
@@ -231,37 +236,50 @@
 				<?php } ?>
 			</div>
 			<?php } ?>
+		<?php } ?>
 
-			<div id="view__expression" data-gene="<?php echo $id; ?>" class="view__facet">
-				<h3>Expression data</h3>
-				<form id="corgi__form" class="has-group">
-					<div class="cols" role="group">
-						<label for="expat-dataset" class="col-one">Dataset <a data-modal="wide" class="info" title="What are the available datasets?" href="<?php echo WEB_ROOT; ?>/lib/docs/expat-datasets">?</a></label>
-						<div class="col-two">
-							<?php
-								$expat_dataset = new \Lotusbase\ExpAt\Dataset();
-								if(!empty($_GET['dataset'])) {
-									$expat_dataset->set_dataset($_GET['dataset']);
-								}
-								$expat_dataset->set_idType(array(
-									'geneid'
-									));
-								$expat_dataset->set_selected_dataset('ljgea-geneid');
-								$expat_dataset->set_species('Lotus');
-								echo $expat_dataset->render();
-							?>
-						</div>
+		<div id="view__expression" data-gene="<?php echo $id; ?>" class="view__facet">
+			<h3>Expression data</h3>
+			<form id="corgi__form" class="has-group">
+				<div class="cols" role="group">
+					<label for="expat-dataset" class="col-one">Dataset <a data-modal="wide" class="info" title="What are the available datasets?" href="<?php echo WEB_ROOT; ?>/lib/docs/expat-datasets">?</a></label>
+					<div class="col-two">
+						<?php
+							$expat_dataset = new \Lotusbase\ExpAt\Dataset();
+							if(!empty($_GET['dataset'])) {
+								$expat_dataset->set_dataset($_GET['dataset']);
+							}
+							$expat_dataset->set_idType(array(
+								'geneid'
+								));
+
+							if ($genome === 'MG20_3.0') {
+								$selected_dataset = 'ljgea-geneid';
+							} else if ($genome === 'Gifu_1.2') {
+								$selected_dataset = 'reidd-2020-gifuatlas';
+							}
+
+							if ($selected_dataset) {
+								$expat_dataset->set_selected_dataset($selected_dataset);
+							}
+							
+							$expat_dataset->set_species('Lotus');
+							$expat_dataset->set_genome($genome);
+							echo $expat_dataset->render();
+						?>
 					</div>
-				</form>
-
-				<h4>Expression pattern</h4>
-				<p>Expression pattern of <strong><?php echo $id; ?></strong>, powered by <a href="<?php echo WEB_ROOT; ?>/expat" title="Expression Atlas">ExpAt</a>. For advanced configuration, data transformation and export options, <a id="view__expat__link" href="<?php echo WEB_ROOT; ?>/expat?ids=<?php echo $id; ?>&amp;dataset=ljgea-geneid&amp;idtype=geneid" title="" data-root="<?php echo WEB_ROOT; ?>">view expression data in the ExpAt application</a>.</p>
-				<div id="expat__loader" class="align-center loader__wrapper">
-					<div class="loader"><svg class="loader"><circle class="path" cx="40" cy="40" r="30" /></svg></div>
-					<p>Loading expression data from <span id="expat__loader__dataset">ljgea-geneid</span>. Please wait&hellip;</p>
 				</div>
-				<div id="view__expat" class="hidden"></div>
-				
+			</form>
+
+			<h4>Expression pattern</h4>
+			<p>Expression pattern of <strong><?php echo $id; ?></strong>, powered by <a href="<?php echo WEB_ROOT; ?>/expat" title="Expression Atlas">ExpAt</a>. For advanced configuration, data transformation and export options, <a id="view__expat__link" href="<?php echo WEB_ROOT; ?>/expat?ids=<?php echo $id; ?>&amp;dataset=ljgea-geneid&amp;idtype=geneid" title="" data-root="<?php echo WEB_ROOT; ?>">view expression data in the ExpAt application</a>.</p>
+			<div id="expat__loader" class="align-center loader__wrapper">
+				<div class="loader"><svg class="loader"><circle class="path" cx="40" cy="40" r="30" /></svg></div>
+				<p>Loading expression data from <span id="expat__loader__dataset">ljgea-geneid</span>. Please wait&hellip;</p>
+			</div>
+			<div id="view__expat" class="hidden"></div>
+			
+			<?php if ($genome === 'MG20_3.0') { ?>
 				<h4>Co-expressed genes</h4>
 				<p>A list of the top 25 highly co-expressed genes of <strong><?php echo $id; ?></strong>, powered by <a href="<?php echo WEB_ROOT; ?>/tools/corgi" title="Co-expressed Genes Identifier (CORGI)">CORGI</a>.</p>
 				<div id="coexpression__loader" class="align-center loader__wrapper">
@@ -278,8 +296,8 @@
 					</thead>
 					<tbody></tbody>
 				</table>
-			</div>
-		<?php } ?>
+			<?php } ?>
+		</div>
 	</section>
 
 	<?php include(DOC_ROOT.'/footer.php'); ?>
