@@ -118,11 +118,8 @@
 						<li>Examples:</li>
 						<li><a href="#" data-value="Lj2g3v3373110">Lj2g3v3373110</a><span class="tag term-type"><em>LjNin</em> (Gene)</span></li>
 						<li><a href="#" data-value="Lj2g3v3373110.1">Lj2g3v3373110.1</a><span class="tag term-type">LjNin (Transcript/Protein)</span></li>
-
-						<?php if (isset($userComps) && in_array('Gifu_1.2', $userComps)) { ?>
-								<li><a href="#" data-value="LotjaGi1g1v0001500">LotjaGi1g1v0001500</a><span class="tag term-type"><em>LjNin</em> (Gene)</span><span class="tag genome-assembly">Gifu v1.2</span></li>
-								<li><a href="#" data-value="LotjaGi1g1v0001500.1">LotjaGi1g1v0001500.1</a><span class="tag term-type">LjNin (Transcript/Protein)</span><span class="tag genome-assembly">Gifu v1.2</span></li>
-							<?php } ?>
+						<li><a href="#" data-value="LotjaGi1g1v0001500">LotjaGi1g1v0001500</a><span class="tag term-type"><em>LjNin</em> (Gene)</span><span class="tag genome-assembly">Gifu v1.2</span></li>
+						<li><a href="#" data-value="LotjaGi1g1v0001500.1">LotjaGi1g1v0001500.1</a><span class="tag term-type">LjNin (Transcript/Protein)</span><span class="tag genome-assembly">Gifu v1.2</span></li>
 					</ul>
 				</div>
 

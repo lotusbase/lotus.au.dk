@@ -39,11 +39,6 @@
 		$ecotypes = array();
 		$versions = array();
 		foreach($version as $v) {
-			if ($v === 'Gifu_1.2' && (!isset($userComps) || !in_array($v, $userComps))) {
-				unset($version[$v]);
-				continue;
-			}
-
 			$version_pieces = explode('_', $v);
 			$ecotypes[] = $version_pieces[0];
 			$versions[] = $version_pieces[1];
@@ -436,11 +431,6 @@
 					<div class="col-two cols justify-content__flex-start versions">
 						<?php
 							foreach($lj_genome_versions as $label => $lj_genome) {
-								// Only display Gifu v1.2 if user is authorized access
-								if ($label === 'Gifu v1.2' && (!isset($userComps) || !in_array($lj_genome['ecotype'].'_'.$lj_genome['version'], $userComps))) {
-									continue;
-								}
-								
 								$lj_genome_id = implode('_', [$lj_genome['ecotype'], $lj_genome['version']]);
 								$lj_genome_version = $lj_genome['version'];
 								$checked = (isset($version) && (in_array($lj_genome_id, $version))) || ((!isset($version) || $error) && version_compare($lj_genome_version, '3.0') >= 0);

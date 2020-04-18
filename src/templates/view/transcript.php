@@ -46,13 +46,7 @@
 					$gene = escapeHTML($_GET['id'].'.1');
 					$coerced = true;
 				}
-
-				if ($genome === 'Gifu_1.2' && !(isset($userComps) && in_array('Gifu_1.2', $userComps))) {
-					// User has no access to Gifu v1.2
-					$_SESSION['view_error'] = 'Insufficient access privilege detected. If you believe you should have access to Gifu v1.2 data, please contact the site administrator.';
-					throw new Exception;
-				}
-
+	
 				// Perform first query
 				$db = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";port=3306;charset=utf8", DB_USER, DB_PASS);
 				$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
