@@ -1,6 +1,5 @@
 <?php
 	require_once('../config.php');
-	require_once('../lib/gatekeeper.php');
 
 	$error = false;
 	$searched = false;

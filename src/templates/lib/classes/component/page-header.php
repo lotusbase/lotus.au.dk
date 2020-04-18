@@ -128,15 +128,13 @@ class PageHeader {
 								</ul>
 							</li>
 							<li><a href="'.WEB_ROOT.'/genome" title="Genome Browser">Genome Browser</a></li>
-							'.(is_allowed_access_by_path('/go/') ? '
 							<li>
 								<a>Gene Ontology</a>
 								<ul>
-									<li><a href="'.WEB_ROOT.'/go/enrichment" title="GO Enrichment Analysis">GO Enrichment Analysis <span class="badge">BETA</span></a></li>
-									<li><a href="'.WEB_ROOT.'/go/explorer" title="GO Explorer">GO Explorer <span class="badge">BETA</span></a></li>
+									<li><a href="'.WEB_ROOT.'/go/enrichment" title="GO Enrichment Analysis">GO Enrichment Analysis</a></li>
+									<li><a href="'.WEB_ROOT.'/go/explorer" title="GO Explorer">GO Explorer</a></li>
 								</ul>
 							</li>
-							' : '').'
 							'.(is_allowed_access_by_path('/tools/phyalign') ? '<li><a href="'.WEB_ROOT.'/tools/phyalign" title="PhyAlign">PhyAlign (<abbr title="Multiple Sequence Alignment">MSA</abbr> + Phylogeny) <span class="badge">BETA</span></a></li>' : '').'
 							<li>
 								<a>Sequence Toolkit</a>

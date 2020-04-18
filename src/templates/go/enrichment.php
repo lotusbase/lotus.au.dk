@@ -1,6 +1,5 @@
 <?php
 	require_once('../config.php');
-	require_once('../lib/gatekeeper.php');
 
 	$error = false;
 	$searched = false;
@@ -32,8 +31,14 @@
 
 			// Check if any of the ids match
 			foreach($ids as &$id) {
-				if(preg_match('/^Lj(\d|chloro|mito)g\dv\d+(\.\d+)?$/', $id)) {
-					if(!preg_match('/^Lj(\d|chloro|mito)g\dv\d+\.\d+$/', $id)) {
+				if(
+					preg_match('/^Lj(\d|chloro|mito)g\dv\d+(\.\d+)?$/', $id) ||
+					preg_match('/^LotjaGi\dg\dv\d+?(_LC)?(\.\d+)?$/', $id)
+				) {
+					if(
+						!preg_match('/^Lj(\d|chloro|mito)g\dv\d+\.\d+$/', $id) &&
+						!preg_match('/^LotjaGi\dg\dv\d+?(_LC)?\.\d+$/', $id)
+					) {
 						$id = $id.".1";
 					}
 					$valid_ids[] = $id;
@@ -194,7 +199,7 @@
 					<div class="multiple-text-input input-mimic">
 						<ul class="input-values">
 						<?php
-							if(!empty($_POST['ids']) && $error) {
+							if(!empty($_POST['ids'])) {
 								if(is_array($_POST['ids'])) {
 									$id_array = $_POST['ids'];
 								} else {
