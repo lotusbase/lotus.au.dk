@@ -112,9 +112,8 @@
 		</div>
 		<div class="user-message reminder">
 			<span class="icon-attention"></span>
-			<strong><em>LORE1</em> order processing are currently suspended</strong> due to the COVID-19 outbreak in Denmark and a nation-wide shutdown of all public institutions.
-			You may still place orders for <em>LORE1</em> lines, but they will only be processed once the country leaves the lockdown period,
-			currently set until April 13, 2020.
+			<strong><em>LORE1</em> order processing are currently suspended until further notice.</strong> This is due to the COVID-19 outbreak in Denmark and a nation-wide shutdown of all public institutions.
+			You may still place orders for <em>LORE1</em> lines, but they will only be processed once the country leaves the lockdown period.
 		</div>
 		<form action="order-exec.php" method="POST" id="order-form" accept-charset="utf-8" class="has-group has-steps">
 
