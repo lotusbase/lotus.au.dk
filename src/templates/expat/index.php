@@ -79,7 +79,16 @@
 						if(isset($_GET['dataset'])) {
 							$expat_dataset->set_selected_dataset($_GET['dataset']);
 						}
+
+						$genomeChecker = new \LotusBase\LjGenomeVersion(array('genome' => $_GET['genome']));
+						if($genomeChecker->check()) {
+							$expat_dataset->set_genome($_GET['genome']);
+						}
 						echo $expat_dataset->render();
+
+						if($genomeChecker->check()) {
+							echo '<small><strong>You are currently only viewing datasets available for the '.str_replace('_', ' ', $_GET['genome']).' genome. <a href="#" id="remove-genome-namespacing">Click here to view all datasets</a>.</strong></small>';
+						}
 					?>
 				</div>
 

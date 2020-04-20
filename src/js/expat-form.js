@@ -150,6 +150,22 @@ $(function() {
 	// Use select2
 	$('#expat-dataset').css('width', '100%').select2();
 
+	// Allow removal of genome namespacing
+	$('#remove-genome-namespacing').on('click', function(e) {
+		e.preventDefault();
+		var urlData = $.extend({}, params);
+		delete urlData.genome;
+
+		Object.keys(urlData).forEach(function(key) {
+			var value = urlData[key];
+			if (value === '') {
+				delete urlData[key];
+			}
+		});
+		
+		window.location = window.location.origin + window.location.pathname + '?' + $.param(urlData);
+	});
+
 	// Allow injection of sample data
 	$('#sample-data').on('click', function(e) {
 		e.preventDefault();
