@@ -10,6 +10,7 @@ tags:
 author: Terry Mun
 summary: <em>L. japonicus</em> Gifu v1.2 genome has been publicly released. It is now accessible via the Genome Browser, as well as other tools on the sites, such as the Expression Atlas (ExpAt) and View tools.
 coverImage: /dist/images/content/20200420/expat.svg
+socialMediaCoverImage: /dist/images/content/20200420/expat.jpg
 ---
 
 The *Lotus japonicus* Gifu genome assembly v1.2 is now officially released and [an associated pre-publication manuscript has been submitted to bioXriv](https://www.biorxiv.org/content/10.1101/2020.04.17.042473v1). Datasets on *Lotus* Base has therefore seen some restructuring to support incoming data from a new genome assembly.
