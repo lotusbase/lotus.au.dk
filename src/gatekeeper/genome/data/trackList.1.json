@@ -271,13 +271,13 @@
                "label": "Retrieve co-expressed genes (CORGI)",
                "iconClass": "dijitIconDatabase",
                "action": "newWindow",
-               "url": "https://lotus.au.dk/tools/corgi?ids={name}"
+               "url": "https://lotus.au.dk/tools/corgi?ids={name}&genome=MG20_3.0"
             },
             {
                "label": "Send to Expression Atlas (ExpAt)",
                "iconClass": "dijitIconDatabase",
                "action": "newWindow",
-               "url": "https://lotus.au.dk/expat/?ids={name}"
+               "url": "https://lotus.au.dk/expat/?ids={name}&genome=MG20_3.0"
             }
          ]
       },
