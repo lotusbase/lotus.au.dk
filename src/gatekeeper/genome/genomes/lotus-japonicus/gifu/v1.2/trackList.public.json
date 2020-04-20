@@ -87,7 +87,31 @@
          "urlTemplate" : "tracks/20190809_Lj_Gifu_v1.2_predictedGenes/{refseq}/trackData.json",
          "compress" : 0,
          "type" : "CanvasFeatures",
-         "label" : "20190809_Lj_Gifu_v1.2_predictedGenes"
+         "label" : "20190809_Lj_Gifu_v1.2_predictedGenes",
+         "menuTemplate": [
+            {
+               "label" : "View details"
+            },
+            {   
+               "label" : "Zoom to this gene"
+            },
+            {   
+               "label" : "Highlight this gene"
+            },
+            { "type": "dijit/MenuSeparator" },
+            {
+               "label": "View {id}",
+               "iconClass": "dijitIconDatabase",
+               "action": "newWindow",
+               "url": "https://lotus.au.dk/view/gene/{id}"
+            },
+            {
+               "label": "Send to Expression Atlas (ExpAt)",
+               "iconClass": "dijitIconDatabase",
+               "action": "newWindow",
+               "url": "https://lotus.au.dk/expat/?ids={id}&genome=Gifu_1.2"
+            }
+         ]
       },
       {
          "style" : {
