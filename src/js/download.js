@@ -36,11 +36,9 @@ $(function() {
 	$('#downloads-filter').on('submit', function(e) {
 		e.preventDefault();
 	});
-	
-	$('#filter').on('change blur keyup search', $.throttle(250, function() {
 
-		var $t = $(this),
-			keyword = $t.val(),
+	var filterDownloads = function() {
+		var keyword = $('#filter').val(),
 			count = 0;
 
 		$('#download__user-message').empty().removeClass('warning approved').addClass('hidden');
@@ -61,7 +59,13 @@ $(function() {
 		} else {
 			$('#downloads__file-list > li').show();
 		}
+	};
+
+	$('#filter').on('change blur keyup search', $.throttle(250, function() {
+		filterDownloads();
 	}));
+
+	filterDownloads();
 
 	// Increment download count when clicked on
 	$('#downloads__file-list a.downloads__file-list-item').on('click', function(e) {

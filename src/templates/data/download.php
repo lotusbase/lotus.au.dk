@@ -17,11 +17,12 @@
 
 	<div id="wrap">
 	<?php
+		$hasSearchTerm = isset($_GET['search']) && strlen($_GET['search']) > 2;
 		$header = new \LotusBase\Component\PageHeader();
 		$header->set_header_content('<h1>Downloadable Resources</h1>
 		<p>You will find a list of downloadable resources we have made available to the public. Click on the file names to initiate download.</p>
 		<form id="downloads-filter" class="search-form" action="#" method="get">
-			<input type="search" id="filter" name="q" value="" placeholder="Filter downloads using keywords" autocomplete="off">
+			<input type="search" id="filter" name="q" value="'.($hasSearchTerm ? escapeHTML($_GET['search']) : '').'" placeholder="Filter downloads using keywords" autocomplete="off">
 			<button type="submit"><span class="pictogram icon-search">Filter</span></button>
 		</form>
 		');
@@ -115,7 +116,7 @@
 							}
 						}
 
-						echo '<li id="file-'.$row['FileKey'].'">
+						echo '<li id="file-'.$row['FileKey'].'" '.($hasSearchTerm ? 'style="display: none;"' : '').'>
 						<a href="'.WEB_ROOT.'/'.$row['FilePath'].$row['FileName'].'" title="'.$row['Description'].'" class="downloads__file-list-item">
 							<div class="file-meta__desc ext-'.str_replace('.', '', $row['FileExtension']).'">
 								<h3 class="file-meta__file-title">'.$row['Title'].'</h3>
