@@ -214,7 +214,8 @@ function create_api_access_token($token_seed = null, $time_created = null, $user
 function is_valid_request_uri($url) {
 	if(
 		!empty($url) &&
-		!preg_match('/^\/[^\/]+/', $url)
+		!preg_match('/^(\/\/|https?:\/\/|ftp:\/\/|javascript:|data:)/', $url) &&
+		!preg_match('/\s/', $url)
 		) {
 		return true;
 	}
