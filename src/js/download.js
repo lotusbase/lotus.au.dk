@@ -37,6 +37,13 @@ $(function() {
 		e.preventDefault();
 	});
 
+	$('.downloads__file-list-item').on('click', function(e) {
+		window.location = $(this).data('file-path');
+	});
+	$('.file-meta__file-data code').on('click', function(e) {
+		e.stopPropagation();
+	});
+
 	var filterDownloads = function() {
 		var keyword = $('#filter').val(),
 			count = 0;

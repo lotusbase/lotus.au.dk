@@ -1846,10 +1846,38 @@ body {
 ------------- Downloads PAGE -------------
 -----------------------------------------*/
 #downloads__file-list {
-	li a {
+	li {
+		margin-bottom: 2px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+	
+	li .downloads__file-list-item {
+		display: flex;
+		padding: 1.5em 2.5em;
+		background-color: #ddd;
+		cursor: pointer;
+		@include transition;
+
+		&:hover {
+			background-color: $lotusPrimary3;
+			color: #eee;
+
+			code {
+				color: #eee;
+			}
+		}
+
+		code {
+			cursor: text;
+			background-color: rgba(#000, .1);
+		}
+		
 		& > div {
 			&.file-meta__desc { width: 75%; }
-			&.file-meta__downloads { border-left: 1px solid #ccc; width: 25%; span { text-align: center; }}
+			&.file-meta__downloads { display: flex; justify-content: center; flex-direction: column; flex-grow: 1; border-left: 1px solid #ccc; width: 25%; margin-left: 1.5rem; span { text-align: center; }}
 			h3.file-meta__file-title {
 				font-size: 1.5rem;
 				font-weight: normal;
@@ -1883,20 +1911,13 @@ body {
 			}
 		}
 		ul.file-meta__file-data {
+			margin: 0.75rem 0;
 			li {
 				background: none;
 				border: none;
 				font-size: .875rem;
 				margin: 0;
 				padding: 0;
-				&:after {
-					content: '·';
-					display: inline-block;
-					margin: 0 .5rem;
-				}
-				&:last-child:after {
-					content: '';
-				}
 			}
 		}
 		ul.file-meta__tags {
@@ -2918,7 +2939,7 @@ kbd, .key {
 	}
 
 	#downloads__file-list {
-		li a {
+		li .downloads__file-list-item {
 			display: block;
 			& > div {
 				&.file-meta__desc { width: 100%; }

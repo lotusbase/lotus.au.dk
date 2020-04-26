@@ -61,6 +61,7 @@
 						t1.Count AS Count,
 						t1.PMID AS PMID,
 						t1.FileKey AS FileKey,
+						t1.MD5 AS MD5Hash,
 						GROUP_CONCAT(t2.AuthGroup) AS AuthGroups
 					FROM download AS t1
 					LEFT JOIN download_auth AS t2 ON
@@ -75,10 +76,13 @@
 					while($row = $q->fetch(PDO::FETCH_ASSOC)) {
 						$count = $row['Count'];
 						$tags = explode(',', $row['Tags']);
-						$fileMeta = array($row['FileName']);
+						$fileMeta = array(
+							'MD5 hash' => $row['MD5Hash'],
+							'Filename' => $row['FileName']
+						);
 						$filePath = DOC_ROOT.'/'.$row['FilePath'].$row['FileName'];
 						if(file_exists($filePath)) {
-							$fileMeta[] = human_filesize(filesize($filePath));
+							$fileMeta['Size'] = human_filesize(filesize($filePath));
 						}
 
 						// Show file when AuthGroup is null, or when is not null, is found in the user
@@ -117,14 +121,18 @@
 						}
 
 						echo '<li id="file-'.$row['FileKey'].'" '.($hasSearchTerm ? 'style="display: none;"' : '').'>
-						<a href="'.WEB_ROOT.'/'.$row['FilePath'].$row['FileName'].'" title="'.$row['Description'].'" class="downloads__file-list-item">
+						<div title="'.$row['Description'].'" class="downloads__file-list-item" data-file-path="'.WEB_ROOT.'/'.$row['FilePath'].$row['FileName'].'">
 							<div class="file-meta__desc ext-'.str_replace('.', '', $row['FileExtension']).'">
 								<h3 class="file-meta__file-title">'.$row['Title'].'</h3>
 								'.(!empty($row['Description']) ? '<p class="file-meta__file-desc">'.$row['Description'].'</p>' : '').'
 								'.(!empty($ref) ? '<p class="file-meta__ref">'.$ref.'</p>' : '').'
-								'.($row['AuthGroups'] !== null ? '<p class="user-message info"><span class="icon-lock">This file is available to internal users only. Please do not redistribute this file.</span></p>' : '').'
-								<ul class="list--floated file-meta__file-data"><li>'.implode('</li><li>', $fileMeta).'</li></ul>
-								<ul class="list--floated file-meta__tags">';
+								'.($row['AuthGroups'] !== null ? '<p class="user-message info"><span class="icon-lock">This file is available to internal users only. Please do not redistribute this file.</span></p>' : '');
+								echo '<ul class="list--reset file-meta__file-data">';
+									foreach ($fileMeta as $key => $value) {
+										echo '<li><strong>'.$key.'</strong>: <code>'.$value.'</code></li>';
+									}
+								echo '</ul>';
+								echo '<ul class="list--floated file-meta__tags">';
 						foreach($tags as $tag) {
 							echo '<li>'.$tag.'</li>';
 						}
@@ -134,7 +142,7 @@
 								<span class="file-meta__download-count" data-count="'.$row['Count'].'">'.nf($count).'</span>
 								<span class="file-meta__download-desc">'.pl($count, 'download', 'downloads').'</span>
 							</div>
-						</a></li>';
+						</div></li>';
 					}
 					echo '</ul>';
 				} else {
