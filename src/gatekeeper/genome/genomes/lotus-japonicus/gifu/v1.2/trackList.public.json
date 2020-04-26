@@ -17,55 +17,10 @@
          "key" : "Genome gaps",
          "storeClass" : "JBrowse/Store/SeqFeature/NCList",
          "trackType" : "JBrowse/View/Track/HTMLFeatures",
-         "urlTemplate" : "tracks/20180416_genome_gaps/{refseq}/trackData.json",
+         "urlTemplate" : "tracks/20202504_Lj_Gifu_v1.2_genomeGaps/{refseq}/trackData.json",
          "compress" : 0,
          "type" : "JBrowse/View/Track/HTMLFeatures",
-         "label" : "20180416_genome_gaps"
-      },
-      {
-         "style" : {
-            "className" : "generic_parent",
-            "subfeatureClasses" : {
-               "mRNA" : "feature_mrna",
-               "exon" : "feature_exon",
-               "CDS" : "feature_cds"
-            },
-            "arrowheadClass" : "transcript-arrowhead",
-            "connectorThickness": 2,
-            "connectorColor": "#777777",
-            "color": "#35978f",
-            "utrColor": "#bf812d",
-            "borderWidth": 0
-         },
-         "key" : "<em>L. japonicus</em> Gifu v1.1 predicted genes",
-         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
-         "trackType" : "CanvasFeatures",
-         "urlTemplate" : "tracks/20180827_Lj_Gifu_v1.1_predictedGenes/{refseq}/trackData.json",
-         "compress" : 0,
-         "type" : "CanvasFeatures",
-         "label" : "20180827_Lj_Gifu_v1.1_predictedGenes"
-      },
-      {
-         "style" : {
-            "className" : "generic_parent",
-            "subfeatureClasses" : {
-               "exon" : "feature_exon",
-               "CDS" : "feature_cds"
-            },
-            "arrowheadClass" : "transcript-arrowhead",
-            "connectorThickness": 2,
-            "connectorColor": "#777777",
-            "color": "#35978f",
-            "utrColor": "#bf812d",
-            "borderWidth": 0
-         },
-         "key" : "<em>L. japonicus</em> Gifu v1.1 predicted ORFs",
-         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
-         "trackType" : "CanvasFeatures",
-         "urlTemplate" : "tracks/20180827_Lj_Gifu_v1.1_predictedORFs/{refseq}/trackData.json",
-         "compress" : 0,
-         "type" : "CanvasFeatures",
-         "label" : "20180827_Lj_Gifu_v1.1_predictedORFs"
+         "label" : "20202504_Lj_Gifu_v1.2_genomeGaps"
       },
       {
          "style" : {
@@ -84,10 +39,10 @@
          "key" : "<em>L. japonicus</em> Gifu v1.2 predicted genes",
          "storeClass" : "JBrowse/Store/SeqFeature/NCList",
          "trackType" : "CanvasFeatures",
-         "urlTemplate" : "tracks/20190809_Lj_Gifu_v1.2_predictedGenes/{refseq}/trackData.json",
+         "urlTemplate" : "tracks/20202504_Lj_Gifu_v1.2_predictedGenes/{refseq}/trackData.json",
          "compress" : 0,
          "type" : "CanvasFeatures",
-         "label" : "20190809_Lj_Gifu_v1.2_predictedGenes",
+         "label" : "20202504_Lj_Gifu_v1.2_predictedGenes",
          "menuTemplate": [
             {
                "label" : "View details"
@@ -125,10 +80,10 @@
          "key" : "<em>L. japonicus</em> Gifu v1.2 non-coding RNA",
          "storeClass" : "JBrowse/Store/SeqFeature/NCList",
          "trackType" : "CanvasFeatures",
-         "urlTemplate" : "tracks/20201804_Lj_Gifu_v1.2_ncrna/{refseq}/trackData.json",
+         "urlTemplate" : "tracks/20202504_Lj_Gifu_v1.2_ncrna/{refseq}/trackData.json",
          "compress" : 0,
          "type" : "CanvasFeatures",
-         "label" : "20201804_Lj_Gifu_v1.2_ncrna"
+         "label" : "20202504_Lj_Gifu_v1.2_ncrna"
       },
       {
          "style" : {
@@ -142,10 +97,10 @@
          "key" : "<em>L. japonicus</em> Gifu v1.2 repeats",
          "storeClass" : "JBrowse/Store/SeqFeature/NCList",
          "trackType" : "CanvasFeatures",
-         "urlTemplate" : "tracks/20201804_Lj_Gifu_v1.2_repeats/{refseq}/trackData.json",
+         "urlTemplate" : "tracks/20202504_Lj_Gifu_v1.2_repeats/{refseq}/trackData.json",
          "compress" : 0,
          "type" : "CanvasFeatures",
-         "label" : "20201804_Lj_Gifu_v1.2_repeats"
+         "label" : "20202504_Lj_Gifu_v1.2_repeats"
       }
    ],
    "names" : {
@@ -153,8 +108,8 @@
       "type" : "Hash"
    },
    "dataset_id" : "lj_gifu_v12",
-   "alwaysOnTracks" : "DNA,20190809_Lj_Gifu_v1.2_predictedGenes,20201804_Lj_Gifu_v1.2_ncrna,20201804_Lj_Gifu_v1.2_repeats,20180416_genome_gaps",
-   "defaultTracks" : "DNA,20190809_Lj_Gifu_v1.2_predictedGenes,20201804_Lj_Gifu_v1.2_ncrna,20201804_Lj_Gifu_v1.2_repeats,20180416_genome_gaps",
+   "alwaysOnTracks" : "DNA,20202504_Lj_Gifu_v1.2_predictedGenes,20202504_Lj_Gifu_v1.2_ncrna,20202504_Lj_Gifu_v1.2_repeats,20202504_Lj_Gifu_v1.2_genomeGaps",
+   "defaultTracks" : "DNA,20202504_Lj_Gifu_v1.2_predictedGenes,20202504_Lj_Gifu_v1.2_ncrna,20202504_Lj_Gifu_v1.2_repeats,20202504_Lj_Gifu_v1.2_genomeGaps",
    "formatVersion" : 1,
    "defaultLocation" : "chr1",
    "highResolutionMode" : "auto",
