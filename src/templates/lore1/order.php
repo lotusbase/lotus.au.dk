@@ -103,6 +103,7 @@
 
 	<section class="wrapper">
 		<p>Please complete the following form to place an order on your <em>LORE1</em> lines for interest. You may only proceed to the next step when the current step is complete and valid, but you may navigate between previously cleared step.</p>
+		<p>Only the Danish <em>LORE1</em> lines can be ordered from this form. Please refer to <a href="https://www.legumebase.brc.miyazaki-u.ac.jp/lore1BrowseAction.do" target="_blank">LegumeBase</a> if you wish to place an order for Japanese <em>LORE1</em> lines.</p>
 		<p>Your private information will be kept <em>strictly</em> confidential. Required fields are marked with an asterisk (<strong>*</strong>).</p>
 		<?php if($error) { 
 			echo '<p class="user-message warning">'.$error.'.</p>';
