@@ -68,7 +68,7 @@ class DocumentHeader {
 			'.$this->get_meta_tags().'
 
 			<!-- Canonical URL -->
-			'.($this->header['canonical_url'] !== null ? '<link rel="canonical" href="'.$this->header['canonical_url'].'" itemprop="url" />' : '').'
+			'.($this->header['canonical_url'] !== null ? '<link rel="canonical" href="'.escapeHTML($this->header['canonical_url']).'" itemprop="url" />' : '').'
 
 			<!--[if IE]>
 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
