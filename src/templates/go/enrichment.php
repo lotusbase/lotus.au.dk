@@ -16,7 +16,7 @@
 		'bh' => 'Benjamini-Hochberg (default)'
 		);
 
-	if(!empty($_POST) && !empty($_POST['ids'])) {
+	if(!empty($_POST) && !empty($_POST['ids']) && !empty($_POST['genome'])) {
 		$ids = !is_array($_POST['ids']) ? explode(',', $_POST['ids']) : $_POST['ids'];
 		$ids = array_values(array_unique($ids));
 
@@ -28,6 +28,17 @@
 
 			// Initiate time count
 			$start_time = microtime(true);
+
+			// Validate genome
+			$genome_checker = new \LotusBase\LjGenomeVersion(array('genome' => $_POST['genome']));
+			$genome = $genome_checker->check();
+			if (!$genome) {
+				throw new Exception('Invalid genome provided');
+			}
+
+			$genome_parts = explode('_', $genome);
+			$ecotype = $genome_parts[0];
+			$version = $genome_parts[1];
 
 			// Check if any of the ids match
 			foreach($ids as &$id) {
@@ -67,11 +78,17 @@
 				WHERE
 					logo1.GO_ID IS NOT NULL AND
 					go.Namespace IN (".str_repeat('?,', count($go_namespaces)-1)."?) AND
-					logo1.Transcript IN (".str_repeat('?,', count($ids)-1)."?)
+					logo1.Transcript IN (".str_repeat('?,', count($ids)-1)."?) AND
+					logo1.Ecotype = ? AND
+					logo1.Version = ?
 				GROUP BY logo1.GO_ID");
-			$q1->execute(array_merge($go_namespaces, $ids));
+			$q1->execute(array_merge($go_namespaces, $ids, array($ecotype, $version)));
 
-			$id_count = 98305;
+			$id_counts = array(
+				'MG20_3.0' => 98305,
+				'Gifu_1.2' => 49868
+			);
+			$id_count = $id_counts[$genome];
 
 			if(!$q1->rowCount()) {
 				throw new Exception('There are no GO terms mapped to the '.pl(count($ids), 'identifier').' you have provided.');
@@ -206,7 +223,7 @@
 									$id_array = explode(",", $_POST['ids']);
 								}
 								foreach($id_array as $id_item) {
-									echo '<li data-input-value="'.escapeHTML($id_item).'" class="'.(!preg_match('/^Lj(\d|chloro|mito)g\dv\d+(\.\d+)?$/', $id_item) ? 'warning' : '').'">'.escapeHTML($id_item).'<span class="icon-cancel" data-action="delete"></span></li>';
+									echo '<li data-input-value="'.escapeHTML($id_item).'" class="'.(!preg_match('/^(Lj(\d|chloro|mito)g\dv\d+(\.\d+)?|LotjaGi\dg\dv\d+?(_LC)?(\.\d+)?)$/', $id_item) ? 'warning' : '').'">'.escapeHTML($id_item).'<span class="icon-cancel" data-action="delete"></span></li>';
 								}
 							}
 						?>
@@ -217,6 +234,24 @@
 					<small><strong>Separate each keyword, or gene/transcript ID, with a comma, space, or tab.</strong></small>
 					<br />
 					<small><strong>Unsure what to do? <a href="#" id="sample-data" data-ids="Lj4g3v0281040 Lj4g3v2139970 Lj2g3v0205600 Lj1g3v0414750 Lj0g3v0249089 Lj4g3v2775550 Lj0g3v0245539 Lj3g3v2693010 Lj2g3v1105370 Lj4g3v1736080 Lj4g3v2573630 Lj1g3v2975920 Lj6g3v1052420">Try a sample data</a> from Mun et al., 2016.</strong></small>
+				</div>
+
+				<label for="genome-version" class="col-one">Genome version <a href="<?php echo WEB_ROOT.'/lib/docs/lj-genome-versions';?>" class="info" data-modal="search-help" title="What does the genome version mean?">?</a></label>
+				<div class="col-two field__version">
+					<select name="genome" id="genome-version">
+						<option value="" <?php echo (isset($_POST['genome']) && empty($_POST['genome'])) ? "selected" : ""; ?>>Select genome version</option>
+						<?php foreach($lj_genome_versions as $label => $lj_genome) {
+							$lj_genome_id = implode('_', [$lj_genome['ecotype'], $lj_genome['version']]);
+							$lj_genome_version = $lj_genome['version'];
+
+							// NOTE: We disable LORE1 search for Gifu v1.2 for now, because data is not yet available
+							if ($lj_genome_id === 'MG20_2.5') {
+								continue;
+							}
+
+							echo '<option value="'.$lj_genome_id.'" '.(isset($_POST['genome']) && !empty($_POST['genome']) && strval($_POST['genome']) === $lj_genome_id ? 'selected' : '').' '.($disabled ? 'disabled' : '').'>'.$label.'</option>';
+						} ?>
+					</select>
 				</div>
 
 				<label class="col-one" for="correction">p-value correction</label>
