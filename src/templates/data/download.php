@@ -19,8 +19,16 @@
 	<?php
 		$hasSearchTerm = isset($_GET['search']) && strlen($_GET['search']) > 2;
 		$header = new \LotusBase\Component\PageHeader();
-		$header->set_header_content('<h1>Downloadable Resources</h1>
-		<p>You will find a list of downloadable resources we have made available to the public. Click on the file names to initiate download.</p>
+		$header->set_header_content('<h1>Data download</h1>
+		<p>
+			You will find a list of downloadable resources we have made available to the public.
+			The integrity of downloaded files can be checked with the published md5 checksum.
+			If any of the downloaded files have been used in your published manuscript and data,
+			we kindly ask you to refer to the <a href="/meta/citation">citation guide</a>.
+		</p>
+		<p>
+			You can also use the search field below to filter the list of downloadable files:
+		</p>
 		<form id="downloads-filter" class="search-form" action="#" method="get">
 			<input type="search" id="filter" name="q" value="'.($hasSearchTerm ? escapeHTML($_GET['search']) : '').'" placeholder="Filter downloads using keywords" autocomplete="off">
 			<button type="submit"><span class="pictogram icon-search">Filter</span></button>
@@ -41,8 +49,6 @@
 			}
 
 			echo '<p id="download__user-message" class="user-message warning hidden"></p>';
-		?>
-		<?php
 
 			// Database connection
 			try {
