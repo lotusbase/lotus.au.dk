@@ -111,7 +111,7 @@
    "alwaysOnTracks" : "DNA,20202504_Lj_Gifu_v1.2_predictedGenes,20202504_Lj_Gifu_v1.2_ncrna,20202504_Lj_Gifu_v1.2_repeats,20202504_Lj_Gifu_v1.2_genomeGaps",
    "defaultTracks" : "DNA,20202504_Lj_Gifu_v1.2_predictedGenes,20202504_Lj_Gifu_v1.2_ncrna,20202504_Lj_Gifu_v1.2_repeats,20202504_Lj_Gifu_v1.2_genomeGaps",
    "formatVersion" : 1,
-   "defaultLocation" : "chr1",
+   "defaultLocation" : "LjG1.1_chr1",
    "highResolutionMode" : "auto",
    "trackSelector" : {
       "type" : "Faceted"
