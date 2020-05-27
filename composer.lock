@@ -1,23 +1,22 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "d2cde69b6945bb17fe479494c5b73ea6",
-    "content-hash": "18942076c64a0ec3c5459d8c614ad911",
+    "content-hash": "9df5c4283faf72f968b46f1f6796024e",
     "packages": [
         {
             "name": "akrabat/rka-scheme-and-host-detection-middleware",
             "version": "0.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/akrabat/rka-scheme-and-host-detection-middleware.git",
+                "url": "https://github.com/akrabat/proxy-detection-middleware.git",
                 "reference": "a224a436c9b1b0f8335b201ad69ff0087b6d6c5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/akrabat/rka-scheme-and-host-detection-middleware/zipball/a224a436c9b1b0f8335b201ad69ff0087b6d6c5b",
+                "url": "https://api.github.com/repos/akrabat/proxy-detection-middleware/zipball/a224a436c9b1b0f8335b201ad69ff0087b6d6c5b",
                 "reference": "a224a436c9b1b0f8335b201ad69ff0087b6d6c5b",
                 "shasum": ""
             },
@@ -53,7 +52,8 @@
                 "middleware",
                 "psr7"
             ],
-            "time": "2016-04-21 06:31:03"
+            "abandoned": "akrabat/proxy-detection-middleware",
+            "time": "2016-04-21T06:31:03+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -80,7 +80,8 @@
                 "MIT"
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
-            "time": "2014-12-30 15:22:37"
+            "abandoned": "psr/container",
+            "time": "2014-12-30T15:22:37+00:00"
         },
         {
             "name": "drewm/mailchimp-api",
@@ -123,7 +124,7 @@
             ],
             "description": "Super-simple, minimum abstraction MailChimp API v3 wrapper",
             "homepage": "https://github.com/drewm/mailchimp-api",
-            "time": "2016-04-23 18:00:21"
+            "time": "2016-04-23T18:00:21+00:00"
         },
         {
             "name": "easybook/geshi",
@@ -169,7 +170,7 @@
                 "highlighter",
                 "syntax"
             ],
-            "time": "2015-06-18 14:56:28"
+            "time": "2015-06-18T14:56:28+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -212,19 +213,19 @@
             ],
             "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
             "homepage": "https://github.com/firebase/php-jwt",
-            "time": "2015-07-22 18:31:08"
+            "time": "2015-07-22T18:31:08+00:00"
         },
         {
             "name": "google/apiclient",
             "version": "v2.0.0-RC8",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-api-php-client.git",
+                "url": "https://github.com/googleapis/google-api-php-client.git",
                 "reference": "f872fea738b8d2deea0a41f070929a67797e5349"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/f872fea738b8d2deea0a41f070929a67797e5349",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client/zipball/f872fea738b8d2deea0a41f070929a67797e5349",
                 "reference": "f872fea738b8d2deea0a41f070929a67797e5349",
                 "shasum": ""
             },
@@ -271,7 +272,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2016-05-13 20:44:11"
+            "time": "2016-05-13T20:44:11+00:00"
         },
         {
             "name": "google/apiclient-services",
@@ -279,12 +280,12 @@
             "target-dir": "Google/Service",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-api-php-client-services.git",
+                "url": "https://github.com/googleapis/google-api-php-client-services.git",
                 "reference": "b33ee2a338e7e68cf56491da2c0690ef50f8f99b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/b33ee2a338e7e68cf56491da2c0690ef50f8f99b",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/b33ee2a338e7e68cf56491da2c0690ef50f8f99b",
                 "reference": "b33ee2a338e7e68cf56491da2c0690ef50f8f99b",
                 "shasum": ""
             },
@@ -306,19 +307,19 @@
             "keywords": [
                 "google"
             ],
-            "time": "2016-05-17 15:34:22"
+            "time": "2016-05-17T15:34:22+00:00"
         },
         {
             "name": "google/auth",
             "version": "v0.8",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-auth-library-php.git",
+                "url": "https://github.com/googleapis/google-auth-library-php.git",
                 "reference": "ec4edcb043e523267973fda308d9412d7db78e17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-auth-library-php/zipball/ec4edcb043e523267973fda308d9412d7db78e17",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/ec4edcb043e523267973fda308d9412d7db78e17",
                 "reference": "ec4edcb043e523267973fda308d9412d7db78e17",
                 "shasum": ""
             },
@@ -354,7 +355,7 @@
                 "google",
                 "oauth2"
             ],
-            "time": "2016-05-11 16:56:35"
+            "time": "2016-05-11T16:56:35+00:00"
         },
         {
             "name": "google/recaptcha",
@@ -399,7 +400,7 @@
                 "recaptcha",
                 "spam"
             ],
-            "time": "2015-09-02 17:23:59"
+            "time": "2015-09-02T17:23:59+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -461,7 +462,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2016-03-21 20:02:09"
+            "time": "2016-03-21T20:02:09+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -512,7 +513,7 @@
             "keywords": [
                 "promise"
             ],
-            "time": "2016-05-18 16:56:05"
+            "time": "2016-05-18T16:56:05+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -570,7 +571,7 @@
                 "stream",
                 "uri"
             ],
-            "time": "2016-02-18 21:54:00"
+            "time": "2016-02-18T21:54:00+00:00"
         },
         {
             "name": "ircmaxell/random-lib",
@@ -624,7 +625,7 @@
                 "random-numbers",
                 "random-strings"
             ],
-            "time": "2015-01-15 16:31:45"
+            "time": "2015-01-15T16:31:45+00:00"
         },
         {
             "name": "ircmaxell/security-lib",
@@ -665,7 +666,7 @@
             ],
             "description": "A Base Security Library",
             "homepage": "https://github.com/ircmaxell/PHP-SecurityLib",
-            "time": "2013-04-30 18:00:34"
+            "time": "2013-04-30T18:00:34+00:00"
         },
         {
             "name": "league/oauth2-client",
@@ -728,7 +729,7 @@
                 "oauth2",
                 "single sign on"
             ],
-            "time": "2016-04-29 15:11:06"
+            "time": "2016-04-29T15:11:06+00:00"
         },
         {
             "name": "league/oauth2-google",
@@ -778,7 +779,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2015-08-28 18:33:30"
+            "time": "2015-08-28T18:33:30+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -856,7 +857,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-04-12 18:29:35"
+            "time": "2016-04-12T18:29:35+00:00"
         },
         {
             "name": "nikic/fast-route",
@@ -899,7 +900,7 @@
                 "router",
                 "routing"
             ],
-            "time": "2016-04-18 11:33:20"
+            "time": "2016-04-18T11:33:20+00:00"
         },
         {
             "name": "palanik/corsslim",
@@ -946,56 +947,58 @@
                 "slim",
                 "slimphp"
             ],
-            "time": "2016-01-15 04:37:35"
+            "time": "2016-01-15T04:37:35+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v5.2.15",
+            "version": "v6.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "d0186171b28af4f06ac2ad8a84a8f3d6cbc3ba6c"
+                "reference": "c2796cb1cb99d7717290b48c4e6f32cb6c60b7b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/d0186171b28af4f06ac2ad8a84a8f3d6cbc3ba6c",
-                "reference": "d0186171b28af4f06ac2ad8a84a8f3d6cbc3ba6c",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/c2796cb1cb99d7717290b48c4e6f32cb6c60b7b3",
+                "reference": "c2796cb1cb99d7717290b48c4e6f32cb6c60b7b3",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.0.0"
+                "ext-ctype": "*",
+                "ext-filter": "*",
+                "php": ">=5.5.0"
             },
             "require-dev": {
-                "phpdocumentor/phpdocumentor": "*",
-                "phpunit/phpunit": "4.7.*"
+                "doctrine/annotations": "^1.2",
+                "friendsofphp/php-cs-fixer": "^2.2",
+                "phpunit/phpunit": "^4.8 || ^5.7"
             },
             "suggest": {
-                "league/oauth2-google": "Needed for Google XOAUTH2 authentication"
+                "ext-mbstring": "Needed to send email in multibyte encoding charset",
+                "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
+                "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
+                "psr/log": "For optional PSR-3 debug logging",
+                "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
+                "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "class.phpmailer.php",
-                    "class.phpmaileroauth.php",
-                    "class.phpmaileroauthgoogle.php",
-                    "class.smtp.php",
-                    "class.pop3.php",
-                    "extras/EasyPeasyICS.php",
-                    "extras/ntlm_sasl_client.php"
-                ]
+                "psr-4": {
+                    "PHPMailer\\PHPMailer\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-2.1"
+                "LGPL-2.1-only"
             ],
             "authors": [
                 {
-                    "name": "Jim Jagielski",
-                    "email": "jimjag@gmail.com"
-                },
-                {
                     "name": "Marcus Bointon",
                     "email": "phpmailer@synchromedia.co.uk"
+                },
+                {
+                    "name": "Jim Jagielski",
+                    "email": "jimjag@gmail.com"
                 },
                 {
                     "name": "Andy Prevost",
@@ -1006,7 +1009,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2016-05-10 18:39:36"
+            "time": "2020-05-27T12:24:03+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -1095,7 +1098,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2016-01-18 17:07:21"
+            "time": "2016-01-18T17:07:21+00:00"
         },
         {
             "name": "pimple/pimple",
@@ -1141,7 +1144,7 @@
                 "container",
                 "dependency injection"
             ],
-            "time": "2015-09-11 15:10:35"
+            "time": "2015-09-11T15:10:35+00:00"
         },
         {
             "name": "psr/cache",
@@ -1187,7 +1190,7 @@
                 "psr",
                 "psr-6"
             ],
-            "time": "2015-12-11 02:52:07"
+            "time": "2015-12-11T02:52:07+00:00"
         },
         {
             "name": "psr/http-message",
@@ -1236,7 +1239,7 @@
                 "request",
                 "response"
             ],
-            "time": "2015-05-04 20:22:00"
+            "time": "2015-05-04T20:22:00+00:00"
         },
         {
             "name": "psr/log",
@@ -1274,7 +1277,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2012-12-21 11:40:51"
+            "time": "2012-12-21T11:40:51+00:00"
         },
         {
             "name": "sameer-shelavale/php-countries-array",
@@ -1323,7 +1326,7 @@
                 "continent",
                 "countries array"
             ],
-            "time": "2016-04-12 11:23:30"
+            "time": "2016-04-12T11:23:30+00:00"
         },
         {
             "name": "slim/slim",
@@ -1393,7 +1396,7 @@
                 "micro",
                 "router"
             ],
-            "time": "2016-05-25 11:23:38"
+            "time": "2016-05-25T11:23:38+00:00"
         },
         {
             "name": "tuupola/slim-jwt-auth",
@@ -1447,7 +1450,7 @@
                 "psr-7",
                 "slim"
             ],
-            "time": "2016-05-10 04:58:11"
+            "time": "2016-05-10T04:58:11+00:00"
         }
     ],
     "packages-dev": [],

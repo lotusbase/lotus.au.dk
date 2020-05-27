@@ -3,7 +3,7 @@
         "vendor-dir": "build/www/vendor"
     },
     "require": {
-        "phpmailer/phpmailer": "~5.2",
+        "phpmailer/phpmailer": "~6.1",
         "league/oauth2-client": "~1.1",
         "league/oauth2-google": "~1.0",
         "sameer-shelavale/php-countries-array": "~1.0",
