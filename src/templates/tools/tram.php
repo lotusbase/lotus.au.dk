@@ -17,11 +17,6 @@
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
-		// White list of gene mapping tables
-		$gene_mapping_tables = array(
-			'v25v30'
-			);
-
 		if($_GET) {
 			// Check if both versions are specified
 			if(empty($_GET['source_version']) || empty($_GET['target_version'])) {
@@ -29,13 +24,13 @@
 			} else {
 				$source_version = escapeHTML($_GET['source_version']);
 				$target_version = escapeHTML($_GET['target_version']);
-				$versions = array($source_version, $target_version);
 			}
 
 			// Define regex for ID verification
 			$id_pattern = array(
-				'2.5' => '/^(chr\d\.(CM\d+|Lj.*)\.\d+\.r\d\.[amd]|LjSGA_\d+\.\d+(\.\d+)?|Lj.*\.\d+\.r\d\.[amd])$/i',
-				'3.0' => '/^Lj([0-6]|chloro|mito|1_4_FUCT|XYLT)g(\dv)?\d+(\.\d+)?$/i'
+				'MG20_2.5' => '/^(chr\d\.(CM\d+|Lj.*)\.\d+\.r\d\.[amd]|LjSGA_\d+\.\d+(\.\d+)?|Lj.*\.\d+\.r\d\.[amd])$/i',
+				'MG20_3.0' => '/^Lj([0-6]|chloro|mito|1_4_FUCT|XYLT)g(\dv)?\d+(\.\d+)?$/i',
+				'Gifu_1.2' => '/^LotjaGi\dg\dv\d+?(_LC)?(\.\d+)?$/i',
 				);
 
 			// Check if IDs are provided
@@ -56,19 +51,14 @@
 				}
 			}
 
-			// Select the appropriate table
-			$start_version = intval(floatval(min($versions)*10));
-			$end_version = intval(floatval(max($versions)*10));
-			$gene_mapping_table = 'v'.$start_version.'v'.$end_version;
-			$source_column = 'v'.intval(floatval($source_version*10));
-			$target_column = 'v'.intval(floatval($target_version*10));
-
 			// Construct query
-			$dbq = 'FROM gene_mapping_'.$gene_mapping_table.' AS gm
-				WHERE (';
-			$dbq_vars = array();
+			$dbq = 'FROM transcript_mapping AS gm
+				WHERE (SourceEcotype = ? AND SourceVersion = ? AND TargetEcotype = ? AND TargetVersion = ? AND ';
+			$source_data = explode('_', $_GET['source_version']);
+			$target_data = explode('_', $_GET['target_version']);
+			$dbq_vars = array($source_data[0], $source_data[1], $target_data[0], $target_data[1]);
 			foreach (array_diff($ids_array, $ids_error) as $key => $id) {
-				$dbq .= 'MATCH ('.$source_column.') AGAINST (?) OR ';
+				$dbq .= 'MATCH (SourceTranscriptID) AGAINST (?) OR ';
 				$dbq_vars[] = $id;
 			};
 			$dbq = substr($dbq, 0 ,-4).')';
@@ -87,8 +77,8 @@
 
 			// Prequery
 			$q1 = $db->prepare("SELECT
-				gm.ID AS ID
-				$dbq ORDER BY gm.ID ASC");
+				gm.IDKey AS ID
+				$dbq ORDER BY gm.IDKey ASC");
 			$q1->execute($dbq_vars);
 
 			$rows = $q1->rowCount();
@@ -118,13 +108,17 @@
 
 			// Perform actual query
 			$q2 = $db->prepare("SELECT
-				gm.ID AS ID,
-				gm.$source_column AS SourceColumn,
-				gm.$target_column AS TargetColumn,
+				gm.IDKey AS ID,
+				gm.SourceTranscriptID AS SourceTranscriptID,
+				gm.SourceEcotype AS SourceEcotype,
+				gm.SourceVersion AS SourceVersion,
+				gm.TargetTranscriptID AS TargetTranscriptID,
+				gm.TargetEcotype AS TargetEcotype,
+				gm.TargetVersion as TargetVersion,
 				gm.Identity AS IdentityScore,
 				gm.Evalue AS Evalue
 				$dbq
-				ORDER BY gm.ID ASC
+				ORDER BY gm.IDKey ASC
 				LIMIT ".($page-1)*$num.", ".$num);
 			$q2->execute($dbq_vars);
 
@@ -141,28 +135,25 @@
 			} else {
 				$source_version = $_POST['source_version'];
 				$target_version = $_POST['target_version'];
-				$versions = array($source_version, $target_version);
 			}
-			$start_version = intval(floatval(min($versions)*10));
-			$end_version = intval(floatval(max($versions)*10));
-			$gene_mapping_table = 'v'.$start_version.'v'.$end_version;
-			$source_column = 'v'.intval(floatval($source_version*10));
-			$target_column = 'v'.intval(floatval($target_version*10));
+			
 
 			// Execute query
 			$q3 = $db->prepare("SELECT
-				gm.$source_column AS SourceColumn,
-				gm.$target_column AS TargetColumn,
+				gm.SourceTranscriptID AS SourceTranscriptID,
+				CONCAT(gm.SourceEcotype, ' v', gm.SourceVersion) AS SourceGenome,
+				gm.TargetTranscriptID AS TargetTranscriptID,
+				CONCAT(gm.TargetEcotype, ' v', gm.TargetVersion) AS TargetGenome,
 				gm.Identity AS IdentityScore,
 				gm.Evalue AS Evalue
-				FROM gene_mapping_$gene_mapping_table AS gm
+				FROM transcript_mapping AS gm
 				WHERE
-					gm.ID IN (".str_repeat('?,', count($ids)-1)."?)
-				ORDER BY gm.ID ASC");
+					gm.IDKey IN (".str_repeat('?,', count($ids)-1)."?)
+				ORDER BY gm.IDKey ASC");
 			$q3->execute($ids);
 
 			// Generate download file
-			$header = array("Source ID (v$source_version)", "Mapped ID (v$target_version)", "Identity Score", "E-value");
+			$header = array("Source Transcript ID", "Source Genome", "Target Transcript ID", "Target Genome", "Identity Score", "E-value");
 			$out = implode("\t", $header)."\n";
 			while($r = $q3->fetch(PDO::FETCH_ASSOC)) {
 				$out .= implode("\t", $r)."\n";
@@ -217,6 +208,7 @@
 		<h2>TRAM</h2>
 		<span class="byline"><strong>Transcript Mapper</strong><br />for <em>L.</em> japonicus</span>
 		<p>The <strong>Transcript Mapper</strong> tool can be used to map transcript identifiers for one version of the <em>Lotus</em> genome assembly to another. Mapping is performed internally by identifying high confidence matching candidates across genome assembly versions using NCBI BLAST.</p>
+		<p>You can also <a href="/data/download?search=Transcript%20mapping">download the full bidrectional mapping table</a> for personal use from our downloads page.</p>
 
 		<?php 
 			// Display error if any
@@ -237,7 +229,7 @@
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get" id="tram-form" class="has-group">
 
 			<div class="cols" role="group">
-				<label for="ids-input" class="col-one">Query <a href="<?php echo WEB_ROOT; ?>/lib/docs/trex-query" class="info" title="How should I look for my gene of interest?" data-modal="wide">?</a></label>
+				<label for="ids-input" class="col-one">Query <a data-modal="wide" class="info" title="How should I enter the IDs?" href="<?php echo WEB_ROOT; ?>/lib/docs/gene-transcript-probe-id">?</a></label>
 				<div class="col-two">
 					<div class="multiple-text-input input-mimic">
 						<ul class="input-values">
@@ -253,11 +245,11 @@
 								}
 							}
 						?>
-							<li class="input-wrapper"><input type="text" id="ids-input" placeholder="Keyword, or gene/transcript ID" autocomplete="off" autocorrect="off"  autocapitalize="off" spellcheck="false" data-boolean-mode="true" /></li>
+							<li class="input-wrapper"><input type="text" id="ids-input" placeholder="Gene/transcript ID" autocomplete="off" autocorrect="off"  autocapitalize="off" spellcheck="false" data-boolean-mode="true" /></li>
 						</ul>
 						<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_GET['ids'])) ? (is_array($_GET['ids']) ? implode(',', preg_replace('/\"/', '&quot;', escapeHTML($trx_array))) : preg_replace('/\"/', '&quot;', escapeHTML($_GET['ids']))) : ''; ?>" readonly />
 					</div>
-					<small><strong>Separate each keyword, or gene/transcript ID, with a comma, space, or tab.</strong></small>
+					<small><strong>Separate each gene/transcript ID with a comma, space, or tab.</strong></small>
 					<?php if(count($ids_error)) { ?>
 						<p class="user-message warning">You have provided IDs that do not match the expected format for the given genome version.</p>
 					<?php } ?>
@@ -271,12 +263,7 @@
 					<select class="col-two col-half-width" name="source_version" id="source-version">
 						<?php
 							foreach($lj_genome_versions as $label => $lj_genome) {
-								// Ignore if is Gifu
-								if ($lj_genome['ecotype'] === 'Gifu') {
-									continue;
-								}
-
-								$v = $lj_genome['version'];
+								$v = implode('_', [$lj_genome['ecotype'], $lj_genome['version']]);
 
 								echo '<option value="'.$v.'" '.(isset($_GET['source_version']) && $_GET['source_version'] === $v ? 'selected' : '').'>'.$label.'</option>';
 							}
@@ -286,13 +273,8 @@
 					<select class="col-two col-half-width" name="target_version" id="target-version" class="disabled">
 						<?php
 							foreach($lj_genome_versions as $label => $lj_genome) {
-								// Ignore if is Gifu
-								if ($lj_genome['ecotype'] === 'Gifu') {
-									continue;
-								}
-
-								$v = $lj_genome['version'];
-								echo ((isset($_GET['source_version']) && $_GET['source_version'] === $v) || (!isset($_GET['source_version']) && $v === '2.5') ? '' : '<option value="'.$v.'">'.$label.'</option>');
+								$v = implode('_', [$lj_genome['ecotype'], $lj_genome['version']]);
+								echo ((isset($_GET['source_version']) && $_GET['source_version'] === $v) ? '' : '<option value="'.$v.'">'.$label.'</option>');
 							}
 						?>
 					</select>
@@ -346,12 +328,22 @@
 
 				function dropdown($transcript, $version) {
 					$out = '<div class="dropdown button"><span class="dropdown--title"><a href="'.WEB_ROOT.'/gene/'.$transcript.'">'.$transcript.'</a></span><ul class="dropdown--list">';
-					if(version_compare($version, '3.0', '>=')) {
+
+					// View gene
+					if ($version === 'MG20_3.0' || $version === 'Gifu_1.2') {
 						$out .= '<li><a href="'.WEB_ROOT.'/view/gene/'.$transcript.'"><span class="icon-search">View gene</span></a></li>';
 					}
-					$out .= '<li><a href="'.WEB_ROOT.'/lore1/search?v=MG20_'.$version.'&gene='.$transcript.'"><span class="icon-leaf"><em>LORE1</em> v'.$version.'</span></a></li>';
-					if(version_compare($version, '3.0', '>=')) {
+
+					// LORE1 search
+					if ($version === 'MG20_2.5' || $version === 'MG20_3.0') {
+						$out .= '<li><a href="'.WEB_ROOT.'/lore1/search?v=MG20_'.$version.'&gene='.$transcript.'"><span class="icon-leaf"><em>LORE1</em></span></a></li>';
+					}
+
+					// Genome browser
+					if ($version === 'MG20_3.0') {
 						$out .= '<li><a href="'.WEB_ROOT.'/genome?data=genomes%2Flotus-japonicus%2Fmg20%2Fv3.0&loc='.$transcript.'" title="View in genome browser"><span class="icon-book">Genome browser</span></a></li>';
+					} elseif ($version === 'Gifu_1.2') {
+						$out .= '<li><a href="'.WEB_ROOT.'/genome?data=genomes%2Flotus-japonicus%2Fgifu%2Fv1.2&loc='.$transcript.'" title="View in genome browser"><span class="icon-book">Genome browser</span></a></li>';
 					}
 					$out .= '</ul>';
 					return $out;
@@ -365,8 +357,8 @@
 				<colgroup></colgroup>
 				<thead>
 					<tr>
-						<th scope="col">Query (MG20 v<?php echo escapeHTML($_GET['source_version']); ?>)</th>
-						<th scope="col">Mapped transcript (MG20 v<?php echo escapeHTML($_GET['target_version']); ?>)</th>
+						<th scope="col">Query (<?php echo str_replace('_', ' v', escapeHTML($_GET['source_version'])); ?>)</th>
+						<th scope="col">Mapped transcript (<?php echo str_replace('_', ' v', escapeHTML($_GET['target_version'])); ?>)</th>
 						<th scope="col" data-type="numeric">Identity score (%)</th>
 						<th scope="col" data-type="numeric">E-value</th>
 					</tr>
@@ -374,8 +366,8 @@
 				<tbody>
 				<?php while($row = $q2->fetch(PDO::FETCH_ASSOC)) { ?>
 					<tr>
-						<td><?php echo dropdown($row['SourceColumn'], $source_version); ?></td>
-						<td><?php echo dropdown($row['TargetColumn'], $target_version); ?></td>
+						<td><?php echo dropdown($row['SourceTranscriptID'], $source_version); ?></td>
+						<td><?php echo dropdown($row['TargetTranscriptID'], $target_version); ?></td>
 						<td data-type="numeric"><?php echo $row['IdentityScore']; ?></td>
 						<td data-type="numeric"><?php echo $row['Evalue']; ?></td>
 					</tr>
