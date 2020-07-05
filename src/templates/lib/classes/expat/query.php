@@ -428,6 +428,17 @@ class Query {
 				'Sinorhizobium_fredii_HH103_3dpi',
 				'Pseudomonas_syringae_pv_tomato_DC3000_3dpi',
 				'Ralstonia_solanacearum_JS763_3dpi'
+			),
+			'montielj-2020-IRBG74infection' => array(
+				'Mock_root_3d',
+				'IRBG74_root_3d',
+				'IRBG74_root_nodA_3d',
+				'Mock_root_5d',
+				'IRBG74_root_5d',
+				'IRBG74_root_nodA_5d',
+				'Mock_root_10d',
+				'IRBG74_root_10d',
+				'IRBG74_root_nodA_10d'
 			)
 		);
 
