@@ -132,8 +132,7 @@ class GODropdown extends Dropdown {
 	private $external_links = array(
 		'AmiGO' => 'http://amigo.geneontology.org/amigo/medial_search?q={{id}}',
 		'InterPro' => 'http://www.ebi.ac.uk/interpro/search?q={{id}}',
-		'QuickGO (legacy)' => 'http://www.ebi.ac.uk/QuickGO/GTerm?id={{id}}',
-		'QuickGO (beta)' => 'http://www.ebi.ac.uk/QuickGO-Beta/term/{{id}}'
+		'QuickGO' => 'http://www.ebi.ac.uk/QuickGO/term/{{id}}'
 		);
 
 	// Public function: Set GO term
