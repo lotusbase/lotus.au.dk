@@ -16,13 +16,13 @@
 		'bh' => 'Benjamini-Hochberg (default)'
 		);
 
-	if(!empty($_POST) && !empty($_POST['ids']) && !empty($_POST['genome'])) {
-		$ids = !is_array($_POST['ids']) ? explode(',', $_POST['ids']) : $_POST['ids'];
+	if(!empty($_GET) && !empty($_GET['ids']) && !empty($_GET['genome'])) {
+		$ids = !is_array($_GET['ids']) ? explode(',', $_GET['ids']) : $_GET['ids'];
 		$ids = array_values(array_unique($ids));
 
-		$correction = !empty($_POST['correction']) &&  in_array($_POST['correction'], $corrections) ? $_POST['correction'] : 'bh';
+		$correction = !empty($_GET['correction']) &&  in_array($_GET['correction'], $corrections) ? $_GET['correction'] : 'bh';
 
-		$go_namespaces = array_intersect(array_keys($allowed_go_namespaces), $_POST['go_namespace_subset']);
+		$go_namespaces = array_intersect(array_keys($allowed_go_namespaces), $_GET['go_namespace_subset']);
 
 		try {
 
@@ -30,7 +30,7 @@
 			$start_time = microtime(true);
 
 			// Validate genome
-			$genome_checker = new \LotusBase\LjGenomeVersion(array('genome' => $_POST['genome']));
+			$genome_checker = new \LotusBase\LjGenomeVersion(array('genome' => $_GET['genome']));
 			$genome = $genome_checker->check();
 			if (!$genome) {
 				throw new Exception('Invalid genome provided');
@@ -209,18 +209,18 @@
 			}
 			echo $searched ? '<div class="toggle'.(empty($error) ? ' hide-first' : '').'"><h3><a href="#" title="Repeat Search">Repeat Search</a></h3>' : '';
 		?>
-		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="has-group">
+		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get" class="has-group">
 			<div class="cols" role="group">
 				<label for="ids-input" class="col-one">Query <a href="<?php echo WEB_ROOT; ?>/lib/docs/trex-query" class="info" title="How should I look for my gene of interest?" data-modal="wide">?</a></label>
 				<div class="col-two">
 					<div class="multiple-text-input input-mimic">
 						<ul class="input-values">
 						<?php
-							if(!empty($_POST['ids'])) {
-								if(is_array($_POST['ids'])) {
-									$id_array = $_POST['ids'];
+							if(!empty($_GET['ids'])) {
+								if(is_array($_GET['ids'])) {
+									$id_array = $_GET['ids'];
 								} else {
-									$id_array = explode(",", $_POST['ids']);
+									$id_array = explode(",", $_GET['ids']);
 								}
 								foreach($id_array as $id_item) {
 									echo '<li data-input-value="'.escapeHTML($id_item).'" class="'.(!preg_match('/^(Lj(\d|chloro|mito)g\dv\d+(\.\d+)?|LotjaGi\dg\dv\d+?(_LC)?(\.\d+)?)$/', $id_item) ? 'warning' : '').'">'.escapeHTML($id_item).'<span class="icon-cancel" data-action="delete"></span></li>';
@@ -229,7 +229,7 @@
 						?>
 							<li class="input-wrapper"><input type="text" id="ids-input" placeholder="Keyword, or gene/transcript ID" autocomplete="off" autocorrect="off"  autocapitalize="off" spellcheck="false" data-boolean-mode="true" /></li>
 						</ul>
-						<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_POST['ids'])) ? (is_array($_POST['ids']) ? implode(',', preg_replace('/\"/', '&quot;', escapeHTML($trx_array))) : preg_replace('/\"/', '&quot;', escapeHTML($_POST['ids']))) : ''; ?>" readonly />
+						<input class="input-hidden" type="hidden" name="ids" id="ids" value="<?php echo (!empty($_GET['ids'])) ? (is_array($_GET['ids']) ? implode(',', preg_replace('/\"/', '&quot;', escapeHTML($trx_array))) : preg_replace('/\"/', '&quot;', escapeHTML($_GET['ids']))) : ''; ?>" readonly />
 					</div>
 					<small><strong>Separate each keyword, or gene/transcript ID, with a comma, space, or tab.</strong></small>
 					<br />
@@ -239,7 +239,7 @@
 				<label for="genome-version" class="col-one">Genome version <a href="<?php echo WEB_ROOT.'/lib/docs/lj-genome-versions';?>" class="info" data-modal="search-help" title="What does the genome version mean?">?</a></label>
 				<div class="col-two field__version">
 					<select name="genome" id="genome-version">
-						<option value="" <?php echo (isset($_POST['genome']) && empty($_POST['genome'])) ? "selected" : ""; ?>>Select genome version</option>
+						<option value="" <?php echo (isset($_GET['genome']) && empty($_GET['genome'])) ? "selected" : ""; ?>>Select genome version</option>
 						<?php foreach($lj_genome_versions as $label => $lj_genome) {
 							$lj_genome_id = implode('_', [$lj_genome['ecotype'], $lj_genome['version']]);
 							$lj_genome_version = $lj_genome['version'];
@@ -249,7 +249,7 @@
 								continue;
 							}
 
-							echo '<option value="'.$lj_genome_id.'" '.(isset($_POST['genome']) && !empty($_POST['genome']) && strval($_POST['genome']) === $lj_genome_id ? 'selected' : '').' '.($disabled ? 'disabled' : '').'>'.$label.'</option>';
+							echo '<option value="'.$lj_genome_id.'" '.(isset($_GET['genome']) && !empty($_GET['genome']) && strval($_GET['genome']) === $lj_genome_id ? 'selected' : '').' '.($disabled ? 'disabled' : '').'>'.$label.'</option>';
 						} ?>
 					</select>
 				</div>
@@ -259,7 +259,7 @@
 					<select id="correction" name="correction">
 					<?php
 						foreach($corrections as $c_key => $c_name) {
-							echo '<option value="'.$c_key.'" '.(!empty($_POST['correction']) && $_POST['correction'] === $c_key ? 'selected': ($c_key === 'bh' ? 'selected': 'none')).'>'.$c_name.'</option>';
+							echo '<option value="'.$c_key.'" '.(!empty($_GET['correction']) && $_GET['correction'] === $c_key ? 'selected': ($c_key === 'bh' ? 'selected': 'none')).'>'.$c_name.'</option>';
 						}
 					?>
 					</select>
@@ -270,7 +270,7 @@
 				<?php
 					foreach($allowed_go_namespaces as $n_key => $n_name) {
 						$n_label = str_replace(' ', '-', strtolower($n_name));
-						echo '<label for="go-namespace__'.$n_label.'"><input id="go-namespace__'.$n_label.'" value="'.$n_key.'" name="go_namespace_subset[]" type="checkbox" class="prettify" '.(!empty($_POST['go_namespace_subset'] && !in_array($n_key, $_POST['go_namespace_subset'])) ? '' : 'checked').' /><span>'.$n_name.'</span></label>';
+						echo '<label for="go-namespace__'.$n_label.'"><input id="go-namespace__'.$n_label.'" value="'.$n_key.'" name="go_namespace_subset[]" type="checkbox" class="prettify" '.(!empty($_GET['go_namespace_subset'] && !in_array($n_key, $_GET['go_namespace_subset'])) ? '' : 'checked').' /><span>'.$n_name.'</span></label>';
 					}
 				?>
 				</div>
