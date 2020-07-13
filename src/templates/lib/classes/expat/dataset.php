@@ -160,7 +160,7 @@ class Dataset {
 							data-column-share="'.(!empty($d['column_share']) ? $d['column_share'] : '').'"
 							data-experiment="'.$d['experiment'].'"
 							value="'.$d['value'].'"
-							'.(isset($this->_vars['selected_dataset']) && $this->_vars['selected_dataset'] === $d['value'] ? 'selected' : '').'>'.$d['text'].'</option>';
+							'.(isset($this->_vars['selected_dataset']) && $this->_vars['selected_dataset'] === $d['value'] ? 'selected' : '').'>'.$d['text'].'&mdash;'.str_replace('_', ' v', $d['genome']).' genome</option>';
 					}
 				}
 			}

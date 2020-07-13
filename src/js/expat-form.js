@@ -142,6 +142,17 @@ $(function() {
 			{value: 'Tissue', text: 'Tissue', sort: 'string'},
 			{value: 'Reference', text: 'Reference', sort: 'string'}
 		],
+		'montielj-2020': [
+			{ value: 'Treatment', text: 'Treatment', sort: 'string' },
+			{ value: 'Inocula', text: 'Inocula', sort: 'string' },
+			{ value: 'Strain', text: 'Strain', sort: 'string' },
+			{ value: 'TimeUnit', text: 'TimeUnit', sort: 'string' },
+			{ value: 'TimeDuration', text: 'TimeDuration', sort: 'int' },
+			{ value: 'PlantSpecies', text: 'PlantSpecies', sort: 'string' },
+			{ value: 'PlantEcotype', text: 'PlantEcotype', sort: 'string' },
+			{ value: 'Tissue', text: 'Tissue', sort: 'string' },
+			{ value: 'Age', text: 'Age', sort: 'int' },
+		]
 	};
 
 	// Display subset options
