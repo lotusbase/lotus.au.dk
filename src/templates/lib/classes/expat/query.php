@@ -628,7 +628,8 @@ class Query {
 					$this->expat['experiment'] === 'rnaseq-davidm-2017' ||
 					$this->expat['experiment'] === 'rnaseq-kellys-2017' ||
 					$this->expat['experiment'] === 'reidd-2019' ||
-					$this->expat['experiment'] === 'reidd-2020'
+					$this->expat['experiment'] === 'reidd-2020' ||
+					$this->expat['experiment'] === 'montielj-2020'
 					) {
 					
 					// Construct LIKE query
