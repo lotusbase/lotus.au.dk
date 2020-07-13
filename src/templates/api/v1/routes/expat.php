@@ -172,7 +172,7 @@ $api->get('/expat/{experiment}/{dataset}', function($request, $response, $args) 
 				)
 			),
 			'montielj-2020' => array(
-				'table' => 'expat_MontielJ2020_IRBG74Infection_columns`',
+				'table' => 'expat_MontielJ2020_IRBG74Infection_columns',
 				'columns' => array(
 					'Treatment',
 					'Inocula',
