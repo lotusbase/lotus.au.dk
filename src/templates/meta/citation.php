@@ -36,6 +36,7 @@
 				<label for="citation__lotus-base"><input id="citation__lotus-base" name="citation[]" type="checkbox" class="prettify citation__filter" value="lotus-base" /><span>Use of <strong>any</strong> <em>Lotus</em> Base resources (e.g. <em>LORE1</em> ordering, Expression Atlas)</span></label>
 				<label for="citation__lore1-mutants"><input id="citation__lore1-mutants" name="citation[]" type="checkbox" class="prettify citation__filter" value="lore1-mutants" /><span>Use of <em>LORE1</em> mutants</span></label>
 				<label for="citation__lore1-methods"><input id="citation__lore1-methods" name="citation[]" type="checkbox" class="prettify citation__filter" value="lore1-methods" /><span>Generation of <em>LORE1</em> mutant population</span></label>
+				<label for="citation__gifu-genome"><input id="citation__gifu-genome" name="citation[]" type="checkbox" class="prettify citation__filter" value="gifu-genome" /><span>Gifu v1.1 genome assembly</span></label>
 			</div>
 		</form>
 		<h3 id="citation__header">Reference list <span class="badge" data-original-count="4">4</span></h3>
@@ -50,86 +51,15 @@
 			</div>
 
 			<div id="citation__list">
-				<ul>
-					<li>Mun et al. (2016). <em>Lotus</em> Base: An integrated information portal for the model legume <em>Lotus japonicus</em>. <em>Sci. Rep.</em> <a href="http://www.nature.com/articles/srep39447">doi:10.1038/srep39447</a>.</li>
-					<li>Małolepszy et al. (2016). The <em>LORE1</em> insertion mutant resource. <em>Plant J.</em> <a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352">doi:10.1111/tpj.13243</a>.</li>
-					<li>Urbański et al. (2012). Genome-wide <em>LORE1</em> retrotransposon mutagenesis and high-throughput insertion detection in <em>Lotus japonicus</em>. <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014280" title="Genome-wide LORE1 retrotransposon mutagenesis and high-throughput insertion detection in Lotus japonicus.">doi:10.1111/j.1365-313X.2011.04827.x</a>.</li>
-					<li>Fukai et al. (2012) Establishment of a <em>Lotus japonicus</em> gene tagging population using the exon-targeting endogenous retrotransposon <em>LORE1</em></strong> (2012). <em>Plant J.</em>, 69(4). <a href="http://www.ncbi.nlm.nih.gov/pubmed/22014259" title="Establishment of a Lotus japonicus gene tagging population using the exon-targeting endogenous retrotransposon LORE1.">doi:10.1111/j.1365-313X.2011.04826.x</a>.</li>
-				</ul>
+				<ul></ul>
 			</div>
 
 			<div id="citation__html">
-				<textarea readonly>&lt;ul&gt;
-	&lt;li&gt;Mun et al. (2016). &lt;em&gt;Lotus&lt;/em&gt; Base: An integrated information portal for the model legume &lt;em&gt;Lotus japonicus&lt;/em&gt;. &lt;em&gt;Sci. Rep.&lt;/em&gt; &lt;a href="http://www.nature.com/articles/srep39447"&gt;doi:10.1038/srep39447&lt;/a&gt;.&lt;/li&gt;
-	&lt;li&gt;Małolepszy et al. (2016). The &lt;em&gt;LORE1&lt;/em&gt; insertion mutant resource. &lt;em&gt;Plant J.&lt;/em&gt; &lt;a href="https://www.ncbi.nlm.nih.gov/pubmed/27322352"&gt;doi:10.1111/tpj.13243&lt;/a&gt;.&lt;/li&gt;
-	&lt;li&gt;Urbański et al. (2012). Genome-wide &lt;em&gt;LORE1&lt;/em&gt; retrotransposon mutagenesis and high-throughput insertion detection in &lt;em&gt;Lotus japonicus&lt;/em&gt;. &lt;em&gt;Plant J.&lt;/em&gt;, 69(4). &lt;a href="http://www.ncbi.nlm.nih.gov/pubmed/22014280" title="Genome-wide LORE1 retrotransposon mutagenesis and high-throughput insertion detection in Lotus japonicus."&gt;doi:10.1111/j.1365-313X.2011.04827.x&lt;/a&gt;.&lt;/li&gt;
-	&lt;li&gt;Fukai et al. (2012) Establishment of a &lt;em&gt;Lotus japonicus&lt;/em&gt; gene tagging population using the exon-targeting endogenous retrotransposon &lt;em&gt;LORE1&lt;/em&gt;&lt;/strong&gt; (2012). &lt;em&gt;Plant J.&lt;/em&gt;, 69(4). &lt;a href="http://www.ncbi.nlm.nih.gov/pubmed/22014259" title="Establishment of a Lotus japonicus gene tagging population using the exon-targeting endogenous retrotransposon LORE1."&gt;doi:10.1111/j.1365-313X.2011.04826.x&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;</textarea>
+				<textarea readonly></textarea>
 			</div>
 
 			<div id="citation__bibtex">
-				<textarea readonly>@article{Mun:2016aa,
-	Author = {Mun, Terry and Bachmann, Asger and Gupta, Vikas and Stougaard, Jens and Andersen, Stig U},
-	Doi = {10.1038/srep39447},
-	Journal = {Sci Rep},
-	Journal-Full = {Scientific reports},
-	Month = {Dec},
-	Pages = {39447},
-	Pmc = {PMC5180183},
-	Pmid = {28008948},
-	Pst = {epublish},
-	Title = {\emph{Lotus} Base: An integrated information portal for the model legume \emph{Lotus japonicus}},
-	Volume = {6},
-	Year = {2016},
-	Bdsk-Url-1 = {http://dx.doi.org/10.1038/srep39447}}
-
-@article{Maolepszy:2016aa,
-    Author = {Ma{\l}olepszy, Anna and Mun, Terry and Sandal, Niels and Gupta, Vikas and Dubin, Manu and Urba{\'n}ski, Dorian and Shah, Niraj and Bachmann, Asger and Fukai, Eigo and Hirakawa, Hideki and Tabata, Satoshi and Nadzieja, Marcin and Markmann, Katharina and Su, Junyi and Umehara, Yosuke and Soyano, Takashi and Miyahara, Akira and Sato, Shusei and Hayashi, Makoto and Stougaard, Jens and Andersen, Stig Uggerh{\o}j},
-    Doi = {10.1111/tpj.13243},
-    Journal = {Plant J},
-    Journal-Full = {The Plant journal : for cell and molecular biology},
-    Keywords = {Lotus japonicus; DNA methylation; Long terminal repeat retrotransposon; mutagenesis; palindrome},
-    Month = {Oct},
-    Number = {2},
-    Pages = {306-317},
-    Pmid = {27322352},
-    Pst = {ppublish},
-    Title = {The \emph{\textsc{LORE1}} insertion mutant resource},
-    Volume = {88},
-    Year = {2016},
-    Bdsk-Url-1 = {http://dx.doi.org/10.1111/tpj.13243}}
-
-@article{Urbanski:2012aa,
-    Author = {Urba{\'n}ski, Dorian Fabian and Ma{\l}olepszy, Anna and Stougaard, Jens and Andersen, Stig Uggerh{\o}j},
-    Doi = {10.1111/j.1365-313X.2011.04827.x},
-    Journal = {Plant J},
-    Journal-Full = {The Plant journal : for cell and molecular biology},
-    Mesh = {Computational Biology; DNA Primers; Exons; Genome, Plant; Genotyping Techniques; High-Throughput Screening Assays; Lotus; Mutagenesis, Insertional; Mutation; Retroelements; Reverse Genetics; Seeds; Sequence Analysis, DNA; Software; Terminal Repeat Sequences},
-    Month = {Feb},
-    Number = {4},
-    Pages = {731--741},
-    Pmid = {22014280},
-    Pst = {ppublish},
-    Title = {Genome-wide \emph{\textsc{LORE1}} retrotransposon mutagenesis and high-throughput insertion detection in \emph{Lotus japonicus}},
-    Volume = {69},
-    Year = {2012},
-    Bdsk-Url-1 = {http://dx.doi.org/10.1111/j.1365-313X.2011.04827.x}}
-
-@article{Fukai:2012aa,
-    Author = {Fukai, Eigo and Soyano, Takashi and Umehara, Yosuke and Nakayama, Shinobu and Hirakawa, Hideki and Tabata, Satoshi and Sato, Shusei and Hayashi, Makoto},
-    Doi = {10.1111/j.1365-313X.2011.04826.x},
-    Journal = {Plant J},
-    Journal-Full = {The Plant journal : for cell and molecular biology},
-    Mesh = {DNA Primers; Exons; Gene Targeting; Lotus; Mutagenesis, Insertional; Mutation; Retroelements; Sequence Analysis, DNA; Symbiosis; Terminal Repeat Sequences},
-    Month = {Feb},
-    Number = {4},
-    Pages = {720--730},
-    Pmid = {22014259},
-    Pst = {ppublish},
-    Title = {Establishment of a \emph{Lotus japonicus} gene tagging population using the exon-targeting endogenous retrotransposon \emph{\textsc{LORE1}}},
-    Volume = {69},
-    Year = {2012},
-    Bdsk-Url-1 = {http://dx.doi.org/10.1111/j.1365-313X.2011.04826.x}}</textarea>
+				<textarea readonly></textarea>
     		<p class="align-center form__controls"><button type="button" data-action="export" data-mime-type="text/plain" data-file-extension="bib" data-file-name="lotusbase_citation" class="icon-download">Export</button></p>
 			</div>
 		</div>
