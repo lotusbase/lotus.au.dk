@@ -57,11 +57,12 @@
 			$source_data = explode('_', $_GET['source_version']);
 			$target_data = explode('_', $_GET['target_version']);
 			$dbq_vars = array($source_data[0], $source_data[1], $target_data[0], $target_data[1]);
+			$dbq .= '(';
 			foreach (array_diff($ids_array, $ids_error) as $key => $id) {
 				$dbq .= 'MATCH (SourceTranscriptID) AGAINST (?) OR ';
 				$dbq_vars[] = $id;
 			};
-			$dbq = substr($dbq, 0 ,-4).')';
+			$dbq = substr($dbq, 0 ,-4).'))';
 
 			if(!empty($_GET['identity_cutoff'])) {
 				$_ic = max(min(floatval($identity_cutoff), 1),0);
