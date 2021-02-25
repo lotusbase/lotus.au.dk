@@ -293,6 +293,13 @@
          "compress" : 0,
          "type" : "JBrowse/View/Track/HTMLFeatures",
          "label" : "20151108_ljv3genome_n_gaps"
+      },
+      {
+         "label": "20201117_Lj30_natural_accessions_variant_calls",
+         "key": "SNPs from natural accessions",
+         "storeClass": "JBrowse/Store/SeqFeature/VCFTabix",
+         "urlTemplate": "./raw/20201117_Lj30_natural_accessions_variant_calls.vcf.gz",
+         "type": "JBrowse/View/Track/HTMLVariants"
       }
    ],
    "names" : {
@@ -322,7 +329,8 @@
          "principal_investigator",
          "file_creator",
          "file_curator",
-         "public"
+         "public",
+         "publication_reference"
       ],
       "type" : "Faceted"
    },
