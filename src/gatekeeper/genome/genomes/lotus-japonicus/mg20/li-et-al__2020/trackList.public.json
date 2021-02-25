@@ -1,0 +1,65 @@
+{
+   "tracks" : [
+      {
+         "chunkSize" : 20000,
+         "storeClass" : "JBrowse/Store/Sequence/StaticChunked",
+         "urlTemplate" : "seq/{refseq_dirpath}/{refseq}-",
+         "category" : "Reference sequence",
+         "type" : "SequenceTrack",
+         "label" : "DNA",
+         "key" : "Reference sequence"
+      },
+      {
+         "style" : {
+            "className" : "feature",
+            "connectorThickness" : 2,
+            "color" : "#33658a",
+            "borderWidth" : 0,
+            "connectorColor" : "#aaa",
+            "utrColor" : "#bf812d"
+         },
+         "key" : "<em>L. japonicus</em> MG20 (Li et al.) genes",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "CanvasFeatures",
+         "urlTemplate" : "tracks/20201020_Lj_MG20_v1_Li_genes/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "CanvasFeatures",
+         "label" : "20201020_Lj_MG20_v1_Li_genes"
+      },
+      {
+         "style" : {
+            "className" : "feature",
+            "borderWidth" : 0,
+            "color" : "#33658a",
+            "connectorThickness" : 2,
+            "connectorColor" : "#aaa",
+            "utrColor" : "#bf812d"
+         },
+         "key" : "<em>L. japonicus</em> MG20 (Li et al.) exons",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "CanvasFeatures",
+         "urlTemplate" : "tracks/20201020_Lj_MG20_v1_Li_exons/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "CanvasFeatures",
+         "label" : "20201020_Lj_MG20_v1_Li_exons"
+      }
+   ],
+   "names" : {
+      "url" : "names/",
+      "type" : "Hash"
+   },
+   "dataset_id" : "lj_gifu_v12",
+   "alwaysOnTracks" : "DNA,20201020_Lj_MG20_v1_Li_genes,20201020_Lj_MG20_v1_Li_exons",
+   "defaultTracks" : "DNA,20201020_Lj_MG20_v1_Li_genes,20201020_Lj_MG20_v1_Li_exons",
+   "formatVersion" : 1,
+   "defaultLocation" : "chr1:1..500000",
+   "highResolutionMode" : "auto",
+   "trackSelector" : {
+      "type" : "Faceted"
+   },
+   "aboutThisBrowser" : {
+      "title" : "Lotus japonicus Genome Browser",
+      "description" : "<p>This high-quality <em>L. japonicus</em> MG20 genome is published by Li et al. (2020).</p><p>Li, H., Jiang, F., Wu, P., Wang, K., & Cao, Y. (2020). A High-Quality Genome Sequence of Model Legume Lotus japonicus (MG-20) Provides Insights into the Evolution of Root Nodule Symbiosis. Genes, 11(5), 483. <a href='https://doi.org/10.3390/genes11050483'>doi:10.3390/genes11050483</a>. The assembly and other relevant data can be downloaded from <a href='https://phytozome-next.jgi.doe.gov/info/Ljaponicus_Lj1_0v1'>Phytozome</a>.</p>"
+   }
+ }
+ 

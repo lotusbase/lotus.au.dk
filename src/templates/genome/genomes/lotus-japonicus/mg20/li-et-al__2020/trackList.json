@@ -1,0 +1,52 @@
+{
+  "tracks" : [
+     {
+        "chunkSize" : 20000,
+        "storeClass" : "JBrowse/Store/Sequence/StaticChunked",
+        "urlTemplate" : "seq/{refseq_dirpath}/{refseq}-",
+        "category" : "Reference sequence",
+        "type" : "SequenceTrack",
+        "label" : "DNA",
+        "key" : "Reference sequence"
+     },
+     {
+        "style" : {
+           "className" : "feature",
+           "connectorThickness" : 2,
+           "color" : "#33658a",
+           "borderWidth" : 0,
+           "connectorColor" : "#aaa",
+           "utrColor" : "#bf812d"
+        },
+        "key" : "<em>L. japonicus</em> MG20 (Li et al.) genes",
+        "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+        "trackType" : "CanvasFeatures",
+        "urlTemplate" : "tracks/20201020_Lj_MG20_v1_Li_genes/{refseq}/trackData.json",
+        "compress" : 0,
+        "type" : "CanvasFeatures",
+        "label" : "20201020_Lj_MG20_v1_Li_genes"
+     },
+     {
+        "style" : {
+           "className" : "feature",
+           "borderWidth" : 0,
+           "color" : "#33658a",
+           "connectorThickness" : 2,
+           "connectorColor" : "#aaa",
+           "utrColor" : "#bf812d"
+        },
+        "key" : "<em>L. japonicus</em> MG20 (Li et al.) exons",
+        "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+        "trackType" : "CanvasFeatures",
+        "urlTemplate" : "tracks/20201020_Lj_MG20_v1_Li_exons/{refseq}/trackData.json",
+        "compress" : 0,
+        "type" : "CanvasFeatures",
+        "label" : "20201020_Lj_MG20_v1_Li_exons"
+     }
+  ],
+  "names" : {
+     "url" : "names/",
+     "type" : "Hash"
+  },
+  "formatVersion" : 1
+}
