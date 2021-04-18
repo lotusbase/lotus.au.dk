@@ -101,6 +101,23 @@
          "compress" : 0,
          "type" : "CanvasFeatures",
          "label" : "20202504_Lj_Gifu_v1.2_repeats"
+      },
+      {
+         "style" : {
+            "className" : "feature",
+            "connectorThickness" : 2,
+            "color" : "#33658a",
+            "borderWidth" : 0,
+            "connectorColor" : "#aaa",
+            "utrColor" : "#bf812d"
+         },
+         "key" : "<em>L. japonicus</em> Gifu v1.2 <em>LORE1</em> insertions",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "CanvasFeatures",
+         "urlTemplate" : "tracks/20210322_Lj_Gifu_v1.2_lore1/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "CanvasFeatures",
+         "label" : "20210322_Lj_Gifu_v1.2_lore1"
       }
    ],
    "names" : {
@@ -108,8 +125,8 @@
       "type" : "Hash"
    },
    "dataset_id" : "lj_gifu_v12",
-   "alwaysOnTracks" : "DNA,20202504_Lj_Gifu_v1.2_predictedGenes,20202504_Lj_Gifu_v1.2_ncrna,20202504_Lj_Gifu_v1.2_repeats,20202504_Lj_Gifu_v1.2_genomeGaps",
-   "defaultTracks" : "DNA,20202504_Lj_Gifu_v1.2_predictedGenes,20202504_Lj_Gifu_v1.2_ncrna,20202504_Lj_Gifu_v1.2_repeats,20202504_Lj_Gifu_v1.2_genomeGaps",
+   "alwaysOnTracks" : "DNA,20202504_Lj_Gifu_v1.2_predictedGenes,20210322_Lj_Gifu_v1.2_lore1,20202504_Lj_Gifu_v1.2_ncrna,20202504_Lj_Gifu_v1.2_repeats,20202504_Lj_Gifu_v1.2_genomeGaps",
+   "defaultTracks" : "DNA,20202504_Lj_Gifu_v1.2_predictedGenes,20210322_Lj_Gifu_v1.2_lore1,20202504_Lj_Gifu_v1.2_ncrna,20202504_Lj_Gifu_v1.2_repeats,20202504_Lj_Gifu_v1.2_genomeGaps",
    "formatVersion" : 1,
    "defaultLocation" : "LjG1.1_chr1",
    "highResolutionMode" : "auto",
