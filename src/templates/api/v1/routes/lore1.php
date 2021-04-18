@@ -311,7 +311,7 @@ $api->get('/lore1/flanking-sequence/{genomeEcotype}/{genomeVersion}/{id}[/{cutof
 		}
 
 		// Prepare query
-		$q = $db->prepare("SELECT PlantID, Chromosome, Position, Orientation, InsFlank
+		$q = $db->prepare("SELECT PlantID, Chromosome, Position, Orientation
 			FROM lore1ins
 			WHERE
 				Salt = :salt AND
@@ -332,7 +332,6 @@ $api->get('/lore1/flanking-sequence/{genomeEcotype}/{genomeVersion}/{id}[/{cutof
 				$chr = $row['Chromosome'];
 				$pos = $row['Position'];
 				$orn = $row['Orientation'];
-				$ins = trim(naseq(!empty($args['cutoff']) ? substr($row['InsFlank'], 1000-max($args['cutoff'],999), -(1000-max($args['cutoff'],999))): $row['InsFlank']));
 			}
 
 			return $response
@@ -345,7 +344,6 @@ $api->get('/lore1/flanking-sequence/{genomeEcotype}/{genomeVersion}/{id}[/{cutof
 						'chromosome' => $chr,
 						'position' => $pos,
 						'orientation' => $orn,
-						'insFlank' => $ins,
 						'cutoff' => !empty($args['cutoff']) ? !!$args['cutoff'] : false
 						)
 					))

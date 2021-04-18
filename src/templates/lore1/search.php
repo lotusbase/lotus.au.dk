@@ -465,9 +465,6 @@
 				<colgroup></colgroup>
 				<colgroup></colgroup>
 				<colgroup></colgroup>
-				<colgroup></colgroup>
-				<colgroup></colgroup>
-				<colgroup></colgroup>
 				<thead>
 					<tr>
 						<th scope="col" class="chk"><input type="checkbox" class="ca" /></td>
@@ -479,9 +476,6 @@
 						<th scope="col"><a title="Type of insertion" data-modal data-modal-content="Inferred from the previous two columns, this column indicates whether the &lt;em&gt;LORE1&lt;/em&gt; insertion occurs in an intron, an exon, or in the intergenic region.">Ins<br />Type</a></td>
 						<th scope="col" class="naseq"><a title="Forward Primer" data-modal data-modal-content="The sequence of the forward primer, designed by Primer3 &lt;a href=&quot;/meta/faq#lore1-primer-design&quot; title=&quot;LORE1 genotyping primer design&quot;&gt;using a set of pre-established parameters&lt;/a&gt;, that is used for genotyping purposes. This primer can either be couplde with the designed reverse primer, or the general &lt;em&gt;LORE1&lt;/em&gt; reverse primer.">Fw<br />Primer</a></td>
 						<th scope="col" class="naseq"><a title="Reverse Primer" data-modal data-modal-content="The sequence of the reverse primer, designed by Primer3 &lt;a href=&quot;/meta/faq#lore1-primer-design&quot; title=&quot;LORE1 genotyping primer design&quot;&gt;using a set of pre-established parameters&lt;/a&gt;, that is used for genotyping purposes.">Rev<br />Primer</a></td>
-						<!--<td scope="col" data-type="numeric"><a title="PCR product size after insertion">Ins Size</a></td>-->
-						<!--<td scope="col" data-type="numeric"><a title="PCR product size in wild-type">WT Size</a></td>-->
-						<th scope="col"><a title="&#177;1000bp insertion flanking sequence" data-modal data-modal-content="Contains the &#177;1000bp base pairs surrounding the insertion site. The insertion site has an insertion position of 1000 in this sequence.">Flanking seq.</a></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -562,11 +556,6 @@
 							<td class="instype" data-instype="<?php echo $results['Type']; ?>"><?php echo $results['Type']; ?></td>
 							<td class="naseq"><?php echo $results['FwPrimer']; ?></td>
 							<td class="naseq"><?php echo $results['RevPrimer']; ?></td>
-							<!--<td class="pcr" data-type="numeric"><?php echo $results['PCRInsPos']; ?></td>-->
-							<!--<td class="pcr" data-type="numeric"><?php echo $results['PCRWT']; ?></td>-->
-							<td class="flk">
-								<a class="api-insertion-flank button" data-key="<?php echo $results['Salt']; ?>" data-genome-ecotype="<?php echo $ecotype; ?>" data-genome-version="<?php echo $version; ?>"><span class="pictogram icon-reply"></span>View</a>
-							</td>
 					</tr>
 					<?php
 						}

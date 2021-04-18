@@ -1012,38 +1012,6 @@ $(function() {
 		e.stopImmediatePropagation();
 	});
 
-	// AJAX to fetch insertion flank
-	$('.results .api-insertion-flank').click(function(e) {
-		var q = $(this).data('key');
-		var genomeEcotype = $(this).data('genome-ecotype');
-		var genomeVersion = $(this).data('genome-version');
-
-		globalFun.modal.open({
-			'title': 'Fetching flanking sequence&hellip;',
-			'content': '<div class="loader"><svg><circle class="path" cx="40" cy="40" r="30" /></svg></div>'
-		});
-
-		$.get(
-			root + '/api/v1/lore1/flanking-sequence/' + encodeURIComponent(genomeEcotype) + '/' + encodeURIComponent(genomeVersion) + '/' + encodeURIComponent(q),
-			'',
-			function(data) {
-				var d = data.data;
-				globalFun.modal.update({
-					'title': 'Flanking sequence (&#177;1000bp) for the insertion <a href="/genome/?data=genomes%2Flotus-japonicus%2Fmg20%2Fv3.0&loc='+d.chromosome+'%3A'+(parseInt(d.position)-5000)+'..'+(parseInt(d.position)+5000)+'">'+d.chromosome+'_'+d.position+'_'+d.orientation+'</a>',
-					'content': '<pre class="insertion-flank">' + d.insFlank + '</pre>'
-				});
-			},
-			"json"
-		).fail(function(xhr, status, thrownError) {
-			globalFun.modal.update({
-				'title': 'Whoops! We have encountered an error!',
-				'content': 'Error ' + xhr.status + ': ' + thrownError,
-				'class': 'warning'
-			});
-		});
-		e.preventDefault();
-	});
-
 	// Download type check
 	$('#dlc').click(function() {
 		$('#dlt').val('checked');

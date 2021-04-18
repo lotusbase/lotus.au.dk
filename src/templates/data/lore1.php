@@ -16,7 +16,6 @@
 		array('name' => 'RevPrimer', 'desc' => 'Reverse primer designeed using Primer3', 'size' => 18430861*$scale_factor),
 		array('name' => 'PCRInsPos', 'desc' => 'Size of PCR product for lines with <em>LORE1</em> insert', 'size' => 2209485*$scale_factor),
 		array('name' => 'PCRWT', 'desc' => 'Size of PCR product for lines without <em>LORE1</em> insert', 'size' => 2209485*$scale_factor),
-		array('name' => 'InsFlank', 'desc' => '&pm;1000bp flanking sequences, relative to the insertion orientation', 'size' => 1525614000*$scale_factor),
 		array('name' => 'ColCoord', 'desc' => 'Column coordinate for sequencing', 'size' => 2974920*$scale_factor),
 		array('name' => 'RowCoord', 'desc' => 'Row coordinate for sequencing', 'size' => 2974882*$scale_factor),
 		array('name' => 'CoordList', 'desc' => 'Coordinates for all instances of the same insertion', 'size' => 7460421*$scale_factor),
