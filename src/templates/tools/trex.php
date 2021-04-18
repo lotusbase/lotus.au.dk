@@ -85,7 +85,24 @@
 				if(preg_match('/^chr\d+/', $trx_item)) {
 					$dbq .= "anno.Gene LIKE ? OR ";
 					$exec_vars = array_merge($exec_vars, array($trx_item.'%'));
-				} else {
+				} else if(preg_match('/^Lj/i', $trx_item)) {
+					$dbq .= "MATCH(anno.Gene) AGAINST (? IN BOOLEAN MODE) OR
+						MATCH(anno.Annotation) AGAINST (? IN BOOLEAN MODE) OR
+						MATCH(anno.LjAnnotation) AGAINST (? IN BOOLEAN MODE) OR ";
+						$exec_vars = array_merge($exec_vars, array($trx_item, $trx_item, (preg_match('/^Lj/i', $trx_item) ? $trx_item : 'Lj'.$trx_item)));
+				} else if(preg_match('/^IPR\d+/i', $trx_item)) {
+					$dbq .= "dompred.InterProID = ? OR ";
+					$exec_vars = array_merge($exec_vars, array($trx_item));
+				} else if(preg_match('/^(cd\d+|PD\d+|PF\d+|PR\d+|PS\d+|SM\d+|TIGR\d+|G3DSA:.+|SSF\d+|PTHR\d+:SF\d+|PTHR\d+)$/i', $trx_item)) {
+					$dbq .= "dompred.SourceID = ? OR ";
+					$exec_vars = array_merge($exec_vars, array($trx_item));
+				} else if(preg_match('/^GO:/i', $trx_item)) {
+					$dbq .= "ip_go.GO_ID = ? OR ";
+					$exec_vars = array_merge($exec_vars, array($trx_item));
+				}
+				
+				// If no pattern matches, then we probably have to search through everything
+				else {
 					$dbq .= "MATCH(anno.Gene) AGAINST (? IN BOOLEAN MODE) OR
 						MATCH(anno.Annotation) AGAINST (? IN BOOLEAN MODE) OR
 						MATCH(anno.LjAnnotation) AGAINST (? IN BOOLEAN MODE) OR
