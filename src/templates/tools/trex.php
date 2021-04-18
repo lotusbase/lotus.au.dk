@@ -85,7 +85,7 @@
 				if(preg_match('/^chr\d+/', $trx_item)) {
 					$dbq .= "anno.Gene LIKE ? OR ";
 					$exec_vars = array_merge($exec_vars, array($trx_item.'%'));
-				} else if(preg_match('/^Lj/i', $trx_item)) {
+				} else if(preg_match('/^(Lj|Lotja)/i', $trx_item)) {
 					$dbq .= "MATCH(anno.Gene) AGAINST (? IN BOOLEAN MODE) OR
 						MATCH(anno.Annotation) AGAINST (? IN BOOLEAN MODE) OR
 						MATCH(anno.LjAnnotation) AGAINST (? IN BOOLEAN MODE) OR ";
