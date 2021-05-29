@@ -157,7 +157,6 @@ class PageHeader {
 						<ul>
 							<li><a href="'.WEB_ROOT.'/data/codon-usage" title="Codon Usage Table">Codon Usage</a></li>
 							<li><a href="'.WEB_ROOT.'/data/download" title="Downloads">Downloads</a></li>
-							<li><a href="'.WEB_ROOT.'/data/lore1" title="LORE1 Raw Data"><em>LORE1</em> Raw Data</a></li>
 						</ul>
 					</li>
 					<li class="h-meta" data-group="meta"><a href="'.WEB_ROOT.'/meta/" title="Info">Info</a>
