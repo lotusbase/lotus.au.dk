@@ -36,6 +36,40 @@
             "utrColor": "#bf812d",
             "borderWidth": 0
          },
+         "key" : "<em>L. japonicus</em> Gifu v1.3 predicted genes",
+         "storeClass" : "JBrowse/Store/SeqFeature/NCList",
+         "trackType" : "CanvasFeatures",
+         "urlTemplate" : "tracks/20210713_Lj_Gifu_v1.3_predictedGenes/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "CanvasFeatures",
+         "label" : "20210713_Lj_Gifu_v1.3_predictedGenes",
+         "menuTemplate": [
+            {
+               "label" : "View details"
+            },
+            {   
+               "label" : "Zoom to this gene"
+            },
+            {   
+               "label" : "Highlight this gene"
+            },
+            { "type": "dijit/MenuSeparator" }
+         ]
+      },
+      {
+         "style" : {
+            "className" : "generic_parent",
+            "subfeatureClasses" : {
+               "exon" : "feature_exon",
+               "CDS" : "feature_cds"
+            },
+            "arrowheadClass" : "transcript-arrowhead",
+            "connectorThickness": 2,
+            "connectorColor": "#777777",
+            "color": "#35978f",
+            "utrColor": "#bf812d",
+            "borderWidth": 0
+         },
          "key" : "<em>L. japonicus</em> Gifu v1.2 predicted genes",
          "storeClass" : "JBrowse/Store/SeqFeature/NCList",
          "trackType" : "CanvasFeatures",
@@ -125,8 +159,8 @@
       "type" : "Hash"
    },
    "dataset_id" : "lj_gifu_v12",
-   "alwaysOnTracks" : "DNA,20202504_Lj_Gifu_v1.2_predictedGenes,20210322_Lj_Gifu_v1.2_lore1,20202504_Lj_Gifu_v1.2_ncrna,20202504_Lj_Gifu_v1.2_repeats,20202504_Lj_Gifu_v1.2_genomeGaps",
-   "defaultTracks" : "DNA,20202504_Lj_Gifu_v1.2_predictedGenes,20210322_Lj_Gifu_v1.2_lore1,20202504_Lj_Gifu_v1.2_ncrna,20202504_Lj_Gifu_v1.2_repeats,20202504_Lj_Gifu_v1.2_genomeGaps",
+   "alwaysOnTracks" : "DNA,20210713_Lj_Gifu_v1.3_predictedGenes,20210322_Lj_Gifu_v1.2_lore1,20202504_Lj_Gifu_v1.2_ncrna,20202504_Lj_Gifu_v1.2_repeats,20202504_Lj_Gifu_v1.2_genomeGaps",
+   "defaultTracks" : "DNA,20210713_Lj_Gifu_v1.3_predictedGenes,20210322_Lj_Gifu_v1.2_lore1,20202504_Lj_Gifu_v1.2_ncrna,20202504_Lj_Gifu_v1.2_repeats,20202504_Lj_Gifu_v1.2_genomeGaps",
    "formatVersion" : 1,
    "defaultLocation" : "LjG1.1_chr1",
    "highResolutionMode" : "auto",
